@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Route, Switch } from 'react-router-dom';
-import { Main, AdminMain } from '../Pages';
+import { UserRouter, AdminRouter } from '.';
 
 const Router : React.FC = () => (
 	<Switch>
-		<Route path="/user" component={Main} />
-		<Route path="/admin" component={AdminMain} />
+		<Route path="/admin" component={AdminRouter} />
+		<Route path="/" component={UserRouter} />
 	</Switch>
 );
 

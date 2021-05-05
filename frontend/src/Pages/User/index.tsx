@@ -1,0 +1,17 @@
+export { default as Main } from './Main';
+export { default as Ask } from './Ask';
+export { default as Book } from './Book';
+export { default as Event } from './Event';
+export { default as FAQ } from './FAQ';
+export { default as Login } from './Login';
+export { default as Movie } from './Movie';
+export { default as MovieList } from './MovieList';
+export { default as MyMovie } from './MyMovie';
+export { default as Mypage } from './Mypage';
+export { default as Notice } from './Notice';
+export { default as Pay } from './Pay';
+export { default as PointDescription } from './PointDescription';
+export { default as SignOn } from './SignOn';
+export { default as Store } from './Store';
+export { default as TheaterDescription } from './TheaterDescription';
+export { default as Error } from './Error';
