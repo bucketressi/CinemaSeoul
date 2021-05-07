@@ -1,0 +1,24 @@
+server:
+  port : 8081
+
+spring :
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@3.35.176.97:1521/xe
+    username: root
+    password: 1234
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+mybatis:
+  configuration:
+    multiple-result-sets-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: varchar
+    default-fetch-size: 500
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.uos.cinemaseoul.vo
+
