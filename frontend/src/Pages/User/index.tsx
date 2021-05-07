@@ -11,7 +11,7 @@ export { default as Mypage } from './Mypage';
 export { default as Notice } from './Notice';
 export { default as Pay } from './Pay';
 export { default as PointDescription } from './PointDescription';
-export { default as SignOn } from './SignOn';
+export { default as SignUp } from './SignUp';
 export { default as Store } from './Store';
 export { default as TheaterDescription } from './TheaterDescription';
 export { default as Error } from './Error';
