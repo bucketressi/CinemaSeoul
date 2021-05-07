@@ -16,9 +16,11 @@ spring :
 mybatis:
   configuration:
     multiple-result-sets-enabled: false
-    call-setters-on-nulls: true
+    lazyLoadingEnabled: true
+    aggressiveLazyLoading: false
     jdbc-type-for-null: varchar
     default-fetch-size: 500
-  mapper-locations: classpath:mybatis/mapper/*.xml
+
+  mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.uos.cinemaseoul.vo
 
