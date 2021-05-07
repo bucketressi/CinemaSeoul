@@ -2,7 +2,7 @@ import React from 'react';
 
 import { LogicProvider } from './ViewModel';
 import { PracticeContextProvider } from './Model/PracticeModel';
-import Router from './Router';
+import { Router } from './Router';
 
 const Provider : React.FC = () => {
 	const a = 1;
