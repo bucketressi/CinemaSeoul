@@ -1,7 +1,54 @@
 @import "../base/variable";
+@import "../base/reset";
 @import "../base/mixin";
 @import "../base/font";
 
 header{
+	margin-top: 30px;
+	padding-bottom: 30px;
 	height: 100px;
+	width: 100%;
+	border-bottom: 1px solid $border-color;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	.logo{
+		height: 100%;
+		img{
+			height: 100%;
+		}
+	}
+	.title{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		p{
+			font-size: 2rem;
+			font-family: 'BlackHanSans', 'noto-sans', sans-serif;
+			margin-bottom: 15px;
+		}
+		.menu{
+			justify-content: center;
+			ul{
+				display: flex;
+				li{
+					padding-right: 20px;
+					margin-right: 20px;
+					border-right: 1px solid $border-color;
+					&:last-of-type{
+						margin-right: 0;
+						border-right: none;
+					}
+				}
+			}
+		}
+	}
+	.sub-menu{
+		ul{
+			display: flex;
+			li{
+				margin-right: 15px;
+			}
+		}
+	}
 }

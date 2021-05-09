@@ -1,0 +1,11 @@
+@import "../base/variable";
+@import "../base/reset";
+@import "../base/mixin";
+@import "../base/font";
+
+#content-width-wrap{
+	display: flex;
+	flex-direction: column;
+	width: 1200px;
+	margin: 0 auto;
+}

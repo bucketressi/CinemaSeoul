@@ -3,8 +3,9 @@
 *{
 	box-sizing: border-box;
 	position: relative;
+	font-family: inherit;
 }
-html, body, #wrap{
+html, body{
 	margin: 0;
 	padding: 0;
 	width: 100%;
@@ -15,4 +16,15 @@ button{
 	outline: none;
 	border: none;
 	cursor: pointer;
+}
+p, ul, li{
+	margin: 0;
+	padding: 0;
+}
+ul{
+	list-style: none;
+}
+a{
+	color: black;
+	text-decoration: none;
 }

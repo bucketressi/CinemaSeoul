@@ -9,7 +9,7 @@ const Main = () => {
 	const a = 1;
 	return (
 		<Layout>
-			<div>hi</div>
+			<div>컨텐츠</div>
 		</Layout>
 	);
 }
