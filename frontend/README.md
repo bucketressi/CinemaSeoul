@@ -47,6 +47,16 @@ URL별로 연결되는 라우팅 컴포넌트에 대해 정리
 
 
 
+## scss 사용방법
+
+* base : scss 사용할 변수나 기본 사항 저장 => 다른 파일에서 import 해서 사용됨
+  * _font.scss : font 폴더에 있는 font를 import해서 사용하기 좋게 조작
+  * _mixin.scss : 반응형 디자인 쉽게 조장
+  * _reset.scss : 초기 css 세팅
+  * _variable.scss : 사용할 공통 변수 저장
+* component : 컴포넌트와 1:1 대응
+* pages : page 컴포넌트와 1:1 대응 
+
 
 
 ## 프론트끼리의 규칙
