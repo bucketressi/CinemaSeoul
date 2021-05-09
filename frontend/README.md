@@ -19,6 +19,34 @@ ViewModel에 필요한 state 관리 로직 정의 => Provider로 감싸진 컴�
 
 
 
+## 라우팅
+
+URL별로 연결되는 라우팅 컴포넌트에 대해 정리
+
+[User]
+
+| 주소             | 컴포넌트           | 비고                                                         |
+| ---------------- | ------------------ | ------------------------------------------------------------ |
+| /ask             | Ask                | 문의사항                                                     |
+| /book            | Book               | 예매                                                         |
+| /event           | Event              | 이벤트                                                       |
+| /faq             | FAQ                | FAQ                                                          |
+| /login           | Login              | 로그인                                                       |
+| /main            | Main               | 메인 페이지                                                  |
+| /movie/:movie_id | MovieList          | movie_id가 없다면 목록 페이지<br />movie_id가 있다면 상세 페이지 |
+| /mymovie         | MyMovie            | 내가 본 영화                                                 |
+| /mypage          | Mypage             | 마이페이지                                                   |
+| /notice          | Notice             | 공지사항                                                     |
+| /pay             | Pay                | 결제                                                         |
+| /point           | PointDescription   | 등급별 설명 페이지                                           |
+| /signup          | SignUp             | 회원가입                                                     |
+| /store           | Store              | 상품                                                         |
+| /theater         | TheaterDescription | 영화관설명                                                   |
+| /error           | Error              | 에러                                                         |
+|                  |                    |                                                              |
+
+
+
 
 
 ## 프론트끼리의 규칙
