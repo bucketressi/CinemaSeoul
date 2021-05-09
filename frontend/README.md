@@ -18,5 +18,10 @@ Model에 필요한 state Context로 정의 => Provider로 감싸진 컴포넌트
 ViewModel에 필요한 state 관리 로직 정의 => Provider로 감싸진 컴포넌트는 모두 이 state를 useContext로 불러와서 사용할 수 있음 (전역 함수의 의미)
 
 
+
+
+
 ## 프론트끼리의 규칙
+
 * material UI 라이브러리의 컴포넌트는 필요 시에만 사용 (div => Grid 와 같은 남용적 사용 x)
+* css name은 -로 잇기 `ex_) class-name`
