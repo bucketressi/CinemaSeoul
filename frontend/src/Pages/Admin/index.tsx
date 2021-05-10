@@ -16,3 +16,4 @@ export { default as AdminGenre } from './AdminGenre';
 export { default as AdminNotice } from './AdminNotice';
 export { default as AdminPay } from './AdminPay';
 export { default as AdminStore } from './AdminStore';
+export { default as AdminError } from './AdminError';
