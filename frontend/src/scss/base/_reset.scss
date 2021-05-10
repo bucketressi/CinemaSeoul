@@ -1,0 +1,30 @@
+@import "./font";
+
+*{
+	box-sizing: border-box;
+	position: relative;
+	font-family: inherit;
+}
+html, body{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	font-family: 'noto-sans', sans-serif;
+}
+button{
+	background-color: transparent;
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+p, ul, li{
+	margin: 0;
+	padding: 0;
+}
+ul{
+	list-style: none;
+}
+a{
+	color: black;
+	text-decoration: none;
+}
