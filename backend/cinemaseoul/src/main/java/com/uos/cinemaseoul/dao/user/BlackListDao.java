@@ -1,6 +1,6 @@
-package com.uos.cinemaseoul.dao;
+package com.uos.cinemaseoul.dao.user;
 
-import com.uos.cinemaseoul.vo.BlackListVo;
+import com.uos.cinemaseoul.vo.user.BlackListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface BlackListDao {
     void insert(BlackListVo vo);
     void delete(BlackListVo vo);
-    BlackListVo select(String name);
+    BlackListVo select(String phone_num, String name);
 }

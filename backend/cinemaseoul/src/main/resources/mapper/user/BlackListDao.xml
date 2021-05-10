@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.uos.cinemaseoul.dao.BlackListDao">
+<mapper namespace="com.uos.cinemaseoul.dao.user.BlackListDao">
 
     <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
     <insert id="insert" parameterType="BlackListVo" >
@@ -13,12 +13,12 @@
 
     <select id="select" resultType="BlackListVo">
         SELECT BLAC_NAME, PHONE_NUM, BIRTH FROM BLACKLIST
-        WHERE BLAC_NAME = #{blac_name}
+        WHERE PHONE_NUM = #{phone_num} AND BLAC_NAME = #{blac_name}
     </select>
 
     <delete id="delete" parameterType="BlackListVo">
         DELETE FROM BLACKLIST
-        WHERE BLAC_NAME = #{blac_name} AND PHONE_NUM = #{phone_num} AND BIRTH = #{birth}
+        WHERE BLAC_NAME = #{blac_name} AND PHONE_NUM = #{phone_num}
     </delete>
 
 </mapper>

@@ -1,8 +1,7 @@
 package com.uos.cinemaseoul.service;
 
-import com.uos.cinemaseoul.dao.BlackListDao;
-
-import com.uos.cinemaseoul.vo.BlackListVo;
+import com.uos.cinemaseoul.service.user.BlackListService;
+import com.uos.cinemaseoul.vo.user.BlackListVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,14 @@ public class BlackListServiceTest {
     BlackListService blackListService;
 
     @Test
-    public void 블랙리스트등록_삭제() throws Exception{
+    public void 블랙리스트등록_조회_삭제() throws Exception{
         BlackListVo givenVo = new BlackListVo("김현동", "01012345678", "20001010");
 
         //given
         blackListService.addBlackList(givenVo);
 
         //when
-        BlackListVo selectVo = blackListService.selectBlackList("김현동");
+        BlackListVo selectVo = blackListService.selectBlackList("01012345678","김현동");
 
         //then
         assertEquals(givenVo.getBlac_name(),selectVo.getBlac_name());

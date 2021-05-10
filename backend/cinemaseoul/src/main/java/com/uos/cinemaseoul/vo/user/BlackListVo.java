@@ -1,12 +1,12 @@
-package com.uos.cinemaseoul.vo;
+package com.uos.cinemaseoul.vo.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.mybatis.spring.annotation.MapperScan;
 
+
 @Getter @Setter
+@Builder
 @AllArgsConstructor
 public class BlackListVo {
     private String blac_name;
