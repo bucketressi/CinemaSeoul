@@ -3,10 +3,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.uos.cinemaseoul.dao.user.UsersDao">
+<mapper namespace="com.uos.cinemaseoul.dao.user.AdminDao">
 
+    <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
     <select id="findByEmail" resultType="UsersVo">
-        SELECT USER_ID, EMAIL, PASSWORD, USER_AUTH_CODE FROM USERS
+        SELECT EMAIL, PASSWORD FROM USERS
         WHERE EMAIL = #{email}
     </select>
 
@@ -16,7 +17,7 @@
     </select>
 
     <insert id="signUp" parameterType="UsersVo">
-        INSERT INTO USERS (USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, CURR_POINT, ACCU_POINT, USER_AUTH_CODE)
-        VALUES (seq_users.NEXTVAL, #{user_name}, #{birth}, #{phone_num}, #{email}, #{password}, #{agreement}, 0, 0, #{user_auth_code})
+        INSERT INTO USERS (USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, USER_TYPE_CODE)
+        VALUES (seq_users.NEXTVAL, #{user_name}, #{birth}, #{phone_num}, #{email},#{password},#{agreement},#{user_type_code})
     </insert>
 </mapper>

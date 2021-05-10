@@ -1,10 +1,12 @@
 package com.uos.cinemaseoul.vo.user;
 
+import com.uos.cinemaseoul.dto.user.UsersDto;
 import lombok.*;
 
 @Getter @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UsersVo {
     private int user_id;
     private String user_name;
@@ -12,7 +14,7 @@ public class UsersVo {
     private String phone_num;
     private String email;
     private String password;
-    private boolean agreement;
+    private String agreement;
     private int curr_point;
     private int accu_point;
     private int user_type_code;
@@ -27,5 +29,17 @@ public class UsersVo {
         this.password = password;
         this.user_type_code = user_type_code;
         this.user_auth_code = user_auth_code;
+    }
+
+    public UsersVo inputSignUp (UsersDto.SignupDto signupDto){
+        this.user_name = signupDto.getUser_name();
+        this.birth = signupDto.getBirth();
+        this.phone_num = signupDto.getPhone_num();
+        this.email = signupDto.getEmail();
+        this.password = signupDto.getPassword();
+        this.agreement = signupDto.getAgreement();
+        //회원
+        this.user_auth_code = 1;
+        return this;
     }
 }

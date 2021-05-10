@@ -1,13 +1,10 @@
 package com.uos.cinemaseoul.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 public class UsersDto {
 
-    @Getter @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginDto{
@@ -15,18 +12,25 @@ public class UsersDto {
         String password;
     }
 
-    public class SignupDto{
-        String userName;
+    @Getter @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SignupDto{
+        String user_name;
         String birth;
-        String phoneNum;
+        String phone_num;
         String email;
         String password;
         String agreement;
+
+        public void encodePassword(String newPass){
+            this.password = newPass;
+        }
     }
 
-    public class NonMemberDto{
-        String userName;
-        String phoneNum;
+    public static class NonMemberDto{
+        String user_name;
+        String phone_num;
         String password;
         String agreement;
     }

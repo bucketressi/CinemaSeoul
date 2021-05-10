@@ -65,6 +65,13 @@
             <version>0.9.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.1</version>
+        </dependency>
+
+
         <!--ioutils-->
         <dependency>
             <groupId>commons-io</groupId>

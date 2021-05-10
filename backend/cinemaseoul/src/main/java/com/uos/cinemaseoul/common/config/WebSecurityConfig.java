@@ -48,11 +48,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 				// don`t authenticate this particular request
 				.authorizeRequests()
-                //.antMatchers("/admin/**").hasRole("T5")
-                .antMatchers("/*/user/login", "/*/user/signup", "/*/user/checkId").permitAll()
-				//all other requests need to be authenticated
-				.anyRequest().hasRole("T1")
-                //.anyRequest().permitAll()
+
+                //로그인 없이 다 가능한 것들
+                .antMatchers("/user/login","/user/signup").permitAll()
+
+                //1 (회원 가능)
+                .antMatchers("/user/test").hasRole("1")
+
+                //2 (비회원, 회원 둘다 가능)
+                .antMatchers("/user/test2").hasAnyRole("2","1")
+
+
+
+                //4 (직원 가능)
+
+                //3 (매니저(높은 관리자) 가능)
+
+
+
                 .and()
                 .cors()
                 .and()

@@ -1,4 +1,4 @@
-package com.uos.cinemaseoul.service;
+package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.service.user.BlackListService;
 import com.uos.cinemaseoul.vo.user.BlackListVo;
