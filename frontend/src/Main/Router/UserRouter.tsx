@@ -17,7 +17,7 @@ const UserRouter : React.FC = () => (
 		<Route path="/notice" component={Notice}/>
 		<Route path="/pay" component={Pay}/>
 		<Route path="/point" component={PointDescription}/>
-		<Route path="/signon" component={SignUp}/>
+		<Route path="/signup" component={SignUp}/>
 		<Route path="/store" component={Store}/>
 		<Route path="/theater" component={TheaterDescription}/>
 		<Route path="/error" component={Error}/>
