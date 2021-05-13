@@ -49,21 +49,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// don`t authenticate this particular request
 				.authorizeRequests()
 
-                //로그인 없이 다 가능한 것들
-                .antMatchers("/user/login","/user/signup").permitAll()
 
-                //1 (회원 가능)
-                .antMatchers("/user/test").hasRole("1")
+                //로그인 없이 다 가능한 것들
+                .antMatchers("/user/login", "/user/signup", "/user/login/non-member", "/adult").permitAll()
 
                 //2 (비회원, 회원 둘다 가능)
                 .antMatchers("/user/test2").hasAnyRole("2","1")
 
+                //1 (회원 가능)
+                .antMatchers("/user/{user_id}","/user").hasRole("1")
 
-
-                //4 (직원 가능)
+                //4 (직원 가능 = 매너지도 가능)
+                .antMatchers("/user/blacklist").hasAnyRole("3","4")
 
                 //3 (매니저(높은 관리자) 가능)
-
+                //.antMatchers().hasAnyRole("4")
 
 
                 .and()

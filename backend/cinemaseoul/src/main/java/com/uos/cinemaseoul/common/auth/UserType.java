@@ -4,13 +4,13 @@ public enum UserType {
     USERS{
         @Override
         public String toString(){
-            return "USERS";
+            return "U";
         }
     },
     ADMIN{
         @Override
         public String toString(){
-            return "ADMIN";
+            return "A";
         }
     }
 }

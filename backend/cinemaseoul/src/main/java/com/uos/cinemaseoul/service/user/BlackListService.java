@@ -24,7 +24,7 @@ public class BlackListService {
         blackListDao.delete(vo);
     }
 
-    public BlackListVo selectBlackList(String phone_num, String name){
-        return blackListDao.select(phone_num, name);
+    public BlackListVo selectBlackList(String phone_num, String blac_name){
+        return blackListDao.select(phone_num, blac_name);
     }
 }

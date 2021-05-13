@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface BlackListDao {
     void insert(BlackListVo vo);
     void delete(BlackListVo vo);
-    BlackListVo select(String phone_num, String name);
+    BlackListVo select(String phone_num, String blac_name);
 }

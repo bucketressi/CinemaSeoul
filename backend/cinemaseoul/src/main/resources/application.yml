@@ -22,5 +22,5 @@ mybatis:
     default-fetch-size: 500
 
   mapper-locations: classpath:mapper/**/*.xml
-  type-aliases-package: com.uos.cinemaseoul.vo/**/
+  type-aliases-package: com.uos.cinemaseoul/**/**/
 

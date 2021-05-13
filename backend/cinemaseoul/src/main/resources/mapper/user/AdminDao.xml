@@ -7,7 +7,7 @@
 
     <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
     <select id="findByEmail" resultType="UsersVo">
-        SELECT EMAIL, PASSWORD FROM USERS
+        SELECT USER_ID, EMAIL, PASSWORD FROM USERS
         WHERE EMAIL = #{email}
     </select>
 
@@ -20,4 +20,7 @@
         INSERT INTO USERS (USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, USER_TYPE_CODE)
         VALUES (seq_users.NEXTVAL, #{user_name}, #{birth}, #{phone_num}, #{email},#{password},#{agreement},#{user_type_code})
     </insert>
+
+
+
 </mapper>
