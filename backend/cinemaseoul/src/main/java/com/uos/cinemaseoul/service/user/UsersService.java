@@ -6,7 +6,7 @@ import com.uos.cinemaseoul.dao.user.BlackListDao;
 import com.uos.cinemaseoul.dao.user.UsersDao;
 import com.uos.cinemaseoul.dto.user.LoginDto;
 import com.uos.cinemaseoul.dto.user.NonMemberDto;
-import com.uos.cinemaseoul.dto.user.SignUpDto;
+import com.uos.cinemaseoul.dto.user.UserSignUpDto;
 import com.uos.cinemaseoul.dto.user.UserInfoDto;
 import com.uos.cinemaseoul.exception.BlackListException;
 import com.uos.cinemaseoul.exception.WrongArgException;
@@ -38,15 +38,15 @@ public class UsersService  {
 
     //회원가입
     @Transactional(rollbackFor = {Exception.class, Error.class})
-    public int signUp(SignUpDto signupDto){
+    public int signUp(UserSignUpDto userSignupDto){
         //아이디, 번호 중복 한번 더 검사
 
         //블랙리스트인지 확인
-        if(blackListDao.select(signupDto.getPhone_num(), signupDto.getUser_name()) != null){
+        if(blackListDao.select(userSignupDto.getPhone_num(), userSignupDto.getUser_name()) != null){
              throw new BlackListException("black list");
         }
 
-        UsersVo vo = new UsersVo().inputSignUp(signupDto);
+        UsersVo vo = new UsersVo().inputSignUp(userSignupDto);
         //회원가입
         usersDao.signUp(vo);
         return vo.getUser_id();
@@ -101,7 +101,7 @@ public class UsersService  {
         if(!usersDao.findById(usr.getUser_id()).getPhone_num().equals(usr.getPhone_num())){
 
             //일단 전화번호 체크해서 중복인지 확인
-            if(usersDao.findByPhone(usr.getPhone_num()) != null){
+            if(!phoneCheck(usr.getPhone_num())){
                 throw new WrongArgException("전화번호 중복");
             }
 
@@ -142,6 +142,17 @@ public class UsersService  {
         int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(birth)/10000;
         System.out.println(age + " " + Integer.parseInt(birth)/10000);
         return (age >= 19) ? true : false;
+    }
+
+    //번호 검사
+    public boolean phoneCheck(String phone){
+        return usersDao.findByPhone(phone) != null ? false : true;
+    }
+
+
+    //이메일 검사
+    public boolean emailCheck(String email){
+        return usersDao.findByEmail(email) != null ? false : true;
     }
 
 

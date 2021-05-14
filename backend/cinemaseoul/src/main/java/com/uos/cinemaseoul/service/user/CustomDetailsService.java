@@ -4,6 +4,7 @@ import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.dao.user.AdminDao;
 import com.uos.cinemaseoul.dao.user.UsersDao;
+import com.uos.cinemaseoul.vo.user.AdminVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,8 +35,8 @@ public class CustomDetailsService implements UserDetailsService {
         }
         else{
             //관리자일때
-            UsersVo vo = adminDao.findById(Integer.parseInt(id));
-            return new AuthUser(vo.getUser_id(),UserType.ADMIN, vo.getUser_auth_code(), vo.getPassword());
+            AdminVo vo = adminDao.findById(Integer.parseInt(id));
+            return new AuthUser(vo.getAdmi_id(),UserType.ADMIN, vo.getAdmi_auth_code(), vo.getPassword());
         }
     }
 

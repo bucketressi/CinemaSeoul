@@ -1,11 +1,9 @@
 package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.common.auth.AuthUser;
-import com.uos.cinemaseoul.controller.user.UsersController;
 import com.uos.cinemaseoul.dao.user.UsersDao;
-import com.uos.cinemaseoul.dto.user.LoginDto;
 import com.uos.cinemaseoul.dto.user.NonMemberDto;
-import com.uos.cinemaseoul.dto.user.SignUpDto;
+import com.uos.cinemaseoul.dto.user.UserSignUpDto;
 import com.uos.cinemaseoul.dto.user.UserInfoDto;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import org.junit.Test;
@@ -45,14 +43,15 @@ public class UsersServiceTest {
     @Test
     public void 회원_수정_삭제() throws Exception{
         //given
-        SignUpDto signupDto = new SignUpDto("김","19990909","01011111111","user1","1234","1");
-        int id = usersService.signUp(signupDto);
+        UserSignUpDto userSignupDto = new UserSignUpDto("김","19990909","01011111111",
+                "user1","1234","1");
+        int id = usersService.signUp(userSignupDto);
         System.out.println("id" + id);
         UserInfoDto u1 = usersService.selectById(id);
 
 
         //when
-        UsersVo v1 = new UsersVo().inputSignUp(signupDto);
+        UsersVo v1 = new UsersVo().inputSignUp(userSignupDto);
         v1.setUser_name("박");
         usersService.updateUser(v1);
         UsersVo v2 = usersDao.findByPhone(v1.getPhone_num());
@@ -63,5 +62,20 @@ public class UsersServiceTest {
         //then
         assertNotEquals(u1.getUser_name(), v2.getUser_name());
         assertNull(u2);
+    }
+    @Test
+    public void 이메일_번호_중복_검사() throws Exception{
+        //given
+        UserSignUpDto userSignUpDto = new UserSignUpDto("샘플", "12345678", "11122223333",
+                "user@naver.com","1234","1");
+        usersService.signUp(userSignUpDto);
+
+        //when
+
+        //then
+        assertFalse(usersService.emailCheck(userSignUpDto.getEmail()));
+        assertFalse(usersService.phoneCheck(userSignUpDto.getPhone_num()));
+
+
     }
 }

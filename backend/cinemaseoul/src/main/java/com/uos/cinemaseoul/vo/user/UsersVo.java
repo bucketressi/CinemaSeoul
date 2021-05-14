@@ -1,6 +1,6 @@
 package com.uos.cinemaseoul.vo.user;
 
-import com.uos.cinemaseoul.dto.user.SignUpDto;
+import com.uos.cinemaseoul.dto.user.UserSignUpDto;
 import lombok.*;
 
 @Getter @Setter
@@ -30,13 +30,13 @@ public class UsersVo {
         this.user_auth_code = user_auth_code;
     }
 
-    public UsersVo inputSignUp (SignUpDto signupDto){
-        this.user_name = signupDto.getUser_name();
-        this.birth = signupDto.getBirth();
-        this.phone_num = signupDto.getPhone_num();
-        this.email = signupDto.getEmail();
-        this.password = signupDto.getPassword();
-        this.agreement = signupDto.getAgreement();
+    public UsersVo inputSignUp (UserSignUpDto userSignupDto){
+        this.user_name = userSignupDto.getUser_name();
+        this.birth = userSignupDto.getBirth();
+        this.phone_num = userSignupDto.getPhone_num();
+        this.email = userSignupDto.getEmail();
+        this.password = userSignupDto.getPassword();
+        this.agreement = userSignupDto.getAgreement();
         //회원
         this.user_auth_code = 100001;
         return this;

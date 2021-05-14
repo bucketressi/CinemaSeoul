@@ -5,6 +5,7 @@ import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.dto.user.*;
 import com.uos.cinemaseoul.exception.BlackListException;
+import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.service.user.BlackListService;
@@ -12,7 +13,6 @@ import com.uos.cinemaseoul.service.user.UsersService;
 import com.uos.cinemaseoul.vo.user.BlackListVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -64,12 +64,12 @@ public class UsersController {
 
     //회원가입
     @PostMapping("/signup")
-    public void signup(@RequestBody SignUpDto signupDto) {
-        System.out.println("signupDto = " + signupDto.getUser_name());
+    public void signup(@RequestBody UserSignUpDto userSignupDto) {
+        System.out.println("signupDto = " + userSignupDto.getUser_name());
         try{
             // 비밀번호 인코딩
-            signupDto.encodePassword(passwordEncoder.encode(signupDto.getPassword()));
-            usersService.signUp(signupDto);
+            userSignupDto.encodePassword(passwordEncoder.encode(userSignupDto.getPassword()));
+            usersService.signUp(userSignupDto);
         }
         //블랙리스트면
         catch (BlackListException e){
@@ -146,6 +146,23 @@ public class UsersController {
         }
     }
 
+    //이메일검사
+    @PostMapping("/emailcheck")
+    public void emailCheck(@RequestParam(name = "email") String email){
+        if(!usersService.emailCheck(email)){
+            throw new DuplicateException();
+        }
+    }
+
+    //번호검사
+    @PostMapping("/phonecheck")
+    public void phoneCheck(@RequestParam(name = "phone_num") String phone_num){
+        if(!usersService.phoneCheck(phone_num)){
+            throw new DuplicateException();
+        }
+    }
+
+
     //블랙리스트 입력
     @PostMapping("/blacklist")
     public void insertBlacklist(@RequestBody BlackListVo blackListVo){
@@ -155,9 +172,5 @@ public class UsersController {
             throw new WrongArgException("Wrong args");
         }
     }
-
-
-
-
 
 }

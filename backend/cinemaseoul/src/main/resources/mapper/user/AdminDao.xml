@@ -5,23 +5,58 @@
 
 <mapper namespace="com.uos.cinemaseoul.dao.user.AdminDao">
 
-    <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
+    <!--관리자 이메일로 조회-->
     <select id="findByEmail" resultType="AdminVo">
         SELECT ADMI_ID, EMAIL, PASSWORD FROM ADMIN
         WHERE EMAIL = #{email}
     </select>
-
+    <!--관리자 번호로 조회-->
+    <select id="findByPhone" resultType="AdminVo">
+        SELECT ADMI_ID, EMAIL, PASSWORD FROM ADMIN
+        WHERE PHONE_NUM = #{phone_num}
+    </select>
+    <!--관리자 아이디로 조회-->
     <select id="findById" resultType="AdminVo">
         SELECT ADMI_ID, PASSWORD, ADMI_AUTH_CODE FROM ADMIN
         WHERE ADMI_ID = #{admi_id}
     </select>
-
+    <!--관리자 이메일 or 번호로 조회-->
+    <select id="findByEmailAndPhone" resultType="AdminVo">
+        SELECT COUNT(ADMI_ID) FROM ADMIN
+        WHERE EMAIL = #{email} OR PHONE_NUM = #{phone_num}
+    </select>
+    <!--관리자 회원가입-->
     <insert id="signUp" parameterType="AdminVo">
         INSERT INTO ADMIN (ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, ADMI_AUTH_CODE, POSITION, ADDRESS, START_DATE)
         VALUES (SEQ_ADMIN.nextval, #{admi_name}, #{birth, jdbcType=VARCHAR}, #{phone_num},
-                #{email},#{password},#{admi_auth_code},#{position}, #{address, jdbcType=VARCHAR}, #{start_date})
+                #{email},#{password},#{admi_auth_code},#{position, jdbcType=VACHAR}, #{address, jdbcType=VARCHAR}, #{start_date})
     </insert>
+    <!--관리자 조회-->
+    <select id="selectAdmin" resultType="AdminInfoDto">
+        SELECT ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, POSITION, ADDRESS, START_DATE,
+               (SELECT CODE_NAME FROM CODE WHRE CODE.CODE_ID = ADMIN.ADMI_AUTH_CODE) ADMI_AUTH
+        FROM ADMIN
+        WHERE ADMI_ID = #{admi_id}
+    </select>
+    <!--관리자 수정-->
+    <update id="updateAdmin" parameterType="AdminVo">
+        UPDATE ADMIN SET ADMI_NAME = {#admi_name},
+                       BIRTH = #{birth, jdbcType=VARCHAR},
+                       PHONE_NUM = #{phone_num ,jdbcType=VARCHAR},
+                       PASSWORD = #{password, jdbcType=VARCHAR},
+                       ADMI_AUTH_CODE = #{admi_auth_code},
+                       POSITION = #{position},
+                       ADDRESS = #{address, jdbcType=VARCHAR},
+                       START_DATE = #{start_date}
+        WHERE ADMI_ID = #{admi_id}
+    </update>
+    <!--관리자 삭제-->
+    <delete id="deleteAdmin">
+        DELETE FROM ADMIN WHERE ADMI_ID = #{admi_id}
+    </delete>
 
-
+    <!--관리자 리스트 조회(페이지)-->
+    <select id="selectAdminList" resultType="d">
+    </select>
 
 </mapper>
