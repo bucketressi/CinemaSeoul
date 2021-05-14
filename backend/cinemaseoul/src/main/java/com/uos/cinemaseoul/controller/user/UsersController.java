@@ -14,6 +14,7 @@ import com.uos.cinemaseoul.vo.user.BlackListVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,7 +85,11 @@ public class UsersController {
 
     //회원정보
     @GetMapping("/{user_id}")
-    public ResponseEntity<UserInfoDto> selectById(@PathVariable int user_id){
+    public ResponseEntity<UserInfoDto> selectById(Authentication authentication, @PathVariable int user_id){
+
+        //자기 id 아니면
+        if(Integer.parseInt(authentication.getName()) != user_id) throw new DuplicateException();
+
         UserInfoDto userInfoDto;
         try{
             userInfoDto = usersService.selectById(user_id);
@@ -100,7 +105,11 @@ public class UsersController {
 
     //회원수정
     @PutMapping("")
-    public void updateUser(@RequestBody final UsersVo usr)throws Exception{
+    public void updateUser(Authentication authentication, @RequestBody final UsersVo usr)throws Exception{
+
+        //자기 id 아니면
+        if(Integer.parseInt(authentication.getName()) != usr.getUser_id()) throw new DuplicateException();
+
         try{
                         int result = usersService.updateUser(usr);
             if(result == 0){
@@ -114,7 +123,11 @@ public class UsersController {
 
     //회원탈퇴
     @DeleteMapping("/{user_id}")
-    public void deleteUser(@PathVariable int user_id)throws Exception{
+    public void deleteUser(Authentication authentication, @PathVariable int user_id)throws Exception{
+
+        //자기 id 아니면
+        if(Integer.parseInt(authentication.getName()) != user_id) throw new DuplicateException();
+
         try {
             int result = usersService.deleteUser(user_id);
             if(result == 0){
@@ -138,8 +151,10 @@ public class UsersController {
                 result = usersService.adultCheck(dto.getPhone_num(), dto.getBirth());
             }
             if(!result){
-                throw new BlackListException("Not available");
+                throw new DuplicateException();
             }
+        }catch (DuplicateException e){
+            throw e;
         }
         catch (Exception e){
             throw new WrongArgException("Wrong args");
@@ -148,7 +163,7 @@ public class UsersController {
 
     //이메일검사
     @PostMapping("/emailcheck")
-    public void emailCheck(@RequestParam(name = "email") String email){
+    public void emailCheck(@ModelAttribute(name = "email") String email){
         if(!usersService.emailCheck(email)){
             throw new DuplicateException();
         }
@@ -156,7 +171,7 @@ public class UsersController {
 
     //번호검사
     @PostMapping("/phonecheck")
-    public void phoneCheck(@RequestParam(name = "phone_num") String phone_num){
+    public void phoneCheck(@ModelAttribute(name = "phone_num") String phone_num){
         if(!usersService.phoneCheck(phone_num)){
             throw new DuplicateException();
         }

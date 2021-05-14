@@ -32,16 +32,17 @@ public class AuthUser implements UserDetails {
 
         if(userType.equals(UserType.USERS)){
             auth_code = auth_code - 100000;
-            for(int i=1; i>=auth_code; i--){
+            for(int i=2; i>=auth_code; i--){
                 auth.add("ROLE_"+i);
             }
         }
         else{
-            auth_code = auth_code - 120000+2;
-            for(int i=4; i>=auth_code; i--){
+            auth_code = auth_code - 120000;
+            for(int i=4; i>=auth_code+2; i--){
                 auth.add("ROLE_"+i);
             }
         }
+        System.out.println(auth);
         this.password = password;
     }
 

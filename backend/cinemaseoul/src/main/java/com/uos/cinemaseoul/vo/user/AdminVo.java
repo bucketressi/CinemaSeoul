@@ -32,8 +32,8 @@ public class AdminVo {
         this.password = adminSignUpDto.getPassword();
         this.admi_auth_code = adminSignUpDto.getAdmi_auth_code();
 
-        if(adminSignUpDto.getAddress() != null){
-            this.position = adminSignUpDto.getPosition();
+        if(adminSignUpDto.getPosition() == null){
+            this.position = "직원";
         }
         if(adminSignUpDto.getAddress() != null){
             this.address = adminSignUpDto.getAddress();

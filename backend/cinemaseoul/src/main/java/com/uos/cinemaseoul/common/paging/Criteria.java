@@ -1,5 +1,8 @@
 package com.uos.cinemaseoul.common.paging;
 
+import lombok.Getter;
+
+@Getter
 public class Criteria {
     private int totalpage;
     private int page;

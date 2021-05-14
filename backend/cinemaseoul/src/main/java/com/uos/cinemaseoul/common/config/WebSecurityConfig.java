@@ -2,6 +2,7 @@ package com.uos.cinemaseoul.common.config;
 
 import com.uos.cinemaseoul.common.auth.JwtAuthenticationFilter;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
+import com.uos.cinemaseoul.common.auth.MappingConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    String[] s = new String[10];
 	private final JwtTokenProvider jwtTokenProvider;
     // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
 
@@ -49,21 +50,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// don`t authenticate this particular request
 				.authorizeRequests()
 
-
                 //로그인 없이 다 가능한 것들
-                .antMatchers("/user/login", "/user/signup", "/user/login/non-member", "/adult").permitAll()
+                .antMatchers(MappingConstant.All).permitAll()
 
                 //2 (비회원, 회원 둘다 가능)
-                .antMatchers("/user/test2").hasAnyRole("2","1")
+                .antMatchers(MappingConstant.NonUser).hasAnyRole("2","1")
 
                 //1 (회원 가능)
-                .antMatchers("/user/{user_id}","/user").hasRole("1")
+                .antMatchers(MappingConstant.User).hasRole("1")
 
                 //4 (직원 가능 = 매너지도 가능)
-                .antMatchers("/user/blacklist").hasAnyRole("3","4")
+                .antMatchers(MappingConstant.Admin).hasAnyRole("3","4")
 
                 //3 (매니저(높은 관리자) 가능)
-                //.antMatchers().hasAnyRole("4")
+                .antMatchers(MappingConstant.Manager).hasAnyRole("4")
+
 
 
                 .and()

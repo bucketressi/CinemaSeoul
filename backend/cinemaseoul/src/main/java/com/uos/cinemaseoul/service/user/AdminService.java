@@ -2,6 +2,7 @@ package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
+import com.uos.cinemaseoul.common.paging.Criteria;
 import com.uos.cinemaseoul.dao.user.AdminDao;
 import com.uos.cinemaseoul.dto.user.*;
 import com.uos.cinemaseoul.exception.DuplicateException;
@@ -48,9 +49,27 @@ public class AdminService {
         return adminDao.selectAdmin(admi_id);
     }
 
+    //리스트 조회
+    @Transactional(rollbackFor = {Exception.class, Error.class})
+    public AdminListDto selectList(Criteria criteria){
+        AdminListDto adminListDto = new AdminListDto();
+        //페이지 계산
+        int totalCount = adminDao.countList();
+        int totalPage =  totalCount / criteria.getAmount();
+        if(totalCount % criteria.getAmount() > 0){
+            totalPage++;
+        }
+
+        //total page
+        adminListDto.setPageInfo(totalPage, criteria.getPage(), criteria.getAmount());
+        adminListDto.setAdminListInfoDtoList(adminDao.selectAdminList(criteria));
+
+        return adminListDto;
+    }
+
     //수정
     @Transactional(rollbackFor = {Exception.class, Error.class})
-    public int updateAdmi(AdminVo adv) throws Exception{
+    public int updateAdmin(AdminVo adv) throws Exception{
 
         //전화번호가 바뀌었으면
         if(!adminDao.findById(adv.getAdmi_id()).getPhone_num().equals(adv.getPhone_num())){
