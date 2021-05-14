@@ -6,19 +6,20 @@
 <mapper namespace="com.uos.cinemaseoul.dao.user.AdminDao">
 
     <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
-    <select id="findByEmail" resultType="UsersVo">
-        SELECT USER_ID, EMAIL, PASSWORD FROM USERS
+    <select id="findByEmail" resultType="AdminVo">
+        SELECT ADMI_ID, EMAIL, PASSWORD FROM ADMIN
         WHERE EMAIL = #{email}
     </select>
 
-    <select id="findById" resultType="UsersVo">
-        SELECT USER_ID, PASSWORD, USER_AUTH_CODE FROM USERS
-        WHERE USER_ID = #{id}
+    <select id="findById" resultType="AdminVo">
+        SELECT ADMI_ID, PASSWORD, ADMI_AUTH_CODE FROM ADMIN
+        WHERE ADMI_ID = #{admi_id}
     </select>
 
-    <insert id="signUp" parameterType="UsersVo">
-        INSERT INTO USERS (USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, USER_TYPE_CODE)
-        VALUES (seq_users.NEXTVAL, #{user_name}, #{birth}, #{phone_num}, #{email},#{password},#{agreement},#{user_type_code})
+    <insert id="signUp" parameterType="AdminVo">
+        INSERT INTO ADMIN (ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, ADMI_AUTH_CODE, POSITION, ADDRESS, START_DATE)
+        VALUES (SEQ_ADMIN.nextval, #{admi_name}, #{birth, jdbcType=VARCHAR}, #{phone_num},
+                #{email},#{password},#{admi_auth_code},#{position}, #{address, jdbcType=VARCHAR}, #{start_date})
     </insert>
 
 
