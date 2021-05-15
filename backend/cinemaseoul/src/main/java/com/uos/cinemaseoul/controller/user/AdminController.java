@@ -1,18 +1,18 @@
 package com.uos.cinemaseoul.controller.user;
 
-import com.uos.cinemaseoul.common.auth.AuthUser;
+
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.common.paging.Criteria;
-import com.uos.cinemaseoul.dto.user.*;
-import com.uos.cinemaseoul.exception.BlackListException;
+import com.uos.cinemaseoul.dto.user.AdminInfoDto;
+import com.uos.cinemaseoul.dto.user.AdminListDto;
+import com.uos.cinemaseoul.dto.user.AdminSignUpDto;
+import com.uos.cinemaseoul.dto.user.LoginDto;
 import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.service.user.AdminService;
 import com.uos.cinemaseoul.vo.user.AdminVo;
-import com.uos.cinemaseoul.vo.user.BlackListVo;
-import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
