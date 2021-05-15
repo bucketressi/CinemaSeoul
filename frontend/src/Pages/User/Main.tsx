@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Layout, MovieCard } from '../../Components';
+import { Layout, MovieCard, PageTitle } from '../../Components';
 import "../../scss/pages/main.scss";
 
 const Main = () => {
@@ -13,6 +13,7 @@ const Main = () => {
 
 	return (
 		<Layout>
+			<PageTitle title="상영 중인 영화"/>
 			<div className="movie-list">
 				{
 					[1,2,3].map((i) => 
