@@ -31,7 +31,7 @@
 		"no-unused-vars": "warn", // 정의 후 사용하지 않은 변수는 경고만 하기
 		"no-use-before-define": 1, // 정의 전에 사용 금지
 		"no-console": 0, // console 사용하기
-		"camelcase": ["error", { "properties": "always" }], // 속성에 camelcase 사용
+		"camelcase": 0, // 속성에 camelcase 사용 x
 		"no-tabs": 0, // tab 사용 안되는 rule
 		"quote-props": 0, // property에 quote를 씌우지 말아야하는 rule
 		"@typescript-eslint/no-empty-function" : 0, // 빈 arrow-funciton 가능
