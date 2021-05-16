@@ -104,7 +104,7 @@ public class UsersController {
     }
 
     //회원수정
-    @PutMapping("")
+    @PutMapping("/update")
     public void updateUser(Authentication authentication, @RequestBody final UsersVo usr)throws Exception{
 
         //자기 id 아니면

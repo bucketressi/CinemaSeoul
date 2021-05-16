@@ -21,18 +21,24 @@ public class MappingConstant {
 
     //1 (회원 가능)
     public static String[] User = {
+            "/user",
             "/user/{user_id}",
-            "/user"};
+            "/user/update"
+    };
 
     //4 (직원 가능 = 매너지도 가능)
     public static String[] Admin = {
             "/user/blacklist",
             "/admin/{admi_id}",
-            "/admin"
+            "/admin/update",
+            "/movie/update",
+            "/movie/add",
+            "/movie/{movi_id}"
     };
 
     //3 (매니저(높은 관리자만) 가능)
     public static String[] Manager = {
             "/admin/list",
+            "/admin"
     };
 }

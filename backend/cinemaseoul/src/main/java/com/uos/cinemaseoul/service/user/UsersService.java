@@ -64,7 +64,7 @@ public class UsersService  {
         return null;
     }
 
-    //비회원가입
+    //비회원가입 장르
     @Transactional
     public AuthUser nonMemberSignUp(NonMemberDto nonMemberDto){
 

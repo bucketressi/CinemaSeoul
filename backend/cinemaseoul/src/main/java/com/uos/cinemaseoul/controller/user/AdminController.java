@@ -1,6 +1,7 @@
 package com.uos.cinemaseoul.controller.user;
 
 
+import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.common.paging.Criteria;
@@ -60,7 +61,7 @@ public class AdminController {
     }
 
     //관리자 수정
-    @PutMapping("")
+    @PutMapping("/update")
     public void updateAdmi(Authentication authentication, @RequestBody final AdminVo adv)throws Exception{
 
         //매니저도 아니고, 자기 id도 아니면

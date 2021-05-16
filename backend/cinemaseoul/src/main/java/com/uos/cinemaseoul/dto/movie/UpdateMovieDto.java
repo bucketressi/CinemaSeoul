@@ -1,24 +1,31 @@
-package com.uos.cinemaseoul.vo.movie;
+package com.uos.cinemaseoul.dto.movie;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
+import org.springframework.lang.NonNull;
 
-@Getter @Builder
+import java.util.List;
+
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class MovieVo {
+@Builder
+public class UpdateMovieDto {
     private int movi_id;
+    @NonNull
     private String movi_name;
+    @NonNull
     private int avai_age_code;
+    @NonNull
     private String show_time;
     //nullable
     private String company;
     //nullable
     private String movi_contents;
+    @NonNull
     private String open_date;
-    private float rating;
+    private int[] genre_code;
+    private List<CastingDto> casting;
     //nullable
     private byte[] image;
 }

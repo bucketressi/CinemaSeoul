@@ -5,8 +5,108 @@
 
 <mapper namespace="com.uos.cinemaseoul.dao.movie.MovieDao">
 
-    <insert id="insertMovie" parameterType="InsertMovieDto">
+    <resultMap id="moviInfo" type="SelectMovieDto">
+        <id property="movi_id" column="MOVI_ID"/>
+        <result property="movi_name" column="MOVI_NAME"/>
+        <result property="avai_age" column="AVAI_AGE"/>
+        <result property="show_time" column="SHOW_TIME"/>
+        <result property="company" column="COMPANY"/>
+        <result property="movi_contents" column="MOVI_CONTENTS"/>
+        <result property="open_date" column="OPEN_DATE"/>
+        <result property="image" column="IMAGE"/>
+        <result property="rating" column="RATING"/>
+        <collection property="genre" ofType="java.util.Arrays"/>
+        <collection property="casting" ofType="CastingInfoDto">
+            <id property="peop_id" column="PEOP_ID"/>
+            <result property="peop_name" column="PEOP_NAME"/>
+            <result property="cast_type_code" column="CAST_TYPE_CODE"/>
+        </collection>
+    </resultMap>
+
+    <!--get query-->
+    <select id="selectMovie" resultType="SelectMovieDto">
+        SELECT M.MOVI_ID, M.MOVI_NAME,
+               (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = M.AVAI_AGE_CODE) AVAI_AGE,
+               M.SHOW_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.IMAGE,
+               C.CAST_TYPE_CODE,
+               P.PEOP_ID, P.PEOP_NAME
+        FROM MOVIE M
+        INNER JOIN CAST C on M.MOVI_ID = C.MOVI_ID
+        LEFT OUTER JOIN PEOPLE P on C.PEOP_ID = P.PEOP_ID
+    </select>
+
+
+    <!-- 영화삽입  -->
+    <insert id="insertMovie" parameterType="MovieVo">
+        <selectKey keyProperty="movi_id" resultType="int" order="BEFORE">
+            SELECT SEQ_MOVIE.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO MOVIE VALUES (#{movi_id}, #{movi_name}, #{avai_age_code}, #{show_time},
+                            #{company, jdbcType=VARCHAR}, #{movi_contents, jdbcType=VARCHAR},
+                            #{open_date}, DEFAULT, #{image, jdbcType=BLOB})
     </insert>
+
+    <!-- 장르삽입  -->
+    <update id="insertGenre" parameterType="hashmap">
+        INSERT ALL
+        <foreach collection="genre" item="genre" index="index" separator=" ">
+            INTO MOVIEGENRE (MOVI_ID, GENRE_CODE) VALUES (${movi_id}, ${genre})
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <!-- 캐스팅 삽입  -->
+    <update id="insertCasting">
+        INSERT ALL
+        <foreach item="casting" index="index" collection="casting" separator=" ">
+        INTO CAST (MOVI_ID, PEOP_ID, CAST_TYPE_CODE) VALUES
+            ( ${movi_id}, ${casting.peop_id}, ${casting.cast_type_code})
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <!-- update query -->
+    <update id="updateMovie" parameterType="MovieVo">
+        UPDATE MOVIE M SET M.MOVI_NAME = #{movi_name},
+                         M.AVAI_AGE_CODE = #{avai_age_code},
+                         M.SHOW_TIME = #{show_time},
+
+                         <if test="company != null">
+                         M.COMPANY = #{company},
+                         </if>
+
+                         <if test="movi_contents != null">
+                         M.MOVI_CONTENTS = #{movi_contents},
+                         </if>
+
+                         M.OPEN_DATE = #{open_date}
+
+                         <if test="image != null">
+                         , M.IMAGE = #{image}
+                         </if>
+
+        WHERE M.MOVI_ID = #{movi_id}
+    </update>
+
+
+
+    <!-- 캐스팅 DELETE  -->
+    <delete id="deleteCasting" parameterType="Integer">
+        DELETE FROM CAST WHERE MOVI_ID = #{movi_id}
+    </delete>
+
+    <!-- Genre delete-->
+    <delete id="deleteGenre" parameterType="Integer">
+        DELETE FROM MOVIEGENRE WHERE MOVI_ID = #{movi_id}
+    </delete>
+
+    <!--movie delete-->
+    <delete id="deleteMovie" parameterType="Integer">
+        DELETE FROM MOVIE WHERE MOVI_ID = #{movi_id}
+    </delete>
+
+
 
 
 </mapper>

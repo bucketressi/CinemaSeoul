@@ -2,29 +2,31 @@ package com.uos.cinemaseoul.dto.movie;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class InsertMovieDto {
+@RequiredArgsConstructor
+public class SelectMovieDto {
 
-    @NonNull
+    private String movi_id;
     private String movi_name;
-    @NonNull
     private int avai_age_code;
-    @NonNull
     private String show_time;
-    //nullable
     private String company;
-    //nullable
     private String movi_contents;
-    @NonNull
-    private String open_date;
-    private int[] genre_code;
-    private List<CastingDto> casting;
-    //nullable
     private byte[] image;
+    private String open_date;
+
+    //장르
+    private int[] genre;
+
+    private List<CastingInfoDto> casting = new ArrayList<>();
+    private float rating;
+    private float bookrecord;
 
 }
