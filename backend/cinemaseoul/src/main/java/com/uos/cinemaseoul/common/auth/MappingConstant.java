@@ -12,7 +12,8 @@ public class MappingConstant {
             "/admin/signup",
             "/admin/login",
             "/admin/phoneCheck",
-            "/admin/emailCheck"};
+            "/admin/emailCheck",
+            "/movie/{movi_id}"};
 
     //2 (비회원, 회원 둘다 가능)
     public static String[] NonUser = {
@@ -23,6 +24,7 @@ public class MappingConstant {
     public static String[] User = {
             "/user",
             "/user/{user_id}",
+            "/user/delete",
             "/user/update"
     };
 
@@ -33,12 +35,13 @@ public class MappingConstant {
             "/admin/update",
             "/movie/update",
             "/movie/add",
-            "/movie/{movi_id}"
+            "/movie/delete"
     };
 
     //3 (매니저(높은 관리자만) 가능)
     public static String[] Manager = {
             "/admin/list",
+            "/admin/delete",
             "/admin"
     };
 }

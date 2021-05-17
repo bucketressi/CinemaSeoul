@@ -3,7 +3,9 @@ package com.uos.cinemaseoul.service.movie;
 import com.uos.cinemaseoul.common.mapper.MovieMapper;
 import com.uos.cinemaseoul.dao.movie.MovieDao;
 import com.uos.cinemaseoul.dto.movie.InsertMovieDto;
+import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
 import com.uos.cinemaseoul.dto.movie.UpdateMovieDto;
+import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.AllArgsConstructor;
@@ -67,5 +69,22 @@ public class MovieService {
         //인물재설정
         movieDao.deleteCasting(movieVo.getMovi_id());
         movieDao.insertCasting(map);
+    }
+
+    //영화 조회
+    @Transactional
+    public SelectMovieDto selectMovie(int movi_id){
+        SelectMovieDto sMDto = movieDao.selectMovie(movi_id);
+
+        if(sMDto == null){
+            throw new NotFoundException("no Movie Detected");
+        }
+
+        System.out.println(sMDto.getMovi_name() + "아니 이거 왜안돼" + sMDto.getCasting());
+        String[] genre = movieDao.selectGenre(movi_id);
+        if(genre != null){
+            sMDto.setGenre(genre);
+        }
+        return sMDto;
     }
 }

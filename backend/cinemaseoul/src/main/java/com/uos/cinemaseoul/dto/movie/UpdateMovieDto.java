@@ -15,7 +15,7 @@ public class UpdateMovieDto {
     @NonNull
     private String movi_name;
     @NonNull
-    private int avai_age_code;
+    private String avai_age_code;
     @NonNull
     private String show_time;
     //nullable
@@ -24,8 +24,8 @@ public class UpdateMovieDto {
     private String movi_contents;
     @NonNull
     private String open_date;
-    private int[] genre_code;
-    private List<CastingDto> casting;
+    private String[] genre_code;
+    private List<CastingInfoDto> casting;
     //nullable
     private byte[] image;
 }

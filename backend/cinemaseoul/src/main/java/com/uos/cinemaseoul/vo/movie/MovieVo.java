@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class MovieVo {
     private int movi_id;
     private String movi_name;
-    private int avai_age_code;
+    private String avai_age_code;
     private String show_time;
     //nullable
     private String company;

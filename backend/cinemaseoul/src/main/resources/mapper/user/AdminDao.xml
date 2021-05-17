@@ -29,7 +29,7 @@
     <insert id="signUp" parameterType="AdminVo">
         INSERT INTO ADMIN (ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, ADMI_AUTH_CODE, POSITION, ADDRESS, START_DATE)
         VALUES (SEQ_ADMIN.nextval, #{admi_name}, #{birth, jdbcType=VARCHAR}, #{phone_num},
-                #{email},#{password},#{admi_auth_code},#{position, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{start_date})
+                #{email},#{password},#{admi_auth_code, jdbcType = VARCHAR}, #{position, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{start_date})
     </insert>
     <!--관리자 조회-->
     <select id="selectAdmin" resultType="AdminInfoDto">

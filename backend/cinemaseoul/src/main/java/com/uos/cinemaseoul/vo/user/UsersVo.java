@@ -17,11 +17,11 @@ public class UsersVo {
     private String agreement;
     private int curr_point;
     private int accu_point;
-    private int user_type_code;
-    private int user_auth_code;
+    private String user_type_code;
+    private String user_auth_code;
 
     //비회원용 생성자
-    public UsersVo(String user_name, String birth, String phone_num,String password, int user_type_code, int user_auth_code){
+    public UsersVo(String user_name, String birth, String phone_num,String password, String user_type_code, String user_auth_code){
         this.user_name = user_name;
         this.birth = birth;
         this.phone_num = phone_num;
@@ -38,7 +38,7 @@ public class UsersVo {
         this.password = userSignupDto.getPassword();
         this.agreement = userSignupDto.getAgreement();
         //회원
-        this.user_auth_code = 100001;
+        this.user_auth_code = "100001";
         return this;
     }
 }

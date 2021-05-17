@@ -80,7 +80,7 @@ public class UsersService  {
                 .phone_num(nonMemberDto.getPhone_num())
                 .password(nonMemberDto.getPassword())
                 //비회원 세팅
-                .user_auth_code(100002)
+                .user_auth_code("100002")
                 .agreement(nonMemberDto.getAgreement())
                 .build();
 
@@ -99,7 +99,6 @@ public class UsersService  {
 
         //전화번호가 바뀌었으면
         if(!usersDao.findById(usr.getUser_id()).getPhone_num().equals(usr.getPhone_num())){
-
             //일단 전화번호 체크해서 중복인지 확인
             if(!phoneCheck(usr.getPhone_num())){
                 throw new WrongArgException("전화번호 중복");

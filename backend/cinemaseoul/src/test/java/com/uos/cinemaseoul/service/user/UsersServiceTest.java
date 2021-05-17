@@ -52,15 +52,16 @@ public class UsersServiceTest {
 
         //when
         UsersVo v1 = new UsersVo().inputSignUp(userSignupDto);
+        v1.setUser_id(id);
         v1.setUser_name("박");
         usersService.updateUser(v1);
-        UsersVo v2 = usersDao.findByPhone(v1.getPhone_num());
+        UsersVo v2 = usersDao.findByEmail(v1.getEmail());
 
         usersService.deleteUser(id);
         UserInfoDto u2 = usersService.selectById(id);
 
         //then
-        assertNotEquals(u1.getUser_name(), v2.getUser_name());
+        assertNotEquals(u1.getPhone_num(), v2.getPhone_num());
         assertNull(u2);
     }
     @Test

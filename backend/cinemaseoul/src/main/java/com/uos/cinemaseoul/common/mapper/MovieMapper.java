@@ -9,10 +9,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface MovieMapper{
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     MovieVo insertMovieDtoToMovieVo (InsertMovieDto insertMovieDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     MovieVo updateMovieDtoToMovieVo (UpdateMovieDto updateMovieDto);
+
 }

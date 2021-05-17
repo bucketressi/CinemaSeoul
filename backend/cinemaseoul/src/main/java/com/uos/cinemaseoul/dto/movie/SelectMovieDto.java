@@ -13,9 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SelectMovieDto {
 
-    private String movi_id;
+    private int movi_id;
     private String movi_name;
-    private int avai_age_code;
+    private String avai_age;
     private String show_time;
     private String company;
     private String movi_contents;
@@ -23,7 +23,7 @@ public class SelectMovieDto {
     private String open_date;
 
     //장르
-    private int[] genre;
+    private String[] genre;
 
     private List<CastingInfoDto> casting = new ArrayList<>();
     private float rating;

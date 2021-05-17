@@ -109,8 +109,8 @@ public class AdminController {
     }
 
     //관리자탈퇴
-    @DeleteMapping("/{admi_id}")
-    public void deleteUser(Authentication authentication, @PathVariable int admi_id)throws Exception{
+    @DeleteMapping("/delete")
+    public void deleteUser(Authentication authentication, @ModelAttribute(name = "admi_id") int admi_id)throws Exception{
         //매니저도 아니고, 자기 id도 아니면
         if(!authentication.getAuthorities().contains("ROLE_3")
                 && Integer.parseInt(authentication.getName()) != admi_id ) throw new DuplicateException();

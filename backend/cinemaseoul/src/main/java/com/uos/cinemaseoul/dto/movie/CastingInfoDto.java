@@ -8,5 +8,5 @@ import lombok.Data;
 public class CastingInfoDto {
     private int peop_id;
     private String peop_name;
-    private int cast_type_code;
+    private String cast_type_code;
 }

@@ -30,7 +30,7 @@ public class AdminServiceTest {
     public void 관리자_등록_수정_삭제() throws Exception{
         //given
         AdminSignUpDto adminSignUpDto = new AdminSignUpDto("관1",null,"12312345678","admin@test.com","1234",
-                120001,"직원",null,"20200101");
+                "120001","직원",null,"20200101");
         adminService.signUp(adminSignUpDto);
 
         //when
@@ -59,7 +59,7 @@ public class AdminServiceTest {
         Criteria criteria = new Criteria(2,5);
         for(int i =1; i<23; i++){
             adminService.signUp(new AdminSignUpDto("관"+i,null,"123123456"+i,"admin@test.com"+i,"1234",
-                    120001,"직원",null,"20200101"));
+                    "120001","직원",null,"20200101"));
         }
 
         //when

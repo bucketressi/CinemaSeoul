@@ -25,20 +25,21 @@ public class AuthUser implements UserDetails {
     private UserType userType;
     private String password;
 
-    public AuthUser(int id, UserType userType, int auth_code, String password){
+    public AuthUser(int id, UserType userType,String auth_code, String password){
         this.id = id;
+        int c = Integer.parseInt(auth_code);
         auth = new ArrayList<>();
         this.userType = userType;
 
         if(userType.equals(UserType.USERS)){
-            auth_code = auth_code - 100000;
-            for(int i=2; i>=auth_code; i--){
+            c = c - 100000;
+            for(int i=2; i>=c; i--){
                 auth.add("ROLE_"+i);
             }
         }
         else{
-            auth_code = auth_code - 120000;
-            for(int i=4; i>=auth_code+2; i--){
+            c = c - 120000;
+            for(int i=4; i>=c+2; i--){
                 auth.add("ROLE_"+i);
             }
         }

@@ -15,7 +15,7 @@ public class AdminVo {
     private String phone_num;
     private String email;
     private String password;
-    private int admi_auth_code;
+    private String admi_auth_code;
     private String position;
     private String address;
     private String start_date;
@@ -34,7 +34,10 @@ public class AdminVo {
 
         if(adminSignUpDto.getPosition() == null){
             this.position = "직원";
+        }else{
+            this.position = adminSignUpDto.getPosition();
         }
+
         if(adminSignUpDto.getAddress() != null){
             this.address = adminSignUpDto.getAddress();
         }

@@ -122,8 +122,8 @@ public class UsersController {
     }
 
     //회원탈퇴
-    @DeleteMapping("/{user_id}")
-    public void deleteUser(Authentication authentication, @PathVariable int user_id)throws Exception{
+    @DeleteMapping("/delete")
+    public void deleteUser(Authentication authentication, @ModelAttribute(name = "user_id") int user_id)throws Exception{
 
         //자기 id 아니면
         if(Integer.parseInt(authentication.getName()) != user_id) throw new DuplicateException();
