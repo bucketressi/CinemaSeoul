@@ -10,21 +10,31 @@
         SELECT ADMI_ID, EMAIL, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
         WHERE EMAIL = #{email}
     </select>
+
     <!--관리자 번호로 조회-->
     <select id="findByPhone" resultType="AdminVo">
-        SELECT ADMI_ID, EMAIL, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE  FROM ADMIN
+        SELECT ADMI_NAME, EMAIL FROM ADMIN
         WHERE PHONE_NUM = #{phone_num}
     </select>
+
     <!--관리자 아이디로 조회-->
     <select id="findById" resultType="AdminVo">
         SELECT ADMI_ID, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
         WHERE ADMI_ID = #{admi_id}
     </select>
+
+    <!--관리자 아이디찾기-->
+    <select id="findByPhoneAndName" parameterType="AdminVo" resultType="String">
+        SELECT EMAIL FROM ADMIN
+        WHERE  PHONE_NUM = #{phone_num} AND ADMI_NAME = #{admi_name}
+    </select>
+
     <!--관리자 이메일 or 번호로 조회-->
     <select id="findByEmailAndPhone" resultType="AdminVo">
         SELECT ADMI_ID FROM ADMIN
-        WHERE EMAIL = #{email} OR PHONE_NUM = #{phone_num}
+        WHERE EMAIL = #{email} or PHONE_NUM = #{phone_num}
     </select>
+
     <!--관리자 회원가입-->
     <insert id="signUp" parameterType="AdminVo">
         INSERT INTO ADMIN (ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, ADMI_AUTH_CODE, POSITION, ADDRESS, START_DATE)
@@ -77,4 +87,11 @@
     <select id="countList" resultType="Integer">
         SELECT COUNT(*) AS totalpage FROM ADMIN
     </select>
+
+    <!-- 비밀번호 재설정 -->
+    <update id="resetPassword" parameterType="AdminVo">
+        UPDATE ADMIN SET PASSWORD = #{password}
+        WHERE PHONE_NUM = #{phone_num} AND EMAIL = #{email}
+    </update>
+
 </mapper>

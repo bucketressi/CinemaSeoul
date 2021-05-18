@@ -2,6 +2,8 @@ package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
+import com.uos.cinemaseoul.common.mapper.AdminMapper;
+import com.uos.cinemaseoul.common.mapper.MovieMapper;
 import com.uos.cinemaseoul.common.paging.Criteria;
 import com.uos.cinemaseoul.dao.user.AdminDao;
 import com.uos.cinemaseoul.dto.user.*;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
 
     private final AdminDao adminDao;
+    private final AdminMapper adminMapper;
 
     //로그인
     public AuthUser login(LoginDto loginDto) {
@@ -67,7 +70,9 @@ public class AdminService {
         return adminListDto;
     }
 
+
     //수정
+    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> ASK, FAQ, NOTICE, EVENT에서의 이름도 변경해야함***/
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int updateAdmin(AdminVo adv) throws Exception{
 
@@ -85,7 +90,6 @@ public class AdminService {
         }
         //1보다 더 많이 수정되어버리면
         int result = adminDao.updateAdmin(adv);
-
         if(result > 1){
             throw new Exception("too much updated");
         }
@@ -116,6 +120,26 @@ public class AdminService {
         return adminDao.findByEmail(email) != null ? false : true;
     }
 
+    //아이디 찾기
+    public String findEmail(AdminFindDto adminFindDto){
+        AdminVo adminVo = adminMapper.insertIntoAdminFindToAdminVo(adminFindDto);
+        String email = adminDao.findByPhoneAndName(adminVo);
+
+        if(email == null) throw new DuplicateException("no email available");
+
+        return email;
+    }
+
+    //비밀번호 재설정
+    @Transactional
+    public void resetPassword(AdminFindDto adminFindDto){
+        AdminVo adminVo = adminMapper.insertIntoAdminFindToAdminVo(adminFindDto);
+
+        if(adminDao.findByPhoneAndName(adminVo) != null) throw new DuplicateException("no email available");
+        if(adminDao.resetPassword(adminVo) > 1){
+            throw new WrongArgException("error occurs");
+        }
+    }
 
 
 }

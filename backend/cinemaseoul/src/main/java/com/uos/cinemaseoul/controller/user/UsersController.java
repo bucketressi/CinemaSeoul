@@ -44,22 +44,8 @@ public class UsersController {
     //비회원가입
     @PostMapping("/login/non-member")
     public String nonMemberlogin(@RequestBody NonMemberDto nonMemberDto){
-        AuthUser authUser = usersService.nonMemberCheck(nonMemberDto.getPhone_num());
-        try {
-            if(authUser == null){
-                nonMemberDto.encodePassword(passwordEncoder.encode(nonMemberDto.getPassword()));
-                authUser = usersService.nonMemberSignUp(nonMemberDto);
-            }
-        }
-        //블랙리스트면
-        catch (BlackListException e){
-            throw e;
-        }
-        //그외 예외
-        catch (Exception e){
-            e.printStackTrace();
-            throw new WrongArgException("Wrong SignUp Form");
-        }
+        nonMemberDto.encodePassword(passwordEncoder.encode(nonMemberDto.getPassword()));
+        AuthUser authUser = usersService.nonMemberCheck(nonMemberDto);
         return jwtTokenProvider.createToken(UserType.USERS.toString(), authUser.getUsername(), authUser.getAuth());
     }
 
@@ -164,17 +150,13 @@ public class UsersController {
     //이메일검사
     @PostMapping("/emailcheck")
     public void emailCheck(@ModelAttribute(name = "email") String email){
-        if(!usersService.emailCheck(email)){
-            throw new DuplicateException();
-        }
+        usersService.emailCheck(email);
     }
 
     //번호검사
     @PostMapping("/phonecheck")
     public void phoneCheck(@ModelAttribute(name = "phone_num") String phone_num){
-        if(!usersService.phoneCheck(phone_num)){
-            throw new DuplicateException();
-        }
+        usersService.phoneCheck(phone_num);
     }
 
 
@@ -186,6 +168,19 @@ public class UsersController {
         }catch (Exception e){
             throw new WrongArgException("Wrong args");
         }
+    }
+
+    //아이디찾기
+    @PostMapping("/findId")
+    public ResponseEntity<String> findId(@RequestBody UserFindDto userFindDto){
+        return ResponseEntity.ok(usersService.findEmail(userFindDto));
+    }
+
+    //비밀번호재설정
+    @PostMapping("/resetPW")
+    public void resetPW(@RequestBody UserFindDto userFindDto){
+        userFindDto.setPassword(passwordEncoder.encode(userFindDto.getPassword()));
+        usersService.resetPassword(userFindDto);
     }
 
 }

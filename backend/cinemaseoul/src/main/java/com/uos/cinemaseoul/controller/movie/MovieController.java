@@ -1,6 +1,8 @@
 package com.uos.cinemaseoul.controller.movie;
 
+import com.uos.cinemaseoul.common.paging.MovieCriteria;
 import com.uos.cinemaseoul.dto.movie.InsertMovieDto;
+import com.uos.cinemaseoul.dto.movie.MovieListDto;
 import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
 import com.uos.cinemaseoul.dto.movie.UpdateMovieDto;
 import com.uos.cinemaseoul.service.movie.MovieService;
@@ -34,5 +36,11 @@ public class MovieController {
     public ResponseEntity<?> selectMovie(@PathVariable int movi_id){
         SelectMovieDto sMDto = movieService.selectMovie(movi_id);
         return ResponseEntity.ok(sMDto);
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<?> searchMovieList(@RequestBody MovieCriteria movieCriteria){
+        MovieListDto movieListDto = movieService.selectMovieList(movieCriteria);
+        return ResponseEntity.ok(movieListDto);
     }
 }

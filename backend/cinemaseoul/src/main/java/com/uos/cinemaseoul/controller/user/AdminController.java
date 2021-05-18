@@ -5,10 +5,7 @@ import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.common.paging.Criteria;
-import com.uos.cinemaseoul.dto.user.AdminInfoDto;
-import com.uos.cinemaseoul.dto.user.AdminListDto;
-import com.uos.cinemaseoul.dto.user.AdminSignUpDto;
-import com.uos.cinemaseoul.dto.user.LoginDto;
+import com.uos.cinemaseoul.dto.user.*;
 import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
@@ -140,5 +137,18 @@ public class AdminController {
         if(!adminService.emailCheck(email)){
             throw new DuplicateException();
         }
+    }
+
+    //아이디찾기
+    @PostMapping("/findId")
+    public ResponseEntity<String> findId(@RequestBody AdminFindDto adminFindDto){
+        return ResponseEntity.ok(adminService.findEmail(adminFindDto));
+    }
+
+    //비밀번호재설정
+    @PostMapping("/resetPW")
+    public void resetPW(@RequestBody AdminFindDto adminFindDto){
+        adminFindDto.setPassword(passwordEncoder.encode(adminFindDto.getPassword()));
+        adminService.resetPassword(adminFindDto);
     }
 }

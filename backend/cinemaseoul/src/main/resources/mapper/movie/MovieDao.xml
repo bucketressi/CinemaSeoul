@@ -44,6 +44,95 @@
     </select>
 
 
+    <!-- 전체 영화 수 조회 -->
+    <select id="countList" parameterType="MovieCriteria" resultType="Integer">
+        SELECT COUNT(*) FROM MOVIE M
+            <trim prefix="WHERE" prefixOverrides="AND">
+
+                <choose>
+                    <!--상영 중-->
+                    <when test="stat == 1"><![CDATA[
+                        M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD') AND
+                                     M.OPEN_DATE+7 > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                    ]]></when>
+
+                    <!--상영 예정-->
+                    <when test="stat == 2"><![CDATA[
+                         M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                    ]]></when>
+                     <otherwise></otherwise>
+                </choose>
+
+                <if test="avai_age_code != null">
+                    AND M.AVAI_AGE_CODE IN
+                    <foreach collection="avai_age_code" item="avai_age" separator=", " open="(" close=")">
+                       #{avai_age}
+                    </foreach>
+                </if>
+
+                <if test="genre_code != null">
+                    AND M.MOVI_ID IN
+                    (SELECT MG.MOVI_ID FROM MOVIEGENRE MG
+                    WHERE MG.GENRE_CODE IN
+                    <foreach collection="genre_code" item="genre" separator=", "  open="(" close=")">
+                        #{genre}
+                    </foreach>
+                    )
+                </if>
+            </trim>
+    </select>
+
+    <!--영화 리스트 조회(페이지)-->
+    <select id="selectMovieList" parameterType="MovieCriteria" resultType="MovieListInfoDto">
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.RATING, B.IMAGE
+        FROM (
+                 SELECT /*+index_desc(IDX_MOVIE)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.RATING, A.IMAGE
+                 FROM(
+                         SELECT MOVI_ID, MOVI_NAME, RATING, IMAGE FROM MOVIE M
+
+                            <trim prefix="WHERE" prefixOverrides="AND">
+                                <choose>
+                                    <!--상영 중-->
+                                    <when test="stat == 1"><![CDATA[
+                                            M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD') AND
+                                                         M.OPEN_DATE+7 > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        ]]></when>
+
+                                    <!--상영 예정-->
+                                    <when test="stat == 2"><![CDATA[
+                                             M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        ]]></when>
+                                    <otherwise></otherwise>
+                                </choose>
+                                <if test="avai_age_code != null">
+                                    AND M.AVAI_AGE_CODE IN
+                                    <foreach collection="avai_age_code" item="avai_age" separator=", " open="(" close=")">
+                                        #{avai_age}
+                                    </foreach>
+                                </if>
+
+                                <if test="genre_code != null">
+                                    AND M.MOVI_ID IN
+                                    (SELECT MG.MOVI_ID FROM MOVIEGENRE MG WHERE MG.GENRE_CODE IN
+                                    <foreach collection="genre_code" item="genre" separator=", "  open="(" close=")">
+                                        #{genre}
+                                    </foreach>
+                                    )
+                                </if>
+                            </trim>
+
+                         ORDER BY
+                         <choose>
+                             <when test="sort eq 0"> MOVI_ID</when>
+                             <otherwise> RATING </otherwise>
+                            <!--누적관객수 추가해야함-->
+                         </choose>
+                         ) A
+        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+
     <!-- 영화삽입  -->
     <insert id="insertMovie" parameterType="MovieVo">
         <selectKey keyProperty="movi_id" resultType="int" order="BEFORE">

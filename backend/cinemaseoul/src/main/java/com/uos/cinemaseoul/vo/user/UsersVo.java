@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.vo.user;
 
+import com.uos.cinemaseoul.common.constatnt.CodeTable;
 import com.uos.cinemaseoul.dto.user.UserSignUpDto;
 import lombok.*;
 
@@ -38,7 +39,7 @@ public class UsersVo {
         this.password = userSignupDto.getPassword();
         this.agreement = userSignupDto.getAgreement();
         //회원
-        this.user_auth_code = "100001";
+        this.user_auth_code = CodeTable.USER_AUTH_MEMBER;
         return this;
     }
 }

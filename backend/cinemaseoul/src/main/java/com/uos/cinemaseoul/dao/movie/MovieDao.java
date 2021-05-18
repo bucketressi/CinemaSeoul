@@ -1,11 +1,15 @@
 package com.uos.cinemaseoul.dao.movie;
 
+import com.uos.cinemaseoul.common.paging.MovieCriteria;
+import com.uos.cinemaseoul.dto.movie.MovieListDto;
+import com.uos.cinemaseoul.dto.movie.MovieListInfoDto;
 import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
 import com.uos.cinemaseoul.vo.movie.MovieVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Repository
 @Mapper
@@ -21,5 +25,8 @@ public interface MovieDao {
 
     SelectMovieDto selectMovie(int movi_id);
     String[] selectGenre(int movi_id);
+
+    int countList(MovieCriteria movieCriteria);
+    List<MovieListInfoDto> selectMovieList(MovieCriteria movieCriteria);
 
 }

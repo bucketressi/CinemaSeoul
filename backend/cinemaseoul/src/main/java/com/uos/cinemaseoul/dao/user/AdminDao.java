@@ -24,4 +24,7 @@ public interface AdminDao {
 
     int updateAdmin(AdminVo adminVo);
     int deleteAdmin(int admi_id);
+
+    String findByPhoneAndName(AdminVo adminVo);
+    int resetPassword(AdminVo adminVo);
 }

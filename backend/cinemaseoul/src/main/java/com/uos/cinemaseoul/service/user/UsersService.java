@@ -2,14 +2,15 @@ package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
+import com.uos.cinemaseoul.common.constatnt.CodeTable;
+import com.uos.cinemaseoul.common.mapper.UsersMapper;
 import com.uos.cinemaseoul.dao.user.BlackListDao;
 import com.uos.cinemaseoul.dao.user.UsersDao;
-import com.uos.cinemaseoul.dto.user.LoginDto;
-import com.uos.cinemaseoul.dto.user.NonMemberDto;
-import com.uos.cinemaseoul.dto.user.UserSignUpDto;
-import com.uos.cinemaseoul.dto.user.UserInfoDto;
+import com.uos.cinemaseoul.dto.user.*;
 import com.uos.cinemaseoul.exception.BlackListException;
+import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.WrongArgException;
+import com.uos.cinemaseoul.vo.user.AdminVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class UsersService  {
 
     private final UsersDao usersDao;
     private final BlackListDao blackListDao;
+    private final UsersMapper usersMapper;
 
     //로그인
     public AuthUser login(LoginDto loginDto) {
@@ -39,35 +41,53 @@ public class UsersService  {
     //회원가입
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int signUp(UserSignUpDto userSignupDto){
-        //아이디, 번호 중복 한번 더 검사
 
-        //블랙리스트인지 확인
-        if(blackListDao.select(userSignupDto.getPhone_num(), userSignupDto.getUser_name()) != null){
-             throw new BlackListException("black list");
+        UsersVo vo = usersDao.findByPhone(userSignupDto.getPhone_num());
+
+        //비회원으로 이용한적이 없으면 -> 일반 회원가입 절차
+        if(vo == null){
+            //아이디, 번호 중복 한번 더 검사
+            if(usersDao.findByEmailAndPhone(userSignupDto.getEmail(), userSignupDto.getPhone_num()) != null){
+                throw new DuplicateException("unavailable email");
+            }
+
+            //블랙리스트인지 확인
+            if(blackListDao.select(userSignupDto.getPhone_num(), userSignupDto.getUser_name()) != null){
+                throw new BlackListException("black list");
+            }
+            UsersVo s = new UsersVo().inputSignUp(userSignupDto);
+            //회원가입
+            usersDao.signUp(s);
+            return s.getUser_id();
+        }
+        //회원이었으면 회원 업그레이드
+        else{
+
+            if(vo.getUser_auth_code().equals("100001")) throw new DuplicateException("already member");
+
+            //비회원이었으면 계속 진행
+            UsersVo usersVo = new UsersVo().inputSignUp(userSignupDto);
+            usersVo.setUser_id(vo.getUser_id()); //아이디도 세팅
+            usersDao.nonMemberUpgrade(usersVo);
+            return usersVo.getUser_id();
         }
 
-        UsersVo vo = new UsersVo().inputSignUp(userSignupDto);
-        //회원가입
-        usersDao.signUp(vo);
-        return vo.getUser_id();
+
+
     }
 
-    //번호조회
-    public AuthUser nonMemberCheck(String phone_num){
+    //비회원조회
+    @Transactional
+    public AuthUser nonMemberCheck(NonMemberDto nonMemberDto){
         //번호로 조회
-        UsersVo usr = usersDao.findByPhone(phone_num);
+        UsersVo usr = usersDao.findByPhone(nonMemberDto.getPhone_num());
 
         //이미 있으면 세팅해서 넘기기
         if(usr != null){
             return new AuthUser(usr.getUser_id(),UserType.USERS,usr.getUser_auth_code(), usr.getPassword());
         }
-        return null;
-    }
 
-    //비회원가입 장르
-    @Transactional
-    public AuthUser nonMemberSignUp(NonMemberDto nonMemberDto){
-
+        //없을때
         //블랙리스트인지 확인
         if(blackListDao.select(nonMemberDto.getPhone_num(), nonMemberDto.getUser_name()) != null){
             throw new BlackListException("black list");
@@ -80,12 +100,13 @@ public class UsersService  {
                 .phone_num(nonMemberDto.getPhone_num())
                 .password(nonMemberDto.getPassword())
                 //비회원 세팅
-                .user_auth_code("100002")
+                .user_auth_code(CodeTable.USER_AUTH_NONMEMBER)
                 .agreement(nonMemberDto.getAgreement())
                 .build();
 
         usersDao.nonMemberSignUp(nousr);
         return new AuthUser(nousr.getUser_id(),UserType.USERS, nousr.getUser_auth_code(), nousr.getPassword());
+
     }
 
     //회원 개인정보
@@ -94,13 +115,14 @@ public class UsersService  {
     }
 
     //회원정보 수정
+    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> ASK의 이름도 변경해야함***/
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int updateUser(UsersVo usr) throws Exception{
 
         //전화번호가 바뀌었으면
         if(!usersDao.findById(usr.getUser_id()).getPhone_num().equals(usr.getPhone_num())){
             //일단 전화번호 체크해서 중복인지 확인
-            if(!phoneCheck(usr.getPhone_num())){
+            if(usersDao.findByPhone(usr.getPhone_num()) != null){
                 throw new WrongArgException("전화번호 중복");
             }
 
@@ -144,15 +166,37 @@ public class UsersService  {
     }
 
     //번호 검사
-    public boolean phoneCheck(String phone){
-        return usersDao.findByPhone(phone) != null ? false : true;
+    public void phoneCheck(String phone){
+        if(usersDao.findByPhone(phone) != null){
+            throw new DuplicateException();
+        }
     }
 
 
     //이메일 검사
-    public boolean emailCheck(String email){
-        return usersDao.findByEmail(email) != null ? false : true;
+    public void emailCheck(String email){
+        if(usersDao.findByEmail(email) != null){
+            throw new DuplicateException();
+        }
     }
 
 
+    //아이디 찾기
+    public String findEmail(UserFindDto userFindDto){
+        UsersVo usersVo = usersMapper.insertIntoUserFindToUsersVo(userFindDto);
+        String email = usersDao.findByPhoneAndName(usersVo);
+
+        if(email == null) throw new DuplicateException("no email available");
+
+        return email;
+    }
+
+    //비밀번호 재설정
+    public void resetPassword(UserFindDto userFindDto){
+        UsersVo usersVo = usersMapper.insertIntoUserFindToUsersVo(userFindDto);
+        if(usersDao.findByEmailAndPhone(usersVo.getEmail(), usersVo.getPhone_num()) != null)
+            throw new DuplicateException("no email available");
+
+        usersDao.resetPassword(usersVo);
+    }
 }

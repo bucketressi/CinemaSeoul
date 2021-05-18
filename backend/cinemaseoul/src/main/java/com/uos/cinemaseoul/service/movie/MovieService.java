@@ -1,8 +1,11 @@
 package com.uos.cinemaseoul.service.movie;
 
 import com.uos.cinemaseoul.common.mapper.MovieMapper;
+import com.uos.cinemaseoul.common.paging.MovieCriteria;
+import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
 import com.uos.cinemaseoul.dao.movie.MovieDao;
 import com.uos.cinemaseoul.dto.movie.InsertMovieDto;
+import com.uos.cinemaseoul.dto.movie.MovieListDto;
 import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
 import com.uos.cinemaseoul.dto.movie.UpdateMovieDto;
 import com.uos.cinemaseoul.exception.NotFoundException;
@@ -49,6 +52,7 @@ public class MovieService {
     }
 
     //업데이트
+    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> SHOWSCHEDULE의 이름도 변경해야함***/
     @Transactional
     public void updateMovie(UpdateMovieDto uMDto){
         MovieVo movieVo = movieMapper.updateMovieDtoToMovieVo(uMDto);
@@ -87,4 +91,24 @@ public class MovieService {
         }
         return sMDto;
     }
+
+    //영화 조건 조회
+    @Transactional
+    public MovieListDto selectMovieList(MovieCriteria movieCriteria){
+        MovieListDto movieListDto = new MovieListDto();
+        System.out.println(movieCriteria.getStat());
+        //페이지 계산
+        int totalCount = movieDao.countList(movieCriteria);
+        int totalPage =  totalCount / movieCriteria.getAmount();
+        if(totalCount % movieCriteria.getAmount() > 0){
+            totalPage++;
+        }
+
+        movieListDto.setMovi_list(movieDao.selectMovieList(movieCriteria));
+        movieListDto.setPageInfo(totalPage, movieCriteria.getPage(), movieCriteria.getAmount());
+        return movieListDto;
+    }
+
+    //영화 검색
+
 }

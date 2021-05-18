@@ -2,7 +2,7 @@ package com.uos.cinemaseoul.common.config;
 
 import com.uos.cinemaseoul.common.auth.JwtAuthenticationFilter;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
-import com.uos.cinemaseoul.common.auth.MappingConstant;
+import com.uos.cinemaseoul.common.constatnt.MappingConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

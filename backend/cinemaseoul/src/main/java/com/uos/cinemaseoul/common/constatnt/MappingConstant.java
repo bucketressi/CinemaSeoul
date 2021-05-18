@@ -1,4 +1,4 @@
-package com.uos.cinemaseoul.common.auth;
+package com.uos.cinemaseoul.common.constatnt;
 
 public class MappingConstant {
 
@@ -13,7 +13,9 @@ public class MappingConstant {
             "/admin/login",
             "/admin/phoneCheck",
             "/admin/emailCheck",
-            "/movie/{movi_id}"};
+            "/movie/{movi_id}",
+            "/movie/list"
+    };
 
     //2 (비회원, 회원 둘다 가능)
     public static String[] NonUser = {
