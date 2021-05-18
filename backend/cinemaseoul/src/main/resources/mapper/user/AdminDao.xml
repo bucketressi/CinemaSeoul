@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.user.AdminDao">
+
+    <!--관리자 이메일로 조회-->
+    <select id="findByEmail" resultType="AdminVo">
+        SELECT ADMI_ID, EMAIL, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
+        WHERE EMAIL = #{email}
+    </select>
+    <!--관리자 번호로 조회-->
+    <select id="findByPhone" resultType="AdminVo">
+        SELECT ADMI_ID, EMAIL, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE  FROM ADMIN
+        WHERE PHONE_NUM = #{phone_num}
+    </select>
+    <!--관리자 아이디로 조회-->
+    <select id="findById" resultType="AdminVo">
+        SELECT ADMI_ID, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
+        WHERE ADMI_ID = #{admi_id}
+    </select>
+    <!--관리자 이메일 or 번호로 조회-->
+    <select id="findByEmailAndPhone" resultType="AdminVo">
+        SELECT ADMI_ID FROM ADMIN
+        WHERE EMAIL = #{email} OR PHONE_NUM = #{phone_num}
+    </select>
+    <!--관리자 회원가입-->
+    <insert id="signUp" parameterType="AdminVo">
+        INSERT INTO ADMIN (ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, ADMI_AUTH_CODE, POSITION, ADDRESS, START_DATE)
+        VALUES (SEQ_ADMIN.nextval, #{admi_name}, #{birth, jdbcType=VARCHAR}, #{phone_num},
+                #{email},#{password},#{admi_auth_code, jdbcType = VARCHAR}, #{position, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{start_date})
+    </insert>
+    <!--관리자 조회-->
+    <select id="selectAdmin" resultType="AdminInfoDto">
+        SELECT ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, POSITION, ADDRESS, START_DATE,
+               (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = ADMIN.ADMI_AUTH_CODE) ADMI_AUTH
+        FROM ADMIN
+        WHERE ADMI_ID = #{admi_id}
+    </select>
+    <!--관리자 수정-->
+    <update id="updateAdmin" parameterType="AdminVo">
+        UPDATE ADMIN SET ADMI_NAME = #{admi_name},
+                       BIRTH = #{birth, jdbcType=VARCHAR},
+                        <if test="phone_num != null">
+                            PHONE_NUM = #{phone_num},
+                        </if>
+                        <if test="password != null">
+                            PASSWORD = #{password},
+                        </if>
+                       ADMI_AUTH_CODE = #{admi_auth_code},
+                       POSITION = #{position},
+                       ADDRESS = #{address, jdbcType=VARCHAR},
+                       START_DATE = #{start_date}
+        WHERE ADMI_ID = #{admi_id}
+    </update>
+    <!--관리자 삭제-->
+    <delete id="deleteAdmin">
+        DELETE FROM ADMIN WHERE ADMI_ID = #{admi_id}
+    </delete>
+
+    <!--관리자 리스트 조회(페이지)-->
+    <select id="selectAdminList" resultType="AdminListInfoDto">
+        <![CDATA[
+            SELECT B.RNUM, B.ADMI_ID, B.ADMI_NAME, B.POSITION, B.START_DATE
+            FROM (
+                SELECT /*+index_desc(IDX_ADMIN)*/ ROWNUM AS RNUM, A.ADMI_ID, A.ADMI_NAME, A.POSITION, A.START_DATE
+                    FROM(
+                        SELECT ADMI_ID, ADMI_NAME, POSITION, START_DATE FROM ADMIN
+                        ORDER BY ADMI_ID) A
+                    WHERE ROWNUM <= #{page}*#{amount}) B
+            WHERE B.RNUM > (#{page}-1)*#{amount}
+        ]]>
+    </select>
+
+    <!-- 전체 페이지 수 얻기 -->
+    <select id="countList" resultType="Integer">
+        SELECT COUNT(*) AS totalpage FROM ADMIN
+    </select>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.user.UsersDao">
+
+    <select id="findByEmail" resultType="UsersVo">
+        SELECT USER_ID, EMAIL, PASSWORD, USER_AUTH_CODE FROM USERS
+        WHERE EMAIL = #{email}
+    </select>
+
+    <select id="findById" resultType="UsersVo">
+        SELECT USER_ID, PHONE_NUM, PASSWORD, USER_AUTH_CODE FROM USERS
+        WHERE USER_ID = #{user_id}
+    </select>
+
+    <select id="findByPhone" resultType="UsersVo">
+        SELECT USER_ID, PHONE_NUM, PASSWORD, USER_AUTH_CODE FROM USERS
+        WHERE PHONE_NUM = #{phone_num}
+    </select>
+
+    <insert id="signUp" parameterType="UsersVo">
+        <selectKey keyProperty="user_id" resultType="Integer" order="BEFORE">
+            SELECT SEQ_USERS.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO USERS (USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, CURR_POINT, ACCU_POINT, USER_AUTH_CODE)
+        VALUES (#{user_id}, #{user_name}, #{birth}, #{phone_num}, #{email}, #{password}, #{agreement}, 0, 0, #{user_auth_code})
+    </insert>
+
+    <insert id="nonMemberSignUp" parameterType="UsersVo">
+        <selectKey keyProperty="user_id" resultType="Integer" order="BEFORE">
+            SELECT SEQ_USERS.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO USERS (USER_ID, USER_NAME, PHONE_NUM, PASSWORD, AGREEMENT)
+        VALUES (#{user_id}, #{user_name}, #{phone_num}, #{password}, #{agreement})
+    </insert>
+
+    <select id="selectById" parameterType="Integer" resultType="UserInfoDto">
+        SELECT USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, CURR_POINT, ACCU_POINT,
+               (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = USERS.USER_TYPE_CODE) USER_TYPE
+        FROM USERS
+        WHERE USER_ID = #{user_id}
+    </select>
+
+    <update id="updateUser" parameterType="UsersVo">
+
+                UPDATE USERS SET USER_NAME = #{user_name},
+                                 BIRTH = #{birth},
+                            <if test="phone_num != null">
+                                PHONE_NUM = #{phone_num},
+                            </if>
+                            <if test="password != null">
+                                PASSWORD = #{password},
+                            </if>
+                                 AGREEMENT = #{agreement}
+                WHERE USER_ID = #{user_id}
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM USERS WHERE USER_ID = #{user_id}
+    </delete>
+
+    <select id="adultCheck" resultType="String">
+        SELECT BIRTH FROM USERS WHERE PHONE_NUM = #{phone_num}
+    </select>
+
+
+
+
+
+</mapper>
