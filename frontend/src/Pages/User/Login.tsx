@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Tabs, Tab, TextField, Checkbox, Button } from '@material-ui/core';
+import { Birth } from '../../Main/Type';
+import { Tabs, Tab, TextField, Checkbox, Button, Select, FormControl, InputLabel } from '@material-ui/core';
 import "../../scss/pages/login.scss";
 
 const Login = () => {
-	const [type, setType] = useState<boolean>(true); // true : 회원, false : 비회원
-	const handleTypeChange = (event : any, newValue : boolean) => { setType(newValue); };
+	const [type, setType] = useState<boolean>(false); // true : 회원, false : 비회원
+
+	const handleTypeChange = (event: any, newValue: boolean) => { setType(newValue); };
 	const openFindIdModal = () => { console.log("id"); };
 	const openFindPWModal = () => { console.log("pw"); };
+	
 	return (
 		<div className="login-con">
 			<Tabs
@@ -21,7 +24,7 @@ const Login = () => {
 			</Tabs>
 			<div
 				role="tabpanel"
-				hidden={!type}
+				hidden={type}
 			>
 				<div className="user-form">
 					<div className="form-con">
@@ -49,10 +52,10 @@ const Login = () => {
 			</div>
 			<div
 				role="tabpanel"
-				hidden={type}
+				hidden={!type}
 			>
 				<div className="nonuser-form form-con">
-					흠
+					비회원
 				</div>
 			</div>
 		</div>
