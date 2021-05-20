@@ -13,7 +13,7 @@ const Main = () => {
 	const avi_age = 19;
 
 	return (
-		<Layout>
+		<>
 			<PageTitle title="상영 중인 영화"/>
 			<div className="movie-list">
 				{
@@ -33,7 +33,7 @@ const Main = () => {
 					})
 				}
 			</div>
-		</Layout>
+		</>
 	);
 }
 
