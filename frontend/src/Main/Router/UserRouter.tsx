@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Ask, Book, Error, Event, FAQ, Login, MovieList, MyMovie, Mypage, Notice, Pay, PointDescription, SignUp, Store, TheaterDescription, Main } from '../../Pages/User';
+import { Ask, Book, Error, Event, FAQ, Login, MovieList, MovieExact, MyMovie, Mypage, Notice, Pay, PointDescription, SignUp, Store, TheaterDescription, Main } from '../../Pages/User';
 
 const UserRouter : React.FC = () => (
 	<Switch>
@@ -12,6 +12,7 @@ const UserRouter : React.FC = () => (
 		<Route path="/login" component={Login}/>
 		<Route path="/main" component={Main}/>
 		<Route path="/movie" component={MovieList}/>
+		<Route path="/movie/:movie_id" component={MovieExact}/>
 		<Route path="/mymovie" component={MyMovie}/>
 		<Route path="/mypage" component={Mypage}/>
 		<Route path="/notice" component={Notice}/>

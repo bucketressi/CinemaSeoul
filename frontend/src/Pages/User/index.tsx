@@ -5,6 +5,7 @@ export { default as Event } from './Event';
 export { default as FAQ } from './FAQ';
 export { default as Login } from './Login';
 export { default as Movie } from './Movie';
+export { default as MovieExact } from './MovieExact';
 export { default as MovieList } from './MovieList';
 export { default as MyMovie } from './MyMovie';
 export { default as Mypage } from './Mypage';

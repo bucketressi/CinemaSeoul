@@ -12,7 +12,7 @@ export type MovieList = {
 
 export type MovieZip = {
 	movi_id : number,
-	movi_name : String,
+	movi_name : string,
 	score : number,
 	image : Blob
 }
