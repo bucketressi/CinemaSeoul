@@ -21,7 +21,7 @@ import {
 	AdminStore,
 	AdminTheater,
 	AdminError,
- } from '../../Pages/Admin';
+} from '../../Pages/Admin';
 
 const AdminRouter : React.FC = () => (
 	<Switch>
