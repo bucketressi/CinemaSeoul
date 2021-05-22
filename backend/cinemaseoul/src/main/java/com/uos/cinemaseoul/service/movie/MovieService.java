@@ -38,8 +38,6 @@ public class MovieService {
         map.put("casting", iMDto.getCasting());
 
         movieDao.insertGenre(map);
-        System.out.println("장르는 됨");
-
         movieDao.insertCasting(map);
     }
 

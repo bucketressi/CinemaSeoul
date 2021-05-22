@@ -47,13 +47,18 @@ public class MappingConstant {
             "/movie/delete",
 
             "/point/update",
-            "/point/{user_id}/{start_date}"
+            "/point/{user_id}/{start_date}",
+
+            "/hall/{hall_id}",
     };
 
     //3 (매니저(높은 관리자만) 가능)
     public static String[] Manager = {
             "/admin/list",
             "/admin/delete",
-            "/admin"
+            "/admin",
+
+            "/hall",
+            "/hall/seat"
     };
 }
