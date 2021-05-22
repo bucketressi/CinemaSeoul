@@ -13,7 +13,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 		user_name: "우희은",
 		phone_num: "010-4444-4444",
 		password: "hihello",
-		agreement: true
+		agreement: "1"
 	};
 
 	function userLogin(id: string, password: string) {

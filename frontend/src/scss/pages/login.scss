@@ -75,3 +75,19 @@
 		}
 	}
 }
+
+.agreement-con{
+	&>p{
+		padding: 1rem;
+		border: 1px solid $border-color;
+	}
+	.agree-check-con{
+		display: flex;
+		flex-wrap: nowrap!important;
+		flex-direction: row!important;
+		&>div{
+			display: flex;
+			align-items: center;
+		}
+	}
+}

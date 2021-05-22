@@ -44,5 +44,5 @@ export type User = {
 	phone_num : string,
 	email? : string
 	password : string,
-	agreement : boolean
+	agreement : string
 }
