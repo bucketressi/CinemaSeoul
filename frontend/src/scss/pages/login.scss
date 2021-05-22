@@ -11,22 +11,37 @@
 		}
 	}
 }
-.user-form{
+.user-form, .nonuser-form{
 	display: flex;
 	justify-content: space-between;
+    margin-top: 30px;
 	&>div{
 		width: 48%;
+	}	
+}
+.form-con{
+	display: flex;
+	flex-direction: column;
+	&>div{
+		margin-bottom: 10px;
 	}
-	.form-con{
+	.input-con{
 		display: flex;
 		flex-direction: column;
 		&>div{
 			margin-bottom: 10px;
 		}
+		.birth-con{
+			display: flex;
+			justify-content: space-between;
+			&>div{
+				width: 33%;
+			}
+		}
 	}
-	.input-con{
-		display: flex;
-		flex-direction: column;
+	.login-btn{
+		height: 3rem;
+		margin-bottom: 1rem;
 	}
 	.under-menu{
 		display: flex;

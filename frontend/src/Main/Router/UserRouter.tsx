@@ -24,7 +24,7 @@ const UserRouter : React.FC = () => (
 			<Route path="/store" component={Store}/>
 			<Route path="/theater" component={TheaterDescription}/>
 			<Route path="/error" component={Error}/>
-			<Redirect to="/error" />
+			<Redirect to="/main" />
 		</Switch>
 	</Layout>
 );
