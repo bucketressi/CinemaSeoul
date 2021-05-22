@@ -2,15 +2,18 @@ package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
-import com.uos.cinemaseoul.common.constatnt.CodeTable;
+import com.uos.cinemaseoul.common.constatnt.ConstantTable;
 import com.uos.cinemaseoul.common.mapper.UsersMapper;
 import com.uos.cinemaseoul.dao.user.BlackListDao;
 import com.uos.cinemaseoul.dao.user.UsersDao;
 import com.uos.cinemaseoul.dto.user.*;
+import com.uos.cinemaseoul.dto.user.user.NonMemberDto;
+import com.uos.cinemaseoul.dto.user.user.UserFindDto;
+import com.uos.cinemaseoul.dto.user.user.UserInfoDto;
+import com.uos.cinemaseoul.dto.user.user.UserSignUpDto;
 import com.uos.cinemaseoul.exception.BlackListException;
 import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.WrongArgException;
-import com.uos.cinemaseoul.vo.user.AdminVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -100,7 +103,7 @@ public class UsersService  {
                 .phone_num(nonMemberDto.getPhone_num())
                 .password(nonMemberDto.getPassword())
                 //비회원 세팅
-                .user_auth_code(CodeTable.USER_AUTH_NONMEMBER)
+                .user_auth_code(ConstantTable.USER_AUTH_NONMEMBER)
                 .agreement(nonMemberDto.getAgreement())
                 .build();
 

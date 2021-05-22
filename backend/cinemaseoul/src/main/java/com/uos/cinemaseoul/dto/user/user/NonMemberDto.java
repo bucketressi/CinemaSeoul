@@ -1,4 +1,4 @@
-package com.uos.cinemaseoul.dto.user;
+package com.uos.cinemaseoul.dto.user.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

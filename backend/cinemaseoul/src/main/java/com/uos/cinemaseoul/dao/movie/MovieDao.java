@@ -1,6 +1,7 @@
 package com.uos.cinemaseoul.dao.movie;
 
 import com.uos.cinemaseoul.common.paging.MovieCriteria;
+import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
 import com.uos.cinemaseoul.dto.movie.MovieListDto;
 import com.uos.cinemaseoul.dto.movie.MovieListInfoDto;
 import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
@@ -19,7 +20,10 @@ public interface MovieDao {
     void insertCasting(HashMap<String, Object> map);
 
     int deleteMovie(int movi_id);
+
     int updateMovie(MovieVo vo);
+    int updateMovieImage(MovieVo movieVo);
+
     void deleteGenre(int movi_id);
     void deleteCasting(int movi_id);
 
@@ -28,5 +32,9 @@ public interface MovieDao {
 
     int countList(MovieCriteria movieCriteria);
     List<MovieListInfoDto> selectMovieList(MovieCriteria movieCriteria);
+
+
+    int countSearchList(MovieSearchCriteria movieSearchCriteria);
+    List<MovieListInfoDto> searchMovie(MovieSearchCriteria movieSearchCriteria);
 
 }

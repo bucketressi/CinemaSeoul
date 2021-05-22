@@ -1,9 +1,9 @@
 package com.uos.cinemaseoul.dao.user;
 
 import com.uos.cinemaseoul.common.paging.Criteria;
-import com.uos.cinemaseoul.dto.user.AdminInfoDto;
-import com.uos.cinemaseoul.dto.user.AdminListInfoDto;
-import com.uos.cinemaseoul.vo.user.AdminVo;
+import com.uos.cinemaseoul.dto.user.admin.AdminInfoDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminListInfoDto;
+import com.uos.cinemaseoul.vo.admin.AdminVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

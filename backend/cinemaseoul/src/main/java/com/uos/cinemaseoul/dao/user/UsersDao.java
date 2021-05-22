@@ -1,6 +1,6 @@
 package com.uos.cinemaseoul.dao.user;
 
-import com.uos.cinemaseoul.dto.user.UserInfoDto;
+import com.uos.cinemaseoul.dto.user.user.UserInfoDto;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

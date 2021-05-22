@@ -26,6 +26,4 @@ public class UpdateMovieDto {
     private String open_date;
     private String[] genre_code;
     private List<CastingInfoDto> casting;
-    //nullable
-    private byte[] image;
 }

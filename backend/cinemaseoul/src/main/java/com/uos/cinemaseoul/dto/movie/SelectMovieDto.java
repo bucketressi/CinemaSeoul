@@ -27,6 +27,6 @@ public class SelectMovieDto {
 
     private List<CastingInfoDto> casting = new ArrayList<>();
     private float rating;
-    private float bookrecord;
+    private int accu_audi;
 
 }

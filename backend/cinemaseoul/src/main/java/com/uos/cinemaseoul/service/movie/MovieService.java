@@ -74,6 +74,13 @@ public class MovieService {
         movieDao.deleteCasting(movieVo.getMovi_id());
         movieDao.insertCasting(map);
     }
+    //이미지 업데이트
+    public void updateMovieImage(int movi_id, byte[] image) {
+        MovieVo movieVo = MovieVo.builder().movi_id(movi_id).image(image).build();
+        if(movieDao.updateMovieImage(movieVo) != 1){
+            throw new WrongArgException("too much");
+        }
+    }
 
     //영화 조회
     @Transactional
@@ -83,8 +90,6 @@ public class MovieService {
         if(sMDto == null){
             throw new NotFoundException("no Movie Detected");
         }
-
-        System.out.println(sMDto.getMovi_name() + "아니 이거 왜안돼" + sMDto.getCasting());
         String[] genre = movieDao.selectGenre(movi_id);
         if(genre != null){
             sMDto.setGenre(genre);
@@ -96,7 +101,6 @@ public class MovieService {
     @Transactional
     public MovieListDto selectMovieList(MovieCriteria movieCriteria){
         MovieListDto movieListDto = new MovieListDto();
-        System.out.println(movieCriteria.getStat());
         //페이지 계산
         int totalCount = movieDao.countList(movieCriteria);
         int totalPage =  totalCount / movieCriteria.getAmount();
@@ -108,6 +112,22 @@ public class MovieService {
         movieListDto.setPageInfo(totalPage, movieCriteria.getPage(), movieCriteria.getAmount());
         return movieListDto;
     }
+
+    @Transactional
+    public MovieListDto searchMovie(MovieSearchCriteria movieSearchCriteria) {
+        movieSearchCriteria.setName("%"+movieSearchCriteria.getName()+"%");
+        MovieListDto movieListDto = new MovieListDto();
+        //페이지 계산
+        int totalCount = movieDao.countSearchList(movieSearchCriteria);
+        int totalPage =  totalCount / movieSearchCriteria.getAmount();
+        if(totalCount % movieSearchCriteria.getAmount() > 0){
+            totalPage++;
+        }
+        movieListDto.setMovi_list(movieDao.searchMovie(movieSearchCriteria));
+        movieListDto.setPageInfo(totalPage, movieSearchCriteria.getPage(), movieSearchCriteria.getAmount());
+        return movieListDto;
+    }
+
 
     //영화 검색
 

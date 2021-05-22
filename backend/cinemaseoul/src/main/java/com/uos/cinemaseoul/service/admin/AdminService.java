@@ -1,16 +1,18 @@
-package com.uos.cinemaseoul.service.user;
+package com.uos.cinemaseoul.service.admin;
 
 import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.common.mapper.AdminMapper;
-import com.uos.cinemaseoul.common.mapper.MovieMapper;
 import com.uos.cinemaseoul.common.paging.Criteria;
 import com.uos.cinemaseoul.dao.user.AdminDao;
 import com.uos.cinemaseoul.dto.user.*;
+import com.uos.cinemaseoul.dto.user.admin.AdminFindDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminInfoDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminListDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminSignUpDto;
 import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.WrongArgException;
-import com.uos.cinemaseoul.vo.user.AdminVo;
-import com.uos.cinemaseoul.vo.user.UsersVo;
+import com.uos.cinemaseoul.vo.admin.AdminVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

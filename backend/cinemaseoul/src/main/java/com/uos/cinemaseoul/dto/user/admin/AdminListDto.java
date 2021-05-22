@@ -1,10 +1,8 @@
-package com.uos.cinemaseoul.dto.user;
+package com.uos.cinemaseoul.dto.user.admin;
 
-import com.uos.cinemaseoul.common.paging.Criteria;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;

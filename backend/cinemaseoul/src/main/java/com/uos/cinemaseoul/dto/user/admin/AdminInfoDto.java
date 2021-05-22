@@ -1,22 +1,21 @@
-package com.uos.cinemaseoul.dto.user;
+package com.uos.cinemaseoul.dto.user.admin;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class AdminSignUpDto {
+public class AdminInfoDto {
+    private int admi_id;
     private String admi_name;
     private String birth;
     private String phone_num;
     private String email;
     private String password;
-    private String admi_auth_code = "120001";
     private String position;
     private String address;
     private String start_date;
-
-    public void encodePassword(String newPass){
-        this.password = newPass;
-    }
+    private String admi_auth;
 }

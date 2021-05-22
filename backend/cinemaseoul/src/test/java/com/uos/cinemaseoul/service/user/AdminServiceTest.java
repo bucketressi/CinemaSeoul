@@ -2,11 +2,11 @@ package com.uos.cinemaseoul.service.user;
 
 import com.uos.cinemaseoul.common.paging.Criteria;
 import com.uos.cinemaseoul.dao.user.AdminDao;
-import com.uos.cinemaseoul.dto.user.AdminInfoDto;
-import com.uos.cinemaseoul.dto.user.AdminListDto;
-import com.uos.cinemaseoul.dto.user.AdminListInfoDto;
-import com.uos.cinemaseoul.dto.user.AdminSignUpDto;
-import com.uos.cinemaseoul.vo.user.AdminVo;
+import com.uos.cinemaseoul.dto.user.admin.AdminInfoDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminListDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminSignUpDto;
+import com.uos.cinemaseoul.service.admin.AdminService;
+import com.uos.cinemaseoul.vo.admin.AdminVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

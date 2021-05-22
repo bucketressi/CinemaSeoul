@@ -4,7 +4,7 @@ import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.dao.user.AdminDao;
 import com.uos.cinemaseoul.dao.user.UsersDao;
-import com.uos.cinemaseoul.vo.user.AdminVo;
+import com.uos.cinemaseoul.vo.admin.AdminVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

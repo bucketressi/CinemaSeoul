@@ -1,11 +1,9 @@
 package com.uos.cinemaseoul.vo.movie;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.uos.cinemaseoul.dto.user.admin.AdminSignUpDto;
+import lombok.*;
 
-@Getter @Builder
+@Getter @Setter @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieVo {
@@ -19,6 +17,8 @@ public class MovieVo {
     private String movi_contents;
     private String open_date;
     private float rating;
+    private int accu_audi;
     //nullable
     private byte[] image;
+
 }

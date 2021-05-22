@@ -1,11 +1,11 @@
-package com.uos.cinemaseoul.dto.user;
+package com.uos.cinemaseoul.dto.user.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserFindDto {
+public class AdminFindDto {
     private String admi_name;
     private String phone_num;
     private String email;

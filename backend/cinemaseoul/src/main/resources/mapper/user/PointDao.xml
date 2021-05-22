@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.user.PointDao">
+
+    <!--[포인트 입력]-->
+    <insert id="updatePoint" parameterType="PointVo">
+        INSERT INTO POINT (POIN_ID, USER_ID, POIN_AMOUNT, POIN_TYPE_CODE, MESSAGE)
+        VALUES (SEQ_POINT.NEXTVAL, #{user_id}, #{poin_amount}, #{poin_type_code}, #{message})
+    </insert>
+
+    <update id="plusUserPoint" parameterType="PointVo">
+        UPDATE USERS U SET
+                U.ACCU_POINT = (SELECT ACCU_POINT FROM USERS S WHERE USER_ID = #{user_id}) + #{poin_amount},
+                U.CURR_POINT = (SELECT CURR_POINT FROM USERS S WHERE USER_ID = #{user_id}) + #{poin_amount}
+        WHERE U.USER_ID = #{user_id}
+    </update>
+
+    <update id="minusUserPoint" parameterType="PointVo">
+        UPDATE USERS U SET
+                           U.CURR_POINT = (SELECT CURR_POINT FROM USERS S WHERE USER_ID = #{user_id}) - #{poin_amount}
+        WHERE U.USER_ID = #{user_id}
+    </update>
+
+    <!--[포인트 조회]-->
+    <select id="getPoint" parameterType="Integer" resultType="UsersVo">
+        SELECT USER_ID, USER_NAME, CURR_POINT, ACCU_POINT
+        FROM USERS
+        WHERE USER_ID = #{user_id}
+    </select>
+
+    <select id="findPoint" resultType="PointInfoDto">
+        SELECT P.POIN_ID, P.POIN_AMOUNT, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = P.POIN_TYPE_CODE) AS POIN_TYPE,
+               P.MESSAGE, P.POIN_DATETIME
+        FROM POINT P
+        WHERE P.USER_ID = #{user_id}
+            <if test="start_date != null"><![CDATA[
+                AND #{start_date} <= TO_CHAR(POIN_DATETIME, 'YYYYMMDD')
+                ]]></if>
+    </select>
+</mapper>

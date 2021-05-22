@@ -1,13 +1,14 @@
-package com.uos.cinemaseoul.vo.user;
+package com.uos.cinemaseoul.vo.admin;
 
-import com.uos.cinemaseoul.dto.user.AdminSignUpDto;
+import com.uos.cinemaseoul.dto.user.admin.AdminSignUpDto;
+import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.*;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
+@Getter @Setter
+@ToString
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
+@Builder
 public class AdminVo {
     private int admi_id;
     private String admi_name;
@@ -20,10 +21,10 @@ public class AdminVo {
     private String address;
     private String start_date;
 
-    public AdminVo inputSignUp(AdminSignUpDto adminSignUpDto){
+    public AdminVo inputSignUp(AdminSignUpDto adminSignUpDto) {
         this.admi_name = adminSignUpDto.getAdmi_name();
 
-        if(adminSignUpDto.getBirth() != null){
+        if (adminSignUpDto.getBirth() != null) {
             this.birth = adminSignUpDto.getBirth();
         }
 
@@ -32,13 +33,13 @@ public class AdminVo {
         this.password = adminSignUpDto.getPassword();
         this.admi_auth_code = adminSignUpDto.getAdmi_auth_code();
 
-        if(adminSignUpDto.getPosition() == null){
+        if (adminSignUpDto.getPosition() == null) {
             this.position = "직원";
-        }else{
+        } else {
             this.position = adminSignUpDto.getPosition();
         }
 
-        if(adminSignUpDto.getAddress() != null){
+        if (adminSignUpDto.getAddress() != null) {
             this.address = adminSignUpDto.getAddress();
         }
         this.start_date = adminSignUpDto.getStart_date();
