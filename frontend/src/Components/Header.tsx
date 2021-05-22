@@ -13,10 +13,10 @@ const Header = () => {
 	return (
 		<header>
 			<div className="logo">
-				<img src="/img/logo.png" alt="logo" />
+				<Link to="/main"><img src="/img/logo.png" alt="logo" /></Link>
 			</div>
 			<div className="title">
-				<p>Seoul Cinema</p>
+				<p><Link to="/main">Seoul Cinema</Link></p>
 				<div className="menu">
 					<ul>
 						<li><Link to="/movie">영화</Link></li>
