@@ -39,9 +39,17 @@
 			}
 		}
 	}
-	.login-btn{
+	.btn{
 		height: 3rem;
 		margin-bottom: 1rem;
+		width: 100%;
+	}
+	.btn-con{
+		display: flex;
+		justify-content: space-between;
+		&>*{
+			width: 48%;
+		}
 	}
 	.under-menu{
 		display: flex;
