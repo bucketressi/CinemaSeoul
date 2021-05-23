@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Layout, MovieCard, PageTitle } from '../../Components';
+import { Link } from 'react-router-dom';
+import { MovieCard, PageTitle } from '../../Components';
 import "../../scss/pages/main.scss";
 import { SimpleMovieType } from '../../Main/Type';
 
@@ -30,7 +31,7 @@ const Main = () => {
 	};
 
 	return (
-		<Layout>
+		<>
 			<PageTitle title="상영 중인 영화"/>
 			<div className="movie-list">
 				{
@@ -48,7 +49,7 @@ const Main = () => {
 					})
 				}
 			</div>
-		</Layout>
+		</>
 	);
 }
 
