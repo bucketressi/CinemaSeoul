@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import "../../scss/pages/_adminmovie.scss";
+import "../../scss/pages/movielist.scss";
 
 import { Link } from 'react-router-dom';
 import { MovieCard, SearchTab } from '../../Components';
 import { SimpleMovieType } from '../../Main/Type';
+import { Button } from '@material-ui/core';
 
 const AdminMovie = () => {
 	const MovieData = {
@@ -45,22 +46,27 @@ const AdminMovie = () => {
 	return (
 		<div className="movie-wrap">
 			<SearchTab />
-			<div className="movie-list">
-				{
-					MovieData.movie_list.map((movie: SimpleMovieType) => {
-						return (
-							<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
-								<MovieCard
-									image={movie.image}
-									movi_name={movie.movi_name}
-									rating={movie.rating}
-									avi_age={movie.avi_age}
-									open_date={movie.open_date}
-								/>
-							</Link>
-						)
-					})
-				}
+			<div className="movie-content-con">
+				<div className="movie-menu">
+					<Button variant="outlined" color="primary">영화 추가</Button>
+				</div>
+				<div className="movie-list-con">
+					{
+						MovieData.movie_list.map((movie: SimpleMovieType) => {
+							return (
+								<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
+									<MovieCard
+										image={movie.image}
+										movi_name={movie.movi_name}
+										rating={movie.rating}
+										avi_age={movie.avi_age}
+										open_date={movie.open_date}
+									/>
+								</Link>
+							)
+						})
+					}
+				</div>
 			</div>
 		</div>
 	);

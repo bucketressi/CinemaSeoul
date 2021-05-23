@@ -34,6 +34,20 @@ const MovieList = () => {
 				avi_age: 19,
 				open_date: new Date("2021/06/03"),
 				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
+			}, {
+				movi_id: 4,
+				movi_name: "보이저스",
+				rating: 4.6,
+				avi_age: 19,
+				open_date: new Date("2021/06/03"),
+				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
+			}, {
+				movi_id: 4,
+				movi_name: "보이저스",
+				rating: 4.6,
+				avi_age: 19,
+				open_date: new Date("2021/06/03"),
+				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
 			}
 		],
 		page: 1,
@@ -43,7 +57,7 @@ const MovieList = () => {
 	return (
 		<div className="movie-wrap">
 			<SearchTab />
-			<div className="movie-list">
+			<div className="movie-list-con">
 				{
 					MovieData.movie_list.map((movie: SimpleMovieType) => {
 						return (
