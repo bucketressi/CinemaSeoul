@@ -85,11 +85,12 @@
     </select>
     <!--영화 리스트 조회(페이지)-->
     <select id="selectMovieList" parameterType="MovieCriteria" resultType="MovieListInfoDto">
-        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.RATING, B.ACCU_AUDI, B.IMAGE
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDI, B.IMAGE
         FROM (
-                 SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.RATING, A.ACCU_AUDI, A.IMAGE
+                 SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDI, A.IMAGE
                  FROM(
-                         SELECT MOVI_ID, MOVI_NAME, RATING, ACCU_AUDI, IMAGE FROM MOVIE M
+                         SELECT MOVI_ID, MOVI_NAME, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
+                         OPEN_DATE, RATING, ACCU_AUDI, IMAGE FROM MOVIE M
 
                             <trim prefix="WHERE" prefixOverrides="AND">
                                 <choose>
@@ -105,6 +106,7 @@
                                         ]]></when>
                                     <otherwise></otherwise>
                                 </choose>
+
                                 <if test="avai_age_code != null">
                                     AND M.AVAI_AGE_CODE IN
                                     <foreach collection="avai_age_code" item="avai_age" separator=", " open="(" close=")">
@@ -147,11 +149,12 @@
 
 
     <select id = "searchMovie" parameterType="MovieSearchCriteria" resultType="MovieListInfoDto">
-        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.RATING, B.ACCU_AUDI, B.IMAGE
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDI, B.IMAGE
         FROM (
-            SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.RATING, A.ACCU_AUDI, A.IMAGE
+            SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDI, A.IMAGE
             FROM(
-                SELECT MOVI_ID, MOVI_NAME, RATING, ACCU_AUDI, IMAGE FROM MOVIE M
+                SELECT MOVI_ID, MOVI_NAME, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
+                       OPEN_DATE, RATING, ACCU_AUDI, IMAGE FROM MOVIE M
                 WHERE
                 <choose>
                     <when test="cast_type_code!= null">
