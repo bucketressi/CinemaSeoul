@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { AdminLayout } from '../../Components';
 import {
 	AdminAdmin,
-	AdminMain,
+	AdminMovieExact,
 	AdminAsk,
 	AdminBlackList,
 	AdminBookRecord,
@@ -35,8 +35,8 @@ const AdminRouter : React.FC = () => (
 			<Route path="/admin/genre" component={AdminGenre}/>
 			<Route path="/admin/hall" component={AdminHall}/>
 			<Route path="/admin/home" component={AdminHome}/>
-			<Route path="/admin/main" component={AdminMain}/>
-			<Route path="/admin/movie" component={AdminMovie}/>
+			<Route exact path="/admin/movie" component={AdminMovie}/>
+			<Route path="/admin/movie/:movie_id" component={AdminMovieExact}/>
 			<Route path="/admin/notice" component={AdminNotice}/>
 			<Route path="/admin/pay" component={AdminPay}/>
 			<Route path="/admin/people" component={AdminPeople}/>

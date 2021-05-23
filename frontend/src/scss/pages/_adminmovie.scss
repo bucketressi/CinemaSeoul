@@ -1,11 +1,46 @@
+@import "../base/variable";
+
 .movie-wrap{
 	display: flex;
+	align-items: flex-start;
+	.title{
+		font-weight: 600;
+		width: 100%;
+		padding: 10px 0;
+		margin-bottom: 1rem;
+		border-bottom: 1px solid $border-color;
+		p{
+			text-align: center;
+			font-size: 1.3rem;
+			margin-bottom: 10px;
+		}
+		button{
+			width: 100%;
+			background-color: $red;
+			color: white;
+		}
+	}
 	.search-tab{
 		width: 20%;
+		.search-condi-con{
+			margin-top: 10px;
+			&>div{
+				width: 100%;
+				margin-bottom: 1rem;
+			}
+		}
+		.search-field-title{
+			font-weight: 600;
+			color: white!important;
+			padding : 10px;
+			border-radius: 10px;
+			background-color: #3f51b5;
+			text-align: center;
+		}
 	}
 	.movie-list{
 		width: 80%;
 		display: flex;
-		justify-content: flex-start;
+		flex-wrap: wrap;
 	}
 }

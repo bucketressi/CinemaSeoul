@@ -39,7 +39,7 @@ export type People = {
 }
 
 export type SimpleMovieType = {
-	movi_id : number;
+	movi_id? : number;
 	movi_name : string;
 	rating : number;
 	image : string;

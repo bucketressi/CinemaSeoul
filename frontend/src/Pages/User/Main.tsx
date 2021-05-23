@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
 import { MovieCard, PageTitle } from '../../Components';
 import "../../scss/pages/main.scss";
 import { SimpleMovieType } from '../../Main/Type';
@@ -36,15 +37,15 @@ const Main = () => {
 				{
 					MovieData.movie_list.map((movie : SimpleMovieType)=>{
 						return (
-							<MovieCard
-								key={movie.movi_id}
-								movi_id={movie.movi_id}
-								image={movie.image}
-								movi_name = {movie.movi_name}
-								rating = {movie.rating}
-								avi_age={movie.avi_age}
-								open_date={movie.open_date}
-							/>
+							<Link key={movie.movi_id} to={`/movie/${movie.movi_id}`}>
+								<MovieCard
+									image={movie.image}
+									movi_name = {movie.movi_name}
+									rating = {movie.rating}
+									avi_age={movie.avi_age}
+									open_date={movie.open_date}
+								/>
+							</Link>
 						)
 					})
 				}

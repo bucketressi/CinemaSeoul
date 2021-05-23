@@ -6,9 +6,10 @@
 .movie-card{
 	display: flex;
 	flex-direction: column;
-	width: 300px;
+    width: 250px;
     height: 400px;
 	align-items: center;
+	margin-bottom: 2rem;
 	.movie-poster{
 		height: 80%;
 		border-radius: 1rem;
