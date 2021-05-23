@@ -5,16 +5,16 @@ export type childrenObj = {
 /* Movie */
 
 export type MovieList = {
-	movie_list : MovieZip[],
+	movie_list: MovieZip[],
 	page: number,
-	totalpage : number
+	totalpage: number
 }
 
 export type MovieZip = {
-	movi_id : number,
-	movi_name : String,
-	score : number,
-	image : Blob
+	movi_id: number,
+	movi_name: string,
+	score: number,
+	image: Blob
 }
 
 export type Movie = {
@@ -34,6 +34,12 @@ export type Movie = {
 }
 
 export type People = {
-  peop_id : number,
-  peop_name : string  
+	peop_id: number,
+	peop_name: string
+}
+
+export type Birth = {
+	year : number,
+	month : number,
+	day : number
 }

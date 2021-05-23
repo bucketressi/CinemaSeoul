@@ -1,0 +1,54 @@
+@import "../base/variable";
+
+.login-con{
+	width: 100%;
+    margin-top: 50px;
+	.MuiTabs-flexContainer{
+		width: 100%!important;
+		&>button{
+			width: 50%!important;
+			max-width: initial!important;
+		}
+	}
+}
+.user-form{
+	display: flex;
+	justify-content: space-between;
+	&>div{
+		width: 48%;
+	}
+	.form-con{
+		display: flex;
+		flex-direction: column;
+		&>div{
+			margin-bottom: 10px;
+		}
+	}
+	.input-con{
+		display: flex;
+		flex-direction: column;
+	}
+	.under-menu{
+		display: flex;
+		justify-content: space-between;
+	}
+	.checkbox-con{
+		display: flex;
+		align-items: center;
+	}
+	.sub-menu{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		&>*{
+			margin-right: 10px;
+			padding-right: 10px;
+			border-right: 1px solid $border-color;
+		}
+		.last{
+			border: none;
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
