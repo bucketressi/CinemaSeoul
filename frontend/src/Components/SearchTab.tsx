@@ -1,6 +1,6 @@
 import React, { Dispatch, useState } from 'react';
 import { Button, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
-
+import "../scss/component/_searchtab.scss";
 
 const SearchTab = () => {
 

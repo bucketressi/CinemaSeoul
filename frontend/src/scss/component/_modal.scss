@@ -1,0 +1,34 @@
+@import "../base/variable";
+
+.modal{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+	.modal-con{
+		position : relative;
+		min-width: 500px;
+		min-height: 300px;
+		max-width: 80vw;
+		max-height: 90vh;
+		overflow-y: scroll;
+		padding: 1rem;
+		background-color: white;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.modal-button{
+			position : absolute;
+			top: 15px;
+			right: 15px;
+			z-index: 200;
+			background-color: $red;
+		}
+		.modal-title{
+			font-size: 1.5rem;
+			font-weight: 600;
+			padding: 10px 30px;
+			margin-bottom: 10px;
+			border-bottom: 1px solid $border-color;
+		}
+	}
+}
