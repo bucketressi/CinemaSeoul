@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import "../scss/component/_moviecard.scss";
+import { SimpleMovieType } from '../Main/Type';
 
-type Props = {
-	imgSrl : string;
-	movi_name : string;
-	bookrecord : number;
-	open_date : Date;
-	avi_age : number;
-}
-
-const MovieCard = ({imgSrl, movi_name, bookrecord, open_date, avi_age} : Props) => {
+const MovieCard = ({movi_id, image, movi_name, rating, open_date, avi_age} : SimpleMovieType) => {
 	const [dDay, setDDay] = useState<string>("Day");
 	useEffect(()=>{
 		const now = new Date();
@@ -23,17 +17,19 @@ const MovieCard = ({imgSrl, movi_name, bookrecord, open_date, avi_age} : Props) 
 	}, [open_date]);
 
 	return (
-		<div className="movie-card">
-			<div className="movie-poster">
-				<span className="age-circle">{avi_age}</span>
-				<img src={imgSrl} alt={`poster ${movi_name}`}/>
+		<Link to={`/movie/${movi_id}`}>
+			<div className="movie-card">
+				<div className="movie-poster">
+					<span className="age-circle">{avi_age}</span>
+					<img src={image} alt={`poster ${movi_name}`}/>
+				</div>
+				<div className="movie-name">{movi_name}</div>
+				<div className="info-con">
+					<div>{`예매율 : ${rating}%`}</div>
+					<div>{`D${dDay}`}</div>
+				</div>
 			</div>
-			<div className="movie-name">{movi_name}</div>
-			<div className="info-con">
-				<div>{`예매율 : ${bookrecord}%`}</div>
-				<div>{`D${dDay}`}</div>
-			</div>
-		</div>
+		</Link>
 	);
 };
 

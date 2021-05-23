@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
 import { MovieCard, PageTitle } from '../../Components';
 import "../../scss/pages/main.scss";
 import { SimpleMovieType } from '../../Main/Type';
@@ -39,9 +38,10 @@ const Main = () => {
 						return (
 							<MovieCard
 								key={movie.movi_id}
-								imgSrl={movie.image}
+								movi_id={movie.movi_id}
+								image={movie.image}
 								movi_name = {movie.movi_name}
-								bookrecord = {movie.rating}
+								rating = {movie.rating}
 								avi_age={movie.avi_age}
 								open_date={movie.open_date}
 							/>

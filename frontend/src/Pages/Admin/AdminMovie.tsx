@@ -37,12 +37,13 @@ const AdminMovie = () => {
 					MovieData.movie_list.map((movie : SimpleMovieType)=>{
 						return (
 							<MovieCard
-								key={movie.movi_id}
-								imgSrl={movie.image}
-								movi_name = {movie.movi_name}
-								bookrecord = {movie.rating}
-								avi_age={movie.avi_age}
-								open_date={movie.open_date}
+							key={movie.movi_id}
+							movi_id={movie.movi_id}
+							image={movie.image}
+							movi_name = {movie.movi_name}
+							rating = {movie.rating}
+							avi_age={movie.avi_age}
+							open_date={movie.open_date}
 							/>
 						)
 					})
