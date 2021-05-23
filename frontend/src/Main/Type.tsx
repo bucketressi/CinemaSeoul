@@ -12,7 +12,7 @@ export type MovieList = {
 
 export type MovieZip = {
 	movi_id : number,
-	movi_name : String,
+	movi_name : string,
 	score : number,
 	image : Blob
 }
@@ -36,4 +36,13 @@ export type Movie = {
 export type People = {
   peop_id : number,
   peop_name : string  
+}
+
+export type SimpleMovieType = {
+	movi_id : number;
+	movi_name : string;
+	rating : number;
+	image : string;
+	open_date : Date;
+	avi_age : number;
 }

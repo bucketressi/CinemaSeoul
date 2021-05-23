@@ -1,0 +1,11 @@
+.movie-wrap{
+	display: flex;
+	.search-tab{
+		width: 20%;
+	}
+	.movie-list{
+		width: 80%;
+		display: flex;
+		justify-content: flex-start;
+	}
+}

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import "../scss/component/_moviecard.scss";
 
 type Props = {
+	imgSrl : string;
 	movi_name : string;
 	bookrecord : number;
 	open_date : Date;
 	avi_age : number;
 }
 
-const MovieCard = ({movi_name, bookrecord, open_date, avi_age} : Props) => {
+const MovieCard = ({imgSrl, movi_name, bookrecord, open_date, avi_age} : Props) => {
 	const [dDay, setDDay] = useState<string>("Day");
 	useEffect(()=>{
 		const now = new Date();
@@ -25,7 +26,7 @@ const MovieCard = ({movi_name, bookrecord, open_date, avi_age} : Props) => {
 		<div className="movie-card">
 			<div className="movie-poster">
 				<span className="age-circle">{avi_age}</span>
-				<img src="https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202005/15586_101_1.jpg" alt="poster"/>
+				<img src={imgSrl} alt={`poster ${movi_name}`}/>
 			</div>
 			<div className="movie-name">{movi_name}</div>
 			<div className="info-con">
