@@ -18,7 +18,9 @@ public class MappingConstant {
             "/movie/{movi_id}",
             "/movie/search",
             "/movie/list",
-            "/movie/genre/list"
+            "/movie/genre/list",
+
+            "/showschedule/list",
     };
 
     //2 (비회원, 회원 둘다 가능)
@@ -50,6 +52,10 @@ public class MappingConstant {
             "/point/{user_id}/{start_date}",
 
             "/hall/{hall_id}",
+
+            "/showschedule",
+            "/showschedule/{show_id}/book",
+            "/showschedule/add"
     };
 
     //3 (매니저(높은 관리자만) 가능)

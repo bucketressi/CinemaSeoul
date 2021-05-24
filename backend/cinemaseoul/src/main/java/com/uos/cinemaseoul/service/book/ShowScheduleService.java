@@ -57,7 +57,7 @@ public class ShowScheduleService {
     public ShowScheduleListDto getShowScheduleList(ScheduleCriteria scheduleCriteria) throws Exception{
         ShowScheduleListDto sLDto = new ShowScheduleListDto();
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyMMddHHmm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
 
         //페이지 계산
         int totalCount = showScheduleDao.countList(scheduleCriteria);
@@ -71,12 +71,12 @@ public class ShowScheduleService {
         for(ScheduleInfoDto s : sLDto.getShowschedule_list()){
 
             //시간 계산
-            Long runtime = format.parse(s.getShow_date()+s.getShow_time()).getTime()
-                    + Long.parseLong(s.getEnd_time())* 60 *1000;
+            Long runtime = format.parse(s.getShow_date()+s.getShow_time()).getTime();
+            runtime = runtime+ Long.parseLong(s.getEnd_time())* 60 *1000;
             s.setEnd_time(format.format(new Date(runtime)));
 
             //전체 - 선택 안되는 좌석 , 예매된 좌석
-            s.setRema_seat(s.getHall_seat() - s.getRema_seat() - showScheduleDao.getBookedSeatNum(s.getShow_id()));
+            s.setRema_seat(s.getHall_seat() - showScheduleDao.getBookedSeatNum(s.getShow_id()));
         }
 
 

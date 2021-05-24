@@ -3,6 +3,8 @@ package com.uos.cinemaseoul.controller.book;
 import com.uos.cinemaseoul.dto.book.hall.HallDto;
 import com.uos.cinemaseoul.dto.book.hall.SeatDto;
 import com.uos.cinemaseoul.service.book.HallService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +32,10 @@ public class HallController {
     public void deleteHall(@RequestBody HallDto updateHallDto){
         hallService.deleteHall(updateHallDto);
     }
+
     @GetMapping("/hall")
     public ResponseEntity<?> getHallList(){
-        return ResponseEntity.ok(hallService.selectList());
+        return ResponseEntity.ok(new Result(hallService.selectList()));
     }
 
     @GetMapping("/hall/{hall_id}")
@@ -43,5 +46,11 @@ public class HallController {
     @PostMapping("/hall/seat")
     public void updateSeat(@RequestBody Map<String,List<SeatDto>> updateSeat){
         hallService.updateSeats(updateSeat.get("seats"));
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T>{
+        private T data;
     }
 }

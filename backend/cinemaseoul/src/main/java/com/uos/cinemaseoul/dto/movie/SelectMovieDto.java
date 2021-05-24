@@ -16,7 +16,7 @@ public class SelectMovieDto {
     private int movi_id;
     private String movi_name;
     private String avai_age;
-    private String run_time;
+    private int run_time;
     private String company;
     private String movi_contents;
     private byte[] image;

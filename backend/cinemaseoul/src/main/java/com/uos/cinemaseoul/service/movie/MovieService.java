@@ -29,6 +29,7 @@ public class MovieService {
     public void insertMovie(InsertMovieDto iMDto){
         MovieVo movieVo = movieMapper.insertMovieDtoToMovieVo(iMDto);
         movieDao.insertMovie(movieVo);
+        System.out.println(movieVo.getRun_time()+"@@@@@@@@@@@@@@@@@@");
         int movi_id = movieVo.getMovi_id();
 
         //삽입값 세팅
@@ -92,6 +93,7 @@ public class MovieService {
         if(genre != null){
             sMDto.setGenre(genre);
         }
+        System.out.println(sMDto.getRun_time()+"@@@@@@@@@@@@@@@@@@@@");
         return sMDto;
     }
 
@@ -111,6 +113,7 @@ public class MovieService {
         return movieListDto;
     }
 
+    //영화 검색
     @Transactional
     public MovieListDto searchMovie(MovieSearchCriteria movieSearchCriteria) {
         movieSearchCriteria.setName("%"+movieSearchCriteria.getName()+"%");
@@ -125,8 +128,4 @@ public class MovieService {
         movieListDto.setPageInfo(totalPage, movieSearchCriteria.getPage(), movieSearchCriteria.getAmount());
         return movieListDto;
     }
-
-
-    //영화 검색
-
 }

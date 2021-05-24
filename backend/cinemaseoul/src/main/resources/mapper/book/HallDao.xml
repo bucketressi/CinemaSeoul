@@ -19,7 +19,6 @@
                 </choose>
                 #{hall_row}, #{hall_col}, #{avai_seat_amount})
     </insert>
-
     <insert id="insertSeat">
         INSERT ALL
             <foreach collection="seats" item="seats" index="index" separator=" ">
@@ -33,12 +32,14 @@
         UPDATE HALL SET HALL_NAME = #{hall_name},
                         HALL_ROW = #{hall_row},
                         HALL_COL = #{hall_col},
-                        AVAI_SEAT_AMOUNT = #{ava_seat_amount}
+                        AVAI_SEAT_AMOUNT = #{avai_seat_amount}
         WHERE HALL_ID = #{hall_id}
     </update>
+
     <delete id="sweapSeat"><![CDATA[
-        DELETE SEAT WHERE HALL_ID = #{hall_id} AND SEAT_NUM < #{seat_num}
+        DELETE SEAT WHERE HALL_ID = #{hall_id} AND SEAT_NUM >= #{seat_num}
         ]]></delete>
+
     <insert id= "additionalSeat">
         INSERT ALL
         <foreach collection="seats" item="seats" index="index" separator=" ">
@@ -55,7 +56,7 @@
 
     <!--[상영관 리스트 조회]-->
     <select id="selectList" resultType="HallDto">
-        SELECT HALL_ID, HALL_NAME, HALL_ROW, HALL_COL FROM HALL
+        SELECT HALL_ID, HALL_NAME, HALL_ROW, HALL_COL, AVAI_SEAT_AMOUNT FROM HALL
     </select>
 
     <!--[상영관 조회]-->
@@ -74,7 +75,7 @@
             WHERE HALL_ID = #{hall_id} AND SEAT_NUM = #{seat_num}
     </update>
 
-    <update id="updateAvaiSeatAmount" parameterType="Integer">
+    <update id="updateAvaiSeatAmount">
         UPDATE HALL SET AVAI_SEAT_AMOUNT = (SELECT COUNT(SEAT_NUM) FROM SEAT WHERE SEAT_TYPE_CODE IN (#{seat_type_ok}, #{seat_type_disabled}))
         WHERE HALL_ID = #{hall_id}
     </update>

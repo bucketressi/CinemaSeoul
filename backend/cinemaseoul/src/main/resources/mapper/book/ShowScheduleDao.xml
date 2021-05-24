@@ -28,11 +28,11 @@
         <trim prefix="WHERE" prefixOverrides="AND">
 
             <if test="start_date != null"><![CDATA[
-                AND S.SHOW_DATE <= #{start_date}
+                AND S.SHOW_DATE >= #{start_date}
             ]]></if>
 
             <if test="end_date != null"><![CDATA[
-                AND S.SHOW_DATE >= #{end_date}
+                AND S.SHOW_DATE <= #{end_date}
             ]]></if>
 
             <if test="movi_id != null">
@@ -53,45 +53,44 @@
     </select>
 
     <select id="selectScheduleList" parameterType="ScheduleCriteria" resultType="ScheduleInfoDto">
-        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME, B.SHOW_DATE, B.SHOW_TIME, B.END_TIME, B.HALL_SEAT, B.REMA_SEAT
+        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME, B.SHOW_DATE, B.SHOW_TIME, B.END_TIME, B.HALL_SEAT
         FROM (
-        SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM, A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME, A.SHOW_DATE, A.SHOW_TIME,
-               A.END_TIME, A.HALL_SEAT, A.REMA_SEAT
-        FROM(
-        SELECT S.SHOW_ID, S.MOVI_ID, S.HALL_ID, S.SHOW_DATE, S.SHOW_TIME,
-               M.MOVI_NAME, M.RUN_TIME AS END_TIME, H.HALL_NAME, (H.HALL_COL * H.HALL_ROW) AS HALL_SEAT, H.AVAI_SEAT_AMOUNT  AS REMA_SEAT,
+            SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM, A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME, A.SHOW_DATE, A.SHOW_TIME,
+               A.END_TIME, A.HALL_SEAT
+            FROM(
+                SELECT S.SHOW_ID, S.MOVI_ID, S.HALL_ID, S.SHOW_DATE, S.SHOW_TIME,
+                       M.MOVI_NAME, M.RUN_TIME AS END_TIME,
+                       H.HALL_NAME, H.AVAI_SEAT_AMOUNT AS HALL_SEAT
 
+                FROM SHOWSCHEDULE S
+                INNER JOIN HALL H ON S.HALL_ID = H.HALL_ID
+                INNER JOIN MOVIE M ON M.MOVI_ID = S.MOVI_ID
 
-        FROM SHOWSCHEDULE S
-        INNER JOIN HALL H ON S.HALL_ID = H.HALL_ID
-        INNER JOIN MOVIE M ON M.MOVI_ID = S.MOVI_ID
+                <trim prefix="WHERE" prefixOverrides="AND">
+                    <if test="start_date != null"><![CDATA[
+                        AND S.SHOW_DATE >= #{start_date}
+                    ]]></if>
 
-        <trim prefix="WHERE" prefixOverrides="AND">
+                    <if test="end_date != null"><![CDATA[
+                        AND S.SHOW_DATE <= #{end_date}
+                    ]]></if>
 
-            <if test="start_date != null"><![CDATA[
-                AND S.SHOW_DATE <= #{start_date}
-            ]]></if>
+                    <if test="movi_id != null">
+                        AND S.MOVI_ID IN
+                        <foreach collection="movi_id" item="id" separator=", " open="(" close=")">
+                            #{id}
+                        </foreach>
+                    </if>
 
-            <if test="end_date != null"><![CDATA[
-                AND S.SHOW_DATE >= #{end_date}
-            ]]></if>
-
-            <if test="movi_id != null">
-                AND S.MOVI_ID IN
-                <foreach collection="movi_id" item="id" separator=", " open="(" close=")">
-                    #{id}
-                </foreach>
-            </if>
-
-            <if test="hall_id != null">
-                AND S.HALL_ID IN
-                <foreach collection="hall_id" item="id" separator=", " open="(" close=")">
-                    #{id}
-                </foreach>
-            </if>
-        </trim>
-        ) A
-        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+                    <if test="hall_id != null">
+                        AND S.HALL_ID IN
+                        <foreach collection="hall_id" item="id" separator=", " open="(" close=")">
+                            #{id}
+                        </foreach>
+                    </if>
+                </trim>
+            ) A
+    <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
         WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
     </select>
 

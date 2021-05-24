@@ -81,7 +81,7 @@ public class ConstantTable {
 
             code = codeMap.get("좌석구분");
             SEAT_TYPE_OK = code.get(0).getCode_id();
-            SEAT_TYPE_DISABLED = code.get(0).getCode_id();
+            SEAT_TYPE_DISABLED = code.get(1).getCode_id();
         }
     }
 }

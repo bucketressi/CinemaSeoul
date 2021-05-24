@@ -1,6 +1,5 @@
 package com.uos.cinemaseoul.vo.movie;
 
-import com.uos.cinemaseoul.dto.user.admin.AdminSignUpDto;
 import lombok.*;
 
 @Getter @Setter @Builder
@@ -10,7 +9,7 @@ public class MovieVo {
     private int movi_id;
     private String movi_name;
     private String avai_age_code;
-    private String show_time;
+    private int run_time;
     //nullable
     private String company;
     //nullable

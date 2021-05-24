@@ -10,7 +10,7 @@
         <result property="movi_id" column="MOVI_ID"/>
         <result property="movi_name" column="MOVI_NAME"/>
         <result property="avai_age" javaType="string" column="AVAI_AGE"/>
-        <result property="runtime" column="RUN_TIME"/>
+        <result property="run_time" column="RUN_TIME"/>
         <result property="company" column="COMPANY"/>
         <result property="movi_contents" column="MOVI_CONTENTS"/>
         <result property="open_date" column="OPEN_DATE"/>

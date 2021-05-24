@@ -36,7 +36,7 @@ public class ShowScheduleController {
         showScheduleService.checkBookViaShowSchedule(show_id);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<?> selectShowScheduleList(@RequestBody ScheduleCriteria scheduleCriteria) throws Exception{
         return ResponseEntity.ok(showScheduleService.getShowScheduleList(scheduleCriteria));
     }
