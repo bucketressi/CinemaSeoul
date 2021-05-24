@@ -15,6 +15,6 @@ public class MovieListInfoDto {
     private String avai_age;
     private String open_date;
     private float rating;
-    private int accu_audi;
+    private int accu_audience;
     private byte[] image;
 }

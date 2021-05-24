@@ -15,7 +15,7 @@ public class InsertMovieDto {
     @NonNull
     private String avai_age_code;
     @NonNull
-    private String show_time;
+    private String run_time;
     //nullable
     private String company;
     //nullable

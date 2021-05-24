@@ -10,14 +10,14 @@
         <result property="movi_id" column="MOVI_ID"/>
         <result property="movi_name" column="MOVI_NAME"/>
         <result property="avai_age" javaType="string" column="AVAI_AGE"/>
-        <result property="show_time" column="SHOW_TIME"/>
+        <result property="runtime" column="RUN_TIME"/>
         <result property="company" column="COMPANY"/>
         <result property="movi_contents" column="MOVI_CONTENTS"/>
         <result property="open_date" column="OPEN_DATE"/>
         <result property="image" column="IMAGE"/>
         <result property="open_date" column="OPEN_DATE"/>
         <result property="rating" column="RATING"/>
-        <result property="accu_audi" column="ACCU_AUDI"/>
+        <result property="accu_audience" column="ACCU_AUDIENCE"/>
         <collection property="casting" javaType="java.util.ArrayList" ofType="CastingInfoDto">
             <id property="peop_id" column="PEOP_ID"/>
             <result property="peop_id" column="PEOP_ID"/>
@@ -31,7 +31,7 @@
     <select id="selectMovie"  resultMap="movieInfo">
         SELECT M.MOVI_ID, M.MOVI_NAME,
                (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
-               M.SHOW_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.ACCU_AUDI, M.IMAGE, M.OPEN_DATE,
+               M.RUN_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.ACCU_AUDIENCE, M.IMAGE, M.OPEN_DATE,
                C.PEOP_ID, C.PEOP_NAME,  C.CAST_TYPE_CODE
         FROM MOVIE M
         INNER JOIN CAST C on M.MOVI_ID = C.MOVI_ID
@@ -85,12 +85,12 @@
     </select>
     <!--영화 리스트 조회(페이지)-->
     <select id="selectMovieList" parameterType="MovieCriteria" resultType="MovieListInfoDto">
-        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDI, B.IMAGE
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDIENCE, B.IMAGE
         FROM (
-                 SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDI, A.IMAGE
+                 SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDIENCE, A.IMAGE
                  FROM(
                          SELECT MOVI_ID, MOVI_NAME, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
-                         OPEN_DATE, RATING, ACCU_AUDI, IMAGE FROM MOVIE M
+                         OPEN_DATE, RATING, ACCU_AUDIENCE, IMAGE FROM MOVIE M
 
                             <trim prefix="WHERE" prefixOverrides="AND">
                                 <choose>
@@ -149,12 +149,12 @@
 
 
     <select id = "searchMovie" parameterType="MovieSearchCriteria" resultType="MovieListInfoDto">
-        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDI, B.IMAGE
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDIENCE, B.IMAGE
         FROM (
-            SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDI, A.IMAGE
+            SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDIENCE, A.IMAGE
             FROM(
                 SELECT MOVI_ID, MOVI_NAME, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
-                       OPEN_DATE, RATING, ACCU_AUDI, IMAGE FROM MOVIE M
+                       OPEN_DATE, RATING, ACCU_AUDIENCE, IMAGE FROM MOVIE M
                 WHERE
                 <choose>
                     <when test="cast_type_code!= null">
@@ -175,7 +175,7 @@
             SELECT SEQ_MOVIE.nextval FROM DUAL
         </selectKey>
 
-        INSERT INTO MOVIE VALUES (#{movi_id}, #{movi_name}, #{avai_age_code}, #{show_time},
+        INSERT INTO MOVIE VALUES (#{movi_id}, #{movi_name}, #{avai_age_code}, #{run_time},
                             #{company, jdbcType=VARCHAR}, #{movi_contents, jdbcType=VARCHAR},
                             #{open_date}, DEFAULT, DEFAULT, #{image, jdbcType=BLOB})
     </insert>
@@ -205,7 +205,7 @@
     <update id="updateMovie" parameterType="MovieVo">
         UPDATE MOVIE M SET M.MOVI_NAME = #{movi_name},
                          M.AVAI_AGE_CODE = #{avai_age_code},
-                         M.SHOW_TIME = #{show_time},
+                         M.RUN_TIME= #{run_time},
 
                          <if test="company != null">
                          M.COMPANY = #{company},

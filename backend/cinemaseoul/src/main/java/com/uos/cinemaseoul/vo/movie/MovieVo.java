@@ -17,7 +17,7 @@ public class MovieVo {
     private String movi_contents;
     private String open_date;
     private float rating;
-    private int accu_audi;
+    private int accu_audience;
     //nullable
     private byte[] image;
 

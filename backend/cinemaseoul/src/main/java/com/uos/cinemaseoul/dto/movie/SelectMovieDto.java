@@ -16,7 +16,7 @@ public class SelectMovieDto {
     private int movi_id;
     private String movi_name;
     private String avai_age;
-    private String show_time;
+    private String run_time;
     private String company;
     private String movi_contents;
     private byte[] image;
@@ -27,6 +27,6 @@ public class SelectMovieDto {
 
     private List<CastingInfoDto> casting = new ArrayList<>();
     private float rating;
-    private int accu_audi;
+    private int accu_audience;
 
 }

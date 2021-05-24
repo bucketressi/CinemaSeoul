@@ -11,4 +11,5 @@ public class HallVo {
     private String hall_name;
     private int hall_row;
     private int hall_col;
+    private int avai_seat_amount;
 }

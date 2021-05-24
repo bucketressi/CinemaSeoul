@@ -21,4 +21,5 @@ public interface ShowScheduleDao {
 
     int countList(ScheduleCriteria scheduleCriteria);
     List<ScheduleInfoDto> selectScheduleList(ScheduleCriteria scheduleCriteria);
+    int getBookedSeatNum(int show_id);
 }

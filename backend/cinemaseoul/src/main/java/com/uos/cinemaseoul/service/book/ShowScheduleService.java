@@ -75,9 +75,8 @@ public class ShowScheduleService {
                     + Long.parseLong(s.getEnd_time())* 60 *1000;
             s.setEnd_time(format.format(new Date(runtime)));
 
-            //빈 좌석 계산
-
             //전체 - 선택 안되는 좌석 , 예매된 좌석
+            s.setRema_seat(s.getHall_seat() - s.getRema_seat() - showScheduleDao.getBookedSeatNum(s.getShow_id()));
         }
 
 

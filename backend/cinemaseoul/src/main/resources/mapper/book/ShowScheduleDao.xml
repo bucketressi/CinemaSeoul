@@ -6,16 +6,13 @@
 <mapper namespace="com.uos.cinemaseoul.dao.book.ShowScheduleDao">
 
     <insert id="insert" parameterType="ShowScheduleVo">
-        INSERT INTO SHOWSCHEDULE (SHOW_ID, MOVI_ID, MOVI_NAME, HALL_ID, HALL_NAME, SHOW_DATE, SHOW_TIME)
-        VALUES (SEQ_SHOW.NEXTVAL, #{movi_id}, (SELECT MOVI_NAME FROM MOVIE M WHERE M.MOVI_ID = #{movi_id}),
-                #{hall_id}, (SELECT HALL_NAME FROM HALL H WHERE H.HALL_ID = #{hall_id}, #{show_date}, #{show_time}))
+        INSERT INTO SHOWSCHEDULE (SHOW_ID, MOVI_ID, HALL_ID, SHOW_DATE, SHOW_TIME)
+        VALUES (SEQ_SHOW.NEXTVAL, #{movi_id}, #{hall_id}, #{show_date}, #{show_time})
     </insert>
 
     <update id="update" parameterType="ShowScheduleVo">
         UPDATE SHOWSCHEDULE SET MOVI_ID = #{movi_id},
-                                MOVI_NAME = (SELECT MOVI_NAME FROM MOVIE M WHERE M.MOVI_ID = #{movi_id}),
                                 HALL_ID = #{hall_id},
-                                HALL_NAME = (SELECT HALL_NAME FROM HALL H WHERE H.HALL_ID = #{hall_id}),
                                 SHOW_DATE = #{show_date},
                                 SHOW_TIME = #{show_time}
         WHERE SHOW_ID =  #{show_id}
@@ -56,13 +53,14 @@
     </select>
 
     <select id="selectScheduleList" parameterType="ScheduleCriteria" resultType="ScheduleInfoDto">
-        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME, B.SHOW_DATE, B.SHOW_TIME, B.END_TIME, B.HALL_SEAT
+        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME, B.SHOW_DATE, B.SHOW_TIME, B.END_TIME, B.HALL_SEAT, B.REMA_SEAT
         FROM (
         SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM, A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME, A.SHOW_DATE, A.SHOW_TIME,
-               A.END_TIME, A.HALL_SEAT
+               A.END_TIME, A.HALL_SEAT, A.REMA_SEAT
         FROM(
-        SELECT S.SHOW_ID, S.MOVI_ID, S.MOVI_NAME, S.HALL_ID, S.HALL_NAME, S.SHOW_DATE, S.SHOW_TIME,
-               M.SHOW_TIME AS END_TIME, (H.HALL_COL * H.HALL_ROW) AS HALL_SEAT
+        SELECT S.SHOW_ID, S.MOVI_ID, S.HALL_ID, S.SHOW_DATE, S.SHOW_TIME,
+               M.MOVI_NAME, M.RUN_TIME AS END_TIME, H.HALL_NAME, (H.HALL_COL * H.HALL_ROW) AS HALL_SEAT, H.AVAI_SEAT_AMOUNT  AS REMA_SEAT,
+
 
         FROM SHOWSCHEDULE S
         INNER JOIN HALL H ON S.HALL_ID = H.HALL_ID
@@ -97,9 +95,12 @@
         WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
     </select>
 
+    <select id="getBookedSeatNum" resultType="Integer">
+        SELECT COUNT(BOOK_ID) FROM BOOKSEAT WHERE SHOW_ID = #{show_id}
+    </select>
+
     <select id="checkBook" resultType="Integer">
         SELECT COUNT(BOOK_ID) FROM BOOK
         WHERE SHOW_ID = #{show_id}
     </select>
-
 </mapper>

@@ -17,7 +17,7 @@
                     <when test="hall_name != null"> #{hall_name},</when>
                      <otherwise> SEQ_HALL.CURRVAL||'관', </otherwise>
                 </choose>
-                #{hall_row}, #{hall_col})
+                #{hall_row}, #{hall_col}, #{avai_seat_amount})
     </insert>
 
     <insert id="insertSeat">
@@ -32,7 +32,8 @@
     <update id="update" parameterType="HallVo">
         UPDATE HALL SET HALL_NAME = #{hall_name},
                         HALL_ROW = #{hall_row},
-                        HALL_COL = #{hall_col}
+                        HALL_COL = #{hall_col},
+                        AVAI_SEAT_AMOUNT = #{ava_seat_amount}
         WHERE HALL_ID = #{hall_id}
     </update>
     <delete id="sweapSeat"><![CDATA[
@@ -71,6 +72,11 @@
     <update id="updateSeats" parameterType="SeatVo">
             UPDATE SEAT SET SEAT_TYPE_CODE = #{seat_type_code}
             WHERE HALL_ID = #{hall_id} AND SEAT_NUM = #{seat_num}
+    </update>
+
+    <update id="updateAvaiSeatAmount" parameterType="Integer">
+        UPDATE HALL SET AVAI_SEAT_AMOUNT = (SELECT COUNT(SEAT_NUM) FROM SEAT WHERE SEAT_TYPE_CODE IN (#{seat_type_ok}, #{seat_type_disabled}))
+        WHERE HALL_ID = #{hall_id}
     </update>
 
 </mapper>

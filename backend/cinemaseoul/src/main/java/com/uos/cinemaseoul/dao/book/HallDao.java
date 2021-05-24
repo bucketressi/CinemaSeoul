@@ -34,4 +34,5 @@ public interface HallDao {
 
     //좌석 상태 수정
     int updateSeats(SeatVo updateSeats);
+    void updateAvaiSeatAmount(int hall_id, String seat_type_ok, String seat_type_disabled);
 }

@@ -20,6 +20,9 @@ public class ConstantTable {
     public static String POINT_CODE_NOTADD;
     public static String POINT_CODE_NOTUSE;
 
+    public static String SEAT_TYPE_OK;
+    public static String SEAT_TYPE_DISABLED;
+
     public static HashMap<String, List<CodeVo>> codeMap = new HashMap<>();
     public static List<MessageVo> message = new ArrayList<>();
 
@@ -75,6 +78,10 @@ public class ConstantTable {
             POINT_CODE_USE = code.get(1).getCode_id();
             POINT_CODE_NOTADD = code.get(2).getCode_id();
             POINT_CODE_NOTUSE = code.get(3).getCode_id();
+
+            code = codeMap.get("좌석구분");
+            SEAT_TYPE_OK = code.get(0).getCode_id();
+            SEAT_TYPE_DISABLED = code.get(0).getCode_id();
         }
     }
 }

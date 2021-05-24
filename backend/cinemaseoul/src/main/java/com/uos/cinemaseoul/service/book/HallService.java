@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.SEAT_TYPE_DISABLED;
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.SEAT_TYPE_OK;
+
 @Service
 @AllArgsConstructor
 public class HallService {
@@ -24,6 +27,7 @@ public class HallService {
 
     @Transactional
     public void insertHall(HallDto hallDto) {
+        hallDto.setAvai_seat_amount(hallDto.getHall_col() * hallDto.getHall_row());
         HallVo vo = hallMapper.insertIntoHallVoFromHallDto(hallDto);
         hallDao.insert(vo);
 
@@ -36,10 +40,11 @@ public class HallService {
     @Transactional
     public void updateHall(HallDto updateHallDto) {
         HallVo vo = hallDao.selectHall(updateHallDto.getHall_id());
-        int pastSeat = vo.getHall_col() * vo.getHall_row();
 
-        hallDao.update(hallMapper.insertIntoHallVoFromHallDto(updateHallDto));
+        int pastSeat = vo.getHall_col() * vo.getHall_row();
         int seat_num = updateHallDto.getHall_col() * updateHallDto.getHall_row();
+        updateHallDto.setAvai_seat_amount(seat_num);
+        hallDao.update(hallMapper.insertIntoHallVoFromHallDto(updateHallDto));
 
         if(pastSeat > seat_num){
             //크기에 맞지 않는 좌석 삭제
@@ -80,5 +85,6 @@ public class HallService {
         for(SeatVo s : updateSeats){
             hallDao.updateSeats(s);
         }
+        hallDao.updateAvaiSeatAmount(seats.get(0).getHall_id(), SEAT_TYPE_OK, SEAT_TYPE_DISABLED);
     }
 }
