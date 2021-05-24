@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.book.ShowScheduleDao">
+
+    <insert id="insert" parameterType="ShowScheduleVo">
+        INSERT INTO SHOWSCHEDULE (SHOW_ID, MOVI_ID, MOVI_NAME, HALL_ID, HALL_NAME, SHOW_DATE, SHOW_TIME)
+        VALUES (SEQ_SHOW.NEXTVAL, #{movi_id}, (SELECT MOVI_NAME FROM MOVIE M WHERE M.MOVI_ID = #{movi_id}),
+                #{hall_id}, (SELECT HALL_NAME FROM HALL H WHERE H.HALL_ID = #{hall_id}, #{show_date}, #{show_time}))
+    </insert>
+
+    <update id="update" parameterType="ShowScheduleVo">
+        UPDATE SHOWSCHEDULE SET MOVI_ID = #{movi_id},
+                                MOVI_NAME = (SELECT MOVI_NAME FROM MOVIE M WHERE M.MOVI_ID = #{movi_id}),
+                                HALL_ID = #{hall_id},
+                                HALL_NAME = (SELECT HALL_NAME FROM HALL H WHERE H.HALL_ID = #{hall_id}),
+                                SHOW_DATE = #{show_date},
+                                SHOW_TIME = #{show_time}
+        WHERE SHOW_ID =  #{show_id}
+    </update>
+
+    <delete id="delete">
+        DELETE SHOWSCHEDULE WHERE SHOW_ID = #{show_id}
+    </delete>
+
+    <select id="countList" parameterType="ScheduleCriteria" resultType="Integer">
+        SELECT COUNT(SHOW_ID) FROM SHOWSCHEDULE S
+
+        <trim prefix="WHERE" prefixOverrides="AND">
+
+            <if test="start_date != null"><![CDATA[
+                AND S.SHOW_DATE <= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND S.SHOW_DATE >= #{end_date}
+            ]]></if>
+
+            <if test="movi_id != null">
+                AND S.MOVI_ID IN
+                <foreach collection="movi_id" item="id" separator=", " open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+
+            <if test="hall_id != null">
+                AND S.HALL_ID IN
+                <foreach collection="hall_id" item="id" separator=", " open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+
+        </trim>
+    </select>
+
+    <select id="selectScheduleList" parameterType="ScheduleCriteria" resultType="ScheduleInfoDto">
+        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME, B.SHOW_DATE, B.SHOW_TIME, B.END_TIME, B.HALL_SEAT
+        FROM (
+        SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM, A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME, A.SHOW_DATE, A.SHOW_TIME,
+               A.END_TIME, A.HALL_SEAT
+        FROM(
+        SELECT S.SHOW_ID, S.MOVI_ID, S.MOVI_NAME, S.HALL_ID, S.HALL_NAME, S.SHOW_DATE, S.SHOW_TIME,
+               M.SHOW_TIME AS END_TIME, (H.HALL_COL * H.HALL_ROW) AS HALL_SEAT
+
+        FROM SHOWSCHEDULE S
+        INNER JOIN HALL H ON S.HALL_ID = H.HALL_ID
+        INNER JOIN MOVIE M ON M.MOVI_ID = S.MOVI_ID
+
+        <trim prefix="WHERE" prefixOverrides="AND">
+
+            <if test="start_date != null"><![CDATA[
+                AND S.SHOW_DATE <= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND S.SHOW_DATE >= #{end_date}
+            ]]></if>
+
+            <if test="movi_id != null">
+                AND S.MOVI_ID IN
+                <foreach collection="movi_id" item="id" separator=", " open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+
+            <if test="hall_id != null">
+                AND S.HALL_ID IN
+                <foreach collection="hall_id" item="id" separator=", " open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </trim>
+        ) A
+        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+    <select id="checkBook" resultType="Integer">
+        SELECT COUNT(BOOK_ID) FROM BOOK
+        WHERE SHOW_ID = #{show_id}
+    </select>
+
+</mapper>
