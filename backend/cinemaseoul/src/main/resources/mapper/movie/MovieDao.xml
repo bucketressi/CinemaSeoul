@@ -127,7 +127,7 @@
                          ORDER BY
                          <choose>
                              <when test="sort eq 1"> RATING </when>
-                             <when test="sort eq 2"> ACCU_AUDI </when>
+                             <when test="sort eq 2"> ACCU_AUDIDENCE </when>
                              <otherwise>MOVI_ID</otherwise>
                          </choose>
                          ) A
