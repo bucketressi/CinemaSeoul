@@ -22,12 +22,14 @@ import {
 	AdminStore,
 	AdminTheater,
 	AdminError,
+	AdminLogin
 } from '../../Pages/Admin';
 
 const AdminRouter : React.FC = () => (
 	<AdminLayout>
 		<Switch>
 			<Route path="/admin/ask" component={AdminAsk}/>
+			<Route path="/admin/login" component={AdminLogin}/>
 			<Route path="/admin/blacklist" component={AdminBlackList}/>
 			<Route path="/admin/book" component={AdminBookRecord}/>
 			<Route path="/admin/event" component={AdminEvent}/>

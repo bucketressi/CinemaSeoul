@@ -49,9 +49,23 @@ export type SimpleMovieType = {
 
 export type User = {
 	user_name : string,
-	birth? : string,
+	birth? : string, // 비회원은 없음
 	phone_num : string,
-	email? : string
+	email? : string, // 비회원은 없음
 	password : string,
-	agreement : string
+	agreement : string,
+	curr_point? : number, // 비회원은 없음
+	accu_point? : number, // 비회원은 없음
+	remain_point? : number, // 비회원은 없음
+}
+
+export type Admin = {
+	admi_name : string,
+	birth : string,
+	phone_num : string,
+	password : string,
+	admi_auth_code : string,
+	position : string,
+	address : string,
+	start_date : string
 }

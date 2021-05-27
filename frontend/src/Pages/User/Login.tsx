@@ -84,7 +84,7 @@ const Login = () => {
 							</div>
 						</div>
 					</div>
-					<div className="rigth-con">
+					<div className="right-con">
 						<img src="/img/killer.jpg" alt="홍보 이미지" />
 					</div>
 				</div>
