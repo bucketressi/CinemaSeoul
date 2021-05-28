@@ -52,17 +52,21 @@
             <trim prefix="WHERE" prefixOverrides="AND">
 
                 <choose>
-                    <!--상영 중-->
+                    <!--개봉 중-->
                     <when test="stat == 1"><![CDATA[
-                        M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD') AND
-                                     M.OPEN_DATE+7 > TO_CHAR(SYSDATE, 'YYYYMMDD')
-                    ]]></when>
+                                    M.MOVI_ID IN
+                                    (SELECT S.MOVI_ID FROM SHOWSCHEDULE S
+                                        WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE, 'YYYYMMDD') -7)
+                                    AND
+                                    M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                    ]]></when>
 
-                    <!--상영 예정-->
+                    <!--개봉 예정-->
                     <when test="stat == 2"><![CDATA[
-                         M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
-                    ]]></when>
-                     <otherwise></otherwise>
+                                    M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        ]]></when>
+                    <otherwise></otherwise>
                 </choose>
 
                 <if test="avai_age_code != null">
@@ -94,13 +98,17 @@
 
                             <trim prefix="WHERE" prefixOverrides="AND">
                                 <choose>
-                                    <!--상영 중-->
+                                    <!--개봉 중-->
                                     <when test="stat == 1"><![CDATA[
-                                            M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD') AND
-                                                         M.OPEN_DATE+7 > TO_CHAR(SYSDATE, 'YYYYMMDD')
-                                        ]]></when>
+                                    M.MOVI_ID IN
+                                    (SELECT S.MOVI_ID FROM SHOWSCHEDULE S
+                                        WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE, 'YYYYMMDD') -7)
+                                    AND
+                                    M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                    ]]></when>
 
-                                    <!--상영 예정-->
+                                    <!--개봉 예정-->
                                     <when test="stat == 2"><![CDATA[
                                              M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
                                         ]]></when>
@@ -180,6 +188,27 @@
                             #{open_date}, DEFAULT, DEFAULT, #{image, jdbcType=BLOB})
     </insert>
 
+    <!-- [캐스팅 수정] -->
+    <!-- 캐스팅 삭제 -> 이후 INSERT  -->
+    <delete id="deleteCasting" parameterType="Integer">
+        DELETE FROM CAST WHERE MOVI_ID = #{movi_id}
+    </delete>
+    <!-- 캐스팅 삽입  -->
+    <update id="insertCasting">
+        INSERT ALL
+        <foreach item="casting" index="index" collection="casting" separator=" ">
+            INTO CAST (MOVI_ID, PEOP_ID, PEOP_NAME, CAST_TYPE_CODE) VALUES
+            ( #{movi_id}, #{casting.peop_id},
+            (SELECT PEOP_NAME FROM PEOPLE P WHERE P.PEOP_ID = #{casting.peop_id}), #{casting.cast_type_code})
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <!-- [장르 수정] -->
+    <!-- 장르 삭제 -> 이후 INSERT -->
+    <delete id="deleteGenre" parameterType="Integer">
+        DELETE FROM MOVIEGENRE WHERE MOVI_ID = #{movi_id}
+    </delete>
     <!-- 장르삽입  -->
     <update id="insertGenre" parameterType="hashmap">
         INSERT ALL
@@ -189,19 +218,9 @@
         SELECT * FROM DUAL
     </update>
 
-    <!-- 캐스팅 삽입  -->
-    <update id="insertCasting">
-        INSERT ALL
-        <foreach item="casting" index="index" collection="casting" separator=" ">
-        INTO CAST (MOVI_ID, PEOP_ID, PEOP_NAME, CAST_TYPE_CODE) VALUES
-            ( #{movi_id}, #{casting.peop_id},
-             (SELECT PEOP_NAME FROM PEOPLE P WHERE P.PEOP_ID = #{casting.peop_id}), #{casting.cast_type_code})
-        </foreach>
-        SELECT * FROM DUAL
-    </update>
+
 
     <!-- [영화 수정] -->
-    <!-- 영화정보 수정 -->
     <update id="updateMovie" parameterType="MovieVo">
         UPDATE MOVIE M SET M.MOVI_NAME = #{movi_name},
                          M.AVAI_AGE_CODE = #{avai_age_code},
@@ -221,15 +240,6 @@
     </update>
 
 
-    <!-- 캐스팅 삭제 -> 이후 INSERT  -->
-    <delete id="deleteCasting" parameterType="Integer">
-        DELETE FROM CAST WHERE MOVI_ID = #{movi_id}
-    </delete>
-
-    <!-- 장르 삭제 -> 이후 INSERT -->
-    <delete id="deleteGenre" parameterType="Integer">
-        DELETE FROM MOVIEGENRE WHERE MOVI_ID = #{movi_id}
-    </delete>
 
     <!-- [영화 이미지 수정] -->
     <update id="updateMovieImage" parameterType="MovieVo">

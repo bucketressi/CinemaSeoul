@@ -144,8 +144,14 @@ public class UsersService  {
     }
 
     //회원탈퇴
+    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> BOOKPAY, PRODUCTPAY에 슈퍼유저 0으로 설정**/
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int deleteUser(int user_id) throws Exception{
+
+        //삭제할때 연관된 예매결제 - 상품결제 항목의 id 슈퍼유저로 변환
+        usersDao.setBookPayDefault(user_id);
+        //usersDao.setProductPayDefault(user_id);
+
         //1보다 더 많이 삭제되어버리면
         int result =usersDao.deleteUser(user_id);
 

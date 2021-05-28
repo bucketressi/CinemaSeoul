@@ -22,8 +22,7 @@ public class InsertMovieDto {
     private String movi_contents;
     @NonNull
     private String open_date;
-    private int[] genre_code;
-    private List<CastingInfoDto> casting;
+
     //nullable
     private byte[] image;
 

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,10 +71,10 @@ public class HallService {
 
     @Transactional
     public HallInfoDto selectHall(int hall_id){
-        HallInfoDto hallInfoDto = hallMapper.insertIntoHallInfoDtoFromHallVo(hallDao.selectHall(hall_id));
-        hallInfoDto.setSeats(hallDao.getSeats(hall_id)
-                    .stream().map(m -> hallMapper.insertIntoSeatDtoFromSeatVo(m)).collect(Collectors.toList()));
-        return hallInfoDto;
+        HallInfoDto hdto = new HallInfoDto();
+        hdto.setSeats(hallDao.getSeats(hall_id)
+                .stream().map(m -> hallMapper.insertIntoSeatDtoFromSeatVo(m)).collect(Collectors.toList()));
+        return hdto;
     }
 
     @Transactional

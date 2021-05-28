@@ -82,9 +82,14 @@
                 WHERE USER_ID = #{user_id}
     </update>
 
+    <!--[회원탈퇴]-->
     <delete id="deleteUser">
         DELETE FROM USERS WHERE USER_ID = #{user_id}
     </delete>
+    <update id="setBookPayDefault" parameterType="Integer">
+        UPDATE BOOKPAY SET USER_ID = 0
+        WHERE USER_ID = #{user_id}
+    </update>
 
     <select id="adultCheck" resultType="String">
         SELECT BIRTH FROM USERS WHERE PHONE_NUM = #{phone_num}

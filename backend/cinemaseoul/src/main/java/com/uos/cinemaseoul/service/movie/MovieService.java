@@ -4,10 +4,7 @@ import com.uos.cinemaseoul.common.mapper.MovieMapper;
 import com.uos.cinemaseoul.common.paging.MovieCriteria;
 import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
 import com.uos.cinemaseoul.dao.movie.MovieDao;
-import com.uos.cinemaseoul.dto.movie.InsertMovieDto;
-import com.uos.cinemaseoul.dto.movie.MovieListDto;
-import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
-import com.uos.cinemaseoul.dto.movie.UpdateMovieDto;
+import com.uos.cinemaseoul.dto.movie.*;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.movie.MovieVo;
@@ -26,19 +23,29 @@ public class MovieService {
 
     //영화 삽입
     @Transactional
-    public void insertMovie(InsertMovieDto iMDto){
+    public int insertMovie(InsertMovieDto iMDto){
         MovieVo movieVo = movieMapper.insertMovieDtoToMovieVo(iMDto);
         movieDao.insertMovie(movieVo);
-        System.out.println(movieVo.getRun_time()+"@@@@@@@@@@@@@@@@@@");
-        int movi_id = movieVo.getMovi_id();
+        return movieVo.getMovi_id();
+    }
+    @Transactional
+    public void updateMovieGenre(InsertGenreDto iMDto) {
+        movieDao.deleteGenre(iMDto.getMovi_id());
 
         //삽입값 세팅
         HashMap<String,Object> map = new HashMap<>();
         map.put("genre",iMDto.getGenre_code());
-        map.put("movi_id", movi_id);
-        map.put("casting", iMDto.getCasting());
+        map.put("movi_id", iMDto.getMovi_id());
 
         movieDao.insertGenre(map);
+    }
+    @Transactional
+    public void updateMovieCast(InsertCastDto iMDto) {
+        movieDao.deleteCasting(iMDto.getMovi_id());
+        //삽입값 세팅
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("movi_id", iMDto.getMovi_id());
+        map.put("casting", iMDto.getCasting());
         movieDao.insertCasting(map);
     }
 
@@ -51,7 +58,7 @@ public class MovieService {
     }
 
     //업데이트
-    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> SHOWSCHEDULE의 이름도 변경해야함***/
+    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> SHOWSCHEDULE에서의 이름도 변경해야함***/
     @Transactional
     public void updateMovie(UpdateMovieDto uMDto){
         MovieVo movieVo = movieMapper.updateMovieDtoToMovieVo(uMDto);
@@ -59,20 +66,8 @@ public class MovieService {
         if(movieDao.updateMovie(movieVo) != 1){
             throw new WrongArgException("too much");
         }
-
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("genre",uMDto.getGenre_code());
-        map.put("movi_id", uMDto.getMovi_id());
-        map.put("casting", uMDto.getCasting());
-
-        //장르재설정
-        movieDao.deleteGenre(movieVo.getMovi_id());
-        movieDao.insertGenre(map);
-
-        //인물재설정
-        movieDao.deleteCasting(movieVo.getMovi_id());
-        movieDao.insertCasting(map);
     }
+
     //이미지 업데이트
     public void updateMovieImage(int movi_id, byte[] image) {
         MovieVo movieVo = MovieVo.builder().movi_id(movi_id).image(image).build();
@@ -128,4 +123,6 @@ public class MovieService {
         movieListDto.setPageInfo(totalPage, movieSearchCriteria.getPage(), movieSearchCriteria.getAmount());
         return movieListDto;
     }
+
+
 }

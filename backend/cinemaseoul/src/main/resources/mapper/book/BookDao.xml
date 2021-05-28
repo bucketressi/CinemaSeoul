@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.book.BookDao">
+
+    <!-- [개봉중인 영화 전부 조회]-->
+    <select id="getBookAvailableMovie" resultType="MovieShortCutDto"><![CDATA[
+        SELECT M.MOVI_ID, M.MOVI_NAME, (SELECT CODE_NAME FROM CODE WHERE CODE_ID = M.AVAI_AGE_CODE) FROM MOVIE M
+        WHERE M.MOVI_ID IN (
+            SELECT S.MOVI_ID FROM SHOWSCHEDULE S
+            WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+              AND S.SHOW_DATE < TO_CHAR(SYSDATE, 'YYYYMMDD') -7)
+        ]]>
+    </select>
+
+    <!-- [해당 영화, 일자의 상영일정 조회]-->
+    <select id="getScheduleFromMoviDate" resultType="ShowScheduleFromDateMovieDto" parameterType="ScheduleAskDto">
+        SELECT S.SHOW_ID, S.SHOW_DATE, S.SHOW_TIME,
+               M.MOVI_NAME,
+               H.HALL_NAME,
+               H.AVAI_SEAT_AMOUNT - (SELECT COUNT(BOOK_ID) FROM BOOKSEAT BS WHERE BS.SHOW_ID = S.SHOW_ID) AS REMA_AMOUNT
+        FROM SHOWSCHEDULE S
+        INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
+        INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
+
+        WHERE S.MOVI_ID = #{movi_id} AND
+              <choose>
+                  <when test="show_date != null"> S.SHOW_DATE = #{show_date}</when>
+                  <otherwise>S.SHOW_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')</otherwise>
+              </choose>
+    </select>
+
+    <!-- [상영일정 좌석 조회]-->
+    <!-- 상영관 가능좌석 조회-->
+    <select id="getShowScheduleSeat" resultType="ShowScheduleSeatDto">
+        SELECT HALL_ID, SEAT_NUM, SEAT_TYPE_CODE FROM SEAT S
+        WHERE S.HALL_ID = (SELECT HALL_ID FROM SHOWSCHEDULE WHERE SHOW_ID = #{show_id})
+    </select>
+    <!-- 예매된 좌석 조회-->
+    <select id="getBookedSeat" resultType="ShowScheduleSeatDto">
+        SELECT HALL_ID, SEAT_NUM FROM BOOKSEAT BS
+        WHERE BS.SHOW_ID = #{show_id}
+    </select>
+
+
+    <!-- [예매 정보 조회]-->
+    <!-- 기본 정보 조회-->
+    <select id="getBookInfo" resultType="BookDto">
+        SELECT B.BOOK_ID, B.BOOK_PAY_ID, B.TEEN, B.ADULT, B.SENIOR, B.IMPAIRED, B.BOOK_DATETIME,
+               S.SHOW_DATE, S.SHOW_TIME, (SELECT H.HALL_NAME FROM HALL H WHERE S.HALL_ID = H.HALL_ID) AS HALL_NAME,
+               M.MOVI_NAME, M.RUN_TIME
+        FROM BOOK B
+        INNER JOIN SHOWSCHEDULE S on S.SHOW_ID = B.SHOW_ID
+        INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
+
+        WHERE B.BOOK_ID = #{book_id}
+    </select>
+    <!-- 예매 좌석 조회-->
+    <select id="getMyBookedSeat" resultType="Integer">
+        SELECT BS.SEAT_NUM FROM BOOKSEAT BS WHERE BS.BOOK_ID = #{book_id}
+    </select>
+
+    <!--[예매 취소]-->
+    <delete id="cancel" parameterType="Integer">
+        DELETE BOOK WHERE BOOK_ID = #{book_id}
+    </delete>
+
+</mapper>

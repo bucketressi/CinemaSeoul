@@ -20,10 +20,14 @@ public interface UsersDao {
 
     UserInfoDto selectById(int user_id);
     int updateUser(UsersVo usr);
+
+
     int deleteUser(int user_id);
+    void setBookPayDefault(int user_id);
+    void setProductPayDefault(int user_id);
+
     String adultCheck(String phone_num);
-
-
-
     Integer resetPassword(UsersVo vo);
+
+
 }

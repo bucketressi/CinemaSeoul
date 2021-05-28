@@ -11,11 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HallInfoDto {
-    private int hall_id;
-    private String hall_name;
-    private int hall_row;
-    private int hall_col;
-    private int avai_seat_amount;
     private List<SeatDto> seats = new ArrayList<>();
-
 }

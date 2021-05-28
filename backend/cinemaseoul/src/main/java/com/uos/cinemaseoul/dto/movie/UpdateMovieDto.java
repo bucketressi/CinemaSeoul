@@ -24,6 +24,4 @@ public class UpdateMovieDto {
     private String movi_contents;
     @NonNull
     private String open_date;
-    private String[] genre_code;
-    private List<CastingInfoDto> casting;
 }

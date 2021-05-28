@@ -59,7 +59,7 @@
         SELECT HALL_ID, HALL_NAME, HALL_ROW, HALL_COL, AVAI_SEAT_AMOUNT FROM HALL
     </select>
 
-    <!--[상영관 조회]-->
+    <!--[상영관 좌석 조회]-->
     <select id="selectHall" resultType="HallVo">
         SELECT HALL_ID, HALL_NAME, HALL_ROW, HALL_COL FROM HALL
         WHERE HALL_ID = #{hall_id}

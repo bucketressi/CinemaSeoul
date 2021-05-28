@@ -4,10 +4,7 @@ import com.uos.cinemaseoul.common.constatnt.CodeVo;
 import com.uos.cinemaseoul.common.constatnt.ConstantTable;
 import com.uos.cinemaseoul.common.paging.MovieCriteria;
 import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
-import com.uos.cinemaseoul.dto.movie.InsertMovieDto;
-import com.uos.cinemaseoul.dto.movie.MovieListDto;
-import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
-import com.uos.cinemaseoul.dto.movie.UpdateMovieDto;
+import com.uos.cinemaseoul.dto.movie.*;
 import com.uos.cinemaseoul.service.movie.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +21,18 @@ public class MovieController {
     private final ConstantTable constantTable;
 
     @PostMapping("/add")
-    public void insertMovie(@RequestBody InsertMovieDto iMDto){
-        movieService.insertMovie(iMDto);
+    public ResponseEntity<?> insertMovie(@RequestBody InsertMovieDto iMDto){
+        return ResponseEntity.ok(movieService.insertMovie(iMDto));
+    }
+
+    @PostMapping("/updateGenre")
+    public void insertMovie(@RequestBody InsertGenreDto iMDto){
+        movieService.updateMovieGenre(iMDto);
+    }
+
+    @PostMapping("/updateCast")
+    public void insertMovie(@RequestBody InsertCastDto iMDto){
+        movieService.updateMovieCast(iMDto);
     }
 
     @DeleteMapping("/delete")

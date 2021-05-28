@@ -19,17 +19,18 @@ public interface HallDao {
     void insert(HallVo vo);
     void insertSeat(int hall_id, int[] seats);
 
-    //수정 후 좌석크기 조정
+    //조회 - 수정 후 좌석크기 조정
+    HallVo selectHall(int hall_id);
     void update(HallVo vo);
     void sweapSeat(int hall_id, int seat_num);
     void additionalSeat(int hall_id, int[] seats);
-
+    //삭제
     void delete(int hall_id);
 
+    //상영관 리스트
     List<HallDto> selectList();
 
-    //상영관 조회
-    HallVo selectHall(int hall_id);
+    //상영관 좌석 조회
     List<SeatVo> getSeats(int hall_id);
 
     //좌석 상태 수정

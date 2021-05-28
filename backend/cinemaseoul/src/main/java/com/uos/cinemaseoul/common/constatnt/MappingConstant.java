@@ -45,6 +45,8 @@ public class MappingConstant {
             "/admin/update",
 
             "/movie/update",
+            "/movie/updateGenre",
+            "/movie/updateCast",
             "/movie/add",
             "/movie/delete",
 
