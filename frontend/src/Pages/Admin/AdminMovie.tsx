@@ -6,7 +6,16 @@ import { MovieCard, SearchTab, ModalComponent, PageTitle } from '../../Component
 import { SimpleMovieType, MovieListType } from '../../Main/Type';
 import { Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
 
-const MovieData = {
+type Props = {
+	MovieData : MovieListType;
+}
+
+type ImgInfoType = {
+	file: File;
+	previewURL: string | ArrayBuffer | null;
+}
+
+const initialMovieData = {
 	movie_list: [
 		{
 			movi_id: 1,
@@ -43,12 +52,7 @@ const MovieData = {
 	amount: 2
 };
 
-type ImgInfoType = {
-	file: File,
-	previewURL: string | ArrayBuffer | null
-}
-
-const AdminMovie = () => {
+const AdminMovie = ({MovieData = initialMovieData} : Props) => {
 	const [movieList, setMovieList] = useState<MovieListType | undefined>(undefined);
 	const [open, setOpen] = useState<boolean>(false);
 
@@ -67,6 +71,7 @@ const AdminMovie = () => {
 	const handleOpenDateChange = (e: any) => { setOpenDate(e.target.value); };
 	const handleContentChange = (e: any) => { setContent(e.target.value); };
 	const handleGenreChange = (e: any) => { setGenre(Number(e.target.value)); };
+
 	const uploadImage = (e: any) => {
 		setImg(e.target.files[0]);
 		const reader = new FileReader();
@@ -89,9 +94,10 @@ const AdminMovie = () => {
 		setMovieList(MovieData);
 	});
 
+	
 	return (
 		<>
-			<PageTitle title="영화 리스트" isButtonVisible={false}/>
+			<PageTitle title="영화 리스트" isButtonVisible={true}/>
 			<div className="movie-wrap">
 				<SearchTab />
 				<div className="movie-content-con">

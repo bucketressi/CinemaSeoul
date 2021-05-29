@@ -3,7 +3,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AdminLayout } from '../../Components';
 import {
-	AdminAdmin,
+	AdminMain,
 	AdminMovieExact,
 	AdminAsk,
 	AdminBlackList,
@@ -28,6 +28,7 @@ import {
 const AdminRouter : React.FC = () => (
 	<AdminLayout>
 		<Switch>
+			<Route exact path="/admin" component={AdminMain}/>
 			<Route path="/admin/ask" component={AdminAsk}/>
 			<Route path="/admin/login" component={AdminLogin}/>
 			<Route path="/admin/blacklist" component={AdminBlackList}/>
@@ -47,7 +48,7 @@ const AdminRouter : React.FC = () => (
 			<Route path="/admin/store" component={AdminStore}/>
 			<Route path="/admin/theater" component={AdminTheater}/>
 			<Route path="/admin/error" component={AdminError}/>
-			<Redirect to="/admin/movie" />
+			<Redirect to="/admin" />
 		</Switch>
 	</AdminLayout>
 );

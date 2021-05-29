@@ -18,3 +18,4 @@ export { default as AdminPay } from './AdminPay';
 export { default as AdminStore } from './AdminStore';
 export { default as AdminError } from './AdminError';
 export { default as AdminLogin } from './AdminLogin';
+export { default as AdminMain } from './AdminMain';
