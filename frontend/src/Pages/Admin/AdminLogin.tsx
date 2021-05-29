@@ -4,6 +4,7 @@ import { TextField, Checkbox, Button } from '@material-ui/core';
 import { useAdminLogin } from '../../Main/AdminModel';
 
 const AdminLogin = () => {
+	// 관리자 로그인 페이지
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 

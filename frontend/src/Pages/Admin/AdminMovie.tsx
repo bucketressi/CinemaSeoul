@@ -1,48 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../../scss/pages/movielist.scss";
 
 import { Link } from 'react-router-dom';
 import { MovieCard, SearchTab, ModalComponent } from '../../Components';
-import { SimpleMovieType } from '../../Main/Type';
+import { SimpleMovieType, MovieListType } from '../../Main/Type';
 import { Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
 
+const MovieData = {
+	movie_list: [
+		{
+			movi_id: 1,
+			movi_name: "귀멸의 칼날",
+			rating: 4.8,
+			avi_age: 15,
+			open_date: new Date("2021/05/30"),
+			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202101/16908_103_1.jpg"
+		}, {
+			movi_id: 2,
+			movi_name: "보이저스",
+			rating: 4.6,
+			avi_age: 19,
+			open_date: new Date("2021/06/03"),
+			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
+		}, {
+			movi_id: 3,
+			movi_name: "보이저스",
+			rating: 4.6,
+			avi_age: 19,
+			open_date: new Date("2021/06/03"),
+			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
+		}, {
+			movi_id: 4,
+			movi_name: "보이저스",
+			rating: 4.6,
+			avi_age: 19,
+			open_date: new Date("2021/06/03"),
+			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
+		}
+	],
+	page: 1,
+	totalpage: 1,
+	amount: 2
+};
+
+type ImgInfoType = {
+	file: File,
+	previewURL: string | ArrayBuffer | null
+}
+
 const AdminMovie = () => {
-	const MovieData = {
-		movie_list: [
-			{
-				movi_id: 1,
-				movi_name: "귀멸의 칼날",
-				rating: 4.8,
-				avi_age: 15,
-				open_date: new Date("2021/05/30"),
-				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202101/16908_103_1.jpg"
-			}, {
-				movi_id: 2,
-				movi_name: "보이저스",
-				rating: 4.6,
-				avi_age: 19,
-				open_date: new Date("2021/06/03"),
-				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-			}, {
-				movi_id: 3,
-				movi_name: "보이저스",
-				rating: 4.6,
-				avi_age: 19,
-				open_date: new Date("2021/06/03"),
-				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-			}, {
-				movi_id: 4,
-				movi_name: "보이저스",
-				rating: 4.6,
-				avi_age: 19,
-				open_date: new Date("2021/06/03"),
-				image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-			}
-		],
-		page: 1,
-		totalpage: 1,
-		amount: 2
-	};
+	const [movieList, setMovieList] = useState<MovieListType | undefined>(undefined);
 	const [open, setOpen] = useState<boolean>(false);
 
 	const [name, setName] = useState<string>("");
@@ -51,13 +58,36 @@ const AdminMovie = () => {
 	const [openDate, setOpenDate] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	const [genre, setGenre] = useState<number>(-1);
+	const [img, setImg] = useState<File | undefined>(undefined);
+	const [imgInfo, setImgInfo] = useState<ImgInfoType | undefined>(undefined);
 
 	const handleNameChange = (e: any) => { setAge(e.target.value); };
 	const handleCompanyChange = (e: any) => { setAge(e.target.value); };
 	const handleAgeChange = (e: any) => { setAge(Number(e.target.value)); };
 	const handleOpenDateChange = (e: any) => { setOpenDate(e.target.value); };
 	const handleContentChange = (e: any) => { setContent(e.target.value); };
-	const handleGenreChange = (e : any ) => { setGenre(Number(e.target.value)); };
+	const handleGenreChange = (e: any) => { setGenre(Number(e.target.value)); };
+	const uploadImage = (e: any) => {
+		setImg(e.target.files[0]);
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setImgInfo({
+				file: e.target.files[0],
+				previewURL: reader.result
+			})
+		};
+		reader.readAsDataURL(e.target.files[0]);
+	};
+
+	const addMovie = () => {
+		// 영화 추가 api 호출
+		console.log("addMovie");
+	}
+
+	useEffect(() => {
+		// 처음에 MovieData 받아오기 , movie list api 호출
+		setMovieList(MovieData);
+	});
 
 	return (
 		<div className="movie-wrap">
@@ -68,6 +98,7 @@ const AdminMovie = () => {
 				</div>
 				<div className="movie-list-con">
 					{
+						MovieData && MovieData.movie_list &&
 						MovieData.movie_list.map((movie: SimpleMovieType) => {
 							return (
 								<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
@@ -89,6 +120,7 @@ const AdminMovie = () => {
 				setOpen={setOpen}
 				title="영화 추가"
 				button="추가"
+				buttonOnClick={addMovie}
 			>
 				<div className="add-container">
 					<div>
@@ -118,31 +150,14 @@ const AdminMovie = () => {
 								<FormControlLabel value={3} control={<Radio color="primary" />} label="18세" />
 							</RadioGroup>
 						</FormControl>
-						<FormControl>
-							<FormLabel className="search-field-title">장르</FormLabel>
-							<RadioGroup name="genre" value={genre} onChange={handleGenreChange}>
-								{
-									// todo : code에서 가져와서 쓰기
-								}
-								<FormControlLabel value={-1} control={<Radio color="primary" />} label="전체" />
-								<FormControlLabel value={0} control={<Radio color="primary" />} label="미지정" />
-								<FormControlLabel value={1} control={<Radio color="primary" />} label="액션" />
-								<FormControlLabel value={2} control={<Radio color="primary" />} label="멜로" />
-								<FormControlLabel value={3} control={<Radio color="primary" />} label="드라마" />
-								<FormControlLabel value={4} control={<Radio color="primary" />} label="코미디" />
-								<FormControlLabel value={5} control={<Radio color="primary" />} label="무협" />
-								<FormControlLabel value={6} control={<Radio color="primary" />} label="SF" />
-								<FormControlLabel value={7} control={<Radio color="primary" />} label="에로" />
-								<FormControlLabel value={8} control={<Radio color="primary" />} label="애니메이션" />
-								<FormControlLabel value={9} control={<Radio color="primary" />} label="공포" />
-							</RadioGroup>
-						</FormControl>
-					</div>
-					<div>
-						casting
-					</div>
-					<div>
-						img
+						<div>
+							<div>포스터</div>
+							{
+								imgInfo && typeof(imgInfo.previewURL) === "string" && 
+								<img src={imgInfo.previewURL} alt="포스터" />
+							}
+							<input type="file" onChange={uploadImage} />
+						</div>
 					</div>
 				</div>
 			</ModalComponent>

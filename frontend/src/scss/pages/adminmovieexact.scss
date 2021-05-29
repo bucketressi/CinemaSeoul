@@ -1,0 +1,36 @@
+.genre-con{
+	display: flex;
+	flex-wrap: wrap;
+	width: 500px;
+	.genre-single{
+		display: flex;
+		align-items: center;
+		margin-right: 10px;
+		.title{
+			margin-left: 5px;
+		}
+	}
+}
+.button-con{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	button{
+		margin-bottom: 10px;
+	}
+	.save-btn{
+		width: 100%;
+	}
+}
+.cast-select-con{
+	width: 500px;
+	&>div{
+		width: 100%;
+		margin-bottom: 1rem;
+	}
+	.cast-chip-con{
+		.chip-component{
+			z-index: 100;
+		}
+	}
+}

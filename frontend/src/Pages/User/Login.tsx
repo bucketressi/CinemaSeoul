@@ -19,6 +19,7 @@ const Login = () => {
 	const [birthMonth, setBirthMonth] = useState<string>("");
 	const [birthDate, setBirthDate] = useState<string>("");
 	const [birth, setBirth] = useState<string>("");
+	const [saveId, setSaveId] = useState<boolean>(false);
 
 	useEffect(() => {
 		setBirth(`${birthYear}/${birthMonth}/${birthDate}`);
@@ -74,7 +75,7 @@ const Login = () => {
 						<Button className="btn" variant="contained" color="primary" onClick={handleUserLogin}>로그인</Button>
 						<div className="under-menu">
 							<div className="checkbox-con">
-								<Checkbox color="primary" />
+								<Checkbox color="primary" value={saveId} onChange={() => {setSaveId(!saveId)}}/>
 								<p>아이디저장</p>
 							</div>
 							<div className="sub-menu">

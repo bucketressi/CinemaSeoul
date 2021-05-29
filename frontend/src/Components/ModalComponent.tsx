@@ -8,9 +8,10 @@ type Props = {
 	title : string;
 	children : ReactNode;
 	button? : string;
+	buttonOnClick? : () => void
 }
 
-const ModalComponent = ({open, setOpen, title, children, button} : Props) => {
+const ModalComponent = ({open, setOpen, title, children, button, buttonOnClick} : Props) => {
 	return (
 		<Modal
 			open={open}
@@ -20,8 +21,8 @@ const ModalComponent = ({open, setOpen, title, children, button} : Props) => {
 			<div className="modal-con">
 				<div className="modal-title">{title}</div>
 				{
-					button &&
-					<Button className="modal-button" variant="contained" color="primary">{button}</Button>
+					button && buttonOnClick &&
+					<Button className="modal-button" variant="contained" color="primary" onClick={buttonOnClick}>{button}</Button>
 				}
 				<div className="modal-content">
 					{children}

@@ -4,17 +4,10 @@ export type childrenObj = {
 
 /* Movie */
 
-export type MovieList = {
-	movie_list: MovieZip[],
+export type MovieListType = {
+	movie_list: SimpleMovieType[],
 	page: number,
 	totalpage: number
-}
-
-export type MovieZip = {
-	movi_id: number,
-	movi_name: string,
-	score: number,
-	image: Blob
 }
 
 export type Movie = {
