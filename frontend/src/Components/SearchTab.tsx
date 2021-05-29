@@ -3,7 +3,6 @@ import { Button, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } f
 import "../scss/component/_searchtab.scss";
 
 import { useMovieListDispatch } from '../Main/MovieListModel';
-import { useHistory } from 'react-router-dom';
 
 const changedMovieData = {
 	movie_list: [
@@ -30,7 +29,6 @@ const changedMovieData = {
 
 const SearchTab = () => {
 	const setMovieList = useMovieListDispatch();
-	const history = useHistory();
 
 	const [state, setState] = useState<number>(0);
 	const [genre, setGenre] = useState<number>(-1);
@@ -42,7 +40,6 @@ const SearchTab = () => {
 
 	const handleSearch = () => {
 		setMovieList(changedMovieData);
-		history.push("/admin/movie");
 	};
 
 	return (
