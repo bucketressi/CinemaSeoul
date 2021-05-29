@@ -5,6 +5,7 @@ import { AdminLayout } from '../../Components';
 import {
 	AdminMain,
 	AdminMovieExact,
+	AdminModifyMovie,
 	AdminAsk,
 	AdminBlackList,
 	AdminBookRecord,
@@ -13,7 +14,7 @@ import {
 	AdminGenre,
 	AdminHall,
 	AdminHome,
-	AdminMovie,
+	AdminMovieList,
 	AdminNotice,
 	AdminPay,
 	AdminPeople,
@@ -38,8 +39,9 @@ const AdminRouter : React.FC = () => (
 			<Route path="/admin/genre" component={AdminGenre}/>
 			<Route path="/admin/hall" component={AdminHall}/>
 			<Route path="/admin/home" component={AdminHome}/>
-			<Route exact path="/admin/movie" component={AdminMovie}/>
+			<Route exact path="/admin/movie" component={AdminMovieList}/>
 			<Route path="/admin/movie/:movie_id" component={AdminMovieExact}/>
+			<Route path="/admin/modify/movie/:movie_id" component={AdminModifyMovie}/>
 			<Route path="/admin/notice" component={AdminNotice}/>
 			<Route path="/admin/pay" component={AdminPay}/>
 			<Route path="/admin/people" component={AdminPeople}/>
