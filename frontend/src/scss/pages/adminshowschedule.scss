@@ -1,0 +1,16 @@
+.schedule-con{
+	display: flex;
+	flex-direction: column;
+	.schedule-header{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.switch-con{
+			display: flex;
+			align-items: center;
+			&>div:first-child{
+				width: 50px;
+			}
+		}
+	}
+}
