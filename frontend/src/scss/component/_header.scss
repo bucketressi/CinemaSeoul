@@ -45,6 +45,7 @@ header{
 		}
 	}
 	.sub-menu{
+		margin-bottom: 10px;
 		ul{
 			display: flex;
 			li{
@@ -53,6 +54,21 @@ header{
 		}
 		.logout{
 			cursor: pointer;
+		}
+	}
+	.search-con{
+		display: flex;
+		align-items: center;
+		.search-type{
+			width: 20%;
+		}
+		.search-input{
+			width: 80%;
+			margin-right: 10px;
+		}
+		button{
+			width: 100px;
+			flex-shrink: 0;
 		}
 	}
 }
@@ -87,21 +103,6 @@ header{
 		}
 		.menu-con{
 			margin-bottom: 10px;
-		}
-		.search-con{
-			display: flex;
-			align-items: center;
-			.search-type{
-				width: 20%;
-			}
-			.search-input{
-				width: 80%;
-				margin-right: 10px;
-			}
-			button{
-				width: 100px;
-				flex-shrink: 0;
-			}
 		}
 	}
 }
