@@ -6,53 +6,16 @@ import { MovieCard, SearchTab, ModalComponent, PageTitle } from '../../Component
 import { SimpleMovieType, MovieListType } from '../../Main/Type';
 import { Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
 
-type Props = {
-	MovieData : MovieListType;
-}
+import {useMovieListState} from '../../Main/MovieListModel';
 
 type ImgInfoType = {
 	file: File;
 	previewURL: string | ArrayBuffer | null;
 }
 
-const initialMovieData = {
-	movie_list: [
-		{
-			movi_id: 1,
-			movi_name: "귀멸의 칼날",
-			rating: 4.8,
-			avi_age: 15,
-			open_date: new Date("2021/05/30"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202101/16908_103_1.jpg"
-		}, {
-			movi_id: 2,
-			movi_name: "보이저스",
-			rating: 4.6,
-			avi_age: 19,
-			open_date: new Date("2021/06/03"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-		}, {
-			movi_id: 3,
-			movi_name: "보이저스",
-			rating: 4.6,
-			avi_age: 19,
-			open_date: new Date("2021/06/03"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-		}, {
-			movi_id: 4,
-			movi_name: "보이저스",
-			rating: 4.6,
-			avi_age: 19,
-			open_date: new Date("2021/06/03"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-		}
-	],
-	page: 1,
-	totalpage: 1,
-	amount: 2
-};
+const AdminMovie = () => {
+	const movieListData = useMovieListState();
 
-const AdminMovie = ({MovieData = initialMovieData} : Props) => {
 	const [movieList, setMovieList] = useState<MovieListType | undefined>(undefined);
 	const [open, setOpen] = useState<boolean>(false);
 
@@ -90,8 +53,8 @@ const AdminMovie = ({MovieData = initialMovieData} : Props) => {
 	}
 
 	useEffect(() => {
-		// 처음에 MovieData 받아오기 , movie list api 호출
-		setMovieList(MovieData);
+		// 처음에 MovieData 받아오기
+		setMovieList(movieListData);
 	});
 
 	
@@ -106,8 +69,8 @@ const AdminMovie = ({MovieData = initialMovieData} : Props) => {
 					</div>
 					<div className="movie-list-con">
 						{
-							MovieData && MovieData.movie_list &&
-							MovieData.movie_list.map((movie: SimpleMovieType) => {
+							movieList && movieList.movie_list &&
+							movieList.movie_list.map((movie: SimpleMovieType) => {
 								return (
 									<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
 										<MovieCard
