@@ -1,13 +1,13 @@
 import React, { useState, useContext, createContext, Dispatch } from 'react';
-import { Admin, childrenObj } from './Type';
+import { AdminType, childrenObj } from './Type';
 
-const adminState = createContext<Admin | undefined>(undefined);
-const adminDispatch = createContext<Dispatch<Admin>>(() => { });
+const adminState = createContext<AdminType | undefined>(undefined);
+const adminDispatch = createContext<Dispatch<AdminType>>(() => { });
 const adminLoginFunction = createContext<(id: string, password: string) => void>(() => { });
 const logoutFunction = createContext<() => void>(() => { });
 
 export const AdminContextProvider = ({ children }: childrenObj) => {
-	const [admin, setAdmin] = useState<Admin | undefined>(undefined);
+	const [admin, setAdmin] = useState<AdminType | undefined>(undefined);
 	const initialAdmin = {
 		admi_name: "우희은",
 		birth: "20202020",
