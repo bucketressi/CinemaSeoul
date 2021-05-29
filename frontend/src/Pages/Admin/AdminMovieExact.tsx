@@ -173,9 +173,9 @@ const AdminMovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 				</div>
 			</div>
 			<div className="button-con">
+				<Button className="save-btn" variant="contained" color="secondary" onClick={saveMovie}>저장</Button>
 				<Button variant="contained" color="primary" onClick={openGenreModal}>장르 설정</Button>
 				<Button variant="contained" color="primary" onClick={openCastModal}>출연진 설정</Button>
-				<Button className="save-btn" variant="contained" color="secondary" onClick={saveMovie}>저장</Button>
 			</div>
 			<ModalComponent
 				title="장르 설정"
