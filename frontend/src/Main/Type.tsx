@@ -69,6 +69,7 @@ export type AdminType = {
 export type ShowScheduleType = {
 	show_id: number;
 	movi_id: number;
+	movi_name : string;
 	hall_id: number;
 	hall_name: string; // "42-1관",
 	show_date: string; //  "20210525",
@@ -77,6 +78,7 @@ export type ShowScheduleType = {
 	hall_seat: number;
 	rema_seat: number;
 }
+
 export type ShowScheduleListType = {
     showschedule_list: ShowScheduleType[],
     page: number;
