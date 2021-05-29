@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../../scss/pages/movielist.scss";
 
 import { Link } from 'react-router-dom';
-import { MovieCard, SearchTab, ModalComponent } from '../../Components';
+import { MovieCard, SearchTab, ModalComponent, PageTitle } from '../../Components';
 import { SimpleMovieType, MovieListType } from '../../Main/Type';
 import { Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
 
@@ -90,78 +90,81 @@ const AdminMovie = () => {
 	});
 
 	return (
-		<div className="movie-wrap">
-			<SearchTab />
-			<div className="movie-content-con">
-				<div className="movie-menu">
-					<Button variant="outlined" color="primary" onClick={() => setOpen(true)}>영화 추가</Button>
-				</div>
-				<div className="movie-list-con">
-					{
-						MovieData && MovieData.movie_list &&
-						MovieData.movie_list.map((movie: SimpleMovieType) => {
-							return (
-								<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
-									<MovieCard
-										image={movie.image}
-										movi_name={movie.movi_name}
-										rating={movie.rating}
-										avi_age={movie.avi_age}
-										open_date={movie.open_date}
-									/>
-								</Link>
-							)
-						})
-					}
-				</div>
-			</div>
-			<ModalComponent
-				open={open}
-				setOpen={setOpen}
-				title="영화 추가"
-				button="추가"
-				buttonOnClick={addMovie}
-			>
-				<div className="add-container">
-					<div>
-						<TextField variant="outlined" placeholder="제목" onChange={handleNameChange} />
-						<TextField variant="outlined" placeholder="회사" onChange={handleCompanyChange} />
+		<>
+			<PageTitle title="영화 리스트" isButtonVisible={false}/>
+			<div className="movie-wrap">
+				<SearchTab />
+				<div className="movie-content-con">
+					<div className="movie-menu">
+						<Button variant="outlined" color="primary" onClick={() => setOpen(true)}>영화 추가</Button>
 					</div>
-					<div>
-						<TextField variant="outlined" placeholder="설명" multiline={true} onChange={handleContentChange} />
-						<TextField
-							variant="outlined"
-							type="date"
-							label="개봉예정일"
-							InputLabelProps={{
-								shrink: true,
-							}}
-							value={openDate}
-							onChange={handleOpenDateChange}
-						/>
+					<div className="movie-list-con">
+						{
+							MovieData && MovieData.movie_list &&
+							MovieData.movie_list.map((movie: SimpleMovieType) => {
+								return (
+									<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
+										<MovieCard
+											image={movie.image}
+											movi_name={movie.movi_name}
+											rating={movie.rating}
+											avi_age={movie.avi_age}
+											open_date={movie.open_date}
+										/>
+									</Link>
+								)
+							})
+						}
 					</div>
-					<div>
-						<FormControl>
-							<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
-							<RadioGroup name="age" value={age} onChange={handleAgeChange}>
-								<FormControlLabel value={0} control={<Radio color="primary" />} label="ALL" />
-								<FormControlLabel value={1} control={<Radio color="primary" />} label="12세" />
-								<FormControlLabel value={2} control={<Radio color="primary" />} label="15세" />
-								<FormControlLabel value={3} control={<Radio color="primary" />} label="18세" />
-							</RadioGroup>
-						</FormControl>
+				</div>
+				<ModalComponent
+					open={open}
+					setOpen={setOpen}
+					title="영화 추가"
+					button="추가"
+					buttonOnClick={addMovie}
+				>
+					<div className="add-container">
 						<div>
-							<div>포스터</div>
-							{
-								imgInfo && typeof(imgInfo.previewURL) === "string" && 
-								<img src={imgInfo.previewURL} alt="포스터" />
-							}
-							<input type="file" onChange={uploadImage} />
+							<TextField variant="outlined" placeholder="제목" onChange={handleNameChange} />
+							<TextField variant="outlined" placeholder="회사" onChange={handleCompanyChange} />
+						</div>
+						<div>
+							<TextField variant="outlined" placeholder="설명" multiline={true} onChange={handleContentChange} />
+							<TextField
+								variant="outlined"
+								type="date"
+								label="개봉예정일"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								value={openDate}
+								onChange={handleOpenDateChange}
+							/>
+						</div>
+						<div>
+							<FormControl>
+								<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
+								<RadioGroup name="age" value={age} onChange={handleAgeChange}>
+									<FormControlLabel value={0} control={<Radio color="primary" />} label="ALL" />
+									<FormControlLabel value={1} control={<Radio color="primary" />} label="12세" />
+									<FormControlLabel value={2} control={<Radio color="primary" />} label="15세" />
+									<FormControlLabel value={3} control={<Radio color="primary" />} label="18세" />
+								</RadioGroup>
+							</FormControl>
+							<div>
+								<div>포스터</div>
+								{
+									imgInfo && typeof(imgInfo.previewURL) === "string" && 
+									<img src={imgInfo.previewURL} alt="포스터" />
+								}
+								<input type="file" onChange={uploadImage} />
+							</div>
 						</div>
 					</div>
-				</div>
-			</ModalComponent>
-		</div>
+				</ModalComponent>
+			</div>
+		</>
 	);
 }
 export default AdminMovie;

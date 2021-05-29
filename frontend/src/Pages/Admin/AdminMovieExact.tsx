@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { RouteComponentProps, useHistory } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { Button, Checkbox, Select, MenuItem, Chip, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, InputLabel } from '@material-ui/core';
 import "../../scss/pages/adminmovieexact.scss";
-import { ModalComponent } from '../../Components';
+import { ModalComponent, PageTitle } from '../../Components';
 
 interface MatchParams {
 	movie_id: string
@@ -18,7 +18,6 @@ const peopleArr = ["우희은", "엄현식", "고다현", "공유", "심은하",
 
 const AdminMovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
 	// 영화 상세 페이지
-	const history = useHistory();
 
 	const [name, setName] = useState<string>("");
 	const [company, setCompany] = useState<string>("");
@@ -84,7 +83,6 @@ const AdminMovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 	const saveMovie = () => {
 		console.log("save movie");
 		// api로 movie 정보 저장
-		history.push("/admin/movie");
 	};
 
 	const saveGenre = () => {
@@ -133,7 +131,7 @@ const AdminMovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 
 	return (
 		<div>
-			<div className="page-title">영화 수정 페이지</div>
+			<PageTitle title="상영 중인 영화" isButtonVisible={true}/>
 			<div className="add-container page-width">
 				<div>
 					<TextField variant="outlined" placeholder="제목" value={name} onChange={handleNameChange} />

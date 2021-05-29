@@ -60,7 +60,7 @@ const Main = () => {
 
 	return (
 		<>
-			<PageTitle title="상영 중인 영화"/>
+			<PageTitle title="상영 중인 영화" isButtonVisible={false}/>
 			<div className="movie-list">
 				{
 					MovieData.movie_list.map((movie : SimpleMovieType)=>{
