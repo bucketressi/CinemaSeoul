@@ -76,7 +76,7 @@ const AdminMovie = () => {
 										<MovieCard
 											image={movie.image}
 											movi_name={movie.movi_name}
-											rating={movie.rating}
+											accu_audience={movie.accu_audience}
 											avi_age={movie.avi_age}
 											open_date={movie.open_date}
 										/>

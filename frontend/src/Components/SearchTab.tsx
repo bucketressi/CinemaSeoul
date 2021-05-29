@@ -10,14 +10,14 @@ const changedMovieData = {
 		{
 			movi_id: 3,
 			movi_name: "파이프라인",
-			rating: 4.6,
+			accu_audience: 500,
 			avi_age: 12,
 			open_date: new Date("2021/05/23"),
 			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17374_103_1.jpg"
 		}, {
 			movi_id: 4,
 			movi_name: "크루엘라",
-			rating: 3.6,
+			accu_audience: 1035,
 			avi_age: 15,
 			open_date: new Date("2021/06/20"),
 			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg"
