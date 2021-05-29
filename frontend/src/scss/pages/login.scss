@@ -1,4 +1,5 @@
 @import "../base/variable";
+@import "../base/common";
 
 .login-con{
 	width: 100%;
@@ -17,7 +18,7 @@
     margin-top: 30px;
 	&>div{
 		width: 48%;
-	}	
+	}
 }
 .form-con{
 	display: flex;
@@ -73,6 +74,13 @@
 			margin: 0;
 			padding: 0;
 		}
+	}
+}
+.right-con{
+	height: 250px;
+	overflow: hidden;
+	img{
+		width: 100%;
 	}
 }
 

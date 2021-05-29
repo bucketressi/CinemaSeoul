@@ -1,0 +1,23 @@
+@import "../base/variable";
+
+/* search */
+.search-tab{
+	width: 25%;
+	padding: 0 1rem;
+	border-right: 1px solid $border-color;
+	.search-condi-con{
+		margin-top: 10px;
+		&>div{
+			width: 100%;
+			margin-bottom: 1rem;
+		}
+	}
+}
+.search-field-title{
+	font-weight: 600;
+	color: white!important;
+	padding : 10px!important;
+	border-radius: 10px;
+	background-color: #3f51b5;
+	text-align: center;
+}

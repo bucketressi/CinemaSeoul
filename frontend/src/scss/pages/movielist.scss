@@ -1,0 +1,63 @@
+@import "../base/variable";
+@import "../base/common";
+
+.movie-wrap{
+	display: flex;
+	align-items: flex-start;
+	margin-top: 2rem;
+	.title{
+		font-weight: 600;
+		width: 100%;
+		padding: 10px 0;
+		margin-bottom: 1rem;
+		border-bottom: 1px solid $border-color;
+		p{
+			text-align: center;
+			font-size: 1.3rem;
+			margin-bottom: 10px;
+		}
+		button{
+			width: 100%;
+			background-color: $red;
+			color: white;
+		}
+	}
+	.movie-content-con{
+		display: flex;
+		flex-direction: column;
+		width: 75%;
+		.movie-menu{
+			display: flex;
+			justify-content: flex-end;
+			width: 100%;
+			padding-bottom: 20px;
+		}
+	}
+	.movie-list-con{
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
+
+/* add modal */
+.add-container{
+	width: 600px;
+	display: flex;
+	flex-direction: column;
+	&>div{
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 1rem;
+		&>*{
+			width: 48%;
+		}
+		&>div{
+			display: flex;
+			flex-direction: column;
+			&>*{
+				margin-bottom: 1rem;
+			}
+		}
+	}
+}
