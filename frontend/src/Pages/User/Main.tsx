@@ -1,12 +1,11 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
-import { Layout, MovieCard, PageTitle } from '../../Components';
+import { MovieCard, PageTitle } from '../../Components';
 import "../../scss/pages/main.scss";
 
 const Main = () => {
 	// 메인 페이지
-	const a = 1;
 	const movi_name = "분노의 질주, 더 얼티메이트";
 	const bookrecord = 49.4;
 	const open_date = new Date("2021-05-23");

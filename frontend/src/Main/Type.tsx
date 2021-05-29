@@ -38,8 +38,11 @@ export type People = {
 	peop_name: string
 }
 
-export type Birth = {
-	year : number,
-	month : number,
-	day : number
+export type User = {
+	user_name : string,
+	birth? : string,
+	phone_num : string,
+	email? : string
+	password : string,
+	agreement : string
 }
