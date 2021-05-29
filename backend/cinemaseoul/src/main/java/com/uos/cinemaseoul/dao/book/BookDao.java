@@ -1,10 +1,16 @@
 package com.uos.cinemaseoul.dao.book;
 
+import com.uos.cinemaseoul.common.paging.BookSearchCriteria;
 import com.uos.cinemaseoul.dto.book.book.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
+@Mapper
 public interface BookDao {
+
     //가능 영화 조회
     List<MovieShortCutDto> getBookAvailableMovie();
 
@@ -21,4 +27,8 @@ public interface BookDao {
 
     //예매 취소
     void cancel(int book_id);
+
+    //예매내역 조회
+    int countList(BookSearchCriteria bookSearchCriteria);
+    List<BookListInfoDto> selectBookList(BookSearchCriteria bookSearchCriteria);
 }

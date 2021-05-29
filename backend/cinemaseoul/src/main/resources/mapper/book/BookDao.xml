@@ -49,18 +49,86 @@
     <!-- 기본 정보 조회-->
     <select id="getBookInfo" resultType="BookDto">
         SELECT B.BOOK_ID, B.BOOK_PAY_ID, B.TEEN, B.ADULT, B.SENIOR, B.IMPAIRED, B.BOOK_DATETIME,
-               S.SHOW_DATE, S.SHOW_TIME, (SELECT H.HALL_NAME FROM HALL H WHERE S.HALL_ID = H.HALL_ID) AS HALL_NAME,
+               S.SHOW_DATE, S.SHOW_TIME, H.HALL_NAME,
                M.MOVI_NAME, M.RUN_TIME
         FROM BOOK B
         INNER JOIN SHOWSCHEDULE S on S.SHOW_ID = B.SHOW_ID
         INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
+        INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
 
         WHERE B.BOOK_ID = #{book_id}
     </select>
+
     <!-- 예매 좌석 조회-->
     <select id="getMyBookedSeat" resultType="Integer">
         SELECT BS.SEAT_NUM FROM BOOKSEAT BS WHERE BS.BOOK_ID = #{book_id}
     </select>
+
+
+    <!-- [예매 정보 리스트 조회]-->
+    <!-- 페이지 수 -->
+    <select id="countList" parameterType="BookSearchCriteria" resultType="Integer">
+        SELECT COUNT(BOOK_ID) FROM BOOK B
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="user_id != null">
+                AND B.USER_ID = #{user_id}
+            </if>
+
+            <if test="start_date != null"><![CDATA[
+                AND TO_CHAR(B.BOOK_DATETIME, 'YYYYMMDD') >= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND TO_CHAR(B.BOOK_DATETIME, 'YYYYMMDD') <= #{end_date}
+            ]]></if>
+        </trim>
+    </select>
+
+
+    <!-- 페이지 별 내용 조회 -> 이후 좌석 받아오기-->
+    <select id="selectBookList" parameterType="BookSearchCriteria" resultType="BookListInfoDto">
+        SELECT
+               B.BOOK_ID, B.BOOK_PAY_ID, B.USER_NAME, B.BOOK_DATETIME,
+               B.SHOW_DATE, B.SHOW_TIME,
+               B.MOVI_NAME, B.HALL_NAME
+        FROM (
+            SELECT /*+index_desc(IDX_BOOK_PK)*/ ROWNUM AS RNUM,
+                   A.BOOK_ID, A.BOOK_PAY_ID, A.USER_NAME, A.BOOK_DATETIME,
+                   A.SHOW_DATE, A.SHOW_TIME,
+                   A.MOVI_NAME, A.HALL_NAME
+            FROM(
+                SELECT
+                       BK.BOOK_ID, BK.BOOK_PAY_ID, U.USER_NAME, BK.BOOK_DATETIME,
+                       S.SHOW_DATE, S.SHOW_TIME,
+                       M.MOVI_NAME, H.HALL_NAME
+
+                FROM BOOK BK
+                INNER JOIN SHOWSCHEDULE S on S.SHOW_ID = BK.SHOW_ID
+                INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
+                INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
+                INNER JOIN USERS U ON U.USER_ID = BK.USER_ID
+
+                <trim prefix="WHERE" prefixOverrides="AND">
+                    <if test="user_id != null">
+                        AND BK.USER_ID = #{user_id}
+                    </if>
+
+                    <if test="start_date != null"><![CDATA[
+                        AND TO_CHAR(BK.BOOK_DATETIME, 'YYYYMMDD') >= #{start_date}
+                    ]]></if>
+
+                    <if test="end_date != null"><![CDATA[
+                        AND TO_CHAR(BK.BOOK_DATETIME, 'YYYYMMDD') <= #{end_date}
+                    ]]></if>
+                </trim>
+            ) A
+            <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+
+
+
 
     <!--[예매 취소]-->
     <delete id="cancel" parameterType="Integer">

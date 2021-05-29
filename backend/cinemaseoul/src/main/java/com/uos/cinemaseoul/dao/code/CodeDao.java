@@ -1,7 +1,7 @@
 package com.uos.cinemaseoul.dao.code;
 
-import com.uos.cinemaseoul.common.constatnt.CodeVo;
-import com.uos.cinemaseoul.common.constatnt.MessageVo;
+import com.uos.cinemaseoul.vo.common.CodeVo;
+import com.uos.cinemaseoul.vo.common.MessageVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +12,5 @@ import java.util.List;
 public interface CodeDao {
 
     List<MessageVo> getMessage();
-    List<CodeVo> getCode();
+    List<CodeVo> getCode(String parent_code);
 }

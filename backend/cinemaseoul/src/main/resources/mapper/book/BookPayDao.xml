@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.book.BookPayDao">
+
+    <!--[예매하기]-->
+    <!-- 사용자 등급 조회-->
+    <select id="getUserCode" resultType="String">
+        SELECT USER_TYPE_CODE FROM USERS WHERE USER_ID = #{user_id}
+    </select>
+
+    <!-- 예매 결제 INSERT-->
+    <insert id="insertBookPay" parameterType="BookPayVo">
+        <selectKey keyProperty="bookpay_id" resultType="int" order="BEFORE">
+            SELECT SEQ_BOOKPAY.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO BOOKPAY (BOOK_PAY_ID, USER_ID, USE_POINT, PRICE, PAY_TYPE_CODE, ACCU_POINT, USE_CODE)
+            VALUES ( #{bookpay_id}, #{user_id}, #{use_point}, #{price}, #{pay_type_code}, #{accu_point}, #{use_code})
+    </insert>
+
+    <!-- 예매 INSERT -->
+    <insert id="insertBook" parameterType="BookVo">
+        <selectKey keyProperty="book_id" resultType="int" order="BEFORE">
+            SELECT SEQ_BOOK.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO BOOK (
+        BOOK_ID, USER_ID, SHOW_ID, BOOK_PAY_ID,
+        TEEN, ADULT, SENIOR, IMPAIRED)
+        VALUES (
+        #{book_id}, #{user_id}, #{show_id}, #{book_pay_id},
+          #{teen}, #{adult}, #{senior}, #{impaired})
+    </insert>
+
+    <!--좌석 INSERT -->
+    <update id="insertBookSeats" parameterType="hashmap">
+        INSERT ALL
+        <foreach collection="genre" item="genre" index="index" separator=" ">
+            INTO BOOKSEAT (BOOK_ID, HALL_ID, SEAT_NUM, SHOW_ID)
+            VALUES (${book_id}, ${hall_id}, ${seat_num}, ${show_id})
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <select id="getCancelInfo" resultType="BookPayVo">
+        SELECT BOOK_PAY_ID, ACCU_POINT, USE_POINT FROM BOOKPAY
+        WHERE BOOK_PAY_ID  = (SELECT BOOK_PAY_ID FROM BOOK WHERE BOOK_ID = #{book_id})
+    </select>
+
+
+    <update id="setCancel">
+        UPDATE BOOKPAY SET PAY_STATE_CODE = #{pay_state_cancel}
+        WHERE BOOK_PAY_ID = #{book_pay_id}
+    </update>
+
+</mapper>

@@ -21,11 +21,20 @@ public class MappingConstant {
             "/movie/genre/list",
 
             "/showschedule/list",
+
+            "/book/movie",
+            "/book/schedule",
     };
 
     //2 (비회원, 회원 둘다 가능)
     public static String[] NonUser = {
             "/adult",
+
+            "/book/list",
+            "/book/{show_id}/seat",
+            "/book/cancel/{book_id}",
+
+            "/pay/book"
     };
 
     //1 (회원 가능)
@@ -35,7 +44,9 @@ public class MappingConstant {
             "/user/delete",
             "/user/update",
 
-            "/point/{user_id}/{start_date}"
+            "/point/{user_id}/{start_date}",
+
+            "/review"
     };
 
     //4 (직원 가능 = 매너지도 가능)
@@ -57,7 +68,10 @@ public class MappingConstant {
 
             "/showschedule",
             "/showschedule/{show_id}/book",
-            "/showschedule/add"
+            "/showschedule/add",
+
+            "/book/list",
+            "/book/{show_id}/seat",
     };
 
     //3 (매니저(높은 관리자만) 가능)

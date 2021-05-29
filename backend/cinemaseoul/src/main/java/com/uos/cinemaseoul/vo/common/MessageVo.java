@@ -1,10 +1,7 @@
-package com.uos.cinemaseoul.common.constatnt;
+package com.uos.cinemaseoul.vo.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor

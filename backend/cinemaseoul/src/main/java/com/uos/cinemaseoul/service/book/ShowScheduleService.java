@@ -73,7 +73,7 @@ public class ShowScheduleService {
             //시간 계산
             Long runtime = format.parse(s.getShow_date()+s.getShow_time()).getTime();
             runtime = runtime+ Long.parseLong(s.getEnd_time())* 60 *1000;
-            s.setEnd_time(format.format(new Date(runtime)));
+            s.setEnd_time(new SimpleDateFormat("yyyy/MM/dd/HH/mm").format(new Date(runtime)));
 
             //전체 - 선택 안되는 좌석 , 예매된 좌석
             s.setRema_seat(s.getHall_seat() - showScheduleDao.getBookedSeatNum(s.getShow_id()));

@@ -9,6 +9,10 @@
     </select>
 
     <select id="getCode" resultType="CodeVo">
-        SELECT CODE_ID, PARENT_CODE, CODE_NAME FROM CODE order by CODE_ID
+        SELECT CODE_ID, PARENT_CODE, CODE_NAME FROM CODE
+        <if test="parent_code != null">
+        WHERE PARENT_CODE = #{parent_code}
+        </if>
+        order by CODE_ID
     </select>
 </mapper>

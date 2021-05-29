@@ -12,11 +12,21 @@ import java.util.List;
 @Repository
 @Mapper
 public interface PointDao {
+
     //포인트업데이트
     void updatePoint(PointVo vo);
+    //적립
     void plusUserPoint(PointVo vo);
+    //차감
     void minusUserPoint(PointVo vo);
+    //사용취소
+    void returnUserUsePoint(PointVo pointVo);
+    //적립취소
+    void returnUserAddPoint(PointVo pointVo);
 
     UsersVo getPoint(int user_id);
     List<PointInfoDto> findPoint(String start_date, int user_id);
+
+
+
 }

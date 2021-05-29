@@ -12,6 +12,7 @@ public class ScheduleInfoDto {
     private String hall_name;
     private String show_date;
     private String show_time;
+    private String movi_name;
     private String end_time;
     private int hall_seat;
     private int rema_seat;

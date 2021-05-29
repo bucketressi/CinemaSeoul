@@ -27,7 +27,7 @@
     </resultMap>
 
     <!-- [영화 세부조회] -->
-    <!--장르 빼고 일단 조회 (장르까지 하면 N+1 문제 발생)-->
+    <!--장르 빼고 일단 조회 (장르까지 하면 너무 복잡)-->
     <select id="selectMovie"  resultMap="movieInfo">
         SELECT M.MOVI_ID, M.MOVI_NAME,
                (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,

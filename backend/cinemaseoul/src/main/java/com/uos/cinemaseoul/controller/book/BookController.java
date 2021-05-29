@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.controller.book;
 
+import com.uos.cinemaseoul.common.paging.BookSearchCriteria;
 import com.uos.cinemaseoul.dto.book.book.MovieShortCutDto;
 import com.uos.cinemaseoul.dto.book.book.ScheduleAskDto;
 import com.uos.cinemaseoul.service.book.BookService;
@@ -49,9 +50,9 @@ public class BookController {
         public Seat_List(List<?> list){this.seat_list = list;}
     }
 
-    @GetMapping("/{book_id}")
-    public ResponseEntity<?> getBook(@PathVariable(name = "book_id") int book_id){
-        return ResponseEntity.ok(bookService.getBook(book_id));
+    @PostMapping("/list")
+    public ResponseEntity<?> getBook(@RequestBody BookSearchCriteria bookSearchCriteria){
+        return ResponseEntity.ok(bookService.getBookList(bookSearchCriteria));
     }
 
     @DeleteMapping("/cancel/{book_id}")

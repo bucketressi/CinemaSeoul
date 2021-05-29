@@ -24,6 +24,19 @@
         WHERE U.USER_ID = #{user_id}
     </update>
 
+    <update id="returnUserUsePoint" parameterType="PointVo">
+        UPDATE USERS U SET
+                           U.CURR_POINT = (SELECT CURR_POINT FROM USERS S WHERE USER_ID = #{user_id}) + #{poin_amount}
+        WHERE U.USER_ID = #{user_id}
+    </update>
+
+    <update id="returnUserAddPoint" parameterType="PointVo">
+        UPDATE USERS U SET
+              U.ACCU_POINT = (SELECT ACCU_POINT FROM USERS S WHERE USER_ID = #{user_id}) - #{poin_amount},
+              U.CURR_POINT = (SELECT CURR_POINT FROM USERS S WHERE USER_ID = #{user_id}) - #{poin_amount}
+        WHERE U.USER_ID = #{user_id}
+    </update>
+
     <!--[포인트 조회]-->
     <select id="getPoint" parameterType="Integer" resultType="UsersVo">
         SELECT USER_ID, USER_NAME, CURR_POINT, ACCU_POINT

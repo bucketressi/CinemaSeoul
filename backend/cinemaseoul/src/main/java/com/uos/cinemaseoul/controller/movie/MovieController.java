@@ -1,6 +1,6 @@
 package com.uos.cinemaseoul.controller.movie;
 
-import com.uos.cinemaseoul.common.constatnt.CodeVo;
+import com.uos.cinemaseoul.vo.common.CodeVo;
 import com.uos.cinemaseoul.common.constatnt.ConstantTable;
 import com.uos.cinemaseoul.common.paging.MovieCriteria;
 import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
@@ -70,7 +70,7 @@ public class MovieController {
 
     @GetMapping("/genre/list")
     public ResponseEntity<?> selectGenreList(){
-        List<CodeVo> genre = constantTable.codeMap.get("장르구분");
+        List<CodeVo> genre = constantTable.childMap.get("장르구분");
         return ResponseEntity.ok(genre);
     }
 }
