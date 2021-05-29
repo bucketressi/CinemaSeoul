@@ -19,7 +19,7 @@ import {
 	AdminPay,
 	AdminPeople,
 	AdminSales,
-	AdminShowSCH,
+	AdminShowSchedule,
 	AdminStore,
 	AdminTheater,
 	AdminError,
@@ -46,7 +46,7 @@ const AdminRouter : React.FC = () => (
 			<Route path="/admin/pay" component={AdminPay}/>
 			<Route path="/admin/people" component={AdminPeople}/>
 			<Route path="/admin/sales" component={AdminSales}/>
-			<Route path="/admin/showsch" component={AdminShowSCH}/>
+			<Route path="/admin/showschedule" component={AdminShowSchedule}/>
 			<Route path="/admin/store" component={AdminStore}/>
 			<Route path="/admin/theater" component={AdminTheater}/>
 			<Route path="/admin/error" component={AdminError}/>
