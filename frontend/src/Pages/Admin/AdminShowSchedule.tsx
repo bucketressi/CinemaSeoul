@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PageTitle } from '../../Components';
 import { useHistory } from 'react-router-dom';
-import { ListItem, ListItemText, Switch, Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
+import { ListItem, ListItemText, Switch, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { ShowScheduleType } from '../../Main/Type';
 import { useShowScheduleListState } from '../../Main/ShowScheduleModel';
 import { ModalComponent } from '../../Components';
@@ -14,12 +14,12 @@ const AdminShowSchedule = () => {
 	const [mode, setMode] = useState<boolean>(true);
 
 	useEffect(() => {
-		if(showScheduleList?.showschedule_list == undefined)
+		if (showScheduleList?.showschedule_list == undefined)
 			return;
 		setScheduleList(showScheduleList.showschedule_list);
-	},[showScheduleList]);
+	}, [showScheduleList]);
 
-	const gotoScheduleExact = (id : number) => {
+	const gotoScheduleExact = (id: number) => {
 		history.push(`/admin/showschedule/${id}`);
 	}
 
@@ -42,12 +42,12 @@ const AdminShowSchedule = () => {
 			<div className="schedule-con">
 				<div className="schedule-header">
 					<div className="switch-con">
-						<div>{mode?"표" : "리스트"}</div>
+						<div>{mode ? "표" : "리스트"}</div>
 						<Switch
 							checked={mode}
 							onChange={handleModeChange}
 							color="primary"
-							name={mode?"표" : "리스트"}
+							name={mode ? "표" : "리스트"}
 						/>
 					</div>
 					<div className="save-btn">
@@ -55,21 +55,35 @@ const AdminShowSchedule = () => {
 					</div>
 				</div>
 				{
-					mode?
+					mode ?
 						<div>표</div>
 						:
-						scheduleList.map((schedule : ShowScheduleType, index : number) => {
-							console.log(schedule);
-							return (
-								<ListItem key={schedule.show_id} button onClick={() => gotoScheduleExact(schedule.show_id)}>
-									<ListItemText primary={`${index+1}번`} />
-									<ListItemText primary={`상영관 : ${schedule.hall_name}`} />
-									<ListItemText primary={`영화명 : ${schedule.movi_name}`} />
-									<ListItemText primary={`개봉 일자 : ${schedule.show_date.substr(0,4)}/${schedule.show_date.substr(4,2)}/${schedule.show_date.substr(6,2)}`} />
-									<ListItemText primary={`런타임 : ${schedule.show_time}`} />
-								</ListItem>
-							);
-						})
+						<TableContainer>
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell>번호</TableCell>
+										<TableCell>상영관</TableCell>
+										<TableCell>영화</TableCell>
+										<TableCell>개봉일자</TableCell>
+										<TableCell>런타임</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{
+										scheduleList.map((schedule : ShowScheduleType, index : number) => (
+											<TableRow key={schedule.show_id} onClick={() => gotoScheduleExact(schedule.show_id)}>
+												<TableCell>{index + 1}</TableCell>
+												<TableCell>{schedule.hall_name}</TableCell>
+												<TableCell>{schedule.movi_name}</TableCell>
+												<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
+												<TableCell>{`${schedule.show_time.substr(0, 2)}시간 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
+											</TableRow>
+										))
+									}
+								</TableBody>
+							</Table>
+						</TableContainer>
 				}
 			</div>
 			<ModalComponent
@@ -83,7 +97,7 @@ const AdminShowSchedule = () => {
 					ㅗㅑ
 				</div>
 			</ModalComponent>
-		</div>
+		</div >
 	);
 }
 

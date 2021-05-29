@@ -13,7 +13,7 @@ const initialShowScheduleData = {
 			hall_name: "42-1관",
 			show_date: "20210525",
 			show_time: "0141",
-			end_time: "20211230603",
+			end_time: "202112300603",
 			hall_seat: 4,
 			rema_seat: 3
 		},{
@@ -24,7 +24,7 @@ const initialShowScheduleData = {
 			hall_name: "43-1관",
 			show_date: "20210528",
 			show_time: "0150",
-			end_time: "20211129603",
+			end_time: "202111290603",
 			hall_seat: 20,
 			rema_seat: 4
 		},{
@@ -35,7 +35,7 @@ const initialShowScheduleData = {
 			hall_name: "43-1관",
 			show_date: "20210529",
 			show_time: "0190",
-			end_time: "20211129603",
+			end_time: "202111290603",
 			hall_seat: 15,
 			rema_seat: 4
 		}

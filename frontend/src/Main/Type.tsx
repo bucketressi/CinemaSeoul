@@ -72,9 +72,9 @@ export type ShowScheduleType = {
 	movi_name : string;
 	hall_id: number;
 	hall_name: string; // "42-1관",
-	show_date: string; //  "20210525",
-	show_time: string; //  "0141",
-	end_time: string; // "20211230603",
+	show_date: string; //  "2021/05/25",
+	show_time: string; //  "01/41",
+	end_time: string; // "2021/12/30/06/03",
 	hall_seat: number;
 	rema_seat: number;
 }

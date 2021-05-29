@@ -13,4 +13,16 @@
 			}
 		}
 	}
+	.MuiTableRow-root{
+		cursor: pointer;
+		&:hover{
+			background-color: rgb(231, 231, 231);
+		}
+	}
+	.MuiTableRow-head{
+		cursor: initial;
+		&:hover{
+			background-color: transparent;
+		}
+	}
 }
