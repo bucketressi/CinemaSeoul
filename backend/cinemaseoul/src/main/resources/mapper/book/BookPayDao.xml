@@ -13,12 +13,12 @@
 
     <!-- 예매 결제 INSERT-->
     <insert id="insertBookPay" parameterType="BookPayVo">
-        <selectKey keyProperty="bookpay_id" resultType="int" order="BEFORE">
+        <selectKey keyProperty="book_pay_id" resultType="int" order="BEFORE">
             SELECT SEQ_BOOKPAY.nextval FROM DUAL
         </selectKey>
 
         INSERT INTO BOOKPAY (BOOK_PAY_ID, USER_ID, USE_POINT, PRICE, PAY_TYPE_CODE, ACCU_POINT, USE_CODE)
-            VALUES ( #{bookpay_id}, #{user_id}, #{use_point}, #{price}, #{pay_type_code}, #{accu_point}, #{use_code})
+            VALUES ( #{book_pay_id}, #{user_id}, #{use_point}, #{price}, #{pay_type_code}, #{accu_point}, #{use_code})
     </insert>
 
     <!-- 예매 INSERT -->
@@ -38,9 +38,9 @@
     <!--좌석 INSERT -->
     <update id="insertBookSeats" parameterType="hashmap">
         INSERT ALL
-        <foreach collection="genre" item="genre" index="index" separator=" ">
+        <foreach collection="seatDtos" item="seat" index="index" separator=" ">
             INTO BOOKSEAT (BOOK_ID, HALL_ID, SEAT_NUM, SHOW_ID)
-            VALUES (${book_id}, ${hall_id}, ${seat_num}, ${show_id})
+            VALUES (${seat.book_id}, ${seat.hall_id}, ${seat.seat_num}, ${seat.show_id})
         </foreach>
         SELECT * FROM DUAL
     </update>

@@ -82,6 +82,7 @@ public class BookPayService {
 
         //예매 insert
         BookVo bookVo = bookPayMapper.insertIntoBookVoByBookInsertDto(bookPayInsertDto);
+        bookVo.setBook_pay_id(bookPayVo.getBook_pay_id());
         bookPayDao.insertBook(bookVo);
 
         //예매좌석 insert

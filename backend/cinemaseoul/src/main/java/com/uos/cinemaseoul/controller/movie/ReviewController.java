@@ -1,10 +1,7 @@
 package com.uos.cinemaseoul.controller.movie;
 
-import com.uos.cinemaseoul.dto.Result;
 import com.uos.cinemaseoul.dto.movie.review.ReviewDto;
 import com.uos.cinemaseoul.service.movie.ReviewService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,6 @@ public class ReviewController {
 
     @GetMapping("/mymovie/{user_id}")
     public ResponseEntity<?> getMyMovie(@PathVariable(name = "user_id") int user_id){
-        return ResponseEntity.ok(new Result(reviewService.getMyMovie(user_id)));
+        return ResponseEntity.ok(reviewService.getMyMovie(user_id));
     }
 }

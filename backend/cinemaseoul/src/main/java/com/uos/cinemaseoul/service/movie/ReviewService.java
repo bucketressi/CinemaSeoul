@@ -31,6 +31,7 @@ public class ReviewService {
 
     public void deleteReview(ReviewDto reviewDto){
         reviewDao.deleteReview(reviewMapper.insertintoReviewVoFromReviewDto(reviewDto));
+        reviewDao.updateMovieRating(reviewDto.getMovi_id());
     }
 
     public List<MovieReviewDto> getMyMovie(int user_id) {

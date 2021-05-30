@@ -19,4 +19,8 @@ public class BookPayVo {
 
     //sha-1 after 16bytes
     private String use_code;
+
+    public void setBook_pay_id(int book_pay_id){
+        this.book_pay_id = book_pay_id;
+    }
 }

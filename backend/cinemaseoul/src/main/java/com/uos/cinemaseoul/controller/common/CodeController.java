@@ -17,22 +17,16 @@ public class CodeController {
 
     @GetMapping("/code/list")
     public ResponseEntity<?> getCodeList(){
-        return ResponseEntity.ok(new Result(codeService.getCode()));
+        return ResponseEntity.ok(codeService.getCode());
     }
 
     @GetMapping("/code/genre/list")
     public ResponseEntity<?> getGenreList(){
-        return ResponseEntity.ok(new Result(codeService.getCode()));
+        return ResponseEntity.ok(codeService.getCode());
     }
 
     @GetMapping("/code/message")
     public ResponseEntity<?> getMessage(){
-        return ResponseEntity.ok(new Result(codeService.getMessage()));
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T>{
-        private T data;
+        return ResponseEntity.ok(codeService.getMessage());
     }
 }
