@@ -2,10 +2,13 @@ package com.uos.cinemaseoul.service.movie;
 
 import com.uos.cinemaseoul.common.mapper.ReviewMapper;
 import com.uos.cinemaseoul.dao.movie.ReviewDao;
+import com.uos.cinemaseoul.dto.movie.review.MovieReviewDto;
 import com.uos.cinemaseoul.dto.movie.review.ReviewDto;
 import com.uos.cinemaseoul.vo.movie.ReviewVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +31,9 @@ public class ReviewService {
 
     public void deleteReview(ReviewDto reviewDto){
         reviewDao.deleteReview(reviewMapper.insertintoReviewVoFromReviewDto(reviewDto));
+    }
+
+    public List<MovieReviewDto> getMyMovie(int user_id) {
+        return reviewDao.getMyMovie(user_id);
     }
 }

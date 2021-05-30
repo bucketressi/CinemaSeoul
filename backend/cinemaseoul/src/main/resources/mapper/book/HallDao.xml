@@ -36,6 +36,7 @@
         WHERE HALL_ID = #{hall_id}
     </update>
 
+<!--
     <delete id="sweapSeat"><![CDATA[
         DELETE SEAT WHERE HALL_ID = #{hall_id} AND SEAT_NUM >= #{seat_num}
         ]]></delete>
@@ -47,7 +48,7 @@
         </foreach>
         SELECT * FROM DUAL
     </insert>
-
+-->
 
     <!--[상영관 삭제]-->
     <delete id="delete">

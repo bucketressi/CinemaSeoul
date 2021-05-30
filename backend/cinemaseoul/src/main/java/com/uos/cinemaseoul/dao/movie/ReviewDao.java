@@ -1,8 +1,11 @@
 package com.uos.cinemaseoul.dao.movie;
 
+import com.uos.cinemaseoul.dto.movie.review.MovieReviewDto;
 import com.uos.cinemaseoul.vo.movie.ReviewVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @Mapper
@@ -20,4 +23,6 @@ public interface ReviewDao {
     //영화 평점 업데이트
     void updateMovieRating(int movi_id);
 
+    //영화 받아오기
+    List<MovieReviewDto> getMyMovie(int user_id);
 }

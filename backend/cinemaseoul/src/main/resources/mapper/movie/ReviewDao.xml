@@ -24,4 +24,13 @@
         UPDATE MOVIE SET RATING =
             (SELECT SUM(R.RATING)/COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id})
     </update>
+
+    <select id="selectMyMovie" resultType="MovieReviewDto">
+        SELECT R.COMMENTS, R.RATING,
+               M.MOVI_ID, M.MOVI_NAME, M.IMAGE
+        FROM BOOK B
+        RIGHT OUTER JOIN MOVIE M ON M.MOVI_ID = B.MOVI_ID
+        INNER JOIN REVIEW R ON R.USER_ID = B.USER_ID
+        WHERE B.USER_ID = {user_id}
+    </select>
 </mapper>

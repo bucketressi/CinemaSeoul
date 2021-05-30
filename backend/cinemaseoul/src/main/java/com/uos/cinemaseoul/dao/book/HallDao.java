@@ -22,8 +22,9 @@ public interface HallDao {
     //조회 - 수정 후 좌석크기 조정
     HallVo selectHall(int hall_id);
     void update(HallVo vo);
-    void sweapSeat(int hall_id, int seat_num);
-    void additionalSeat(int hall_id, int[] seats);
+    //void sweapSeat(int hall_id, int seat_num);
+    //void additionalSeat(int hall_id, int[] seats);
+
     //삭제
     void delete(int hall_id);
 

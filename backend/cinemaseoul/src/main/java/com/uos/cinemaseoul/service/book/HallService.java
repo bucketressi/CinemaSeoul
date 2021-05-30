@@ -41,12 +41,14 @@ public class HallService {
     @Transactional
     public void updateHall(HallDto updateHallDto) {
         HallVo vo = hallDao.selectHall(updateHallDto.getHall_id());
-        int pastSeat = vo.getHall_col() * vo.getHall_row();
-        int seat_num = updateHallDto.getHall_col() * updateHallDto.getHall_row();
-        updateHallDto.setAvai_seat_amount(seat_num);
+        //int pastSeat = vo.getHall_col() * vo.getHall_row();
+        //int seat_num = updateHallDto.getHall_col() * updateHallDto.getHall_row();
+        //updateHallDto.setAvai_seat_amount(seat_num);
+        updateHallDto.setHall_col(vo.getHall_col());
+        updateHallDto.setHall_row(vo.getHall_row());
         hallDao.update(hallMapper.insertIntoHallVoFromHallDto(updateHallDto));
 
-        if(pastSeat > seat_num){
+        /*if(pastSeat > seat_num){
             //크기에 맞지 않는 좌석 삭제
             hallDao.sweapSeat(updateHallDto.getHall_id(), seat_num);
         }
@@ -56,7 +58,7 @@ public class HallService {
                 seats[i] = pastSeat + i;
             }
             hallDao.additionalSeat(updateHallDto.getHall_id(), seats);
-        }
+        }*/
     }
 
     @Transactional
