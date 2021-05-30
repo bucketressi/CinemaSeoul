@@ -17,7 +17,6 @@ const PageTitle = ({title, isButtonVisible} : Props) => {
 			{
 				isButtonVisible && <Button onClick={() => history.goBack()} className="back-arrow"><ArrowBackIcon/></Button>
 			}
-			
 			<div>
 				{title}
 			</div>

@@ -4,6 +4,7 @@ import { UserContextProvider } from './UserModel';
 import { AdminContextProvider } from './AdminModel';
 import { MovieListContextProvider } from './MovieListModel';
 import { ShowScheduleListContextProvider } from './ShowScheduleModel';
+import { HallListContextProvider } from './HallListModel';
 
 const Provider: React.FC = () => {
 	const a = 1;
@@ -12,7 +13,9 @@ const Provider: React.FC = () => {
 			<UserContextProvider>
 				<MovieListContextProvider>
 					<ShowScheduleListContextProvider>
-						<Router />
+						<HallListContextProvider>
+							<Router />
+						</HallListContextProvider>
 					</ShowScheduleListContextProvider>
 				</MovieListContextProvider>
 			</UserContextProvider>

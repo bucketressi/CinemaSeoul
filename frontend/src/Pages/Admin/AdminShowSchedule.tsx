@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PageTitle } from '../../Components';
 import { useHistory } from 'react-router-dom';
-import { ListItem, ListItemText, Switch, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Switch, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { ShowScheduleType } from '../../Main/Type';
 import { useShowScheduleListState } from '../../Main/ShowScheduleModel';
 import { ModalComponent } from '../../Components';

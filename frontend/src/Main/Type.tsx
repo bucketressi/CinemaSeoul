@@ -85,3 +85,20 @@ export type ShowScheduleListType = {
     totalpage: number;
     amount: number;
 }
+
+/* hall */
+export type HallListType = {
+    data: HallType[];
+}
+
+export type HallType = {
+	hall_id: number; //42,
+	hall_name: string; // "42-1관",
+	hall_row: number; //2,
+	hall_col: number; //2,
+	avai_seat_amount: number; //3 => 가능 좌석 수
+}
+
+export type HallNameListType = {
+    [hall_id : number] : string;
+}
