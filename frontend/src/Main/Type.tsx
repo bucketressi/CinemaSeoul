@@ -99,6 +99,21 @@ export type HallType = {
 	avai_seat_amount: number; //3 => 가능 좌석 수
 }
 
-export type HallNameListType = {
-    [hall_id : number] : string;
+export type SimpleHallType = {
+	hall_name: string; // "42-1관",
+	hall_row: number; //2,
+	hall_col: number; //2
+}
+
+export type HallListObjType = {
+    [hall_id : number] : SimpleHallType
+}
+export type SeatType = {
+	hall_id: number; //42,
+	seat_num: number; //0,
+	seat_type_code: string; //"230001"
+}
+
+export type HallSeatObjType = {
+    seats: SeatType[]
 }

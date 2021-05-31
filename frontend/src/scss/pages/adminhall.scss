@@ -1,8 +1,12 @@
 .hall-list-con{
 	.MuiTableRow-root{
 		cursor: pointer;
+		
 		&:hover{
 			background-color: rgb(231, 231, 231);
+		}
+		button{
+			margin-right: 15px;
 		}
 	}
 	.MuiTableRow-head{
@@ -10,5 +14,18 @@
 		&:hover{
 			background-color: transparent;
 		}
+	}
+	.hall-name{
+		margin-right: 15px;
+	}
+}
+
+.seat{
+		padding: 3px;
+	div{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: rgb(226, 166, 226);
 	}
 }
