@@ -3,8 +3,9 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AdminLayout } from '../../Components';
 import {
-	AdminAdmin,
+	AdminMain,
 	AdminMovieExact,
+	AdminModifyMovie,
 	AdminAsk,
 	AdminBlackList,
 	AdminBookRecord,
@@ -13,7 +14,7 @@ import {
 	AdminGenre,
 	AdminHall,
 	AdminHome,
-	AdminMovie,
+	AdminMovieList,
 	AdminNotice,
 	AdminPay,
 	AdminPeople,
@@ -28,6 +29,7 @@ import {
 const AdminRouter : React.FC = () => (
 	<AdminLayout>
 		<Switch>
+			<Route exact path="/admin" component={AdminMain}/>
 			<Route path="/admin/ask" component={AdminAsk}/>
 			<Route path="/admin/login" component={AdminLogin}/>
 			<Route path="/admin/blacklist" component={AdminBlackList}/>
@@ -37,8 +39,9 @@ const AdminRouter : React.FC = () => (
 			<Route path="/admin/genre" component={AdminGenre}/>
 			<Route path="/admin/hall" component={AdminHall}/>
 			<Route path="/admin/home" component={AdminHome}/>
-			<Route exact path="/admin/movie" component={AdminMovie}/>
+			<Route exact path="/admin/movie" component={AdminMovieList}/>
 			<Route path="/admin/movie/:movie_id" component={AdminMovieExact}/>
+			<Route path="/admin/modify/movie/:movie_id" component={AdminModifyMovie}/>
 			<Route path="/admin/notice" component={AdminNotice}/>
 			<Route path="/admin/pay" component={AdminPay}/>
 			<Route path="/admin/people" component={AdminPeople}/>
@@ -47,7 +50,7 @@ const AdminRouter : React.FC = () => (
 			<Route path="/admin/store" component={AdminStore}/>
 			<Route path="/admin/theater" component={AdminTheater}/>
 			<Route path="/admin/error" component={AdminError}/>
-			<Redirect to="/admin/movie" />
+			<Redirect to="/admin" />
 		</Switch>
 	</AdminLayout>
 );

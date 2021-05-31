@@ -2,7 +2,33 @@ import React, { Dispatch, useState } from 'react';
 import { Button, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
 import "../scss/component/_searchtab.scss";
 
+import { useMovieListDispatch } from '../Main/MovieListModel';
+
+const changedMovieData = {
+	movie_list: [
+		{
+			movi_id: 3,
+			movi_name: "파이프라인",
+			accu_audience: 500,
+			avi_age: 12,
+			open_date: new Date("2021/05/23"),
+			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17374_103_1.jpg"
+		}, {
+			movi_id: 4,
+			movi_name: "크루엘라",
+			accu_audience: 1035,
+			avi_age: 15,
+			open_date: new Date("2021/06/20"),
+			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg"
+		}
+	],
+	page: 1,
+	totalpage: 1,
+	amount: 2
+};
+
 const SearchTab = () => {
+	const setMovieList = useMovieListDispatch();
 
 	const [state, setState] = useState<number>(0);
 	const [genre, setGenre] = useState<number>(-1);
@@ -12,7 +38,9 @@ const SearchTab = () => {
 	const handleGenreChange = (e : any ) => { setGenre(Number(e.target.value)); };
 	const handleAgeChange = (e : any ) => { setAge(Number(e.target.value)); };
 
-	const handleSearch = () => {}; // props로 검색 함수 받아서 검색
+	const handleSearch = () => {
+		setMovieList(changedMovieData);
+	};
 
 	return (
 		<div className="search-tab">

@@ -1,8 +1,9 @@
 export { default as AdminMovieExact } from './AdminMovieExact';
+export { default as AdminModifyMovie } from './AdminModifyMovie';
 export { default as AdminHome } from './AdminHome';
 export { default as AdminTheater } from './AdminTheater';
 export { default as AdminHall } from './AdminHall';
-export { default as AdminMovie } from './AdminMovie';
+export { default as AdminMovieList } from './AdminMovieList';
 export { default as AdminPeople } from './AdminPeople';
 export { default as AdminShowSCH } from './AdminShowSCH';
 export { default as AdminSales } from './AdminSales';
@@ -18,3 +19,4 @@ export { default as AdminPay } from './AdminPay';
 export { default as AdminStore } from './AdminStore';
 export { default as AdminError } from './AdminError';
 export { default as AdminLogin } from './AdminLogin';
+export { default as AdminMain } from './AdminMain';

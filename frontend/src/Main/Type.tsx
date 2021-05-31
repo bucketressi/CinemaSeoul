@@ -22,7 +22,7 @@ export type Movie = {
 	cast_director: People,
 	cast_actor: People,
 	image: Blob,
-	rating: number,
+	accu_audience: number,
 	bookrecord: number
 }
 
@@ -34,7 +34,7 @@ export type People = {
 export type SimpleMovieType = {
 	movi_id? : number;
 	movi_name : string;
-	rating : number;
+	accu_audience : number;
 	image : string;
 	open_date : Date;
 	avi_age : number;
