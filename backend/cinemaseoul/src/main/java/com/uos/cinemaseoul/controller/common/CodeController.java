@@ -22,7 +22,7 @@ public class CodeController {
 
     @GetMapping("/code/genre/list")
     public ResponseEntity<?> getGenreList(){
-        return ResponseEntity.ok(codeService.getCode());
+        return ResponseEntity.ok(codeService.getGenre());
     }
 
     @GetMapping("/code/message")

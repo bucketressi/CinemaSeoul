@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/movie")
@@ -36,8 +37,8 @@ public class MovieController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteMovie(@ModelAttribute(name = "movi_id") int movi_id){
-        movieService.deleteMovie(movi_id);
+    public void deleteMovie( @RequestBody Map<String, Integer> map){
+        movieService.deleteMovie(map.get("movi_id"));
     }
 
     @PutMapping("/update")

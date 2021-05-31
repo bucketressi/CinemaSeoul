@@ -2,7 +2,6 @@ package com.uos.cinemaseoul.dao.movie;
 
 import com.uos.cinemaseoul.common.paging.MovieCriteria;
 import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
-import com.uos.cinemaseoul.dto.movie.MovieListDto;
 import com.uos.cinemaseoul.dto.movie.MovieListInfoDto;
 import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
 import com.uos.cinemaseoul.vo.movie.MovieVo;

@@ -7,13 +7,17 @@ public class MappingConstant {
             "/user/login",
             "/user/signup",
             "/user/login/non-member",
-            "/user/phoneCheck",
-            "/user/emailCheck",
+            "/user/phonecheck",
+            "/user/emailcheck",
+            "/user/findId",
+            "/user/resetPw",
 
             "/admin/signup",
             "/admin/login",
-            "/admin/phoneCheck",
-            "/admin/emailCheck",
+            "/admin/phonecheck",
+            "/admin/emailcheck",
+            "/admin/findId",
+            "/admin/resetPw",
 
             "/movie/{movi_id}",
             "/movie/search",
@@ -29,6 +33,7 @@ public class MappingConstant {
     //2 (비회원, 회원 둘다 가능)
     public static String[] NonUser = {
             "/adult",
+            "/user/delete",
 
             "/book/list",
             "/book/{show_id}/seat",
@@ -41,7 +46,6 @@ public class MappingConstant {
     public static String[] User = {
             "/user",
             "/user/{user_id}",
-            "/user/delete",
             "/user/update",
 
             "/point/{user_id}/{start_date}",

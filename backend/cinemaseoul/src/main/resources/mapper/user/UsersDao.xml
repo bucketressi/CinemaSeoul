@@ -28,7 +28,7 @@
     <!--회원 아이디찾기-->
     <select id="findByPhoneAndName" parameterType="UsersVo" resultType="String">
         SELECT EMAIL FROM USERS
-        WHERE  PHONE_NUM = #{phone_num} AND USER_NAME = #{admi_name}
+        WHERE  PHONE_NUM = #{phone_num} AND USER_NAME = #{user_name}
     </select>
 
     <insert id="signUp" parameterType="UsersVo">

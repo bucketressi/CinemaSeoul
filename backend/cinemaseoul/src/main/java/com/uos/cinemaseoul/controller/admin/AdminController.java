@@ -15,11 +15,14 @@ import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.service.admin.AdminService;
 import com.uos.cinemaseoul.vo.admin.AdminVo;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/admin")
@@ -66,8 +69,11 @@ public class AdminController {
     public void updateAdmi(Authentication authentication, @RequestBody final AdminVo adv)throws Exception{
 
         //매니저도 아니고, 자기 id도 아니면
-        if(!authentication.getAuthorities().contains("ROLE_3")
-                && Integer.parseInt(authentication.getName()) != adv.getAdmi_id()) throw new DuplicateException();
+        if((!authentication.getAuthorities().toString().contains("ROLE_3"))
+                && Integer.parseInt(authentication.getName()) != adv.getAdmi_id()){
+
+            throw new DuplicateException("아니왜에러임?");
+        }
 
         try{
             int result = adminService.updateAdmin(adv);
@@ -92,8 +98,9 @@ public class AdminController {
     public ResponseEntity<AdminInfoDto> selectById(Authentication authentication, @PathVariable int admi_id){
 
         //매니저도 아니고, 자기 id도 아니면
-        if(!authentication.getAuthorities().contains("ROLE_3")
-                && Integer.parseInt(authentication.getName()) != admi_id ) throw new DuplicateException();
+        if( (!authentication.getAuthorities().toString().contains("ROLE_3") )
+                && Integer.parseInt(authentication.getName()) != admi_id )
+            throw new DuplicateException();
 
 
         AdminInfoDto adminInfoDto;
@@ -111,10 +118,12 @@ public class AdminController {
 
     //관리자탈퇴
     @DeleteMapping("/delete")
-    public void deleteUser(Authentication authentication, @ModelAttribute(name = "admi_id") int admi_id)throws Exception{
+    public void deleteUser(Authentication authentication, @RequestBody Map<String, Integer> map)throws Exception{
+        int admi_id = map.get("admi_id");
+
         //매니저도 아니고, 자기 id도 아니면
-        if(!authentication.getAuthorities().contains("ROLE_3")
-                && Integer.parseInt(authentication.getName()) != admi_id ) throw new DuplicateException();
+        if(!authentication.getAuthorities().toString().contains("ROLE_3")
+                && Integer.parseInt(authentication.getName()) !=  admi_id) throw new DuplicateException();
 
         try {
             int result = adminService.deleteAdmin(admi_id);
@@ -129,16 +138,16 @@ public class AdminController {
 
     //번호검사
     @PostMapping("/phonecheck")
-    public void phoneCheck(@ModelAttribute(name = "phone_num") String phone_num){
-        if(!adminService.phoneCheck(phone_num)){
+    public void phoneCheck(@RequestBody Map<String, String> phone_num){
+        if(!adminService.phoneCheck(phone_num.get("phone_num"))){
             throw new DuplicateException();
         }
     }
 
     //이메일검사
     @PostMapping("/emailcheck")
-    public void emailCheck(@ModelAttribute(name = "email") String email){
-        if(!adminService.emailCheck(email)){
+    public void emailCheck(@RequestBody Map<String, String> email){
+        if(!adminService.emailCheck(email.get("email"))){
             throw new DuplicateException();
         }
     }
@@ -150,7 +159,7 @@ public class AdminController {
     }
 
     //비밀번호재설정
-    @PostMapping("/resetPW")
+    @PostMapping("/resetPw")
     public void resetPW(@RequestBody AdminFindDto adminFindDto){
         adminFindDto.setPassword(passwordEncoder.encode(adminFindDto.getPassword()));
         adminService.resetPassword(adminFindDto);

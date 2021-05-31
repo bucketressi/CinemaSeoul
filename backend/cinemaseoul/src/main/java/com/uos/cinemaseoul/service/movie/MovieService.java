@@ -42,10 +42,12 @@ public class MovieService {
     @Transactional
     public void updateMovieCast(InsertCastDto iMDto) {
         movieDao.deleteCasting(iMDto.getMovi_id());
+
         //삽입값 세팅
         HashMap<String,Object> map = new HashMap<>();
         map.put("movi_id", iMDto.getMovi_id());
         map.put("casting", iMDto.getCasting());
+
         movieDao.insertCasting(map);
     }
 
@@ -111,7 +113,7 @@ public class MovieService {
     //영화 검색
     @Transactional
     public MovieListDto searchMovie(MovieSearchCriteria movieSearchCriteria) {
-        movieSearchCriteria.setName("%"+movieSearchCriteria.getName()+"%");
+        movieSearchCriteria.setName("%" + movieSearchCriteria.getName() + "%");
         MovieListDto movieListDto = new MovieListDto();
         //페이지 계산
         int totalCount = movieDao.countSearchList(movieSearchCriteria);

@@ -20,7 +20,6 @@
         <result property="accu_audience" column="ACCU_AUDIENCE"/>
         <collection property="casting" javaType="java.util.ArrayList" ofType="CastingInfoDto">
             <id property="peop_id" column="PEOP_ID"/>
-            <result property="peop_id" column="PEOP_ID"/>
             <result property="peop_name" column="PEOP_NAME"/>
             <result property="cast_type_code" column="CAST_TYPE_CODE"/>
         </collection>
@@ -32,7 +31,7 @@
         SELECT M.MOVI_ID, M.MOVI_NAME,
                (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
                M.RUN_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.ACCU_AUDIENCE, M.IMAGE, M.OPEN_DATE,
-               C.PEOP_ID, C.PEOP_NAME,  C.CAST_TYPE_CODE
+               C.PEOP_ID, C.PEOP_NAME, C.CAST_TYPE_CODE
         FROM MOVIE M
         INNER JOIN CAST C on M.MOVI_ID = C.MOVI_ID
         WHERE M.MOVI_ID = #{movi_id}
@@ -135,7 +134,7 @@
                          ORDER BY
                          <choose>
                              <when test="sort eq 1"> RATING </when>
-                             <when test="sort eq 2"> ACCU_AUDIDENCE </when>
+                             <when test="sort eq 2"> ACCU_AUDIENCE </when>
                              <otherwise>MOVI_ID</otherwise>
                          </choose>
                          ) A
@@ -151,7 +150,7 @@
                 <when test="cast_type_code != null"> MOVI_ID IN
                  (SELECT C.MOVI_ID FROM CAST C
                  WHERE C.CAST_TYPE_CODE = #{cast_type_code} AND C.PEOP_NAME LIKE #{name})</when>
-                <otherwise> M.MOVI_NAME = #{%name%}</otherwise>
+                <otherwise> M.MOVI_NAME LIKE #{name}</otherwise>
             </choose>
     </select>
 
@@ -169,7 +168,7 @@
                       M.MOVI_ID IN
                         (SELECT C.MOVI_ID FROM CAST C
                         WHERE C.CAST_TYPE_CODE = #{cast_type_code} AND C.PEOP_NAME LIKE #{name})</when>
-                    <otherwise> M.MOVI_NAME = #{name}</otherwise>
+                    <otherwise> M.MOVI_NAME LIKE #{name}</otherwise>
                 </choose>
         ) A
         <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
@@ -185,7 +184,10 @@
 
         INSERT INTO MOVIE VALUES (#{movi_id}, #{movi_name}, #{avai_age_code}, #{run_time},
                             #{company, jdbcType=VARCHAR}, #{movi_contents, jdbcType=VARCHAR},
-                            #{open_date}, DEFAULT, DEFAULT, #{image, jdbcType=BLOB})
+                            #{open_date}, DEFAULT, DEFAULT,
+                                <if test="image == null"> DEFAULT</if>
+                                <if test="image != null"> #{image, jdbcType=BLOB}</if>
+                            )
     </insert>
 
     <!-- [캐스팅 수정] -->
@@ -193,13 +195,16 @@
     <delete id="deleteCasting" parameterType="Integer">
         DELETE FROM CAST WHERE MOVI_ID = #{movi_id}
     </delete>
+
     <!-- 캐스팅 삽입  -->
     <update id="insertCasting">
         INSERT ALL
-        <foreach item="casting" index="index" collection="casting" separator=" ">
-            INTO CAST (MOVI_ID, PEOP_ID, PEOP_NAME, CAST_TYPE_CODE) VALUES
-            ( #{movi_id}, #{casting.peop_id},
-            (SELECT PEOP_NAME FROM PEOPLE P WHERE P.PEOP_ID = #{casting.peop_id}), #{casting.cast_type_code})
+        <foreach item="cast" index="index" collection="casting" separator=" ">
+            INTO CAST VALUES(
+            #{movi_id}, ${cast.peop_id},
+            (SELECT P.PEOP_NAME FROM PEOPLE P WHERE P.PEOP_ID = ${cast.peop_id}),
+            ${cast.cast_type_code}
+        )
         </foreach>
         SELECT * FROM DUAL
     </update>

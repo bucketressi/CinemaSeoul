@@ -44,12 +44,12 @@ mybatis:
 #Description=server start
 #After=oracle.service (다음에 실행할 서비스)
 #[Service]
-#ExecStart=/bin/bash -c "exec java -jar [jar 파일 경로]/[jar파일].jar"
+#ExecStart=/bin/bash -c "exec java -Duser.timezone=Asia/Seoul -jar [jar 파일 경로]/[jar파일].jar"
 #[Install]
 #WantedBy=multi-user.target
 
 #sudo systemctl daemon-reload
-#sudo systemctl enable [서비스 이름(server_start)].service
-#sudo systemctl start [서비스 이름(server_start)].service
+#sudo systemctl enable server_start.service
+#sudo systemctl start server_start.service
 
 #아니면 nohup 해보기

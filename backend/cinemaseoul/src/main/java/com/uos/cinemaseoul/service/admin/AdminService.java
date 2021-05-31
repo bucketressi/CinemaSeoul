@@ -101,6 +101,7 @@ public class AdminService {
     //탈퇴
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int deleteAdmin(int admi_id) throws Exception{
+
         //1보다 더 많이 삭제되어버리면
         int result =adminDao.deleteAdmin(admi_id);
 
@@ -137,7 +138,7 @@ public class AdminService {
     public void resetPassword(AdminFindDto adminFindDto){
         AdminVo adminVo = adminMapper.insertIntoAdminFindToAdminVo(adminFindDto);
 
-        if(adminDao.findByPhoneAndName(adminVo) != null) throw new DuplicateException("no email available");
+        if(adminDao.findByPhoneAndName(adminVo) == null) throw new DuplicateException("no email available");
         if(adminDao.resetPassword(adminVo) > 1){
             throw new WrongArgException("error occurs");
         }

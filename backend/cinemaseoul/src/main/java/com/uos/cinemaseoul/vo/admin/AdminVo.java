@@ -1,7 +1,6 @@
 package com.uos.cinemaseoul.vo.admin;
 
 import com.uos.cinemaseoul.dto.user.admin.AdminSignUpDto;
-import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.*;
 
 @Getter @Setter

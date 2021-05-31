@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserFindDto {
-    private String admi_name;
+    private String user_name;
     private String phone_num;
     private String email;
     private String password;

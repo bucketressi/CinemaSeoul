@@ -23,13 +23,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = "/user")
 @RequiredArgsConstructor
 public class UsersController {
 
     private final UsersService usersService;
-    private final BlackListService blackListService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -114,7 +115,8 @@ public class UsersController {
 
     //회원탈퇴
     @DeleteMapping("/delete")
-    public void deleteUser(Authentication authentication, @ModelAttribute(name = "user_id") int user_id)throws Exception{
+    public void deleteUser(Authentication authentication, @RequestBody Map<String, Integer> map)throws Exception{
+        int user_id = map.get("user_id");
 
         //자기 id 아니면
         if(Integer.parseInt(authentication.getName()) != user_id) throw new DuplicateException();
@@ -153,26 +155,15 @@ public class UsersController {
     }
 
     //이메일검사
-    @PostMapping("/emailcheck")
-    public void emailCheck(@ModelAttribute(name = "email") String email){
-        usersService.emailCheck(email);
+    @PostMapping(value = "/emailcheck")
+    public void emailCheck(@RequestBody Map<String, String> email){
+        usersService.emailCheck(email.get("email"));
     }
 
     //번호검사
-    @PostMapping("/phonecheck")
-    public void phoneCheck(@ModelAttribute(name = "phone_num") String phone_num){
-        usersService.phoneCheck(phone_num);
-    }
-
-
-    //블랙리스트 입력
-    @PostMapping("/blacklist")
-    public void insertBlacklist(@RequestBody BlackListVo blackListVo){
-        try{
-            blackListService.addBlackList(blackListVo);
-        }catch (Exception e){
-            throw new WrongArgException("Wrong args");
-        }
+    @PostMapping(value = "/phonecheck")
+    public void phoneCheck(@RequestBody Map<String, String> phone_num){
+        usersService.phoneCheck(phone_num.get("phone_num"));
     }
 
     //아이디찾기
@@ -182,7 +173,7 @@ public class UsersController {
     }
 
     //비밀번호재설정
-    @PostMapping("/resetPW")
+    @PostMapping("/resetPw")
     public void resetPW(@RequestBody UserFindDto userFindDto){
         userFindDto.setPassword(passwordEncoder.encode(userFindDto.getPassword()));
         usersService.resetPassword(userFindDto);

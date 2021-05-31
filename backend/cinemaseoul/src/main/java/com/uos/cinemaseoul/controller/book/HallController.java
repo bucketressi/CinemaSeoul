@@ -43,7 +43,7 @@ public class HallController {
         return ResponseEntity.ok(hallService.selectHall(hall_id));
     }
 
-    @PostMapping("/hall/seat")
+    @PutMapping("/hall/seat")
     public void updateSeat(@RequestBody Map<String,List<SeatDto>> updateSeat){
         hallService.updateSeats(updateSeat.get("seats"));
     }

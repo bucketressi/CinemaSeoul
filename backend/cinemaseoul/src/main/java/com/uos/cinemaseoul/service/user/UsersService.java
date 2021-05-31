@@ -55,7 +55,7 @@ public class UsersService  {
             }
 
             //블랙리스트인지 확인
-            if(blackListDao.select(userSignupDto.getPhone_num(), userSignupDto.getUser_name()) != null){
+            if(blackListDao.select(userSignupDto.getPhone_num()) != null){
                 throw new BlackListException("black list");
             }
             UsersVo s = new UsersVo().inputSignUp(userSignupDto);
@@ -92,7 +92,7 @@ public class UsersService  {
 
         //없을때
         //블랙리스트인지 확인
-        if(blackListDao.select(nonMemberDto.getPhone_num(), nonMemberDto.getUser_name()) != null){
+        if(blackListDao.select(nonMemberDto.getPhone_num()) != null){
             throw new BlackListException("black list");
         }
 
@@ -203,8 +203,8 @@ public class UsersService  {
     //비밀번호 재설정
     public void resetPassword(UserFindDto userFindDto){
         UsersVo usersVo = usersMapper.insertIntoUserFindToUsersVo(userFindDto);
-        if(usersDao.findByEmailAndPhone(usersVo.getEmail(), usersVo.getPhone_num()) != null)
-            throw new DuplicateException("no email available");
+        if(usersDao.findByEmailAndPhone(usersVo.getEmail(), usersVo.getPhone_num()) == null)
+            throw new DuplicateException("no available email");
 
         usersDao.resetPassword(usersVo);
     }
