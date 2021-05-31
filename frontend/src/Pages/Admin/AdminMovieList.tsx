@@ -52,11 +52,6 @@ const AdminMovie = () => {
 		console.log("addMovie");
 	}
 
-	useEffect(() => {
-		// 처음에 MovieData 받아오기
-		setMovieList(movieListData);
-	});
-
 	
 	return (
 		<>
@@ -77,8 +72,9 @@ const AdminMovie = () => {
 											image={movie.image}
 											movi_name={movie.movi_name}
 											accu_audience={movie.accu_audience}
-											avi_age={movie.avi_age}
+											avai_age={movie.avai_age}
 											open_date={movie.open_date}
+											rating={movie.rating}
 										/>
 									</Link>
 								)

@@ -3,30 +3,7 @@ import "../scss/component/_header.scss";
 import { Button, MenuItem, TextField, Select } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useAdminState, useLogout } from '../Main/AdminModel';
-import {useMovieListDispatch} from '../Main/MovieListModel';
-
-const changedMovieData = {
-	movie_list: [
-		{
-			movi_id: 1,
-			movi_name: "귀멸의 칼날",
-			accu_audience: 408,
-			avi_age: 15,
-			open_date: new Date("2021/05/30"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202101/16908_103_1.jpg"
-		}, {
-			movi_id: 2,
-			movi_name: "보이저스",
-			accu_audience: 202,
-			avi_age: 18,
-			open_date: new Date("2021/06/03"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-		}
-	],
-	page: 1,
-	totalpage: 1,
-	amount: 2
-};
+import { useMovieListDispatch } from '../Main/MovieListModel';
 
 const AdminHeader = () => {
 	const setMovieList = useMovieListDispatch();
@@ -35,11 +12,11 @@ const AdminHeader = () => {
 	/* 직원 정보 */
 	const admin = useAdminState();
 	const logout = useLogout();
-	
+
 	const [searchKeyword, setSearchKeyword] = useState<string>("");
 	const [searchType, setSearchType] = useState<number>(0);
 
-	const handleKeywordChange = (e : any) => {
+	const handleKeywordChange = (e: any) => {
 		setSearchKeyword(e.target.value);
 	}
 
@@ -50,7 +27,6 @@ const AdminHeader = () => {
 	const search = () => {
 		// 검색 시 type을 null, "감독", "배우"로 mapping
 		// movielist로 이동하면서 props로 api로부터 받은 moviedata 전달
-		setMovieList(changedMovieData);
 		history.push("/admin/movie");
 	}
 
@@ -100,7 +76,7 @@ const AdminHeader = () => {
 					<TextField
 						className="search-input"
 						value={searchKeyword}
-						onChange = {handleKeywordChange}
+						onChange={handleKeywordChange}
 					/>
 					<Button color="primary" variant="contained" onClick={search}>검색</Button>
 				</div>

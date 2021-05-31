@@ -14,16 +14,17 @@ const MovieList = () => {
 			<SearchTab />
 			<div className="movie-list-con">
 				{
-					movieListData && movieListData.movie_list &&
-					movieListData.movie_list.map((movie: SimpleMovieType) => {
+					movieListData  &&
+					movieListData.map((movie: SimpleMovieType) => {
 						return (
 							<Link key={movie.movi_id} to={`/movie/${movie.movi_id}`}>
 								<MovieCard
 									image={movie.image}
 									movi_name={movie.movi_name}
 									accu_audience={movie.accu_audience}
-									avi_age={movie.avi_age}
+									avai_age={movie.avai_age}
 									open_date={movie.open_date}
+									rating={movie.rating}
 								/>
 							</Link>
 						)

@@ -21,7 +21,7 @@ export type MovieType = {
 	genre: number[],
 	cast_director: PeopleType,
 	cast_actor: PeopleType,
-	image: Blob,
+	image: string,
 	accu_audience: number,
 	bookrecord: number
 }
@@ -32,12 +32,13 @@ export type PeopleType = {
 }
 
 export type SimpleMovieType = {
-	movi_id? : number;
-	movi_name : string;
-	accu_audience : number;
-	image : string;
-	open_date : Date;
-	avi_age : number;
+	movi_id? : number,
+	movi_name : string,
+	accu_audience : number,
+	image : string,
+	open_date : string,
+	rating: number,
+	avai_age : string
 }
 
 /* User */
