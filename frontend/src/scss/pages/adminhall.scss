@@ -26,6 +26,16 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: rgb(226, 166, 226);
+		background-color: rgb(146, 169, 218);
+		cursor: pointer;
+	}
+	&.disabled div{
+		background-color: green;
+	}
+	&.distance div{
+		background-color: rgb(194, 165, 35);
+	}
+	&.impossible div{
+		background-color: gray;
 	}
 }
