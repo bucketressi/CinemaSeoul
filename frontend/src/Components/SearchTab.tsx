@@ -91,7 +91,7 @@ const SearchTab = () => {
 				</FormControl>
 				<FormControl>
 					<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
-					<RadioGroup name="age" value={age} onChange={handleAgeChange}>
+					<RadioGroup name="age" value={age}>
 						{
 							movieAuthCode.map((auth) =>
 								<FormControlLabel key={auth.code_id} value={auth.code_id} control={<Checkbox onChange={handleAgeChange} color="primary" />} label={auth.code_name} />

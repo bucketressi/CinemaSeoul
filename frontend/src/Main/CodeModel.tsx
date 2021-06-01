@@ -75,7 +75,7 @@ const initialGenreCode = [
 	{
 		"code_id": "220002",
 		"parent_code": "220",
-		"code_name": "맬로"
+		"code_name": "멜로"
 	},
 	{
 		"code_id": "220003",

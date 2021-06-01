@@ -7,6 +7,7 @@ import { useTokenState } from './TokenModel';
 
 const movieListState = createContext<SimpleMovieType[] | undefined>(undefined);
 const movieListDispatch = createContext<Dispatch<SimpleMovieType[] | undefined>>(() => { });
+const fetchMovieFunction = createContext<()=>void>(() => {});
 
 export const MovieListContextProvider = ({ children }: childrenObj) => {
 	// 공통적으로 쓰이는 page가 많아서 model로 정의함 => 영화 리스트 데이터
@@ -14,6 +15,10 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 	const [movieList, setMovieList] = useState<SimpleMovieType[] | undefined>(undefined);
 
 	useEffect(() => { // 처음에 영화 리스트 데이터 받아오기
+		fetchMovie();
+	}, []);
+
+	const fetchMovie = () => {
 		axios.post(`${SERVER_URL}/movie/list`, {
 			//전체 : 0, 상영중  1, 상영예정 : 2
 			"page": 1,
@@ -33,12 +38,14 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "조건이 잘못 입력되었습니다.", ""]);
 			});
-	}, []);
+	}
 
 	return (
 		<movieListState.Provider value={movieList}>
 			<movieListDispatch.Provider value={setMovieList}>
-				{children}
+				<fetchMovieFunction.Provider value={fetchMovie}>
+					{children}
+				</fetchMovieFunction.Provider>
 			</movieListDispatch.Provider>
 		</movieListState.Provider>
 	);
@@ -50,5 +57,9 @@ export function useMovieListState() {
 }
 export function useMovieListDispatch() {
 	const context = useContext(movieListDispatch);
+	return context;
+}
+export function useFetchMovieFunction() {
+	const context = useContext(fetchMovieFunction);
 	return context;
 }
