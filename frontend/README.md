@@ -61,7 +61,6 @@ URL별로 연결되는 라우팅 컴포넌트에 대해 정리
 | /faq       | AdminFAQ        | 커뮤니티  | FAQ 관리         |
 | /genre     | AdminGenre      | 영화관    | 장르 관리        |
 | /hall      | AdminHall       | 영화관    | 상영관 관리      |
-| /home      | AdminHome       |           |                  |
 | /main      | AdminMain       | -         | 메인 페이지      |
 | /movie     | AdminMovie      | 영화관    | 영화 관리        |
 | /notice    | AdminNotice     | 커뮤니티  | 공지사항 관리    |
