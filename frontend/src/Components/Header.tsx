@@ -52,7 +52,7 @@ const Header = () => {
 			<div>
 				<div className="sub-menu">
 					{
-						user ?
+						user !== undefined ?
 							<ul>
 								<li><Link to="/myPage"><Button color="primary" variant="outlined">마이페이지</Button></Link></li>
 								<li className="logout" onClick={logout}><Button color="primary" variant="outlined">로그아웃</Button></li>

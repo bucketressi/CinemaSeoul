@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../scss/component/_header.scss";
 import { Button, MenuItem, TextField, Select } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
-import { useAdminState, useLogout } from '../Main/AdminModel';
+import { useAdminState, useLogout } from '../Main/UserModel';
 import { useMovieListDispatch } from '../Main/MovieListModel';
 
 const AdminHeader = () => {
@@ -51,7 +51,7 @@ const AdminHeader = () => {
 					</div>
 					<div className="sub-menu">
 						{
-							admin ?
+							admin !== undefined ?
 								<ul>
 									<li><Link to="/admin/myPage"><Button color="primary" variant="outlined">마이페이지</Button></Link></li>
 									<li className="logout" onClick={logout}><Button color="primary" variant="outlined">로그아웃</Button></li>

@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
 import { TextField, Checkbox, Button } from '@material-ui/core';
-import { useAdminLogin } from '../../Main/AdminModel';
+import { useAdminLogin } from '../../Main/UserModel';
 
 const AdminLogin = () => {
 	// 관리자 로그인 페이지
+	const adminLogin = useAdminLogin();
+
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
 	const openFindIdModal = () => { console.log("id"); };
 	const openFindPWModal = () => { console.log("pw"); };
-	const history = useHistory();
-
-	/* 로그인 */
-	const adminLogin = useAdminLogin();
 
 	const handleAdminLogin = () => {
 		adminLogin(email, password);
-		history.push("/admin/main");
 	}
 
 
