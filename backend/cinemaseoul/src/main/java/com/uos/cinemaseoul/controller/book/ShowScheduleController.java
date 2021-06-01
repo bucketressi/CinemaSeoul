@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/showschedule")
@@ -27,8 +28,8 @@ public class ShowScheduleController {
     }
 
     @DeleteMapping("/")
-    public void deleteShowSchedule(@RequestParam(name = "show_id") int show_id){
-        showScheduleService.deleteShowSchedule(show_id);
+    public void deleteShowSchedule(@RequestBody Map<String, Integer> map){
+        showScheduleService.deleteShowSchedule(map.get("show_id"));
     }
 
     @GetMapping("/{show_id}/book")

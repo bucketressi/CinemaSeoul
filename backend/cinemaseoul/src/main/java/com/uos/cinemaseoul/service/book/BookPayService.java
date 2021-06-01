@@ -8,6 +8,7 @@ import com.uos.cinemaseoul.dao.user.PointDao;
 import com.uos.cinemaseoul.dto.book.bookpay.BookPayIdDto;
 import com.uos.cinemaseoul.dto.book.bookpay.BookPayInsertDto;
 import com.uos.cinemaseoul.dto.book.bookpay.BookSeatDto;
+import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.book.BookPayVo;
 import com.uos.cinemaseoul.vo.book.BookVo;
 import com.uos.cinemaseoul.vo.user.PointVo;
@@ -28,6 +29,11 @@ public class BookPayService {
 
     @Transactional
     public BookPayIdDto payBook(BookPayInsertDto bookPayInsertDto) {
+
+        if(bookPayInsertDto.getSeat_list().size() != bookPayInsertDto.getTeen() + bookPayInsertDto.getAdult() + bookPayInsertDto.getSenior() + bookPayInsertDto.getImpaired()){
+            throw new WrongArgException("Disappeared Seat");
+        }
+
         BookPayVo bookPayVo;
         int pointRatio = 0;
 

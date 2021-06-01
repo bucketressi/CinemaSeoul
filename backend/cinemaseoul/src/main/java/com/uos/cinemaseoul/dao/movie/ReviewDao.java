@@ -25,4 +25,8 @@ public interface ReviewDao {
 
     //영화 받아오기
     List<MovieReviewDto> getMyMovie(int user_id);
+
+    //영화 숫자 받아와서 0으로만들기
+    int getCount(int movi_id);
+    void updateMovieRatingToZero(int movi_id);
 }

@@ -12,7 +12,7 @@
     </insert>
 
     <update id="updateReview" parameterType="ReviewVo">
-        UPDATE REVIEW SET RATING = #{rating}, COMMENTS = #{commnets}
+        UPDATE REVIEW SET RATING = #{rating}, COMMENTS = #{comments}
         WHERE MOVI_ID = #{movi_id} AND USER_ID = #{user_id}
     </update>
 
@@ -22,7 +22,16 @@
 
     <update id="updateMovieRating">
         UPDATE MOVIE SET RATING =
-            (SELECT SUM(R.RATING)/COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id})
+            (SELECT SUM(R.RATING) / COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id})
+        WHERE MOVI_ID = #{movi_id}
+    </update>
+
+    <select id="getCount" resultType="Integer">
+        SELECT COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id}
+    </select>
+
+    <update id="updateMovieRatingToZero">
+        UPDATE MOVIE SET RATING =0 WHERE MOVI_ID = #{movi_id}
     </update>
 
     <select id="getMyMovie" resultType="MovieReviewDto">
@@ -30,7 +39,8 @@
         FROM MOVIE M
                  LEFT OUTER JOIN REVIEW R ON R.MOVI_ID = M.MOVI_ID
         WHERE M.MOVI_ID IN (SELECT MOVI_ID FROM SHOWSCHEDULE
-                            WHERE SHOW_ID IN (SELECT SHOW_ID FROM BOOK WHERE USER_ID = #{user_id}))
+                            WHERE SHOW_ID IN (SELECT SHOW_ID FROM BOOK WHERE USER_ID = #{user_id})
+                            <![CDATA[ AND CONCAT(SHOW_DATE,SHOW_TIME) <= TO_CHAR(SYSDATE, ('YYYYMMDDHHMM'))) ]]>
     </select>
 
 

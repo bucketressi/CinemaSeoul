@@ -26,9 +26,10 @@
     </select>
 
     <insert id="update" parameterType="BlackListVo" >
-        UPDATE BLACKLIST SET (BLAC_NAME = #{blac_name},
-                            PHONE_NUM = #{phone_num},
-                            BIRTH = #{birth})
+        UPDATE BLACKLIST SET
+            BLAC_NAME = #{blac_name},
+            PHONE_NUM = #{phone_num},
+            BIRTH = #{birth}
     </insert>
 
 </mapper>

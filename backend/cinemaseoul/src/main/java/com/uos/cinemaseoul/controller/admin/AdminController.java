@@ -5,6 +5,7 @@ import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.common.paging.Criteria;
+import com.uos.cinemaseoul.controller.user.UsersController;
 import com.uos.cinemaseoul.dto.user.*;
 import com.uos.cinemaseoul.dto.user.admin.AdminFindDto;
 import com.uos.cinemaseoul.dto.user.admin.AdminInfoDto;
@@ -16,6 +17,7 @@ import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.service.admin.AdminService;
 import com.uos.cinemaseoul.vo.admin.AdminVo;
 import jdk.swing.interop.SwingInterOpUtils;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,8 +35,19 @@ public class AdminController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Getter
+    static class Result{
+        String token;
+        int admi_id;
+
+        public Result(String token, int user_id){
+            this.token = token;
+            this.admi_id = user_id;
+        }
+    }
+
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto logindto){
+    public ResponseEntity<Result> login(@RequestBody LoginDto logindto){
         AuthUser authUser = adminService.login(logindto);
 
         if(authUser == null){
@@ -42,7 +55,8 @@ public class AdminController {
         }else if(!passwordEncoder.matches(logindto.getPassword(), authUser.getPassword())){
             throw new WrongArgException("Wrong Password");
         }
-        return jwtTokenProvider.createToken(UserType.ADMIN.toString(), authUser.getUsername(), authUser.getAuth());
+        String token = jwtTokenProvider.createToken(UserType.ADMIN.toString(),authUser.getUsername(), authUser.getAuth());
+        return ResponseEntity.ok(new Result(token,Integer.parseInt(authUser.getUsername())));
     }
 
     @PostMapping("/signup")

@@ -54,9 +54,9 @@
                     <!--개봉 중-->
                     <when test="stat == 1"><![CDATA[
                                     M.MOVI_ID IN
-                                    (SELECT S.MOVI_ID FROM SHOWSCHEDULE S
+                                    (SELECT DISTINCT S.MOVI_ID FROM SHOWSCHEDULE S
                                         WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE, 'YYYYMMDD') -7)
+                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE+7, 'YYYYMMDD') )
                                     AND
                                     M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
                                     ]]></when>
@@ -86,6 +86,7 @@
                 </if>
             </trim>
     </select>
+
     <!--영화 리스트 조회(페이지)-->
     <select id="selectMovieList" parameterType="MovieCriteria" resultType="MovieListInfoDto">
         SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDIENCE, B.IMAGE
@@ -100,9 +101,9 @@
                                     <!--개봉 중-->
                                     <when test="stat == 1"><![CDATA[
                                     M.MOVI_ID IN
-                                    (SELECT S.MOVI_ID FROM SHOWSCHEDULE S
+                                    (SELECT DISTINCT S.MOVI_ID FROM SHOWSCHEDULE S
                                         WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE, 'YYYYMMDD') -7)
+                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE+7, 'YYYYMMDD') )
                                     AND
                                     M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
                                     ]]></when>
@@ -214,6 +215,7 @@
     <delete id="deleteGenre" parameterType="Integer">
         DELETE FROM MOVIEGENRE WHERE MOVI_ID = #{movi_id}
     </delete>
+
     <!-- 장르삽입  -->
     <update id="insertGenre" parameterType="hashmap">
         INSERT ALL

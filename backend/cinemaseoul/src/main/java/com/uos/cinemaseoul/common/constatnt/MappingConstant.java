@@ -35,10 +35,6 @@ public class MappingConstant {
             "/adult",
             "/user/delete",
 
-            "/book/list",
-            "/book/{show_id}/seat",
-            "/book/cancel/{book_id}",
-
             "/pay/book"
     };
 
@@ -48,14 +44,14 @@ public class MappingConstant {
             "/user/{user_id}",
             "/user/update",
 
-            "/point/{user_id}/{start_date}",
-
             "/review"
     };
 
     //4 (직원 가능 = 매너지도 가능)
     public static String[] Admin = {
-            "/user/blacklist",
+
+            "/blacklist",
+
             "/admin/{admi_id}",
             "/admin/update",
 
@@ -66,16 +62,12 @@ public class MappingConstant {
             "/movie/delete",
 
             "/point/update",
-            "/point/{user_id}/{start_date}",
 
             "/hall/{hall_id}",
 
             "/showschedule",
             "/showschedule/{show_id}/book",
-            "/showschedule/add",
-
-            "/book/list",
-            "/book/{show_id}/seat",
+            "/showschedule/add"
     };
 
     //3 (매니저(높은 관리자만) 가능)
@@ -86,5 +78,16 @@ public class MappingConstant {
 
             "/hall",
             "/hall/seat"
+    };
+
+    //5 (직원, 매니저, 회원, 비회원 모두 가능)
+    public static String[] AllUser = {
+
+            "/book/list",
+            "/book/{book_id}",
+            "/book/{show_id}/seat",
+            "/book/cancel/{book_id}",
+
+            "/point/{user_id}/{start_date}",
     };
 }

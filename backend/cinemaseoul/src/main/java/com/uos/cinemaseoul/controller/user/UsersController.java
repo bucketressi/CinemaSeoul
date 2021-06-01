@@ -3,6 +3,7 @@ package com.uos.cinemaseoul.controller.user;
 import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
+import com.uos.cinemaseoul.controller.admin.AdminController;
 import com.uos.cinemaseoul.dto.user.*;
 import com.uos.cinemaseoul.dto.user.admin.AdultCheckDto;
 import com.uos.cinemaseoul.dto.user.user.NonMemberDto;
@@ -17,6 +18,7 @@ import com.uos.cinemaseoul.service.user.BlackListService;
 import com.uos.cinemaseoul.service.user.UsersService;
 import com.uos.cinemaseoul.vo.user.BlackListVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,9 +36,20 @@ public class UsersController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Getter
+    static class Result{
+        String token;
+        int user_id;
+
+        public Result(String token, int user_id){
+            this.token = token;
+            this.user_id = user_id;
+        }
+    }
+
     //회원 로그인
     @PostMapping(value = "/login")
-    public String login(@RequestBody LoginDto logindto){
+    public ResponseEntity<?> login(@RequestBody LoginDto logindto){
         AuthUser authUser = usersService.login(logindto);
 
         if(authUser == null){
@@ -44,15 +57,17 @@ public class UsersController {
         }else if(!passwordEncoder.matches(logindto.getPassword(), authUser.getPassword())){
             throw new WrongArgException("Wrong Password");
         }
-        return jwtTokenProvider.createToken(UserType.USERS.toString(), authUser.getUsername(), authUser.getAuth());
+        String token = jwtTokenProvider.createToken(UserType.USERS.toString(),authUser.getUsername(), authUser.getAuth());
+        return ResponseEntity.ok(new Result(token,Integer.parseInt(authUser.getUsername())));
     }
 
     //비회원가입
     @PostMapping("/login/non-member")
-    public String nonMemberlogin(@RequestBody NonMemberDto nonMemberDto){
+    public ResponseEntity<?> nonMemberlogin(@RequestBody NonMemberDto nonMemberDto){
         nonMemberDto.encodePassword(passwordEncoder.encode(nonMemberDto.getPassword()));
         AuthUser authUser = usersService.nonMemberCheck(nonMemberDto);
-        return jwtTokenProvider.createToken(UserType.USERS.toString(), authUser.getUsername(), authUser.getAuth());
+        String token = jwtTokenProvider.createToken(UserType.USERS.toString(),authUser.getUsername(), authUser.getAuth());
+        return ResponseEntity.ok(new Result(token,Integer.parseInt(authUser.getUsername())));
     }
 
     //회원가입

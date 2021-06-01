@@ -52,4 +52,5 @@ mybatis:
 #sudo systemctl enable server_start.service
 #sudo systemctl start server_start.service
 
-#아니면 nohup 해보기
+#우분투와 시간대 설정필요
+#sudo dpkg-reconfigure tzdata

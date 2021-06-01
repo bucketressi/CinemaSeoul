@@ -20,7 +20,5 @@ public interface BookPayDao {
 
     //취소정보 -> 취소로 변경
     BookPayVo getCancelInfo(int book_id);
-    void setCancel(int book_id, String pay_state_cancel);
-
-
+    void setCancel(int book_pay_id, String pay_state_cancel);
 }

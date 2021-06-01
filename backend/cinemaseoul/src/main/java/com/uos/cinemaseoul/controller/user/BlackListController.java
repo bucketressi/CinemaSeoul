@@ -16,7 +16,7 @@ public class BlackListController {
     private final BlackListService blackListService;
 
     //블랙리스트 입력
-    @PostMapping("/user/blacklist")
+    @PostMapping("/blacklist")
     public void insertBlacklist(@RequestBody BlackListVo blackListVo){
         try{
             blackListService.addBlackList(blackListVo);
@@ -26,19 +26,19 @@ public class BlackListController {
     }
 
     //블랙리스트 삭제
-    @DeleteMapping("/user/blacklist")
+    @DeleteMapping("/blacklist")
     public void deleteBlacklist(@RequestBody Map<String, String> map){
         blackListService.deleteBlackList(map.get("phone_num"));
     }
 
     //블랙리스트 조회
-    @GetMapping("/user/blacklist")
+    @GetMapping("/blacklist")
     public ResponseEntity<?> getBlackList(){
         return ResponseEntity.ok(blackListService.getBlackList());
     }
 
     //블랙리스트 수정
-    @PutMapping("/user/blacklist")
+    @PutMapping("/blacklist")
     public void updateBlacklist(@RequestBody BlackListVo vo){
         blackListService.updateBlackList(vo);
     }

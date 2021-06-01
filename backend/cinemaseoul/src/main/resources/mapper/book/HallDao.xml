@@ -77,7 +77,10 @@
     </update>
 
     <update id="updateAvaiSeatAmount">
-        UPDATE HALL SET AVAI_SEAT_AMOUNT = (SELECT COUNT(SEAT_NUM) FROM SEAT WHERE SEAT_TYPE_CODE IN (#{seat_type_ok}, #{seat_type_disabled}))
+        UPDATE HALL SET AVAI_SEAT_AMOUNT = (
+            SELECT COUNT(SEAT_NUM) FROM SEAT
+            WHERE SEAT_TYPE_CODE IN (#{seat_type_ok}, #{seat_type_disabled})
+              AND HALL_ID =#{hall_id})
         WHERE HALL_ID = #{hall_id}
     </update>
 

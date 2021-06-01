@@ -7,6 +7,7 @@ import com.uos.cinemaseoul.dto.movie.review.ReviewDto;
 import com.uos.cinemaseoul.vo.movie.ReviewVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,23 +18,29 @@ public class ReviewService {
     private final ReviewDao reviewDao;
     private final ReviewMapper reviewMapper;
 
+    @Transactional
     public void insertReview(ReviewDto reviewDto) {
         ReviewVo vo = reviewMapper.insertintoReviewVoFromReviewDto(reviewDto);
         reviewDao.insertReview(vo);
         reviewDao.updateMovieRating(vo.getMovi_id());
     }
-
+    @Transactional
     public void updateReview(ReviewDto reviewDto) {
         ReviewVo vo = reviewMapper.insertintoReviewVoFromReviewDto(reviewDto);
         reviewDao.updateReview(vo);
         reviewDao.updateMovieRating(vo.getMovi_id());
     }
-
+    @Transactional
     public void deleteReview(ReviewDto reviewDto){
         reviewDao.deleteReview(reviewMapper.insertintoReviewVoFromReviewDto(reviewDto));
-        reviewDao.updateMovieRating(reviewDto.getMovi_id());
-    }
+        if(reviewDao.getCount(reviewDto.getMovi_id()) < 1){
+            reviewDao.updateMovieRatingToZero(reviewDto.getMovi_id());
+        }else{
+            reviewDao.updateMovieRating(reviewDto.getMovi_id());
+        }
 
+    }
+    @Transactional
     public List<MovieReviewDto> getMyMovie(int user_id) {
         return reviewDao.getMyMovie(user_id);
     }

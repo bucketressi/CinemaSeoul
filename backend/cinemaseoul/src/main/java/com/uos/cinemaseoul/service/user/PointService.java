@@ -49,6 +49,7 @@ public class PointService {
         PointListDto pointListDto = new PointListDto();
         UsersVo vo = pointDao.getPoint(user_id);
 
+        pointListDto.setUser_id(user_id);
         pointListDto.setPoint(pointDao.findPoint(start_date, user_id));
         pointListDto.setAccu_point(vo.getAccu_point());
         pointListDto.setCurr_point(vo.getCurr_point());

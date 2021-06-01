@@ -11,7 +11,7 @@
         WHERE M.MOVI_ID IN (
             SELECT S.MOVI_ID FROM SHOWSCHEDULE S
             WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-              AND S.SHOW_DATE < TO_CHAR(SYSDATE, 'YYYYMMDD') -7)
+              AND S.SHOW_DATE < TO_CHAR(SYSDATE+7, 'YYYYMMDD') )
         ]]>
     </select>
 
@@ -25,23 +25,24 @@
         INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
         INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
 
-        WHERE S.MOVI_ID = #{movi_id} AND
-              <choose>
-                  <when test="show_date != null"> S.SHOW_DATE = #{show_date}</when>
-                  <otherwise>S.SHOW_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')</otherwise>
-              </choose>
+        WHERE S.MOVI_ID = #{movi_id} AND S.SHOW_DATE = #{show_date}
     </select>
+
+
+
 
     <!-- [상영일정 좌석 조회]-->
     <!-- 상영관 가능좌석 조회-->
     <select id="getShowScheduleSeat" resultType="ShowScheduleSeatDto">
-        SELECT HALL_ID, SEAT_NUM, SEAT_TYPE_CODE FROM SEAT S
+        SELECT HALL_ID, SEAT_NUM, SEAT_TYPE_CODE AS SEAT_TYPE FROM SEAT S
         WHERE S.HALL_ID = (SELECT HALL_ID FROM SHOWSCHEDULE WHERE SHOW_ID = #{show_id})
+        ORDER BY SEAT_NUM
     </select>
     <!-- 예매된 좌석 조회-->
     <select id="getBookedSeat" resultType="ShowScheduleSeatDto">
         SELECT HALL_ID, SEAT_NUM FROM BOOKSEAT BS
         WHERE BS.SHOW_ID = #{show_id}
+        ORDER BY SEAT_NUM
     </select>
 
 
@@ -50,11 +51,12 @@
     <select id="getBookInfo" resultType="BookDto">
         SELECT B.BOOK_ID, B.BOOK_PAY_ID, B.TEEN, B.ADULT, B.SENIOR, B.IMPAIRED, B.BOOK_DATETIME,
                S.SHOW_DATE, S.SHOW_TIME, H.HALL_NAME,
-               M.MOVI_NAME, M.RUN_TIME
+               M.MOVI_NAME, M.RUN_TIME, U.USER_NAME
         FROM BOOK B
         INNER JOIN SHOWSCHEDULE S on S.SHOW_ID = B.SHOW_ID
         INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
         INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
+        INNER JOIN USERS U on B.USER_ID = U.USER_ID
 
         WHERE B.BOOK_ID = #{book_id}
     </select>

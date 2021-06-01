@@ -22,7 +22,6 @@ public class BookService {
     private final BookDao bookDao;
     private final BookPayDao bookPayDao;
     private final PointDao pointDao;
-    private final PointService pointService;
 
     @Transactional
     public List<MovieShortCutDto> getBookAvailableMovie() {
@@ -45,7 +44,7 @@ public class BookService {
 
         //리스트는 순서대로 오리라 가정
         for(ShowScheduleSeatDto b : book_seat_list){
-            seat_list.get(b.getSeat_num()).set_booked(true);
+            seat_list.get(b.getSeat_num()).setBooked(true);
         }
 
         return seat_list;
