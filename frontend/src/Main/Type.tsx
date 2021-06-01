@@ -2,6 +2,21 @@ export type childrenObj = {
 	children: React.ReactNode;
 }
 
+/* Code */
+export type Code = {
+	[parent : number] : string[];
+}
+
+export type CodeMatch = {
+	[code : number] : string;
+}
+
+export type CodeType = {
+	code_id : string,
+	parent_code : string | null,
+	code_name : string
+}
+
 /* Movie */
 
 export type MovieListType = {
