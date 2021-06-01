@@ -1,0 +1,7 @@
+.link-con{
+	display: flex;
+	flex-wrap: wrap;
+	&>button{
+		margin-right: 15px;
+	}
+}

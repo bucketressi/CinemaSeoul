@@ -67,8 +67,8 @@ const AdminHeader = () => {
 					<div className="menu">
 						<ul>
 							<li><Link to="/admin/movie">영화</Link></li>
-							<li><Link to="/admin/movie">영화</Link></li>
-							<li><Link to="/admin/movie">영화</Link></li>
+							<li><Link to="/admin/hall">상영관</Link></li>
+							<li><Link to="/admin/showschedule">상영일정</Link></li>
 							<li><Link to="/admin/movie">영화</Link></li>
 							<li><Link to="/admin/movie">영화</Link></li>
 						</ul>

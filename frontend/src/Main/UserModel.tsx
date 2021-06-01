@@ -1,14 +1,14 @@
 import React, { useState, useContext, createContext, Dispatch } from 'react';
-import { User, childrenObj } from './Type';
+import { UserType, childrenObj } from './Type';
 
-const userState = createContext<User | undefined>(undefined);
-const userDispatch = createContext<Dispatch<User>>(() => { });
+const userState = createContext<UserType | undefined>(undefined);
+const userDispatch = createContext<Dispatch<UserType>>(() => { });
 const userLoginFunction = createContext<(id: string, password: string) => void>(() => { });
-const nonUserLoginFunction = createContext<(user : User) => void>(() => { });
+const nonUserLoginFunction = createContext<(user : UserType) => void>(() => { });
 const logoutFunction = createContext<() => void>(() => { });
 
 export const UserContextProvider = ({ children }: childrenObj) => {
-	const [user, setUser] = useState<User | undefined>(undefined);
+	const [user, setUser] = useState<UserType | undefined>(undefined);
 	const initialUser = {
 		user_name: "우희은",
 		phone_num: "010-4444-4444",
@@ -21,7 +21,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 		setUser(initialUser);
 	}
 
-	function nonUserLogin(user : User){
+	function nonUserLogin(user : UserType){
 		// todo : api로 nonuser-login하기 => 응답으로 setUser
 		setUser(initialUser);
 	}
