@@ -32,7 +32,7 @@ const Main = () => {
 				console.log(res.data.movi_list);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+				errorHandler(e, true);
 			});
 	}, []);
 

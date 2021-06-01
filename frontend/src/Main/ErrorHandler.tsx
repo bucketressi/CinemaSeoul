@@ -12,7 +12,7 @@ export const errorHandler = (error: AxiosError, alertOn: boolean, errorMsg?: str
 			case 400:
 				errorMsg && errorMsg[0] !== "" ?
 					alert(errorMsg[0]) :
-					alert("죄송합니다. 서비스에 문제가 생겼습니다. 신고하기를 통해 관리자에게 문의해주세요.");
+					alert("죄송합니다. 서비스에 문제가 생겼습니다. 관리자에게 문의해주세요.");
 				break;
 			case 401:
 				errorMsg && errorMsg[1] !== "" ?

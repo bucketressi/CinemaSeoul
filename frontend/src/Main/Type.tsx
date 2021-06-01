@@ -36,9 +36,9 @@ export type SimpleMovieType = {
 	movi_name : string,
 	accu_audience : number,
 	image : string,
-	open_date : string,
-	rating: number,
-	avai_age : string
+	open_date? : string,
+	rating?: number,
+	avai_age? : string
 }
 
 /* User */

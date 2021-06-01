@@ -5,10 +5,10 @@ import { SimpleMovieType } from '../Main/Type';
 const MovieCard = ({image, movi_name, accu_audience, open_date, avai_age, rating} : SimpleMovieType) => {
 	const [dDay, setDDay] = useState<string>("Day");
 	useEffect(()=>{
+		if(open_date == undefined)
+			return;
 		const now = new Date();
 		const movieTime = new Date(`${open_date.slice(0,4)}/${open_date.slice(4,6)}/${open_date.slice(6,8)}`);
-		console.log(open_date);
-		console.log(movieTime)
 		const time = now.getDate() - movieTime.getDate();
 		if(time === 0){
 			setDDay("Day");
@@ -31,13 +31,16 @@ const MovieCard = ({image, movi_name, accu_audience, open_date, avai_age, rating
 				<img src={isImgInvalid()?"https://i.pinimg.com/564x/38/cb/31/38cb31cee4b2da2676f1003a2fcf514d.jpg":image} alt={`poster ${movi_name}`}/>
 			</div>
 			<div className="movie-name">{movi_name}</div>
-			<div className="info-con">
-				<div>
-					<div className="rating">{`평점 : ${rating}`}</div>
-					<div className="open-date">{`D${dDay}`}</div>
+			{
+				rating === undefined &&
+				<div className="info-con">
+					<div>
+						<div className="rating">{`평점 : ${rating}`}</div>
+						<div className="open-date">{`D${dDay}`}</div>
+					</div>
+					<div className="audience">{`누적관람객 수 : ${accu_audience}명`}</div>
 				</div>
-				<div className="audience">{`누적관람객 수 : ${accu_audience}명`}</div>
-			</div>
+			}
 		</div>
 	);
 };
