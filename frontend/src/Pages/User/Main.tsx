@@ -26,7 +26,7 @@ const Main = () => {
 			}
 		})
 			.then((res) => {
-				if(!res.data || !res.data.movi_list)
+				if (!res.data || !res.data.movi_list)
 					return;
 				setNowMovie(res.data.movi_list);
 				console.log(res.data.movi_list);
@@ -42,13 +42,14 @@ const Main = () => {
 			<div className="movie-list">
 				{
 					nowMovie &&
-					nowMovie.map((movie : SimpleMovieType)=>{
+					nowMovie.map((movie: SimpleMovieType) => {
 						return (
 							<Link key={movie.movi_id} to={`/movie/${movie.movi_id}`}>
 								<MovieCard
+									movi_id={movie.movi_id}
 									image={movie.image}
-									movi_name = {movie.movi_name}
-									accu_audience = {movie.accu_audience}
+									movi_name={movie.movi_name}
+									accu_audience={movie.accu_audience}
 									avai_age={movie.avai_age}
 									open_date={movie.open_date}
 									rating={movie.rating}

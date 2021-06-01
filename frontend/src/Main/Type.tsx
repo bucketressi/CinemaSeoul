@@ -41,19 +41,23 @@ export type MovieType = {
 	bookrecord: number
 }
 
-export type PeopleType = {
-  peop_id : number,
-  peop_name : string  
-}
-
 export type SimpleMovieType = {
-	movi_id? : number,
+	movi_id : number,
 	movi_name : string,
 	accu_audience : number,
 	image : string,
 	open_date? : string,
 	rating?: number,
 	avai_age? : string
+}
+
+export type MovieListObjType = {
+	[movi_id : number] : SimpleMovieType
+}
+
+export type PeopleType = {
+  peop_id : number,
+  peop_name : string  
 }
 
 /* User */

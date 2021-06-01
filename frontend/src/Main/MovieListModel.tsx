@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext, Dispatch, useEffect } from 'react';
-import { SimpleMovieType, childrenObj } from './Type';
+import { SimpleMovieType, childrenObj, MovieListObjType } from './Type';
 import axios from 'axios';
 import { SERVER_URL } from '../CommonVariable';
 import { errorHandler } from './ErrorHandler';
@@ -7,16 +7,27 @@ import { useTokenState } from './TokenModel';
 
 const movieListState = createContext<SimpleMovieType[] | undefined>(undefined);
 const movieListDispatch = createContext<Dispatch<SimpleMovieType[] | undefined>>(() => { });
+const movieListObjState = createContext<MovieListObjType | undefined>(undefined);
 const fetchMovieFunction = createContext<()=>void>(() => {});
 
 export const MovieListContextProvider = ({ children }: childrenObj) => {
 	// 공통적으로 쓰이는 page가 많아서 model로 정의함 => 영화 리스트 데이터
 	const token = useTokenState();
 	const [movieList, setMovieList] = useState<SimpleMovieType[] | undefined>(undefined);
+	const [movieListObj, setMovieListObj] = useState<MovieListObjType | undefined>(undefined);
 
 	useEffect(() => { // 처음에 영화 리스트 데이터 받아오기
 		fetchMovie();
 	}, []);
+
+	useEffect(() => {
+		// id로 접근하기 좋게 obj 형태로 만들기
+		const obj = Object.assign({}, movieListObj);
+		movieList?.forEach((movie) => {
+			obj[movie.movi_id] = movie;
+		});
+		setMovieListObj(obj);
+	}, [movieList]);
 
 	const fetchMovie = () => {
 		axios.post(`${SERVER_URL}/movie/list`, {
@@ -44,7 +55,9 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 		<movieListState.Provider value={movieList}>
 			<movieListDispatch.Provider value={setMovieList}>
 				<fetchMovieFunction.Provider value={fetchMovie}>
-					{children}
+					<movieListObjState.Provider value={movieListObj}>
+						{children}
+					</movieListObjState.Provider>
 				</fetchMovieFunction.Provider>
 			</movieListDispatch.Provider>
 		</movieListState.Provider>
@@ -53,6 +66,10 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 
 export function useMovieListState() {
 	const context = useContext(movieListState);
+	return context;
+}
+export function useMovieListObjState() {
+	const context = useContext(movieListObjState);
 	return context;
 }
 export function useMovieListDispatch() {

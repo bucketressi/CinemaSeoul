@@ -121,6 +121,7 @@ const AdminMovie = () => {
 								return (
 									<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
 										<MovieCard
+											movi_id = {movie.movi_id}
 											image={movie.image}
 											movi_name={movie.movi_name}
 											accu_audience={movie.accu_audience}

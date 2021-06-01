@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../scss/component/_moviecard.scss";
 import { SimpleMovieType } from '../Main/Type';
 
-const MovieCard = ({image, movi_name, accu_audience, open_date, avai_age, rating} : SimpleMovieType) => {
+const MovieCard = ({movi_id, image, movi_name, accu_audience, open_date, avai_age, rating} : SimpleMovieType) => {
 	const [dDay, setDDay] = useState<string>("Day");
 	useEffect(()=>{
 		if(open_date == undefined)
