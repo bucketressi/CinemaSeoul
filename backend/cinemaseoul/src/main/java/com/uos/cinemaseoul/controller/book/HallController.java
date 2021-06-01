@@ -28,9 +28,9 @@ public class HallController {
         hallService.updateHall(updateHallDto);
     }
 
-    @DeleteMapping("/hall")
-    public void deleteHall(@RequestBody HallDto updateHallDto){
-        hallService.deleteHall(updateHallDto);
+    @DeleteMapping("/hall/delete/{hall_id}")
+    public void deleteHall(@PathVariable(name = "hall_id")int hall_id){
+        hallService.deleteHall(hall_id);
     }
 
     @GetMapping("/hall")

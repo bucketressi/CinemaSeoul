@@ -36,4 +36,8 @@ public class BookDto {
 
     //좌석 정보
     private int[] seat_num;
+
+    //사용 정보
+    private String use_code;
+    private String use_datetime;
 }

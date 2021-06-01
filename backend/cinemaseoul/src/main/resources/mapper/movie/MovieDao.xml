@@ -252,8 +252,8 @@
     <update id="updateMovieImage" parameterType="MovieVo">
         UPDATE MOVIE M SET M.IMAGE =
         <choose>
-            <when test= "image != NULL"> #{image} </when>
-            <otherwise> NULL </otherwise>
+            <when test= "image != NULL"> #{image, jdbcType=BLOB} </when>
+            <otherwise> DEFAULT </otherwise>
         </choose>
     </update>
 

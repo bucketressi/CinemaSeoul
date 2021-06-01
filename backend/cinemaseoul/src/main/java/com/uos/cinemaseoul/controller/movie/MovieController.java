@@ -36,9 +36,9 @@ public class MovieController {
         movieService.updateMovieCast(iMDto);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteMovie( @RequestBody Map<String, Integer> map){
-        movieService.deleteMovie(map.get("movi_id"));
+    @DeleteMapping("/delete/{movi_id}")
+    public void deleteMovie( @PathVariable(name = "movi_id") int movi_id){
+        movieService.deleteMovie(movi_id);
     }
 
     @PutMapping("/update")

@@ -28,12 +28,15 @@ public class MappingConstant {
 
             "/book/movie",
             "/book/schedule",
+
+            "/prod/{prod_id}",
+            "/prod/list"
     };
 
     //2 (비회원, 회원 둘다 가능)
     public static String[] NonUser = {
             "/adult",
-            "/user/delete",
+            "/user/delete/{user_id}",
 
             "/pay/book"
     };
@@ -44,7 +47,9 @@ public class MappingConstant {
             "/user/{user_id}",
             "/user/update",
 
-            "/review"
+            "/review",
+            "/review/delete/{user_id}/{movi_id}",
+            "/mymovie/{user_id}"
     };
 
     //4 (직원 가능 = 매너지도 가능)
@@ -59,7 +64,7 @@ public class MappingConstant {
             "/movie/updateGenre",
             "/movie/updateCast",
             "/movie/add",
-            "/movie/delete",
+            "/movie/delete/{movi_id}",
 
             "/point/update",
 
@@ -67,16 +72,22 @@ public class MappingConstant {
 
             "/showschedule",
             "/showschedule/{show_id}/book",
-            "/showschedule/add"
+            "/showschedule/add",
+            "/showschedule/delete/{show_id}",
+
+            "/prod",
+            "/prod/image",
+            "/prod/delete/{prod_id}"
     };
 
     //3 (매니저(높은 관리자만) 가능)
     public static String[] Manager = {
             "/admin/list",
-            "/admin/delete",
+            "/admin/delete/{admi_id}",
             "/admin",
 
             "/hall",
+            "/hall/delete/{hall_id}",
             "/hall/seat"
     };
 

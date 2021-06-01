@@ -131,9 +131,8 @@ public class AdminController {
     }
 
     //관리자탈퇴
-    @DeleteMapping("/delete")
-    public void deleteUser(Authentication authentication, @RequestBody Map<String, Integer> map)throws Exception{
-        int admi_id = map.get("admi_id");
+    @DeleteMapping("/delete/{admi_id}")
+    public void deleteUser(Authentication authentication, @PathVariable(name = "movi_id") int admi_id)throws Exception{
 
         //매니저도 아니고, 자기 id도 아니면
         if(!authentication.getAuthorities().toString().contains("ROLE_3")

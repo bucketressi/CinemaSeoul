@@ -47,16 +47,19 @@
 
 
     <!-- [예매 정보 조회]-->
-    <!-- 기본 정보 조회-->
+    <!--기본 정보 조회-->
     <select id="getBookInfo" resultType="BookDto">
         SELECT B.BOOK_ID, B.BOOK_PAY_ID, B.TEEN, B.ADULT, B.SENIOR, B.IMPAIRED, B.BOOK_DATETIME,
                S.SHOW_DATE, S.SHOW_TIME, H.HALL_NAME,
-               M.MOVI_NAME, M.RUN_TIME, U.USER_NAME
+               M.MOVI_NAME, M.RUN_TIME,
+               U.USER_NAME,
+               B2.USE_CODE, B2.USE_DATETIME
         FROM BOOK B
         INNER JOIN SHOWSCHEDULE S on S.SHOW_ID = B.SHOW_ID
         INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
         INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
         INNER JOIN USERS U on B.USER_ID = U.USER_ID
+        INNER JOIN BOOKPAY B2 on B.BOOK_PAY_ID = B2.BOOK_PAY_ID
 
         WHERE B.BOOK_ID = #{book_id}
     </select>

@@ -30,9 +30,16 @@ public class ReviewService {
         reviewDao.updateReview(vo);
         reviewDao.updateMovieRating(vo.getMovi_id());
     }
+
     @Transactional
-    public void deleteReview(ReviewDto reviewDto){
+    public void deleteReview(int user_id, int movi_id){
+
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setMovi_id(movi_id);
+        reviewDto.setUser_id(user_id);
+
         reviewDao.deleteReview(reviewMapper.insertintoReviewVoFromReviewDto(reviewDto));
+
         if(reviewDao.getCount(reviewDto.getMovi_id()) < 1){
             reviewDao.updateMovieRatingToZero(reviewDto.getMovi_id());
         }else{

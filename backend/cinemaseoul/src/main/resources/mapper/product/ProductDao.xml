@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.product.ProductDao">
+
+    <!--[상품 입력]-->
+    <insert id="insertProduct" parameterType="ProductVo">
+        <selectKey keyProperty="prod_id" resultType="Integer" order="BEFORE">
+            SELECT SEQ_PRODUCT.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO PRODUCT (PROD_ID, PROD_NAME, PRICE, PROD_TYPE_CODE, LIMIT, PROD_CONTENTS, IMAGE)
+        VALUES (#{prod_id}, #{prod_name}, #{price}, #{prod_type_code}, {$limit}, #{prod_contents}
+        <choose>
+            <when test="image == null">DEFAULT</when>
+            <otherwise>#{image, jdbcType=BLOB}</otherwise>
+        </choose>)
+    </insert>
+
+    <!--[상품 수정]-->
+    <update id="updateProduct" parameterType="ProductVo">
+        UPDATE PRODUCT SET
+                           PROD_NAME = #{prod_name},
+                           PRICE = #{price},
+                           PROD_TYPE_CODE = #{prod_type_code},
+                           LIMIT = #{limit},
+                           PROD_CONTENTS = #{prod_contents}
+        WHERE PROD_ID = #{prod_id}
+    </update>
+
+    <!--[상품 이미지 수정]-->
+    <update id="updateProductImage" parameterType="ProductVo">
+        UPDATE PRODUCT SET
+                <choose>
+                    <when test="image == null">DEFAULT</when>
+                    <otherwise>Image =#{image, jdbcType=BLOB}</otherwise>
+                </choose>
+        WHERE PROD_ID = #{prod_id}
+    </update>
+
+    <!--[상품삭제}-->
+    <delete id="deleteProduct" parameterType="Integer">
+        DELETE PRODUCT WHERE PROD_ID = #{prod_id}
+    </delete>
+
+    <!--[상품 조회]-->
+    <select id="selectProduct" resultType="ProductVo">
+        SELECT PROD_ID, PROD_NAME, PRICE, PROD_TYPE_CODE, LIMIT, PROD_CONTENTS, IMAGE FROM PRODUCT
+        WHERE PROD_ID = #{prod_id}
+    </select>
+
+    <!--[상품 리스트 조회]-->
+    <!--상품 수 계산-->
+    <select id="countList" parameterType="ProductCriteria" resultType="Integer">
+        SELECT COUNT(PROD_ID) FROM PRODUCT P
+        <if test="prod_type_code != null">WHERE PROD_TYPE_CODE = #{prod_type_code}</if>
+    </select>
+
+    <!--상품 받아오기 -->
+    <select id="selectProductList" parameterType="ProductCriteria" resultType="ProductInfoDto">
+        SELECT B.PROD_ID, B.PROD_NAME, B.PRICE, B.LIMIT, B.IMAGE
+        FROM (
+                 SELECT /*+index_desc(IDX_PRODUCT_PK)*/ ROWNUM AS RNUM, A.PROD_ID, A.PROD_NAME, A.PRICE, A.LIMIT, A.IMAGE
+                 FROM(
+                         SELECT PROD_ID, PROD_NAME, PRICE, LIMIT, IMAGE FROM PRODUCT P
+                        <if test="prod_type_code != null">WHERE PROD_TYPE_CODE = #{prod_type_code}</if>
+                 ) A
+        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+</mapper>

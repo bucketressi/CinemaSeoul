@@ -21,9 +21,9 @@ public class ReviewController {
         reviewService.updateReview(reviewDto);
     }
 
-    @DeleteMapping("/review")
-    public void deleteReview(@RequestBody ReviewDto reviewDto){
-        reviewService.deleteReview(reviewDto);
+    @DeleteMapping("/review/delete/{user_id}/{movi_id}")
+    public void deleteReview(@PathVariable(name = "user_id") int user_id, @PathVariable(name="movi_id") int movi_id){
+        reviewService.deleteReview(user_id, movi_id);
     }
 
     @GetMapping("/mymovie/{user_id}")

@@ -27,9 +27,9 @@ public class ShowScheduleController {
         showScheduleService.updateShowSchedule(insertScheduleDto);
     }
 
-    @DeleteMapping("/")
-    public void deleteShowSchedule(@RequestBody Map<String, Integer> map){
-        showScheduleService.deleteShowSchedule(map.get("show_id"));
+    @DeleteMapping("/delete/{show_id}")
+    public void deleteShowSchedule(@PathVariable(name = "show_id")int show_id){
+        showScheduleService.deleteShowSchedule(show_id);
     }
 
     @GetMapping("/{show_id}/book")

@@ -62,8 +62,8 @@ public class HallService {
     }
 
     @Transactional
-    public void deleteHall(HallDto hallDto) {
-        hallDao.delete(hallDto.getHall_id());
+    public void deleteHall(int hall_id) {
+        hallDao.delete(hall_id);
     }
 
 

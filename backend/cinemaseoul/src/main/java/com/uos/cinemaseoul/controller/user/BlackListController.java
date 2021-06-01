@@ -26,9 +26,9 @@ public class BlackListController {
     }
 
     //블랙리스트 삭제
-    @DeleteMapping("/blacklist")
-    public void deleteBlacklist(@RequestBody Map<String, String> map){
-        blackListService.deleteBlackList(map.get("phone_num"));
+    @DeleteMapping("/blacklist/delete/{phone_num}")
+    public void deleteBlacklist(@PathVariable(name = "phone_num")String phone_num){
+        blackListService.deleteBlackList(phone_num);
     }
 
     //블랙리스트 조회
