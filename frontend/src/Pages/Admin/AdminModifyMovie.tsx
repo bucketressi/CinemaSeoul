@@ -3,6 +3,14 @@ import { RouteComponentProps } from "react-router-dom";
 import { Button, Checkbox, Select, MenuItem, Chip, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, InputLabel } from '@material-ui/core';
 import "../../scss/pages/adminmovieexact.scss";
 import { ModalComponent, PageTitle } from '../../Components';
+import { useGenreCodeState, useMovieAuthCodeState, usePeopleTypeCodeState} from '../../Main/CodeModel';
+import { MovieType } from '../../Main/Type';
+
+import axios from 'axios';
+import { SERVER_URL } from '../../CommonVariable';
+import { errorHandler } from '../../Main/ErrorHandler';
+import { useTokenState } from '../../Main/TokenModel';
+import { useHistory } from 'react-router-dom';
 
 interface MatchParams {
 	movie_id: string
@@ -13,25 +21,30 @@ type ImgInfoType = {
 	previewURL: string | ArrayBuffer | null
 }
 
-const genreArr = ["액션", "로맨스", "애니메이션", "공포", "스릴러"];
-const peopleArr = ["우희은", "엄현식", "고다현", "공유", "심은하", "손예진", "김태희"];
-
 const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
 	// 영화 상세 페이지
+	const history = useHistory();
+	const AUTH_TOKEN = useTokenState();
+	const genreCode = useGenreCodeState();
+	const peopleTypeCode = usePeopleTypeCodeState();
+	const movieAuthCode = useMovieAuthCodeState();
+
+	const [movie, setMovie] = useState<MovieType | undefined>(undefined);
 
 	const [name, setName] = useState<string>("");
 	const [company, setCompany] = useState<string>("");
-	const [age, setAge] = useState<number>(0);
+	const [age, setAge] = useState<string>("");
 	const [openDate, setOpenDate] = useState<string>("");
+	const [runtime, setRuntime] = useState<number>(0);
 	const [content, setContent] = useState<string>("");
+	const [genre, setGenre] = useState<string[]>([]);
 	const [img, setImg] = useState<File | undefined>(undefined);
 	const [imgInfo, setImgInfo] = useState<ImgInfoType | undefined>(undefined);
-	const [genre, setGenre] = useState<boolean[]>([]);
 	const [cast, setCast] = useState<string[]>([]);
 
-	const handleNameChange = (e: any) => { setAge(e.target.value); };
-	const handleCompanyChange = (e: any) => { setAge(e.target.value); };
-	const handleAgeChange = (e: any) => { setAge(Number(e.target.value)); };
+	const handleNameChange = (e: any) => { setName(e.target.value); };
+	const handleCompanyChange = (e: any) => { setCompany(e.target.value); };
+	const handleAgeChange = (e: any) => { setAge(e.target.value.toString()); };
 	const handleOpenDateChange = (e: any) => { setOpenDate(e.target.value); };
 	const handleContentChange = (e: any) => { setContent(e.target.value); };
 	const uploadImage = (e: any) => {
@@ -59,20 +72,36 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 		reader.readAsDataURL(img);
 	}, [img]);
 
-	useEffect(() => {
-		// 초기화 시 url로 넘어온 id로 정보 셋
-		// api로 정보 받아오기
-		console.log(match.params.movie_id);
-	}, [match.params]);
+	useEffect(()=> {
+		fetchExactMovie();
+	},[]);
 
-	useEffect(() => {
-		// 초기화 시 genre 세팅
-		const arr = [];
-		for (let i = 0; i < genreArr.length; i++)
-			arr.push(false);
-		setGenre(arr);
-	}, []);
-
+	const fetchExactMovie = () => {
+		// movie의 정보 받아오기
+		axios.get(`${SERVER_URL}/movie/${match.params.movie_id}`,{
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				console.log(res.data);
+				setName(res.data.movi_name);
+				setCompany(res.data.company);
+				setCast(res.data.casting);
+				setGenre(res.data.genre);
+				// setImg(res.data.image);
+				setContent(res.data.movi_contents);
+				const date : string = res.data.open_date;
+				const dateString = date.substr(0,4) + "-" + date.substr(4,2) + "-" + date.substr(6,2);
+				setOpenDate(dateString);
+				const age = movieAuthCode.filter((auth) => auth.code_name == res.data.avai_age);
+				setAge(age[0].code_id);
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
+				history.goBack();
+			});
+	}
 
 	/* modal */
 	const [isGenreOpened, setGenreOpen] = useState<boolean>(false);
@@ -81,14 +110,65 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const openGenreModal = () => { setGenreOpen(true); };
 	const openCastModal = () => { setCastOpen(true); };
 	const saveMovie = () => {
-		console.log("save movie");
-		// api로 movie 정보 저장
+		// 영화 정보 저장
+		axios.put(`${SERVER_URL}/movie/update`, {
+			movi_id : match.params.movie_id,
+			movi_name : name,
+			avai_age_code : age,
+			run_time : runtime,
+			company : company,
+			movi_contents : content,
+			open_date : openDate.split('-').join("")
+		}, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				history.goBack();
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "잘못된 정보를 입력하였습니다.", ""]);
+			});
 	};
 
+	/* genre */
 	const saveGenre = () => {
-		console.log("save genre");
-		setGenreOpen(false);
+		// 영화 장르 저장
+		axios.post(`${SERVER_URL}/movie/updateGenre`, {
+			movi_id : match.params.movie_id,
+			genre_code : genre
+		}, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				setGenreOpen(false);
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "잘못된 정보를 입력하였습니다.", ""]);
+			});
 	};
+
+	const handleGenreChange = (e: any) => {
+		const arr = genre.slice();
+		const codeStr = e.target.value.toString();
+		if (arr.includes(codeStr)){
+			arr.splice(arr.findIndex(code => code == codeStr),1);
+			setGenre(arr);
+			return;
+		}
+		arr.push(codeStr);
+		setGenre(arr);
+	};
+
+	/* cast */
+	useEffect(() => {
+		if(!isCastOpened)
+			return;
+		// todo : 인물조회 api 완성되면 api로 인물 받아와서 peopleArr에 저장하기
+	}, [isCastOpened]);
 
 	const saveCast = () => {
 		console.log("save cast");
@@ -111,22 +191,6 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 		setCast(arr);
 	}
 
-	const handleCheckGenre = (e: any, idx: number) => {
-		const arr = genre.slice();
-		arr[idx] = e.target.checked;
-		setGenre(arr);
-	}
-
-	const Genre = (isChecked: boolean, idx: number) => (
-		<div className="genre-single">
-			<Checkbox
-				color="primary"
-				checked={isChecked}
-				onChange={(e: any) => handleCheckGenre(e, idx)}
-			/>
-			<div className="title">{genreArr[idx]}</div>
-		</div>
-	);
 
 
 	return (
@@ -154,10 +218,11 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 					<FormControl>
 						<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
 						<RadioGroup name="age" value={age} onChange={handleAgeChange}>
-							<FormControlLabel value={0} control={<Radio color="primary" />} label="ALL" />
-							<FormControlLabel value={1} control={<Radio color="primary" />} label="12세" />
-							<FormControlLabel value={2} control={<Radio color="primary" />} label="15세" />
-							<FormControlLabel value={3} control={<Radio color="primary" />} label="18세" />
+							{
+								movieAuthCode.map((auth) => 
+									<FormControlLabel key={auth.code_id} value={auth.code_id} control={<Radio color="primary" />} label={auth.code_name} />
+								)
+							}
 						</RadioGroup>
 					</FormControl>
 					<div>
@@ -181,13 +246,20 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				setOpen={setGenreOpen}
 			>
 				<div className="genre-con">
-					{
-						genre.map((isChecked, idx) => Genre(isChecked, idx))
-					}
+					<FormControl>
+						<FormLabel className="search-field-title">장르</FormLabel>
+						<div>
+							{
+								genreCode.map((genreElement) =>
+									<FormControlLabel key={genreElement.code_id} value={genreElement.code_id} control={<Checkbox onChange={handleGenreChange} checked={genre.includes(genreElement.code_id)} color="primary" />} label={genreElement.code_name} />
+								)
+							}
+						</div>
+					</FormControl>
 				</div>
 				<Button className="save-btn" variant="contained" color="secondary" onClick={saveGenre}>장르 저장</Button>
 			</ModalComponent>
-			<ModalComponent
+			{/* <ModalComponent
 				title="출연진 설정"
 				open={isCastOpened}
 				setOpen={setCastOpen}
@@ -230,7 +302,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 					</FormControl>
 				</div>
 				<Button className="save-btn" variant="contained" color="secondary" onClick={saveCast}>출연진 저장</Button>
-			</ModalComponent>
+			</ModalComponent> */}
 		</div>
 	);
 }

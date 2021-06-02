@@ -19,7 +19,7 @@ export type CodeType = {
 
 /* Movie */
 
-export type MovieListType = {
+export type SimpleMovieListType = {
 	movie_list: SimpleMovieType[],
 	page: number,
 	totalpage: number
@@ -107,10 +107,6 @@ export type ShowScheduleListType = {
 }
 
 /* hall */
-export type HallListType = {
-    data: HallType[];
-}
-
 export type HallType = {
 	hall_id: number; //42,
 	hall_name: string; // "42-1관",
@@ -119,21 +115,20 @@ export type HallType = {
 	avai_seat_amount: number; //3 => 가능 좌석 수
 }
 
-export type SimpleHallType = {
-	hall_name: string; // "42-1관",
-	hall_row: number; //2,
-	hall_col: number; //2
+export type HallListType = {
+    [hall_id : number] : HallType
 }
 
-export type HallListObjType = {
-    [hall_id : number] : SimpleHallType
+export type SeatAPIType = {
+    seats : SeatType[]
 }
+
+export type SeatObjType = {
+    [seat_num : number] : SeatType
+}
+
 export type SeatType = {
 	hall_id: number; //42,
 	seat_num: number; //0,
 	seat_type_code: string; //"230001"
-}
-
-export type HallSeatObjType = {
-    seats: SeatType[]
 }

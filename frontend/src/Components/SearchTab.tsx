@@ -16,8 +16,8 @@ const SearchTab = () => {
 	const movieAuthCode = useMovieAuthCodeState();
 
 	const [state, setState] = useState<number>(0);
-	const [genre, setGenre] = useState<number[]>([]);
-	const [age, setAge] = useState<number[]>([]);
+	const [genre, setGenre] = useState<string[]>([]);
+	const [age, setAge] = useState<string[]>([]);
 
 	const handleStateChange = (e: any) => { setState(Number(e.target.value)); };
 	const handleGenreChange = (e: any) => {

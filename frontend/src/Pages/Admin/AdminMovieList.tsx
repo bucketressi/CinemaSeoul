@@ -8,7 +8,7 @@ import { useTokenState } from '../../Main/TokenModel';
 
 import { Link } from 'react-router-dom';
 import { MovieCard, SearchTab, ModalComponent, PageTitle } from '../../Components';
-import { SimpleMovieType, MovieListType } from '../../Main/Type';
+import { SimpleMovieType } from '../../Main/Type';
 import { Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel } from '@material-ui/core';
 
 import { useMovieListState, useFetchMovieFunction } from '../../Main/MovieListModel';
@@ -36,6 +36,10 @@ const AdminMovie = () => {
 	const [genre, setGenre] = useState<string[]>([]);
 	const [img, setImg] = useState<File | undefined>(undefined);
 	const [imgInfo, setImgInfo] = useState<ImgInfoType | undefined>(undefined);
+
+	useEffect(()=>{
+		fetchMovie();
+	}, []);
 
 	useEffect(() => {
 		setAge(movieAuthCode[0].code_id);
@@ -148,7 +152,7 @@ const AdminMovie = () => {
 							<TextField variant="outlined" placeholder="회사" inputProps={{ maxLength: 20 }} value={company} onChange={handleCompanyChange} />
 						</div>
 						<div>
-							<TextField variant="outlined" placeholder="런타임" inputProps={{ maxLength: 4 }} value={runtime} onChange={handleRuntimeChange} />
+							<TextField variant="outlined" placeholder="런타임" inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
 							<TextField variant="outlined" placeholder="설명" inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
 
 						</div>

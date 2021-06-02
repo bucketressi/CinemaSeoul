@@ -22,11 +22,26 @@ const MovieExact : React.FunctionComponent<RouteComponentProps<MatchParams>> = (
 
 	const [movie, setMovie] = useState<SimpleMovieType| undefined>(undefined);
 
-	useEffect(() => {
-		if(!movieListObj || !match.params.movie_id || !movieListObj[Number(match.params.movie_id)])
-			return;
-		setMovie(movieListObj[Number(match.params.movie_id)]);
-	},[movieListObj]);
+	useEffect(()=> {
+		fetchExactMovie();
+	},[]);
+
+	const fetchExactMovie = () => {
+		// movie의 정보 받아오기
+		axios.get(`${SERVER_URL}/movie/${match.params.movie_id}`,{
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				console.log(res.data);
+				setMovie(res.data);
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
+				history.goBack();
+			});
+	}
 
 	const modifyMovie = () => {
 		history.push(`/admin/modify/movie/${match.params.movie_id}`);
@@ -34,20 +49,21 @@ const MovieExact : React.FunctionComponent<RouteComponentProps<MatchParams>> = (
 
 	const removeMovie = () => {
 		// 영화 리스트 다시 받기 => todo : api 해결되고 다시 하기
-		// axios.delete(`${SERVER_URL}/movie/delete`, {
-		// 	headers : {
-		// 		TOKEN : AUTH_TOKEN
-		// 	}, data: { // 서버에서 req.body.{} 로 확인할 수 있다.
-		// 		movi_id : Number(match.params.movie_id)
-		// 	}
-		// })
-		// 	.then((res) => {
-		// 		console.log(res.data);
-		// 	})
-		// 	.catch((e) => {
-		// 		errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
-		// 	});
-		// history.push("/admin/movie");
+		if(!confirm(`[${movie?.movi_name}] 영화를 정말로 삭제할까요?`))
+			return;
+		axios.delete(`${SERVER_URL}/movie/delete/${match.params.movie_id}`, {
+			headers : {
+				TOKEN : AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("삭제되었습니다.");
+				fetchMovie();
+				history.push("/admin/movie");
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
+			});
 	}
 
 	return (

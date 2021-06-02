@@ -31,7 +31,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				setToken(res.data.token); // token 세팅
 				setUser(res.data.user_id);
 				setAdmin(undefined);
-				history.push("/main");
+				history.goBack();
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
@@ -49,7 +49,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				setToken(res.data.token); // token 세팅
 				setUser(res.data.user_id);
 				setAdmin(undefined);
-				history.push("/main");
+				history.goBack();
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
@@ -66,7 +66,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				setAdmin(res.data.admi_id);
 				console.log(res.data);
 				setUser(undefined);
-				history.push("/admin/main");
+				history.goBack();
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);

@@ -16,10 +16,6 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 	const [movieList, setMovieList] = useState<SimpleMovieType[] | undefined>(undefined);
 	const [movieListObj, setMovieListObj] = useState<MovieListObjType | undefined>(undefined);
 
-	useEffect(() => { // 처음에 영화 리스트 데이터 받아오기
-		fetchMovie();
-	}, []);
-
 	useEffect(() => {
 		// id로 접근하기 좋게 obj 형태로 만들기
 		const obj = Object.assign({}, movieListObj);

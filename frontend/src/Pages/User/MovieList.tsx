@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MovieCard, SearchTab } from '../../Components';
-import { SimpleMovieType, MovieListType } from '../../Main/Type';
-import { useMovieListState } from '../../Main/MovieListModel';
+import { SimpleMovieType } from '../../Main/Type';
+import { useMovieListState, useFetchMovieFunction } from '../../Main/MovieListModel';
 
 
 const MovieList = () => {
 	// 영화 목록 페이지
+	const fetchMovie = useFetchMovieFunction();
 	const movieListData = useMovieListState();
+
+	useEffect(()=>{
+		fetchMovie();
+	}, []);
 
 	return (
 		<div className="movie-wrap">
