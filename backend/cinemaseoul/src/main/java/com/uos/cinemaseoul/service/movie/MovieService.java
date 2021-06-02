@@ -9,13 +9,14 @@ import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MovieService {
 
     private final MovieDao movieDao;
@@ -60,7 +61,6 @@ public class MovieService {
     }
 
     //업데이트
-    /***이름 바뀌면, 참조무결성 제약조건을 만족하기 위해 -> SHOWSCHEDULE에서의 이름도 변경해야함***/
     @Transactional
     public void updateMovie(UpdateMovieDto uMDto){
         MovieVo movieVo = movieMapper.updateMovieDtoToMovieVo(uMDto);
@@ -86,11 +86,12 @@ public class MovieService {
         if(sMDto == null){
             throw new NotFoundException("no Movie Detected");
         }
+
+        sMDto.setCasting(movieDao.selectCast(movi_id));
         String[] genre = movieDao.selectGenre(movi_id);
         if(genre != null){
             sMDto.setGenre(genre);
         }
-        System.out.println(sMDto.getRun_time()+"@@@@@@@@@@@@@@@@@@@@");
         return sMDto;
     }
 

@@ -18,23 +18,22 @@
         <result property="open_date" column="OPEN_DATE"/>
         <result property="rating" column="RATING"/>
         <result property="accu_audience" column="ACCU_AUDIENCE"/>
-        <collection property="casting" javaType="java.util.ArrayList" ofType="CastingInfoDto">
-            <id property="peop_id" column="PEOP_ID"/>
-            <result property="peop_name" column="PEOP_NAME"/>
-            <result property="cast_type_code" column="CAST_TYPE_CODE"/>
-        </collection>
     </resultMap>
 
     <!-- [영화 세부조회] -->
-    <!--장르 빼고 일단 조회 (장르까지 하면 너무 복잡)-->
+    <!--영화 조회-->
     <select id="selectMovie"  resultMap="movieInfo">
         SELECT M.MOVI_ID, M.MOVI_NAME,
                (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
-               M.RUN_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.ACCU_AUDIENCE, M.IMAGE, M.OPEN_DATE,
-               C.PEOP_ID, C.PEOP_NAME, C.CAST_TYPE_CODE
+               M.RUN_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.ACCU_AUDIENCE, M.IMAGE, M.OPEN_DATE
         FROM MOVIE M
-        INNER JOIN CAST C on M.MOVI_ID = C.MOVI_ID
         WHERE M.MOVI_ID = #{movi_id}
+    </select>
+    <!--출연진 조회-->
+    <select id="selectCast" resultType="CastingInfoDto">
+        SELECT C.PEOP_ID, C.PEOP_NAME, C.CAST_TYPE_CODE
+        FROM CAST C
+        WHERE C.MOVI_ID = #{movi_id}
     </select>
     <!-- 장르 조회-->
     <select id="selectGenre" resultType="String">
@@ -253,7 +252,7 @@
         UPDATE MOVIE M SET M.IMAGE =
         <choose>
             <when test= "image != NULL"> #{image, jdbcType=BLOB} </when>
-            <otherwise> DEFAULT </otherwise>
+            <otherwise> empty_blob() </otherwise>
         </choose>
     </update>
 

@@ -51,6 +51,7 @@ mybatis:
 #sudo systemctl daemon-reload
 #sudo systemctl enable server_start.service
 #sudo systemctl start server_start.service
+#sudo systemctl status server_start.service
 
-#우분투와 시간대 설정필요
+#우분투 시간대 설정 필요 (Asia로)
 #sudo dpkg-reconfigure tzdata

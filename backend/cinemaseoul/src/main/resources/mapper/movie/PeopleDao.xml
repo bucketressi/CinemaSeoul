@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.movie.PeopleDao">
+
+
+    <!-- [인물명 검색}-->
+    <select id="searchPeople" resultType="PeopleInfoDto">
+        SELECT PEOP_ID, PEOP_NAME FROM PEOPLE P
+        <if test="name != null"> WHERE PEOP_NAME LIKE #{name}</if>
+    </select>
+
+    <!-- [인물 세부 조회}-->
+    <select id="getPeople" resultType="PeopleDetailDto">
+        SELECT PEOP_ID, PEOP_NAME, BIRTH, NATION, PEOP_CONTENTS, IMAGE
+        FROM PEOPLE P
+        WHERE P.PEOP_ID = #{peop_id}
+    </select>
+
+    <select id="getCastMovies" resultType="CastingMovieDto">
+        SELECT M.MOVI_ID, M.MOVI_NAME
+        FROM MOVIE M
+        LEFT OUTER JOIN CAST C on M.MOVI_ID = C.MOVI_ID
+        WHERE C.PEOP_ID = #{peop_id}
+    </select>
+
+    <!-- [인물 리스트 조회}-->
+    <select id="countList" resultType="Integer">
+        SELECT COUNT(PEOP_ID) FROM PEOPLE
+    </select>
+
+    <select id="getPeopleList" resultType="PeopleInfoDto">
+        SELECT B.PEOP_ID, B.PEOP_NAME
+        FROM (
+                 SELECT /*+index_desc(IDX_PEOPLE_PK)*/ ROWNUM AS RNUM, A.PEOP_ID, A.PEOP_NAME
+                 FROM (
+                      SELECT PEOP_ID, PEOP_NAME FROM PEOPLE
+                      order by PEOP_ID
+                          ) A
+            <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+    <!--[인물 삽입]-->
+    <insert id="insertPeople" parameterType="PeopleVo">
+        INSERT INTO PEOPLE (PEOP_ID, PEOP_NAME, NATION, BIRTH, PEOP_CONTENTS, IMAGE)
+        VALUES (SEQ_PEOPLE.nextval, #{peop_name}, #{nation}, #{birth}, #{peop_contents},
+                <choose>
+                    <when test="image != null"> #{image, jdbcType=BLOB} </when>
+                    <otherwise>DEFAULT</otherwise>
+                </choose>
+        )
+    </insert>
+
+    <!--[인물 삭제]-->
+    <delete id="deletePeople" parameterType="Integer">
+        DELETE PEOPLE WHERE PEOP_ID = #{peop_id}
+    </delete>
+
+    <!--[인물 수정]-->
+    <update id="updatePeople" parameterType="PeopleVo">
+        UPDATE PEOPLE SET
+                          PEOP_NAME = #{peop_name},
+                          NATION = #{nation},
+                          BIRTH = #{birth},
+                          PEOP_CONTENTS = #{peop_contents}
+        WHERE PEOP_ID = #{peop_id}
+    </update>
+
+    <!-- Casting에서도 다 수정-->
+    <update id="updateCasting" parameterType="PeopleVo">
+        UPDATE CAST SET PEOP_NAME = #{peop_name}
+        WHERE PEOP_ID = #{peop_id}
+    </update>
+
+    <!--[인물 사진 수정]-->
+    <update id="updatePeopleImage" parameterType="PeopleVo">
+        UPDATE PEOPLE SET IMAGE =
+        <choose>
+            <when test= "image != NULL"> #{image, jdbcType=BLOB} </when>
+            <otherwise> empty_blob() </otherwise>
+        </choose>
+    </update>
+
+</mapper>

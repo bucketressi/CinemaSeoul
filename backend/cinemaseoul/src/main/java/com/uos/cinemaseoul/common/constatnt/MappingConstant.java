@@ -30,7 +30,11 @@ public class MappingConstant {
             "/book/schedule",
 
             "/prod/{prod_id}",
-            "/prod/list"
+            "/prod/list",
+
+            "/people/search",
+            "/people/list",
+            "/people/{peop_id}"
     };
 
     //2 (비회원, 회원 둘다 가능)
@@ -56,6 +60,7 @@ public class MappingConstant {
     public static String[] Admin = {
 
             "/blacklist",
+            "/blacklist/delete/{phone_num}",
 
             "/admin/{admi_id}",
             "/admin/update",
@@ -77,7 +82,12 @@ public class MappingConstant {
 
             "/prod",
             "/prod/image",
-            "/prod/delete/{prod_id}"
+            "/prod/delete/{prod_id}",
+
+            "/people/add",
+            "/people/",
+            "/people/image",
+            "/people/delete/{peop_id}"
     };
 
     //3 (매니저(높은 관리자만) 가능)
