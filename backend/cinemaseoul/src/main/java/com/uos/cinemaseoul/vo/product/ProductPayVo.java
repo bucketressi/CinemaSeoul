@@ -1,4 +1,5 @@
-package com.uos.cinemaseoul.vo.book;
+package com.uos.cinemaseoul.vo.product;
+
 
 import lombok.*;
 
@@ -6,8 +7,8 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
-public class BookPayVo {
-    private int book_pay_id;
+public class ProductPayVo {
+    private int prod_pay_id;
     private int user_id;
     private int use_point;
     private int price;
@@ -17,12 +18,8 @@ public class BookPayVo {
     private String pay_datetime;
     private String use_datetime;
 
-    //sha-1 after 16bytes
+    //MD5 after 16bytes
     private String use_code;
-
-    public void setBook_pay_id(int book_pay_id){
-        this.book_pay_id = book_pay_id;
-    }
 
     public void createCode(String code){
         this.use_code = code;

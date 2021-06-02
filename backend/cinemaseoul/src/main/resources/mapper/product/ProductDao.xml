@@ -12,7 +12,7 @@
         </selectKey>
 
         INSERT INTO PRODUCT (PROD_ID, PROD_NAME, PRICE, PROD_TYPE_CODE, LIMIT, PROD_CONTENTS, IMAGE)
-        VALUES (#{prod_id}, #{prod_name}, #{price}, #{prod_type_code}, {$limit}, #{prod_contents}
+        VALUES (#{prod_id}, #{prod_name}, #{price}, #{prod_type_code}, #{limit}, #{prod_contents},
         <choose>
             <when test="image == null">DEFAULT</when>
             <otherwise>#{image, jdbcType=BLOB}</otherwise>

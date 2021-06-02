@@ -13,7 +13,6 @@ import java.util.List;
 public interface BookPayDao {
 
     //예매 과정
-    String getUserCode(int user_id);
     void insertBookPay(BookPayVo bookPayVo);
     void insertBook(BookVo bookVo);
     void insertBookSeats(List<BookSeatDto> seatDtos);

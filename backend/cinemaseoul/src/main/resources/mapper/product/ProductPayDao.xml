@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.product.ProductPayDao">
+
+    <!--[상품 결제하기]-->
+    <insert id="insertProductPay" parameterType="ProductPayVo">
+        <selectKey keyProperty="prod_pay_id" resultType="int" order="BEFORE">
+            SELECT SEQ_PAY.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO PRODUCTPAY (PROD_PAY_ID, USER_ID, USE_POINT, PRICE, PAY_TYPE_CODE, ACCU_POINT, USE_CODE)
+        VALUES (#{prod_pay_id},#{user_id},#{use_point},#{price},#{pay_type_code},#{accu_point},#{use_code})
+    </insert>
+
+    <!--상품 세부정보 저장-->
+    <update id="insertProductPayInfo" parameterType="ProductPayInfoVo">
+        INSERT INTO PRODUCTPAYINFO (PROD_PAY_INFO_ID, PROD_PAY_ID, PROD_ID, PROD_NAME, AMOUNT, PRICE)
+        SELECT SEQ_PRODUCTPAYINFO.nextval, A.* FROM (
+        <foreach collection="products" item="prod" index="index" separator="UNION ALL ">
+            SELECT ${prod.prod_pay_id} AS PROD_PAY_ID, ${prod.prod_id} AS PROD_ID,
+                   (SELECT PROD_NAME FROM PRODUCT WHERE PROD_ID = ${prod.prod_id}) AS PROD_NAME,
+                                                 ${prod.amount} AS AMOUNT, ${prod.price} AS PRICE FROM DUAL
+        </foreach>)A
+    </update>
+
+    <!--상품 수량 업데이트-->
+    <update id="updateProductLimit">
+        UPDATE PRODUCT SET LIMIT = LIMIT - #{amount}
+        WHERE PROD_ID =#{prod_id}
+    </update>
+    <!--상품 수량 체크 (음수면 rollback)-->
+    <select id="getProductLimit" resultType="Integer" parameterType="Integer">
+        SELECT LIMIT FROM PRODUCT WHERE PROD_ID = #{prod_id}
+    </select>
+
+
+    <!--[상품결제 취소]-->
+    <!--포인트 원복용-->
+    <select id="getCancelInfo" resultType="ProductPayVo">
+        SELECT PROD_PAY_ID, ACCU_POINT, USE_POINT FROM PRODUCTPAY
+        WHERE PROD_PAY_ID  = #{prod_pay_id}
+    </select>
+    <!--결제상태취소-->
+    <update id="setCancel">
+        UPDATE PRODUCTPAY SET PAY_STATE_CODE = #{pay_state_cancel}
+        WHERE PROD_PAY_ID = #{prod_pay_id}
+    </update>
+    <!--결제 상품 확인-->
+    <select id="getProductPayInfo" resultType="ProductPayInfoVo">
+        SELECT PROD_ID, AMOUNT FROM PRODUCTPAYINFO
+        WHERE PROD_PAY_ID = #{prod_pay_id}
+    </select>
+    <!--상품 수량 원복-->
+    <update id="updateProductLimitBack">
+        UPDATE PRODUCT SET LIMIT = LIMIT + #{amount}
+        WHERE PROD_ID =#{prod_id}
+    </update>
+
+</mapper>

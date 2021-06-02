@@ -42,7 +42,8 @@ public class MappingConstant {
             "/adult",
             "/user/delete/{user_id}",
 
-            "/pay/book"
+            "/pay/book",
+            "/pay/product"
     };
 
     //1 (회원 가능)
@@ -110,5 +111,8 @@ public class MappingConstant {
             "/book/cancel/{book_id}",
 
             "/point/{user_id}/{start_date}",
+
+            "/product/cancel/{prod_pay_id}"
+
     };
 }

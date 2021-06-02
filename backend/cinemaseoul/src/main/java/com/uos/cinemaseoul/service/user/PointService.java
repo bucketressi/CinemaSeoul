@@ -1,11 +1,7 @@
 package com.uos.cinemaseoul.service.user;
 
-import com.uos.cinemaseoul.common.constatnt.ConstantTable;
 import com.uos.cinemaseoul.common.mapper.PointMapper;
-import com.uos.cinemaseoul.controller.user.PointController;
 import com.uos.cinemaseoul.dao.user.PointDao;
-import com.uos.cinemaseoul.dao.user.UsersDao;
-import com.uos.cinemaseoul.dto.user.point.PointInfoDto;
 import com.uos.cinemaseoul.dto.user.point.PointListDto;
 import com.uos.cinemaseoul.dto.user.point.PointUpdateDto;
 import com.uos.cinemaseoul.vo.user.PointVo;
@@ -14,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static com.uos.cinemaseoul.common.constatnt.ConstantTable.POINT_CODE_ADD;
-import static com.uos.cinemaseoul.common.constatnt.ConstantTable.POINT_CODE_USE;
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,19 +21,8 @@ public class PointService {
 
     @Transactional
     public void updatePoint(PointUpdateDto pointUpdateDto) {
-        PointVo vo = pointMapper.insertIntoPointVoFromPointUpdateDto(pointUpdateDto);
-
-        pointDao.updatePoint(vo);
-
-        //사용
-        if(vo.getPoin_type_code().equals(ConstantTable.POINT_CODE_NOTADD)
-                || vo.getPoin_type_code().equals(POINT_CODE_USE)){
-            System.out.println(POINT_CODE_USE + " " + POINT_CODE_ADD + " " + vo.getPoin_type_code());
-            pointDao.minusUserPoint(vo);
-        }
-        else{
-            pointDao.plusUserPoint(vo);
-        }
+        updatePoint(pointUpdateDto.getUser_id(), pointUpdateDto.getPoin_amount(),
+                pointUpdateDto.getPoin_type_code(),pointUpdateDto.getMessage());
     }
 
 
@@ -55,5 +37,52 @@ public class PointService {
         pointListDto.setCurr_point(vo.getCurr_point());
 
         return pointListDto;
+    }
+
+    @Transactional
+    public void updatePoint(int user_id, int use_point, String code, String s){
+        PointVo pointVo = PointVo.builder()
+                .user_id(user_id)
+                .poin_amount(use_point)
+                .poin_type_code(code)
+                .message(s)
+                .build();
+
+        if(code.equals(POINT_CODE_ADD)){
+            addPoint(pointVo);
+        }
+        else if(code.equals(POINT_CODE_USE)){
+            minusPoint(pointVo);
+        }
+        else if(code.equals(POINT_CODE_NOTADD)){
+            notAddPoint(pointVo);
+        }
+        else if(code.equals(POINT_CODE_NOTUSE)){
+            notUsePoint(pointVo);
+        }
+    }
+
+    @Transactional
+    public void notAddPoint(PointVo pointVo) {
+        pointDao.updatePoint(pointVo);
+        pointDao.returnUserUsePoint(pointVo);
+    }
+
+    @Transactional
+    public void notUsePoint(PointVo pointVo) {
+        pointDao.updatePoint(pointVo);
+        pointDao.returnUserAddPoint(pointVo);
+    }
+
+    @Transactional
+    public void addPoint(PointVo pointVo) {
+        pointDao.updatePoint(pointVo);
+        pointDao.plusUserPoint(pointVo);
+    }
+
+    @Transactional
+    public void minusPoint(PointVo pointVo) {
+        pointDao.updatePoint(pointVo);
+        pointDao.minusUserPoint(pointVo);
     }
 }

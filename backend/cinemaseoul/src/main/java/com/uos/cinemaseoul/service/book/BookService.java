@@ -22,6 +22,7 @@ public class BookService {
     private final BookDao bookDao;
     private final BookPayDao bookPayDao;
     private final PointDao pointDao;
+    private final PointService pointService;
 
     @Transactional
     public List<MovieShortCutDto> getBookAvailableMovie() {
@@ -65,30 +66,21 @@ public class BookService {
         //결제 취소로 변경
         bookPayDao.setCancel(bookPayVo.getBook_pay_id(), ConstantTable.PAY_STAT_CANCEL);
 
-        if(bookPayVo.getUse_point() > 0){
-            //사용 포인트가 있으면
-            PointVo pointVo = PointVo.builder()
-                    .user_id(bookPayVo.getUser_id())
-                    .poin_amount(bookPayVo.getUse_point())
-                    .poin_type_code(ConstantTable.POINT_CODE_NOTUSE)
-                    .message("예매 취소로 인한 사용 포인트 재적립")
-                    .build();
 
-            pointDao.updatePoint(pointVo);
-            pointDao.returnUserUsePoint(pointVo);
+        //사용 포인트가 있으면
+        if(bookPayVo.getUse_point() > 0){
+            pointService.updatePoint(bookPayVo.getUser_id(),
+                    bookPayVo.getUse_point(),
+                    ConstantTable.POINT_CODE_NOTUSE,
+                    "예매 취소로 인한 사용 포인트 재적립");
         }
 
+        //
         if(bookPayVo.getAccu_point() > 0){
-            //사용 포인트가 있으면
-            PointVo pointVo = PointVo.builder()
-                    .user_id(bookPayVo.getUser_id())
-                    .poin_amount(bookPayVo.getAccu_point())
-                    .poin_type_code(ConstantTable.POINT_CODE_NOTADD)
-                    .message("예매 취소로 인한 적립 포인트 취소")
-                    .build();
-
-            pointDao.updatePoint(pointVo);
-            pointDao.returnUserAddPoint(pointVo);
+            pointService.updatePoint(bookPayVo.getUser_id(),
+                    bookPayVo.getAccu_point(),
+                    ConstantTable.POINT_CODE_NOTADD,
+                    "예매 취소로 인한 적립 포인트 취소");
         }
 
         //삭제

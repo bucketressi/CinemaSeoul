@@ -6,15 +6,10 @@
 <mapper namespace="com.uos.cinemaseoul.dao.book.BookPayDao">
 
     <!--[예매하기]-->
-    <!-- 사용자 등급 조회-->
-    <select id="getUserCode" resultType="String">
-        SELECT USER_TYPE_CODE FROM USERS WHERE USER_ID = #{user_id}
-    </select>
-
     <!-- 예매 결제 INSERT-->
     <insert id="insertBookPay" parameterType="BookPayVo">
         <selectKey keyProperty="book_pay_id" resultType="int" order="BEFORE">
-            SELECT SEQ_BOOKPAY.nextval FROM DUAL
+            SELECT SEQ_PAY.nextval FROM DUAL
         </selectKey>
 
         INSERT INTO BOOKPAY (BOOK_PAY_ID, USER_ID, USE_POINT, PRICE, PAY_TYPE_CODE, ACCU_POINT, USE_CODE)

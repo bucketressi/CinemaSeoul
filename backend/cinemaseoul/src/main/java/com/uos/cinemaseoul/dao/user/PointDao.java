@@ -24,6 +24,9 @@ public interface PointDao {
     //적립취소
     void returnUserAddPoint(PointVo pointVo);
 
+    //사용자 등급
+    String getUserCode(int user_id);
+
     UsersVo getPoint(int user_id);
     List<PointInfoDto> findPoint(String start_date, int user_id);
 
