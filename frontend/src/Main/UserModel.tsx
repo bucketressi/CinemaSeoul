@@ -1,9 +1,9 @@
-import React, { useState, useContext, createContext, Dispatch } from 'react';
+import React, { useState, useContext, createContext, Dispatch, useEffect } from 'react';
 import { UserType, childrenObj } from './Type';
 import axios from 'axios';
 import { SERVER_URL } from '../CommonVariable';
 import { errorHandler } from './ErrorHandler';
-import { useTokenDispatch } from './TokenModel';
+import { useTokenDispatch, useTokenState } from './TokenModel';
 import { useHistory } from 'react-router-dom';
 
 const userState = createContext<number | undefined>(undefined);
@@ -17,6 +17,7 @@ const logoutFunction = createContext<() => void>(() => { });
 
 export const UserContextProvider = ({ children }: childrenObj) => {
 	const setToken = useTokenDispatch();
+	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
 
 	const [user, setUser] = useState<number | undefined>(undefined);
@@ -49,6 +50,8 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				setToken(res.data.token); // token 세팅
 				setUser(res.data.user_id);
 				setAdmin(undefined);
+				localStorage.setItem("auth", res.data.token);
+				localStorage.setItem("type", "non-user");
 				history.goBack();
 			})
 			.catch((e) => {
@@ -64,8 +67,9 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 			.then((res) => {
 				setToken(res.data.token); // token 세팅
 				setAdmin(res.data.admi_id);
-				console.log(res.data);
 				setUser(undefined);
+				localStorage.setItem("auth", res.data.token);
+				localStorage.setItem("type", "admin");
 				history.goBack();
 			})
 			.catch((e) => {

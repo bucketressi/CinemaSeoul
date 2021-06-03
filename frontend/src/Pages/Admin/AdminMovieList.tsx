@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import "../../scss/pages/movielist.scss";
 
+import { useHistory } from 'react-router-dom';
+
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
@@ -22,6 +24,7 @@ type ImgInfoType = {
 const AdminMovie = () => {
 	const AUTH_TOKEN = useTokenState();
 	const movieAuthCode = useMovieAuthCodeState();
+	const history = useHistory();
 	const fetchMovie = useFetchMovieFunction();
 
 	const movieListData = useMovieListState();
@@ -100,7 +103,6 @@ const AdminMovie = () => {
 			}
 		})
 			.then((res) => {
-				fetchMovie();
 				setOpen(false);
 			})
 			.catch((e) => {

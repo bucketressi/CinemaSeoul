@@ -9,6 +9,7 @@ import {
 	AdminMain,
 	AdminMovieExact,
 	AdminModifyMovie,
+	AdminMyPage,
 	AdminAsk,
 	AdminBlackList,
 	AdminBookRecord,
@@ -48,6 +49,7 @@ const AdminRouter: React.FC = () => {
 				<Route exact path="/admin" component={AdminMain} />
 				<Route path="/admin/ask" component={AdminAsk} />
 				<Route path="/admin/login" component={AdminLogin} />
+				<Route path="/admin/myPage" component={AdminMyPage} />
 				<Route path="/admin/blacklist" component={AdminBlackList} />
 				<Route path="/admin/book" component={AdminBookRecord} />
 				<Route path="/admin/event" component={AdminEvent} />

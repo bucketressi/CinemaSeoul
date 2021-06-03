@@ -12,7 +12,7 @@ const fetchMovieFunction = createContext<()=>void>(() => {});
 
 export const MovieListContextProvider = ({ children }: childrenObj) => {
 	// 공통적으로 쓰이는 page가 많아서 model로 정의함 => 영화 리스트 데이터
-	const token = useTokenState();
+	const AUTH_TOKEN = useTokenState();
 	const [movieList, setMovieList] = useState<SimpleMovieType[] | undefined>(undefined);
 	const [movieListObj, setMovieListObj] = useState<MovieListObjType | undefined>(undefined);
 
@@ -33,7 +33,7 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 			"sort": 0
 		}, {
 			headers: {
-				"TOKEN": token
+				"TOKEN": AUTH_TOKEN
 			}
 		})
 			.then((res) => {

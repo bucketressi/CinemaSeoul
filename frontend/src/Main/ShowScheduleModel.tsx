@@ -1,58 +1,51 @@
 import React, { useState, useContext, createContext, Dispatch, useEffect } from 'react';
 import { ShowScheduleListType, childrenObj } from './Type';
+import axios from 'axios';
+import { SERVER_URL } from '../CommonVariable';
+import { errorHandler } from './ErrorHandler';
+import { useTokenState } from './TokenModel';
 
 const showScheduleListState = createContext<ShowScheduleListType | undefined>(undefined);
 const showScheduleListDispatch = createContext<Dispatch<ShowScheduleListType | undefined>>(() => { });
-const initialShowScheduleData = {
-	showschedule_list: [
-		{
-			show_id: 2,
-			movi_id: 126,
-			movi_name : "귀멸의 칼날",
-			hall_id: 42,
-			hall_name: "42-1관",
-			show_date: "20210525",
-			show_time: "0141",
-			end_time: "202112300603",
-			hall_seat: 4,
-			rema_seat: 3
-		},{
-			show_id: 3,
-			movi_id: 127,
-			movi_name : "앨리스",
-			hall_id: 43,
-			hall_name: "43-1관",
-			show_date: "20210528",
-			show_time: "0150",
-			end_time: "202111290603",
-			hall_seat: 20,
-			rema_seat: 4
-		},{
-			show_id: 4,
-			movi_id: 107,
-			movi_name : "짱구와 친구들",
-			hall_id: 43,
-			hall_name: "43-1관",
-			show_date: "20210529",
-			show_time: "0190",
-			end_time: "202111290603",
-			hall_seat: 15,
-			rema_seat: 4
-		}
-	],
-	page: 1,
-	totalpage: 1,
-	amount: 10
-};
+const fetchShowScheduleFunction = createContext<()=>void>(()=>{});
 
 export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
-	// 공통적으로 쓰이는 page가 많아서 model로 정의함 => 영화 리스트 데이터
-	const [showScheduleList, setShowScheduleList] = useState<ShowScheduleListType | undefined>(initialShowScheduleData);
+	const AUTH_TOKEN = useTokenState();
+
+	const [showScheduleList, setShowScheduleList] = useState<ShowScheduleListType | undefined>(undefined);
+
+	const fetchShowSchedule = () => {
+		// 이것부터 하세요~ 6/3
+		console.log(new Date());
+		const dateObj = new Date();
+		const month = (dateObj.getMonth()+1).toString.length !== 1 ? (dateObj.getMonth()+1) : "0" + (dateObj.getMonth()+1);
+		const date = (dateObj.getDate()).toString.length !== 1 ? (dateObj.getDate()) : "0" + (dateObj.getDate());
+		const dateString = `${dateObj.getFullYear()}${month}${date}`;
+
+		axios.post(`${SERVER_URL}/showschedule/list`, {
+			"page" : 1,    
+			"movi_id" : [126, 143],
+			"start_date" : dateString, // 오늘 날짜 
+			"end_date" : null
+		}, {
+			headers : {
+				TOKEN : AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
 
 	return (
 		<showScheduleListState.Provider value={showScheduleList}>
 			<showScheduleListDispatch.Provider value={setShowScheduleList}>
-				{children}
+				<fetchShowScheduleFunction.Provider value={fetchShowSchedule}>
+					{children}
+				</fetchShowScheduleFunction.Provider>
 			</showScheduleListDispatch.Provider>
 		</showScheduleListState.Provider>
 	);
@@ -64,5 +57,9 @@ export function useShowScheduleListState() {
 }
 export function useShowScheduleListDispatch() {
 	const context = useContext(showScheduleListDispatch);
+	return context;
+}
+export function useFetchShowSchedule() {
+	const context = useContext(fetchShowScheduleFunction);
 	return context;
 }

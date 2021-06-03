@@ -117,31 +117,27 @@ const initialGenreCode = [
 		"parent_code": "220",
 		"code_name": "뮤지컬"
 	}];
-const initialSeatTypeCode = [{
-	"code_id": "230   ",
-	"parent_code": null,
-	"code_name": "좌석구분"
-},
-{
-	"code_id": "230001",
-	"parent_code": "230",
-	"code_name": "일반"
-},
-{
-	"code_id": "230002",
-	"parent_code": "230",
-	"code_name": "장애인석"
-},
-{
-	"code_id": "230003",
-	"parent_code": "230",
-	"code_name": "불가"
-},
-{
-	"code_id": "230004",
-	"parent_code": "230",
-	"code_name": "거리두기"
-}];
+const initialSeatTypeCode = [
+	{
+		"code_id": "230001",
+		"parent_code": "230",
+		"code_name": "일반"
+	},
+	{
+		"code_id": "230002",
+		"parent_code": "230",
+		"code_name": "장애인석"
+	},
+	{
+		"code_id": "230003",
+		"parent_code": "230",
+		"code_name": "불가"
+	},
+	{
+		"code_id": "230004",
+		"parent_code": "230",
+		"code_name": "거리두기"
+	}];
 const initialPointTypeCode = [{
 	"code_id": "300001",
 	"parent_code": "300",

@@ -4,17 +4,17 @@ export type childrenObj = {
 
 /* Code */
 export type Code = {
-	[parent : number] : string[];
+	[parent: number]: string[];
 }
 
 export type CodeMatch = {
-	[code : number] : string;
+	[code: number]: string;
 }
 
 export type CodeType = {
-	code_id : string,
-	parent_code : string | null,
-	code_name : string
+	code_id: string,
+	parent_code: string | null,
+	code_name: string
 }
 
 /* Movie */
@@ -42,54 +42,67 @@ export type MovieType = {
 }
 
 export type SimpleMovieType = {
-	movi_id : number,
-	movi_name : string,
-	accu_audience : number,
-	image : string,
-	open_date? : string,
+	movi_id: number,
+	movi_name: string,
+	accu_audience: number,
+	image: string,
+	open_date?: string,
 	rating?: number,
-	avai_age? : string
+	avai_age?: string
 }
 
 export type MovieListObjType = {
-	[movi_id : number] : SimpleMovieType
+	[movi_id: number]: SimpleMovieType
 }
 
+/* people */
+
 export type PeopleType = {
-  peop_id : number,
-  peop_name : string  
+	peop_id: number,
+	peop_name: string
+}
+
+export type CastingType = {
+	cast_type_code: string, //"210001", 
+	peop_id: number
+}
+
+export type MovieCastingType = {
+	cast_type_code: string, //"210001", 
+	peop_id: number,//1,
+	peop_name: string
 }
 
 /* User */
 
 export type UserType = {
-	user_name : string,
-	birth? : string, // 비회원은 없음
-	phone_num : string,
-	email? : string, // 비회원은 없음
-	password : string,
-	agreement : string,
-	curr_point? : number, // 비회원은 없음
-	accu_point? : number, // 비회원은 없음
-	remain_point? : number, // 비회원은 없음
+	user_name: string,
+	birth?: string, // 비회원은 없음
+	phone_num: string,
+	email?: string, // 비회원은 없음
+	password: string,
+	agreement: string,
+	curr_point?: number, // 비회원은 없음
+	accu_point?: number, // 비회원은 없음
+	remain_point?: number, // 비회원은 없음
 }
 
 export type AdminType = {
-	admi_name : string,
-	birth : string,
-	phone_num : string,
-	password : string,
-	admi_auth_code : string,
-	position : string,
-	address : string,
-	start_date : string
+	admi_name: string,
+	birth: string,
+	phone_num: string,
+	password: string,
+	admi_auth_code: string,
+	position: string,
+	address: string,
+	start_date: string
 }
 
 /* show schedule */
 export type ShowScheduleType = {
 	show_id: number;
 	movi_id: number;
-	movi_name : string;
+	movi_name: string;
 	hall_id: number;
 	hall_name: string; // "42-1관",
 	show_date: string; //  "2021/05/25",
@@ -100,10 +113,10 @@ export type ShowScheduleType = {
 }
 
 export type ShowScheduleListType = {
-    showschedule_list: ShowScheduleType[],
-    page: number;
-    totalpage: number;
-    amount: number;
+	showschedule_list: ShowScheduleType[],
+	page: number;
+	totalpage: number;
+	amount: number;
 }
 
 /* hall */
@@ -116,15 +129,15 @@ export type HallType = {
 }
 
 export type HallListType = {
-    [hall_id : number] : HallType
+	[hall_id: number]: HallType
 }
 
 export type SeatAPIType = {
-    seats : SeatType[]
+	seats: SeatType[]
 }
 
 export type SeatObjType = {
-    [seat_num : number] : SeatType
+	[seat_num: number]: SeatType
 }
 
 export type SeatType = {

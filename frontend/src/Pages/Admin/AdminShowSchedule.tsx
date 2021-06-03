@@ -3,21 +3,20 @@ import { PageTitle } from '../../Components';
 import { useHistory } from 'react-router-dom';
 import { Switch, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { ShowScheduleType } from '../../Main/Type';
-import { useShowScheduleListState } from '../../Main/ShowScheduleModel';
+import { useShowScheduleListState, useFetchShowSchedule } from '../../Main/ShowScheduleModel';
 import { ModalComponent } from '../../Components';
 import "../../scss/pages/adminshowschedule.scss";
 
 const AdminShowSchedule = () => {
 	const history = useHistory();
+	const fetchShowSchedule = useFetchShowSchedule();
 	const showScheduleList = useShowScheduleListState();
 	const [scheduleList, setScheduleList] = useState<ShowScheduleType[]>([]);
 	const [mode, setMode] = useState<boolean>(true);
 
 	useEffect(() => {
-		if (showScheduleList?.showschedule_list == undefined)
-			return;
-		setScheduleList(showScheduleList.showschedule_list);
-	}, [showScheduleList]);
+		fetchShowSchedule();
+	}, []);
 
 	const gotoScheduleExact = (id: number) => {
 		history.push(`/admin/showschedule/${id}`);
@@ -51,7 +50,7 @@ const AdminShowSchedule = () => {
 						/>
 					</div>
 					<div className="save-btn">
-						<Button variant="contained" color="primary" onClick={() => setOpenModal(true)}>추가</Button>
+						<Button variant="contained" color="secondary" onClick={() => setOpenModal(true)}>상영일정 추가</Button>
 					</div>
 				</div>
 				{
