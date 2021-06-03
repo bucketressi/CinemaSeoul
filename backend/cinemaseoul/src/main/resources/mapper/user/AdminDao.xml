@@ -85,7 +85,7 @@
 
     <!-- 전체 페이지 수 얻기 -->
     <select id="countList" resultType="Integer">
-        SELECT COUNT(*) AS totalpage FROM ADMIN
+        SELECT COUNT(ADMI_ID) AS totalpage FROM ADMIN
     </select>
 
     <!-- 비밀번호 재설정 -->

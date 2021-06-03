@@ -23,4 +23,9 @@ public class PointController {
     public ResponseEntity<?> FindPoint(@PathVariable(value = "start_date", required = false) String start_date, @PathVariable(name = "user_id") int user_id){
         return ResponseEntity.ok(pointService.findPoint(start_date,user_id));
     }
+
+    @GetMapping("/point/{user_id}")
+    public ResponseEntity<?> getMyPoint(@PathVariable(value = "user_id") int user_id){
+        return ResponseEntity.ok(pointService.getMyPoint(user_id));
+    }
 }

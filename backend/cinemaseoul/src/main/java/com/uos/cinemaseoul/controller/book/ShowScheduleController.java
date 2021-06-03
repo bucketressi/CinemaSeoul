@@ -42,5 +42,10 @@ public class ShowScheduleController {
         return ResponseEntity.ok(showScheduleService.getShowScheduleList(scheduleCriteria));
     }
 
+    @GetMapping("/{show_id}")
+    public ResponseEntity<?> selectShowSchedule(@PathVariable(name = "show_id") int show_id) throws Exception{
+        return ResponseEntity.ok(showScheduleService.getShowSchedule(show_id));
+    }
+
 
 }

@@ -3,17 +3,18 @@ package com.uos.cinemaseoul.service.book;
 import com.uos.cinemaseoul.common.mapper.ShowScheduleMapper;
 import com.uos.cinemaseoul.common.paging.ScheduleCriteria;
 import com.uos.cinemaseoul.dao.book.ShowScheduleDao;
+import com.uos.cinemaseoul.dto.book.book.ShowScheduleDto;
 import com.uos.cinemaseoul.dto.book.showschedule.InsertScheduleDto;
 import com.uos.cinemaseoul.dto.book.showschedule.ScheduleInfoDto;
 import com.uos.cinemaseoul.dto.book.showschedule.ShowScheduleListDto;
 import com.uos.cinemaseoul.exception.NotAllowedException;
+import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.vo.book.ShowScheduleVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,6 +31,7 @@ public class ShowScheduleService {
         showScheduleDao.insert(vo);
     }
 
+    @Transactional
     public void checkBookViaShowSchedule(int show_id) {
        if(showScheduleDao.checkBook(show_id) > 0){
            throw new NotAllowedException();
@@ -71,16 +73,40 @@ public class ShowScheduleService {
         for(ScheduleInfoDto s : sLDto.getShowschedule_list()){
 
             //시간 계산
-            Long runtime = format.parse(s.getShow_date()+s.getShow_time()).getTime();
-            runtime = runtime+ Long.parseLong(s.getEnd_time())* 60 *1000;
-            s.setEnd_time(new SimpleDateFormat("yyyy/MM/dd/HH/mm").format(new Date(runtime)));
+            s.setEnd_time(calEndTime(s.getShow_date(),s.getShow_time(),s.getEnd_time()));
 
-            //전체 - 선택 안되는 좌석 , 예매된 좌석
-            s.setRema_seat(s.getHall_seat() - showScheduleDao.getBookedSeatNum(s.getShow_id()));
+            //선택 되는 좌석 - 예매된 좌석
+            s.setRema_seat(s.getAvai_seat_amount() - showScheduleDao.getBookedSeatNum(s.getShow_id()));
         }
 
 
         sLDto.setPageInfo(totalPage, scheduleCriteria.getPage(), scheduleCriteria.getAmount());
         return sLDto;
+    }
+
+    @Transactional
+    public ShowScheduleDto getShowSchedule(int show_id) throws Exception{
+        ShowScheduleDto showDto = showScheduleDao.selectSchedule(show_id);
+
+        if(showDto == null) {
+            throw new NotFoundException("No Schedule");
+        }
+        //시간계산
+        showDto.setEnd_time(calEndTime(showDto.getShow_date(), showDto.getShow_time(), showDto.getEnd_time()));
+
+        return showDto;
+    }
+
+    public String calEndTime(String startDate, String startTime, String runtime) throws Exception{
+
+        try{
+            //시간 계산
+            Long initialTime = new SimpleDateFormat("yyyyMMddHHmm").parse(startDate+ startTime).getTime();
+            initialTime = initialTime+ Long.parseLong(runtime)* 60 *1000;
+            return new SimpleDateFormat("yyyy/MM/dd/HH/mm").format(new Date(initialTime));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

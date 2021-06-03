@@ -1,6 +1,7 @@
 package com.uos.cinemaseoul.dao.book;
 
 import com.uos.cinemaseoul.common.paging.ScheduleCriteria;
+import com.uos.cinemaseoul.dto.book.book.ShowScheduleDto;
 import com.uos.cinemaseoul.dto.book.showschedule.ScheduleInfoDto;
 import com.uos.cinemaseoul.vo.book.ShowScheduleVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,4 +23,6 @@ public interface ShowScheduleDao {
     int countList(ScheduleCriteria scheduleCriteria);
     List<ScheduleInfoDto> selectScheduleList(ScheduleCriteria scheduleCriteria);
     int getBookedSeatNum(int show_id);
+
+    ShowScheduleDto selectSchedule(int show_id);
 }

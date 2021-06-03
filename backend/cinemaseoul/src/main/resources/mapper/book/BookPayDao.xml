@@ -40,6 +40,7 @@
         SELECT * FROM DUAL
     </update>
 
+    <!--[사용 취소]-->
     <select id="getCancelInfo" resultType="BookPayVo">
         SELECT BOOK_PAY_ID, ACCU_POINT, USE_POINT FROM BOOKPAY
         WHERE BOOK_PAY_ID  = (SELECT BOOK_PAY_ID FROM BOOK WHERE BOOK_ID = #{book_id})
@@ -50,5 +51,77 @@
         UPDATE BOOKPAY SET PAY_STATE_CODE = #{pay_state_cancel}
         WHERE BOOK_PAY_ID = #{book_pay_id}
     </update>
+
+    <!--[코드 사용]-->
+    <select id="selectBookPay" resultType="BookPayVo">
+        SELECT BOOK_PAY_ID, USE_CODE, USE_DATETIME, PAY_STATE_CODE FROM BOOKPAY
+        WHERE USE_CODE = #{use_code}
+    </select>
+
+    <update id="useCode" parameterType="String">
+        UPDATE PRODUCTPAY SET PAY_STATE_CODE = #{pay_state_fin},
+                              USE_DATETIME = SYSDATE
+        WHERE USE_CODE = #{use_code}
+    </update>
+
+    <!--[예매 결제 조회]-->
+    <select id="countList" parameterType="PayListCriteria" resultType="Integer">
+        SELECT COUNT(BOOK_PAY_ID) FROM BOOKPAY B
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="user_id != null">
+                AND B.USER_ID = #{user_id}
+            </if>
+
+            <if test="start_date != null"><![CDATA[
+                AND TO_CHAR(B.PAY_DATETIME, 'YYYYMMDD') >= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND TO_CHAR(B.PAY_DATETIME, 'YYYYMMDD') <= #{end_date}
+            ]]></if>
+        </trim>
+    </select>
+
+    <select id="selectBookPayList" parameterType="PayListCriteria" resultType="BookPayInfoDto">
+        SELECT
+            B.BOOK_PAY_ID, B.USER_ID, B.USE_POINT, B.PRICE, B.ACCU_POINT,
+            B.PAY_TYPE, B.PAY_STATE, B.PAY_DATETIME,
+            B.USE_DATETIME, B.USE_CODE,
+            B.BOOK_ID
+        FROM (
+            SELECT /*+index_desc(IDX_BOOK_PAY_PK)*/ ROWNUM AS RNUM,
+                A.BOOK_PAY_ID, A.USER_ID, A.USE_POINT, A.PRICE, A.ACCU_POINT,
+                A.PAY_TYPE, A.PAY_STATE, A.PAY_DATETIME,
+                A.USE_DATETIME, A.USE_CODE,
+                A.BOOK_ID
+                FROM(
+                    SELECT
+                           P.BOOK_PAY_ID, P.USER_ID, P.USE_POINT, P.PRICE, P.ACCU_POINT,
+                           CC.CODE_NAME AS PAY_TYPE, C.CODE_NAME AS PAY_STATE, P.PAY_DATETIME,
+                           P.USE_DATETIME, P.USE_CODE,
+                           BB.BOOK_ID
+                    FROM BOOKPAY P
+                    LEFT OUTER JOIN BOOK BB on P.BOOK_PAY_ID = BB.BOOK_PAY_ID
+                    INNER JOIN CODE C ON P.PAY_STATE_CODE = C.CODE_ID
+                    INNER JOIN CODE CC ON P.PAY_TYPE_CODE = CC.CODE_ID
+
+                <trim prefix="WHERE" prefixOverrides="AND">
+                    <if test="user_id != null">
+                        AND P.USER_ID = #{user_id}
+                    </if>
+
+                    <if test="start_date != null"><![CDATA[
+                        AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') >= #{start_date}
+                    ]]></if>
+
+                    <if test="end_date != null"><![CDATA[
+                        AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') <= #{end_date}
+                    ]]></if>
+                </trim>
+                        ORDER BY P.BOOK_PAY_ID
+                        ) A
+            <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
 
 </mapper>

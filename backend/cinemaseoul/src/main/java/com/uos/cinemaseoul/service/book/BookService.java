@@ -9,7 +9,6 @@ import com.uos.cinemaseoul.dto.book.book.*;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.service.user.PointService;
 import com.uos.cinemaseoul.vo.book.BookPayVo;
-import com.uos.cinemaseoul.vo.user.PointVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ import java.util.List;
 public class BookService {
     private final BookDao bookDao;
     private final BookPayDao bookPayDao;
-    private final PointDao pointDao;
     private final PointService pointService;
 
     @Transactional
@@ -30,25 +28,25 @@ public class BookService {
     }
 
     @Transactional
-    public List<ShowScheduleFromDateMovieDto> getScheduleFromMoviDate(ScheduleAskDto sADto) {
+    public List<ShowScheduleDto> getScheduleFromMoviDate(ScheduleAskDto sADto) {
         return bookDao.getScheduleFromMoviDate(sADto);
     }
 
     @Transactional
-    public List<ShowScheduleSeatDto> getSeatFromShowSchedule(int show_id) {
-        List<ShowScheduleSeatDto> seat_list = bookDao.getShowScheduleSeat(show_id);
+    public BookSeatListDto getSeatFromShowSchedule(int show_id) {
+        BookSeatListDto bookSeatListDto = bookDao.getShowScheduleSeat(show_id);
         List<ShowScheduleSeatDto> book_seat_list = bookDao.getBookedSeat(show_id);
 
-        if(seat_list == null){
+        if(bookSeatListDto == null){
             throw new NotFoundException("No showschedule");
         }
 
         //리스트는 순서대로 오리라 가정
         for(ShowScheduleSeatDto b : book_seat_list){
-            seat_list.get(b.getSeat_num()).setBooked(true);
+            bookSeatListDto.getSeat_list().get(b.getSeat_num()).setBooked(true);
         }
 
-        return seat_list;
+        return bookSeatListDto;
     }
     @Transactional
     public BookDto getBook(int book_id) {

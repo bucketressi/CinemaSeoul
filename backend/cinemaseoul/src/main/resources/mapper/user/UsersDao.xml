@@ -90,6 +90,10 @@
         UPDATE BOOKPAY SET USER_ID = 0
         WHERE USER_ID = #{user_id}
     </update>
+    <update id="setProductPayDefault" parameterType="Integer">
+        UPDATE PRODUCTPAY SET USER_ID = 0
+        WHERE USER_ID = #{user_id}
+    </update>
 
     <select id="adultCheck" resultType="String">
         SELECT BIRTH FROM USERS WHERE PHONE_NUM = #{phone_num}

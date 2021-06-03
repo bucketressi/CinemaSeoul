@@ -108,9 +108,9 @@ public class ConstantTable {
     }
 
     public static int getPointRatio(String user_type_code){
-        if(user_type_code == USER_TYPE_FRIENDS) return 1;
-        else if(user_type_code == USER_TYPE_FAMILY) return 3;
-        else if(user_type_code == USER_TYPE_VIP) return 5;
+        if(user_type_code.equals(USER_TYPE_FRIENDS)) return 1;
+        else if(user_type_code.equals(USER_TYPE_FAMILY)) return 3;
+        else if(user_type_code.equals(USER_TYPE_VIP)) return 5;
         else return 0;
     }
 }

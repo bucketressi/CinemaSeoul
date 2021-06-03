@@ -34,7 +34,10 @@ public class MappingConstant {
 
             "/people/search",
             "/people/list",
-            "/people/{peop_id}"
+            "/people/{peop_id}",
+
+            "/faq/{faq_id}",
+            "/faq/list"
     };
 
     //2 (비회원, 회원 둘다 가능)
@@ -42,8 +45,13 @@ public class MappingConstant {
             "/adult",
             "/user/delete/{user_id}",
 
+            "/point/{user_id}",
+
             "/pay/book",
-            "/pay/product"
+            "/pay/product",
+            "/showschedule/{show_id}"
+
+
     };
 
     //1 (회원 가능)
@@ -88,7 +96,17 @@ public class MappingConstant {
             "/people/add",
             "/people/",
             "/people/image",
-            "/people/delete/{peop_id}"
+            "/people/delete/{peop_id}",
+            "/pay/use/book",
+            "/pay/use/product",
+
+            "/record",
+            "/sales",
+            "/sales/update",
+
+            "/faq/add",
+            "/faq/update",
+            "/faq/delete/{faq_id}"
     };
 
     //3 (매니저(높은 관리자만) 가능)
@@ -112,7 +130,8 @@ public class MappingConstant {
 
             "/point/{user_id}/{start_date}",
 
-            "/product/cancel/{prod_pay_id}"
-
+            "/product/cancel/{prod_pay_id}",
+            "/pay/book/list",
+            "/pay/product/list"
     };
 }

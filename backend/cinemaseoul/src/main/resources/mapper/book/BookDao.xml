@@ -16,11 +16,12 @@
     </select>
 
     <!-- [해당 영화, 일자의 상영일정 조회]-->
-    <select id="getScheduleFromMoviDate" resultType="ShowScheduleFromDateMovieDto" parameterType="ScheduleAskDto">
+    <select id="getScheduleFromMoviDate" resultType="ShowScheduleDto" parameterType="ScheduleAskDto">
         SELECT S.SHOW_ID, S.SHOW_DATE, S.SHOW_TIME,
                M.MOVI_NAME,
                H.HALL_NAME,
-               H.AVAI_SEAT_AMOUNT - (SELECT COUNT(BOOK_ID) FROM BOOKSEAT BS WHERE BS.SHOW_ID = S.SHOW_ID) AS REMA_AMOUNT
+               H.AVAI_SEAT_AMOUNT - (SELECT COUNT(BOOK_ID) FROM BOOKSEAT BS WHERE BS.SHOW_ID = S.SHOW_ID) AS REMA_AMOUNT,
+               H.HALL_ROW * H.HALL_COL AS HALL_SEAT
         FROM SHOWSCHEDULE S
         INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
         INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
@@ -33,11 +34,25 @@
 
     <!-- [상영일정 좌석 조회]-->
     <!-- 상영관 가능좌석 조회-->
-    <select id="getShowScheduleSeat" resultType="ShowScheduleSeatDto">
-        SELECT HALL_ID, SEAT_NUM, SEAT_TYPE_CODE AS SEAT_TYPE FROM SEAT S
+    
+    
+    <resultMap id="bookseatlist" type="BookSeatListDto">
+        <id property="hall_id" column="HALL_ID"/>
+        <result property="hall_row" column="HALL_ROW"/>
+        <result property="hall_col" column="HALL_COL"/>
+        <collection property="seat_list" javaType="ShowScheduleSeatDto">
+            <id property="seat_num" column="SEAT_NUM"/>
+            <result property="seat_type" column="SEAT_TYPE"/>
+        </collection>
+    </resultMap>
+    
+    <select id="getShowScheduleSeat" resultMap="bookseatlist">
+        SELECT H.HALL_ID, H.HALL_ROW, H.HALL_COL, S.SEAT_NUM, S.SEAT_TYPE_CODE AS SEAT_TYPE FROM SEAT S
+        INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
         WHERE S.HALL_ID = (SELECT HALL_ID FROM SHOWSCHEDULE WHERE SHOW_ID = #{show_id})
         ORDER BY SEAT_NUM
     </select>
+
     <!-- 예매된 좌석 조회-->
     <select id="getBookedSeat" resultType="ShowScheduleSeatDto">
         SELECT HALL_ID, SEAT_NUM FROM BOOKSEAT BS
@@ -126,6 +141,7 @@
                         AND TO_CHAR(BK.BOOK_DATETIME, 'YYYYMMDD') <= #{end_date}
                     ]]></if>
                 </trim>
+                ORDER BY BOOK_ID
             ) A
             <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
         WHERE B.RNUM > (#{page}-1)*#{amount} ]]>

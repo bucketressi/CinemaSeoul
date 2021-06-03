@@ -87,7 +87,6 @@ public class HallService {
         for(SeatVo s : updateSeats){
             hallDao.updateSeats(s);
         }
-        System.out.println(SEAT_TYPE_OK + SEAT_TYPE_DISABLED);
         hallDao.updateAvaiSeatAmount(seats.get(0).getHall_id(), SEAT_TYPE_OK, SEAT_TYPE_DISABLED);
     }
 }

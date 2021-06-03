@@ -21,17 +21,9 @@
     </delete>
 
     <update id="updateMovieRating">
-        UPDATE MOVIE SET RATING =
-            (SELECT SUM(R.RATING) / COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id})
+        UPDATE MOVIE SET RATING = COALESCE(
+            (SELECT SUM(R.RATING) / COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id}), 0 )
         WHERE MOVI_ID = #{movi_id}
-    </update>
-
-    <select id="getCount" resultType="Integer">
-        SELECT COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id}
-    </select>
-
-    <update id="updateMovieRatingToZero">
-        UPDATE MOVIE SET RATING =0 WHERE MOVI_ID = #{movi_id}
     </update>
 
     <select id="getMyMovie" resultType="MovieReviewDto">

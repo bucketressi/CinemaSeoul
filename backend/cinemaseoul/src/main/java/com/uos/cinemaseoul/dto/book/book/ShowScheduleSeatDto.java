@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShowScheduleSeatDto {
-    private int hall_id;
     private int seat_num;
     private String seat_type;
     private boolean booked = false;

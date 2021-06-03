@@ -4,9 +4,9 @@ import com.uos.cinemaseoul.common.paging.BookSearchCriteria;
 import com.uos.cinemaseoul.dto.book.book.MovieShortCutDto;
 import com.uos.cinemaseoul.dto.book.book.ScheduleAskDto;
 import com.uos.cinemaseoul.service.book.BookService;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,22 +46,25 @@ public class BookController {
 
     @GetMapping("/{show_id}/seat")
     public ResponseEntity<?> getSeatFromShowSchedule(@PathVariable(name = "show_id") int show_id){
-        return ResponseEntity.ok(new Seat_List(bookService.getSeatFromShowSchedule(show_id)));
+        return ResponseEntity.ok(bookService.getSeatFromShowSchedule(show_id));
     }
 
-    @Getter
-    static class Seat_List{
-        List<?> seat_list;
-        public Seat_List(List<?> list){this.seat_list = list;}
-    }
+
 
     @PostMapping("/list")
-    public ResponseEntity<?> getBookList(@RequestBody BookSearchCriteria bookSearchCriteria){
+    public ResponseEntity<?> getBookList(Authentication authentication, @RequestBody BookSearchCriteria bookSearchCriteria){
+
+        //매니저 아니면 자기 것만 조회 가능
+        if(!authentication.getAuthorities().toString().contains("ROLE_3")){
+            bookSearchCriteria.setUser_id(Integer.parseInt(authentication.getName()));
+        }
+
         return ResponseEntity.ok(bookService.getBookList(bookSearchCriteria));
     }
 
     @GetMapping("/{book_id}")
     public ResponseEntity<?> getBook(@PathVariable(name = "book_id")int book_id){
+
         return ResponseEntity.ok(bookService.getBook(book_id));
     }
 

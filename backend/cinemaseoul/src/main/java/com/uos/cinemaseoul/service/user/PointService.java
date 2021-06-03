@@ -17,7 +17,6 @@ import static com.uos.cinemaseoul.common.constatnt.ConstantTable.*;
 public class PointService {
 
     private final PointDao pointDao;
-    private final PointMapper pointMapper;
 
     @Transactional
     public void updatePoint(PointUpdateDto pointUpdateDto) {
@@ -84,5 +83,10 @@ public class PointService {
     public void minusPoint(PointVo pointVo) {
         pointDao.updatePoint(pointVo);
         pointDao.minusUserPoint(pointVo);
+    }
+
+    @Transactional
+    public int getMyPoint(int user_id) {
+        return pointDao.getPoint(user_id).getCurr_point();
     }
 }

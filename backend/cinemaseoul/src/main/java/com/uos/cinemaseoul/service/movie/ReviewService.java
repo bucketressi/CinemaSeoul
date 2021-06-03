@@ -39,12 +39,7 @@ public class ReviewService {
         reviewDto.setUser_id(user_id);
 
         reviewDao.deleteReview(reviewMapper.insertintoReviewVoFromReviewDto(reviewDto));
-
-        if(reviewDao.getCount(reviewDto.getMovi_id()) < 1){
-            reviewDao.updateMovieRatingToZero(reviewDto.getMovi_id());
-        }else{
-            reviewDao.updateMovieRating(reviewDto.getMovi_id());
-        }
+        reviewDao.updateMovieRating(reviewDto.getMovi_id());
 
     }
     @Transactional

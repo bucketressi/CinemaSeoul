@@ -3,12 +3,19 @@ package com.uos.cinemaseoul.service.product;
 import com.uos.cinemaseoul.common.constatnt.ConstantTable;
 import com.uos.cinemaseoul.common.constatnt.MD5;
 import com.uos.cinemaseoul.common.mapper.ProductPayMapper;
+import com.uos.cinemaseoul.common.paging.PayListCriteria;
 import com.uos.cinemaseoul.dao.product.ProductDao;
 import com.uos.cinemaseoul.dao.product.ProductPayDao;
 import com.uos.cinemaseoul.dao.user.PointDao;
+import com.uos.cinemaseoul.dto.book.bookpay.BookPayListDto;
+import com.uos.cinemaseoul.dto.product.productpay.ProductPayInfoDto;
 import com.uos.cinemaseoul.dto.product.productpay.ProductPayInsertDto;
+import com.uos.cinemaseoul.dto.product.productpay.ProductPayListDto;
+import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.NotAllowedException;
+import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.service.user.PointService;
+import com.uos.cinemaseoul.vo.book.BookPayVo;
 import com.uos.cinemaseoul.vo.product.ProductPayInfoVo;
 import com.uos.cinemaseoul.vo.product.ProductPayVo;
 import com.uos.cinemaseoul.vo.user.PointVo;
@@ -19,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.PAY_STAT_CANCEL;
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.PAY_STAT_FIN;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +64,7 @@ public class ProductPayService {
         }
 
         //포인트 사용했으면, 사용한 것도 추가
-        if(productPayVo.getAccu_point() != 0){
+        if(productPayVo.getUse_point() != 0){
             pointService.updatePoint(productPayVo.getUser_id(),
                     productPayVo.getAccu_point(),
                     ConstantTable.POINT_CODE_USE,
@@ -120,5 +130,46 @@ public class ProductPayService {
         //make
         productPayDao.setCancel(prod_pay_id, ConstantTable.PAY_STAT_CANCEL);
 
+    }
+
+    //코드 사용
+    @Transactional
+    public void useProductCode(String use_code) {
+
+        ProductPayVo vo = productPayDao.selectProductPay(use_code);
+
+        if(vo == null){
+            throw new NotFoundException("not founded Code");
+        }
+        //이미 사용
+        if(vo.getUse_datetime() != null && vo.getPay_state_code().equals(PAY_STAT_FIN)){
+            throw new DuplicateException("Already Used");
+        }
+        //사용불가 OR 취소
+        else if(vo.getPay_state_code().equals(PAY_STAT_FIN) || vo.getPay_state_code().equals(PAY_STAT_CANCEL)){
+            throw new NotAllowedException("Not Allowed Code");
+        }
+
+        productPayDao.useCode(use_code, ConstantTable.PAY_STAT_FIN);
+    }
+
+    @Transactional
+    public ProductPayListDto getList(PayListCriteria payListCriteria) {
+        ProductPayListDto productPayListDto = new ProductPayListDto();
+        //페이지 계산
+        int totalCount = productPayDao.countList(payListCriteria);
+        int totalPage =  totalCount / payListCriteria.getAmount();
+        if(totalCount % payListCriteria.getAmount() > 0){
+            totalPage++;
+        }
+
+        productPayListDto.setProdpayinfo(productPayDao.selectProductPayList(payListCriteria));
+
+        for(ProductPayInfoDto pd : productPayListDto.getProdpayinfo()){
+            pd.setProductPayDetails(productPayDao.selectProductPayInfo(pd.getProd_pay_id()));
+        }
+
+        productPayListDto.setPageInfo(totalPage, payListCriteria.getPage(), payListCriteria.getAmount());
+        return productPayListDto;
     }
 }

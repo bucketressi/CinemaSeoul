@@ -86,7 +86,7 @@ public class AdminController {
         if((!authentication.getAuthorities().toString().contains("ROLE_3"))
                 && Integer.parseInt(authentication.getName()) != adv.getAdmi_id()){
 
-            throw new DuplicateException("아니왜에러임?");
+            throw new DuplicateException("에러");
         }
 
         try{

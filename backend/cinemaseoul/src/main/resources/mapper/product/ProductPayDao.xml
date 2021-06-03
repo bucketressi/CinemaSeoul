@@ -59,4 +59,80 @@
         WHERE PROD_ID =#{prod_id}
     </update>
 
+
+    <!--[코드 사용]-->
+    <select id="selectProductPay" resultType="ProductPayVo">
+        SELECT PROD_PAY_ID, USE_CODE, USE_DATETIME, PAY_STATE_CODE FROM PRODUCTPAY
+        WHERE USE_CODE = #{use_code}
+    </select>
+    <update id="useCode" parameterType="String">
+        UPDATE PRODUCTPAY SET PAY_STATE_CODE = #{pay_state_fin},
+                              USE_DATETIME = SYSDATE
+        WHERE USE_CODE = #{use_code}
+    </update>
+
+    <!--[결제 조회]-->
+    <select id="countList" parameterType="PayListCriteria" resultType="Integer">
+        SELECT COUNT(PROD_PAY_ID) FROM PRODUCTPAY P
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="user_id != null">
+                AND P.USER_ID = #{user_id}
+            </if>
+
+            <if test="start_date != null"><![CDATA[
+                AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') >= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') <= #{end_date}
+            ]]></if>
+        </trim>
+    </select>
+
+    <select id="selectProductPayList" parameterType="PayListCriteria" resultType="ProductPayInfoDto">
+        SELECT
+            B.PROD_PAY_ID, B.USER_ID, B.USE_POINT, B.PRICE, B.ACCU_POINT,
+            B.PAY_TYPE, B.PAY_STATE, B.PAY_DATETIME,
+            B.USE_DATETIME, B.USE_CODE
+        FROM (
+        SELECT /*+index_desc(IDX_BOOK_PK)*/ ROWNUM AS RNUM,
+        A.PROD_PAY_ID, A.USER_ID, A.USE_POINT, A.PRICE, A.ACCU_POINT,
+        A.PAY_TYPE, A.PAY_STATE, A.PAY_DATETIME,
+        A.USE_DATETIME, A.USE_CODE
+
+        FROM(
+        SELECT
+            P.PROD_PAY_ID, P.USER_ID, P.USE_POINT, P.PRICE, P.ACCU_POINT,
+            CC.CODE_NAME AS PAY_TYPE, C.CODE_NAME AS PAY_STATE, P.PAY_DATETIME,
+            P.USE_DATETIME, P.USE_CODE
+            FROM PRODUCTPAY P
+            INNER JOIN CODE C ON P.PAY_STATE_CODE = C.CODE_ID
+            INNER JOIN CODE CC ON P.PAY_TYPE_CODE = CC.CODE_ID
+
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="user_id != null">
+                AND P.USER_ID = #{user_id}
+            </if>
+
+            <if test="start_date != null"><![CDATA[
+                AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') >= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') <= #{end_date}
+            ]]></if>
+        </trim>
+
+        ORDER BY P.PROD_PAY_ID
+        ) A
+        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+    <select id="selectProductPayInfo" resultType="ProductInfoShortDto">
+        SELECT PROD_ID, PROD_NAME, PRICE, AMOUNT FROM PRODUCTPAYINFO
+        WHERE PROD_PAY_ID = #{prod_pay_id}
+    </select>
+
+
 </mapper>

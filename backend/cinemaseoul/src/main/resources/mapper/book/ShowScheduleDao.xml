@@ -53,14 +53,18 @@
     </select>
 
     <select id="selectScheduleList" parameterType="ScheduleCriteria" resultType="ScheduleInfoDto">
-        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME, B.SHOW_DATE, B.SHOW_TIME, B.END_TIME, B.HALL_SEAT
+        SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME,
+               B.SHOW_DATE, B.SHOW_TIME, B.END_TIME,
+               B.AVAI_SEAT_AMOUNT, B.HALL_SEAT
         FROM (
-            SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM, A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME, A.SHOW_DATE, A.SHOW_TIME,
-               A.END_TIME, A.HALL_SEAT
+            SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM,
+                   A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME,
+                   A.SHOW_DATE, A.SHOW_TIME, A.END_TIME,
+                   A.AVAI_SEAT_AMOUNT, A.HALL_SEAT
             FROM(
                 SELECT S.SHOW_ID, S.MOVI_ID, S.HALL_ID, S.SHOW_DATE, S.SHOW_TIME,
                        M.MOVI_NAME, M.RUN_TIME AS END_TIME,
-                       H.HALL_NAME, H.AVAI_SEAT_AMOUNT AS HALL_SEAT
+                       H.HALL_NAME, H.AVAI_SEAT_AMOUNT, H.HALL_ROW* H.HALL_COL AS HALL_SEAT
 
                 FROM SHOWSCHEDULE S
                 INNER JOIN HALL H ON S.HALL_ID = H.HALL_ID
@@ -101,5 +105,19 @@
     <select id="checkBook" resultType="Integer">
         SELECT COUNT(BOOK_ID) FROM BOOK
         WHERE SHOW_ID = #{show_id}
+    </select>
+
+
+    <select id="selectSchedule" resultType="ShowScheduleDto" parameterType="Integer">
+        SELECT S.SHOW_ID, S.SHOW_DATE, S.SHOW_TIME,
+               M.MOVI_ID, M.MOVI_NAME, M.RUN_TIME AS END_TIME,
+               H.HALL_ID, H.HALL_NAME,
+               H.AVAI_SEAT_AMOUNT - (SELECT COUNT(BOOK_ID) FROM BOOKSEAT BS WHERE BS.SHOW_ID = S.SHOW_ID) AS REMA_AMOUNT,
+               H.HALL_ROW * H.HALL_COL AS HALL_SEAT
+        FROM SHOWSCHEDULE S
+                 INNER JOIN MOVIE M on S.MOVI_ID = M.MOVI_ID
+                 INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
+
+        WHERE S.SHOW_ID = #{show_id}
     </select>
 </mapper>

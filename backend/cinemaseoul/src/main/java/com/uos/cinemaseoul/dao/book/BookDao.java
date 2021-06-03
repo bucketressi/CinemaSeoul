@@ -15,10 +15,10 @@ public interface BookDao {
     List<MovieShortCutDto> getBookAvailableMovie();
 
     //영화 - 날짜의 상영일정 조회
-    List<ShowScheduleFromDateMovieDto> getScheduleFromMoviDate(ScheduleAskDto sADto);
+    List<ShowScheduleDto> getScheduleFromMoviDate(ScheduleAskDto sADto);
 
     //우선 상영관의 좌석현황 조회, 예약좌석 조회 -> 비교
-    List<ShowScheduleSeatDto> getShowScheduleSeat(int show_id);
+    BookSeatListDto getShowScheduleSeat(int show_id);
     List<ShowScheduleSeatDto> getBookedSeat(int show_id);
 
     //영화의 기초적인 내용 조회 -> 좌석조회

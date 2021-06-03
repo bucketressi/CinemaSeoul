@@ -49,6 +49,7 @@ mybatis:
 #WantedBy=multi-user.target
 
 #sudo systemctl daemon-reload
+#sudo systemctl stop server_start.service
 #sudo systemctl enable server_start.service
 #sudo systemctl start server_start.service
 #sudo systemctl status server_start.service
