@@ -25,7 +25,7 @@ const AdminShowSchedule = () => {
 	const hallList = useHallListState();
 	const movieList = useMovieListObjState();
 
-	const [mode, setMode] = useState<boolean>(true); // 표 / 리스트
+	const [mode, setMode] = useState<boolean>(false); // 표 / 리스트
 
 	useEffect(() => {
 		fetchShowSchedule();

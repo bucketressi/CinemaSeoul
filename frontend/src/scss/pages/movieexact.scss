@@ -1,0 +1,122 @@
+@import "../base/variable";
+.movie-exact-con{
+	.btn-con{
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 15px;
+		button{
+			margin-right: 10px;
+		}
+	}
+	.info-con{
+		display: flex;
+		.img-con{
+			width: 250px;
+			padding-right: 15px;
+			margin-right: 15px;
+			border-right: 1px solid $border-color;
+			flex-shrink: 0;
+			img{
+				width: 100%;
+			}
+		}
+		.movie-info-con{
+			width: 100%;
+			display : flex;
+			justify-content: space-between;
+			&>div{
+				width: 48%;
+			}
+			.left-info-con{
+				display : flex;
+				flex-direction: column;
+				&>div{
+					display: flex;
+					align-items: center;
+					&>div{
+						display: flex;
+						align-items: center;
+						margin-right: 20px;
+						margin-bottom: 10px;
+					}
+				}
+			}
+			.movie-title{
+				.movie-name{
+					font-weight: 600;
+					font-size: 2.5rem;
+				}
+				.movie-age{
+					padding: 5px 10px;
+					border-radius: 10px;
+					background-color: $red;
+					margin-left: 10px;
+					color: white;
+				}
+			}
+			.menu-genre, .menu-director, .menu-actor{
+				span{
+					margin-right: 10px;
+				}
+			}
+			.menu-director, .menu-actor{
+				span{ 
+					cursor: pointer;
+					text-decoration: underline;
+				}
+			}
+			.right-info-con{
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				.menu-subtitle{
+					text-align: center;
+				}
+				button{
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+.menu{
+	display: flex;
+	align-items: center;
+	.menu-subtitle{  // 전역
+		padding: 5px 10px;
+		border-radius: 10px;
+		background-color: lightgray;
+		margin-right: 10px;
+		flex-shrink: 0;
+	}
+}
+
+.people-modal-con{
+	display: flex;
+	flex-direction: column;
+	max-width: 500px;
+	&>div{
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+		width: 100%;
+	}
+	.left-right-con{
+		display: flex;
+		justify-content: space-between;
+		.left-con{
+			display: flex;
+			width: 70%;
+			flex-shrink: 0;
+			&>div{
+				display: flex;
+				margin-right: 15px;
+			}
+		}
+	}
+	.menu{
+		width: 100%;
+	}
+}

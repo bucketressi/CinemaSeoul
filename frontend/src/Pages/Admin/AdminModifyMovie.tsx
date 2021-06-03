@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from "react-router-dom";
 import { Button, Checkbox, Select, MenuItem, Chip, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, InputLabel } from '@material-ui/core';
-import "../../scss/pages/adminmovieexact.scss";
+import "../../scss/pages/adminmodifymovie.scss";
 import { ModalComponent, PageTitle } from '../../Components';
 import { useGenreCodeState, useMovieAuthCodeState, usePeopleTypeCodeState } from '../../Main/CodeModel';
 import { MovieType, PeopleType, MovieCastingType, CodeType, CodeMatch, CastingType } from '../../Main/Type';
