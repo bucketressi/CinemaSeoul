@@ -24,7 +24,6 @@ import {
 	AdminPeople,
 	AdminSales,
 	AdminShowSchedule,
-	AdminShowScheduleExact,
 	AdminModifyShowSchedule,
 	AdminStore,
 	AdminTheater,
@@ -39,7 +38,7 @@ const AdminRouter: React.FC = () => {
 	useEffect(()=> {
 		if(admin !== undefined || location.pathname == "/admin/login")
 			return;
-		alert("로그인 먼저 해주세요.");
+		alert("로그인 후 이용해주세요.");
 		history.push("/admin/login");
 	},[location.pathname]);
 
@@ -65,7 +64,6 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/people" component={AdminPeople} />
 				<Route path="/admin/sales" component={AdminSales} />
 				<Route exact path="/admin/showschedule" component={AdminShowSchedule} />
-				<Route path="/admin/showschedule/:schedule_id" component={AdminShowScheduleExact} />
 				<Route path="/admin/modify/showschedule/:schedule_id" component={AdminModifyShowSchedule} />
 				<Route path="/admin/store" component={AdminStore} />
 				<Route path="/admin/theater" component={AdminTheater} />

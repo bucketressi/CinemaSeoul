@@ -8,7 +8,7 @@ const UserRouter : React.FC = () => (
 	<Layout>
 		<Switch>
 			<Route path="/ask" component={Ask}/>
-			<Route path="/book" component={Book}/>
+			<Route exact path="/book" component={Book}/>
 			<Route path="/event" component={Event}/>
 			<Route path="/faq" component={FAQ}/>
 			<Route path="/login" component={Login}/>

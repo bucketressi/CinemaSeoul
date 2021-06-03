@@ -1,6 +1,9 @@
 export { default as Main } from './Main';
 export { default as Ask } from './Ask';
 export { default as Book } from './Book';
+export { default as BookSchedule } from './BookSchedule';
+export { default as BookSeat } from './BookSeat';
+export { default as BookPay } from './BookPay';
 export { default as Event } from './Event';
 export { default as FAQ } from './FAQ';
 export { default as Login } from './Login';
