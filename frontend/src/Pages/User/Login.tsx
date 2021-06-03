@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { SelectModule } from '../../Components';
+import { PageTitle, SelectModule } from '../../Components';
 import { Tabs, Tab, TextField, Checkbox, Button, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { useUserLogin, useNonUserLogin } from '../../Main/UserModel';
 import "../../scss/pages/login.scss";
@@ -39,8 +39,12 @@ const Login = () => {
 	}
 
 	const handleNonUserLogin = () => {
-		if(password !== passwordDual){
+		if (password !== passwordDual) {
 			alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
+			return;
+		}
+		if (!email.includes("@")) {
+			alert("이메일 형식을 확인해주세요.");
 			return;
 		}
 		nonUserLogin({
@@ -55,6 +59,10 @@ const Login = () => {
 
 	return (
 		<div className="login-con">
+			<PageTitle
+				title="로그인"
+				isButtonVisible={false}
+			/>
 			<Tabs
 				value={type}
 				onChange={handleTypeChange}
@@ -77,7 +85,7 @@ const Login = () => {
 						<Button className="btn" variant="contained" color="primary" onClick={handleUserLogin}>로그인</Button>
 						<div className="under-menu">
 							<div className="checkbox-con">
-								<Checkbox color="primary" value={saveId} onChange={() => {setSaveId(!saveId)}}/>
+								<Checkbox color="primary" value={saveId} onChange={() => { setSaveId(!saveId) }} />
 								<p>아이디저장</p>
 							</div>
 							<div className="sub-menu">
@@ -99,15 +107,15 @@ const Login = () => {
 				<div className="nonuser-form">
 					<div className="form-con">
 						<div className="input-con">
-							<TextField variant="outlined" placeholder="이름" inputProps={{ maxLength: 20 }} onChange={(e) => { setName(e.target.value); }} />
-							<TextField variant="outlined" placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e) => { setPhoneNum(e.target.value); }} />
+							<TextField variant="outlined" value={name} placeholder="이름" inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
+							<TextField variant="outlined" value={name} placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
 							<div className="birth-con">
-								<SelectModule tag="Year" value={birthYear} handleValueChange={(e) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
-								<SelectModule tag="Month" value={birthMonth} handleValueChange={(e) => { setBirthMonth(e.target.value) }} start={1} end={12} />
-								<SelectModule tag="Date" value={birthDate} handleValueChange={(e) => { setBirthDate(e.target.value) }} start={1} end={30} />
+								<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
+								<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
+								<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
 							</div>
-							<TextField variant="outlined" type="password" placeholder="예매 비밀번호" onChange={(e) => { setPassword(e.target.value); }} />
-							<TextField variant="outlined" type="password" placeholder="예매 비밀번호 확인" onChange={(e) => { setPasswordDual(e.target.value); }} />
+							<TextField variant="outlined" type="password" placeholder="예매 비밀번호" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
+							<TextField variant="outlined" type="password" placeholder="예매 비밀번호 확인" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
 						</div>
 						<div className="btn-con">
 							<Link to="/SignUp"><Button className="btn" variant="outlined" color="primary">회원가입</Button></Link>
@@ -128,8 +136,8 @@ const Login = () => {
 
 								※ 비회원 예매서비스 제공을 위한 최소한의 개인정보이며 거부할 수 있습니다. 다만, 수집에 동의하지 않을 경우 서비스 이용이 제한됩니다.<br />
 							</p>
-							<RadioGroup value={agreement} className="agree-check-con" onChange={(e)=>{setAgreement(e.target.value)}}>
-								<FormControlLabel value="1" control={<Radio color="primary"/>} label="동의" />
+							<RadioGroup value={agreement} className="agree-check-con" onChange={(e) => { setAgreement(e.target.value) }}>
+								<FormControlLabel value="1" control={<Radio color="primary" />} label="동의" />
 								<FormControlLabel value="0" control={<Radio color="primary" />} label="동의하지 않음" />
 							</RadioGroup>
 						</div>
