@@ -24,4 +24,11 @@
 			background-color: transparent;
 		}
 	}
+	.modify-btn-con{
+		display: flex;
+		flex-direction: column;
+		&>button{
+			margin-bottom: 5px;
+		}
+	}
 }
