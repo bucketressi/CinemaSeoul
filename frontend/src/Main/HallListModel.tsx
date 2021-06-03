@@ -53,7 +53,7 @@ export function useHallListDispatch() {
 	const context = useContext(hallDispatch);
 	return context;
 }
-export function usefetchHallFunction() {
+export function useFetchHallFunction() {
 	const context = useContext(fetchHallFunction);
 	return context;
 }

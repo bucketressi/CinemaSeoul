@@ -2,7 +2,7 @@ import React, { DOMElement, ReactElement, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { ModalComponent, PageTitle } from '../../Components';
 import { FormControl, InputLabel, Select, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField } from '@material-ui/core';
-import { useHallListState, usefetchHallFunction } from '../../Main/HallListModel';
+import { useHallListState, useFetchHallFunction } from '../../Main/HallListModel';
 import { useSeatTypeCodeState } from '../../Main/CodeModel';
 import { HallType, HallListType, SeatObjType, SeatType, CodeMatch } from '../../Main/Type';
 import "../../scss/pages/adminhall.scss";
@@ -14,7 +14,7 @@ import { useTokenState } from '../../Main/TokenModel';
 
 const AdminHall = () => {
 	const AUTH_TOKEN = useTokenState();
-	const fetchHall = usefetchHallFunction();
+	const fetchHall = useFetchHallFunction();
 	const hallList = useHallListState();
 	const seatTypeCode = useSeatTypeCodeState();
 

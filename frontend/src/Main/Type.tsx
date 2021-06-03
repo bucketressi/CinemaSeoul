@@ -112,12 +112,10 @@ export type ShowScheduleType = {
 	rema_seat: number;
 }
 
-export type ShowScheduleListType = {
-	showschedule_list: ShowScheduleType[],
-	page: number;
-	totalpage: number;
-	amount: number;
-}
+export type ShowScheduleListType = ShowScheduleType[];
+export type ShowScheduleListObjType = {
+	[show_id : number] : ShowScheduleType
+};
 
 /* hall */
 export type HallType = {
