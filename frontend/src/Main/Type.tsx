@@ -19,6 +19,11 @@ export type CodeType = {
 
 /* Movie */
 
+export type CastMovieType = {
+	movi_id: number,
+	movi_name: string
+}
+
 export type SimpleMovieListType = {
 	movie_list: SimpleMovieType[],
 	page: number,
@@ -28,17 +33,16 @@ export type SimpleMovieListType = {
 export type MovieType = {
 	movi_id: number,
 	movi_name: string,
-	avi_age: string,
-	show_time: number,
+	avai_age: string,
+	run_time: number,
 	company: string,
 	movi_contents: string,
 	open_date: string,
-	genre: number[],
-	cast_director: PeopleType,
-	cast_actor: PeopleType,
+	genre: string[],
+	casting: MovieCastingType[],
 	image: string,
 	accu_audience: number,
-	bookrecord: number
+	rating: number
 }
 
 export type SimpleMovieType = {
@@ -71,6 +75,16 @@ export type MovieCastingType = {
 	cast_type_code: string, //"210001", 
 	peop_id: number,//1,
 	peop_name: string
+}
+
+export type PeopleExactType = {
+    peop_id: number,//2,
+    peop_name: string,//"강동원",
+    nation: string,//"한국",
+    birth: string,//"19810118",
+    peop_contents: string,//"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다.",
+    image: string,//"",
+    movies: CastMovieType[]
 }
 
 /* User */

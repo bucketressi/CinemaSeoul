@@ -1,0 +1,7 @@
+.signup-con{
+	display: flex;
+	justify-content: space-between;
+	&>div{
+		width: 48%;
+	}
+}

@@ -3,7 +3,6 @@
 
 .login-con{
 	width: 100%;
-    margin-top: 50px;
 	.MuiTabs-flexContainer{
 		width: 100%!important;
 		&>button{
@@ -42,6 +41,13 @@
 				width: 33%;
 			}
 		}
+		.with-btn{
+			display: flex;
+			align-items: center;
+			button{
+				margin-left: 10px;
+			}
+		}
 	}
 	.btn{
 		height: 3rem;
@@ -50,9 +56,12 @@
 	}
 	.btn-con{
 		display: flex;
-		justify-content: space-between;
 		&>*{
-			width: 48%;
+			width: 100%;
+			margin-right: 5px;
+		}
+		button{
+			margin-right: 0;
 		}
 	}
 	.under-menu{
