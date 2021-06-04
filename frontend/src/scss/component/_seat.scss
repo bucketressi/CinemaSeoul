@@ -1,0 +1,56 @@
+@import "../base/variable";
+.seat{
+	padding: 3px;
+	div{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: rgb(146, 169, 218);
+		cursor: pointer;
+	}
+	&.장애인석 div{
+		background-color: green;
+	}
+	&.거리두기 div{
+		cursor: initial!important;
+		background-color: rgb(194, 165, 35);
+	}
+	&.불가 div{
+		cursor: initial!important;
+		background-color: gray;
+	}
+	&.selected div{
+		background-color: $red!important;
+	}
+}
+.seat-info-con{
+	display: flex;
+	padding: 20px;
+	border : 1px solid $border-color;
+	margin: 1rem 0;
+	&>div{
+		display: flex;
+		align-items: center;
+		margin-right: 15px;
+	}
+	.seat-shape{
+		width: 20px;
+		height: 20px;
+		margin-right: 5px;
+		&.일반{
+			background-color: rgb(146, 169, 218);
+		}
+		&.장애인석{
+			background-color: green;
+		}
+		&.거리두기{
+			background-color: rgb(194, 165, 35);
+		}
+		&.불가{
+			background-color: gray;
+		}
+		&.selected{
+			background-color: $red;
+		}
+	}
+}

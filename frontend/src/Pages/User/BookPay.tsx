@@ -45,7 +45,11 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 
 	const fetchPoint = () => {
 		// todo : token 나중에 체크하는 걸로 변동되면 고치기
-		axios.get(`${SERVER_URL}/point/${userId}`)
+		axios.get(`${SERVER_URL}/point/${userId}`, {
+			headers : {
+				TOKEN : AUTH_TOKEN
+			}
+		})
 			.then((res) => {
 				const num = Number(res.data);
 				if (isNaN(num))
