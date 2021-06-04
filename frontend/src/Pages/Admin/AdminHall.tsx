@@ -86,8 +86,8 @@ const AdminHall = () => {
 
 	/* 좌석 수정 */
 
-	useEffect(()=> {
-		const obj : CodeMatch = {};
+	useEffect(() => {
+		const obj: CodeMatch = {};
 		seatTypeCode.forEach((code) => {
 			obj[Number(code.code_id)] = code.code_name;
 		})
@@ -108,12 +108,12 @@ const AdminHall = () => {
 			});
 	}
 
-	const removeHall = (hall_id : number) => {
-		if(!hallList)
+	const removeHall = (hall_id: number) => {
+		if (!hallList)
 			return;
-		if(!confirm(`[${hallList[hall_id].hall_name}] 상영관을 삭제하시겠습니까?`))
+		if (!confirm(`[${hallList[hall_id].hall_name}] 상영관을 삭제하시겠습니까?`))
 			return;
-		axios.delete(`${SERVER_URL}/hall/delete/${hall_id}`,{
+		axios.delete(`${SERVER_URL}/hall/delete/${hall_id}`, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
 			}
@@ -176,11 +176,12 @@ const AdminHall = () => {
 				DOM.push(getSeatArray(i, col));
 			}
 		}
+
 		return DOM;
 	}
 
-	const handleSelectSeat = (seat : SeatType | undefined) => { // 좌석 클릭 시 정보 저장하고 모달 띄우기
-		if(!seat)
+	const handleSelectSeat = (seat: SeatType | undefined) => { // 좌석 클릭 시 정보 저장하고 모달 띄우기
+		if (!seat)
 			return;
 		setOpenSeatTypeModal(true);
 		setSelectedSeat(seat.seat_num);
@@ -258,13 +259,13 @@ const AdminHall = () => {
 
 	const addHall = () => {
 		// api 호출해서 hall 저장
-		if(hallRow === 0 || hallCol === 0){
+		if (hallRow === 0 || hallCol === 0) {
 			alert("행과 열은 적어도 1이어야 합니다.");
 		}
 		axios.post(`${SERVER_URL}/hall`, {
-			"hall_name" : hallName === "" ? null : hallName,
-			"hall_row" : hallRow,
-			"hall_col" : hallCol
+			"hall_name": hallName === "" ? null : hallName,
+			"hall_row": hallRow,
+			"hall_col": hallCol
 		}, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
@@ -355,7 +356,7 @@ const AdminHall = () => {
 							</Table>
 						</TableContainer>
 						<div className="seat-info-con">
-								
+
 						</div>
 					</div>
 				</ModalComponent>

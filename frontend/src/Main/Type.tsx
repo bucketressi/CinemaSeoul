@@ -59,6 +59,13 @@ export type MovieListObjType = {
 	[movi_id: number]: SimpleMovieType
 }
 
+export type AbleMovieType = {
+	movi_id: number,
+	movi_name: string,
+	avai_age: string
+}
+
+
 /* people */
 
 export type PeopleType = {
@@ -114,16 +121,16 @@ export type AdminType = {
 
 /* show schedule */
 export type ShowScheduleType = {
-	show_id: number;
-	movi_id: number;
-	movi_name: string;
-	hall_id: number;
-	hall_name: string; // "42-1관",
-	show_date: string; //  "2021/05/25",
-	show_time: string; //  "01/41",
-	end_time: string; // "2021/12/30/06/03",
-	hall_seat: number;
-	rema_seat: number;
+	show_id: number,
+	movi_id: number,
+	movi_name: string,
+	hall_id: number,
+	hall_name: string, // "42-1관",
+	show_date: string, //  "2021/05/25",
+	show_time: string, //  "01/41",
+	end_time: string, // "2021/12/30/06/03",
+	hall_seat: number,
+	rema_amount: number,
 }
 
 export type ShowScheduleListType = ShowScheduleType[];
@@ -157,3 +164,30 @@ export type SeatType = {
 	seat_num: number; //0,
 	seat_type_code: string; //"230001"
 }
+
+export type BookSeatType = {
+	hall_id: number; //42,
+	seat_num: number; //0,
+	seat_type: string; //"230001"
+	booked : boolean
+}
+
+/* Book */
+
+export type BookShowScheduleType = {
+	show_id: number,
+	movi_name : string,
+	hall_name : string,
+	show_date: string, //  "2021/05/25",
+	show_time: string, //  "01/41",
+	rema_amount: number,
+	hall_seat: number
+}
+
+export type BookSeatListType = BookSeat[];
+export type BookSeat = {
+	hall_id: 66,
+	seat_num: 0,
+	seat_type: "230001",
+	booked: false
+};
