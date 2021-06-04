@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PayListCriteria extends Criteria{
+public class AskCriteria extends Criteria{
+    private int answered;
     private Integer user_id;
-    private String start_date;
-    private String end_date;
 }

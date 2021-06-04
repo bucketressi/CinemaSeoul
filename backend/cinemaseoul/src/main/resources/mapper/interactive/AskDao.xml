@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.interactive.AskDao">
+
+    <insert id="insertAsk" parameterType="AskVo">
+        INSERT INTO ASK (ASK_ID, USER_ID, USER_NAME,
+                         ASK_TITLE, ASK_CONTENTS, ANSW_DATETIME)
+         VALUES (SEQ_ASK.NEXTVAL, #{user_id},
+                 (SELECT USER_NAME FROM USERS WHERE USER_ID = #{user_id}),
+                 #{ask_title}, #{ask_contents}, DEFAULT)
+    </insert>
+
+    <select id="selectAsk" resultType="AskVo">
+        SELECT ASK_ID, USER_ID, USER_NAME, ASK_TITLE, ASK_CONTENTS, ADMI_ID, ADMI_NAME, ANSWER,
+               CREA_DATETIME, ANSW_DATETIME FROM ASK
+        WHERE ASK_ID = #{ask_id}
+    </select>
+
+    <update id="updateAsk" parameterType="AskVo">
+        UPDATE ASK SET ASK_TITLE = #{ask_title, jdbcType=VARCHAR},
+                       ASK_CONTENTS = #{ask_contents, jdbcType=VARCHAR}
+        WHERE ASK_ID = #{ask_id} AND USER_ID = #{user_id}
+    </update>
+
+    <delete id="deleteAsk">
+        DELETE ASK WHERE ASK_ID = #{ask_id}
+    </delete>
+
+    <update id="answerAsk" parameterType="AskVo">
+        UPDATE ASK SET ADMI_ID =#{admi_id},
+                       ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = #{admi_id}),
+                       ANSWER = #{answer},
+                       ANSW_DATETIME = SYSDATE
+        WHERE ASK_ID = #{ask_id}
+    </update>
+
+    <select id="countList" parameterType="AskCriteria" resultType="Integer">
+        SELECT COUNT(ASK_ID) FROM ASK
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="user_id != null">
+                AND ASK.USER_ID = #{user_id}
+            </if>
+
+            <choose>
+                <when test="answered == 1">
+                    AND ASK.ADMI_ID IS NULL
+                </when>
+                <when test="answered == 2">
+                    AND ASK.ADMI_ID IS NOT NULL
+                </when>
+            </choose>
+        </trim>
+
+    </select>
+
+
+    <select id="selectAskList" parameterType="AskCriteria" resultType="AskVo">
+        SELECT B.ASK_ID, B.USER_NAME, B.ASK_TITLE, B.CREA_DATETIME,
+               B.ADMI_NAME, B.ANSW_DATETIME
+        FROM (
+                 SELECT /*+index_desc(IDX_ASK_PK)*/ ROWNUM AS RNUM,
+                        A.ASK_ID, A.USER_NAME, A.ASK_TITLE, A.CREA_DATETIME,
+                        A.ADMI_NAME, A.ANSW_DATETIME
+                 FROM(
+                         SELECT ASK_ID, USER_NAME, ASK_TITLE, CREA_DATETIME, ADMI_NAME, ANSW_DATETIME FROM ASK ASK
+
+                        <trim prefix="WHERE" prefixOverrides="AND">
+                            <if test="user_id != null">
+                                AND ASK.USER_ID = #{user_id}
+                            </if>
+                            <choose>
+                                <when test="answered == 1">
+                                    AND ASK.ADMI_ID IS NULL
+                                </when>
+                                <when test="answered == 2">
+                                    AND ASK.ADMI_ID IS NOT NULL
+                                </when>
+                            </choose>
+                        </trim>
+
+                         ORDER BY ASK.ASK_ID DESC) A
+                <![CDATA[ WHERE ROWNUM <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount}
+    ]]>
+    </select>
+
+</mapper>

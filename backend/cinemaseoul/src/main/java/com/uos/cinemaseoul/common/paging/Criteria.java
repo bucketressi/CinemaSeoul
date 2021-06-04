@@ -10,7 +10,6 @@ public class Criteria {
 
     public Criteria(){
         this(1,10); // 1 페이지, 10개 게시글
-
     }
 
     public Criteria(int page, int amount) {

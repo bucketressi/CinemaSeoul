@@ -34,7 +34,7 @@ public class ProductPayController {
     @PostMapping("/pay/product/list")
     public ResponseEntity<?> getBookPayList(Authentication authentication, @RequestBody PayListCriteria payListCriteria){
         //매니저 아니면 자기 것만 조회 가능
-        if(!authentication.getAuthorities().toString().contains("ROLE_3")){
+        if(!authentication.getAuthorities().toString().contains("ROLE_4")){
             payListCriteria.setUser_id(Integer.parseInt(authentication.getName()));
         }
 

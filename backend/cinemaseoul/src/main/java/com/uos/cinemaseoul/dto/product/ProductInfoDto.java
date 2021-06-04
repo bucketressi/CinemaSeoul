@@ -11,6 +11,6 @@ public class ProductInfoDto {
     private int prod_id;
     private String prod_name;
     private int price;
-    private int number;
+    private int limit;
     private byte[] image;
 }

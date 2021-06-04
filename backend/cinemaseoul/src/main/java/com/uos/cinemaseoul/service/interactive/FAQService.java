@@ -3,15 +3,15 @@ package com.uos.cinemaseoul.service.interactive;
 import com.uos.cinemaseoul.common.mapper.FAQMapper;
 import com.uos.cinemaseoul.common.paging.Criteria;
 import com.uos.cinemaseoul.dao.interactive.FAQDao;
-import com.uos.cinemaseoul.dto.interactive.FAQDto;
-import com.uos.cinemaseoul.dto.interactive.FAQListDto;
+import com.uos.cinemaseoul.dto.interactive.faq.FAQDto;
+import com.uos.cinemaseoul.dto.interactive.faq.FAQListDto;
+import com.uos.cinemaseoul.dto.interactive.faq.FAQShortDto;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.vo.interactive.FAQVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,7 +55,8 @@ public class FAQService {
 
         //total page
         faqListDto.setPageInfo(totalPage, criteria.getPage(), criteria.getAmount());
-        faqListDto.setFaq_lists(faqDao.selectFAQList(criteria).stream().map( o -> faqMapper.insertIntoFAQDtoByFAQVo(o))
+        faqListDto.setFaq_lists(faqDao.selectFAQList(criteria).stream()
+                .map( o -> new FAQShortDto(o.getFaq_id(), o.getAdmi_name(), o.getFaq_title()))
                 .collect(Collectors.toList()));
 
         return faqListDto;

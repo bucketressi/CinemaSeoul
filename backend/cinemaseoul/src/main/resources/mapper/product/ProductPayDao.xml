@@ -40,7 +40,7 @@
     <!--[상품결제 취소]-->
     <!--포인트 원복용-->
     <select id="getCancelInfo" resultType="ProductPayVo">
-        SELECT PROD_PAY_ID, ACCU_POINT, USE_POINT FROM PRODUCTPAY
+        SELECT PROD_PAY_ID, USER_ID, ACCU_POINT, USE_POINT FROM PRODUCTPAY
         WHERE PROD_PAY_ID  = #{prod_pay_id}
     </select>
     <!--결제상태취소-->

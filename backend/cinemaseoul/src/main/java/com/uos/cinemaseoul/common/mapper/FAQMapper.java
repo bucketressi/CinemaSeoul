@@ -1,8 +1,6 @@
 package com.uos.cinemaseoul.common.mapper;
 
-import com.uos.cinemaseoul.dto.book.bookpay.BookPayInsertDto;
-import com.uos.cinemaseoul.dto.interactive.FAQDto;
-import com.uos.cinemaseoul.vo.book.BookVo;
+import com.uos.cinemaseoul.dto.interactive.faq.FAQDto;
 import com.uos.cinemaseoul.vo.interactive.FAQVo;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

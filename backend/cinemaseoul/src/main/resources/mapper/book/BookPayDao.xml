@@ -42,7 +42,7 @@
 
     <!--[사용 취소]-->
     <select id="getCancelInfo" resultType="BookPayVo">
-        SELECT BOOK_PAY_ID, ACCU_POINT, USE_POINT FROM BOOKPAY
+        SELECT BOOK_PAY_ID, USER_ID, ACCU_POINT, USE_POINT FROM BOOKPAY
         WHERE BOOK_PAY_ID  = (SELECT BOOK_PAY_ID FROM BOOK WHERE BOOK_ID = #{book_id})
     </select>
 

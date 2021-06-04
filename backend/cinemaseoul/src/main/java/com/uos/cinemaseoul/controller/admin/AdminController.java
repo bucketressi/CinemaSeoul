@@ -5,8 +5,7 @@ import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.common.paging.Criteria;
-import com.uos.cinemaseoul.controller.user.UsersController;
-import com.uos.cinemaseoul.dto.user.*;
+import com.uos.cinemaseoul.dto.user.LoginDto;
 import com.uos.cinemaseoul.dto.user.admin.AdminFindDto;
 import com.uos.cinemaseoul.dto.user.admin.AdminInfoDto;
 import com.uos.cinemaseoul.dto.user.admin.AdminListDto;
@@ -16,7 +15,6 @@ import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.service.admin.AdminService;
 import com.uos.cinemaseoul.vo.admin.AdminVo;
-import jdk.swing.interop.SwingInterOpUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +81,7 @@ public class AdminController {
     public void updateAdmi(Authentication authentication, @RequestBody final AdminVo adv)throws Exception{
 
         //매니저도 아니고, 자기 id도 아니면
-        if((!authentication.getAuthorities().toString().contains("ROLE_3"))
+        if((!authentication.getAuthorities().toString().contains("ROLE_4"))
                 && Integer.parseInt(authentication.getName()) != adv.getAdmi_id()){
 
             throw new DuplicateException("에러");
@@ -112,7 +110,7 @@ public class AdminController {
     public ResponseEntity<AdminInfoDto> selectById(Authentication authentication, @PathVariable int admi_id){
 
         //매니저도 아니고, 자기 id도 아니면
-        if( (!authentication.getAuthorities().toString().contains("ROLE_3") )
+        if( (!authentication.getAuthorities().toString().contains("ROLE_4") )
                 && Integer.parseInt(authentication.getName()) != admi_id )
             throw new DuplicateException();
 
@@ -135,7 +133,7 @@ public class AdminController {
     public void deleteUser(Authentication authentication, @PathVariable(name = "movi_id") int admi_id)throws Exception{
 
         //매니저도 아니고, 자기 id도 아니면
-        if(!authentication.getAuthorities().toString().contains("ROLE_3")
+        if(!authentication.getAuthorities().toString().contains("ROLE_4")
                 && Integer.parseInt(authentication.getName()) !=  admi_id) throw new DuplicateException();
 
         try {

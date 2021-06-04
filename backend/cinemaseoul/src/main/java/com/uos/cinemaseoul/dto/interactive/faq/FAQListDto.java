@@ -1,4 +1,4 @@
-package com.uos.cinemaseoul.dto.interactive;
+package com.uos.cinemaseoul.dto.interactive.faq;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class FAQListDto {
 
-    List<FAQDto> faq_lists = new ArrayList<>();
+    List<FAQShortDto> faq_lists = new ArrayList<>();
     private int page;
     private int totalpage;
     private int amount;

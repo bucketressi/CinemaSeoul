@@ -64,13 +64,13 @@ public class PointService {
     @Transactional
     public void notAddPoint(PointVo pointVo) {
         pointDao.updatePoint(pointVo);
-        pointDao.returnUserUsePoint(pointVo);
+        pointDao.returnUserAddPoint(pointVo);
     }
 
     @Transactional
     public void notUsePoint(PointVo pointVo) {
         pointDao.updatePoint(pointVo);
-        pointDao.returnUserAddPoint(pointVo);
+        pointDao.returnUserUsePoint(pointVo);
     }
 
     @Transactional
