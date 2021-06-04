@@ -1,3 +1,9 @@
+@import "../base/variable";
+
+.hall-add-con{
+	display:flex;
+	justify-content: flex-end;
+}
 .hall-list-con{
 	.MuiTableRow-root{
 		cursor: pointer;
@@ -20,22 +26,8 @@
 	}
 }
 
-.seat{
-		padding: 3px;
-	div{
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: rgb(146, 169, 218);
-		cursor: pointer;
-	}
-	&.disabled div{
-		background-color: green;
-	}
-	&.distance div{
-		background-color: rgb(194, 165, 35);
-	}
-	&.impossible div{
-		background-color: gray;
+.add-hall-input-con{
+	&>div{
+		margin-right: 10px;
 	}
 }

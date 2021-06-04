@@ -5,28 +5,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { useUserState, useLogout } from '../Main/UserModel';
 import {useMovieListDispatch} from '../Main/MovieListModel';
 
-const changedMovieData = {
-	movie_list: [
-		{
-			movi_id: 1,
-			movi_name: "귀멸의 칼날",
-			accu_audience: 408,
-			avi_age: 15,
-			open_date: new Date("2021/05/30"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202101/16908_103_1.jpg"
-		}, {
-			movi_id: 2,
-			movi_name: "보이저스",
-			accu_audience: 202,
-			avi_age: 18,
-			open_date: new Date("2021/06/03"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-		}
-	],
-	page: 1,
-	totalpage: 1,
-	amount: 2
-};
 
 // user 페이지의 header
 const Header = () => {
@@ -52,7 +30,6 @@ const Header = () => {
 	const search = () => {
 		// 검색 시 type을 null, "감독", "배우"로 mapping
 		// movielist로 이동하면서 props로 api로부터 받은 moviedata 전달
-		setMovieList(changedMovieData);
 		history.push("/movie");
 	}
 
@@ -68,14 +45,14 @@ const Header = () => {
 						<li><Link to="/movie">영화</Link></li>
 						<li><Link to="/book">예매</Link></li>
 						<li>커뮤니티</li>
-						<li><Link to="/store">스토어</Link></li>
+						<li><Link to="/product">스토어</Link></li>
 					</ul>
 				</div>
 			</div>
 			<div>
 				<div className="sub-menu">
 					{
-						user ?
+						user !== undefined ?
 							<ul>
 								<li><Link to="/myPage"><Button color="primary" variant="outlined">마이페이지</Button></Link></li>
 								<li className="logout" onClick={logout}><Button color="primary" variant="outlined">로그아웃</Button></li>

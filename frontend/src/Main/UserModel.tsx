@@ -1,34 +1,86 @@
-import React, { useState, useContext, createContext, Dispatch } from 'react';
+import React, { useState, useContext, createContext, Dispatch, useEffect } from 'react';
 import { UserType, childrenObj } from './Type';
+import axios from 'axios';
+import { SERVER_URL } from '../CommonVariable';
+import { errorHandler } from './ErrorHandler';
+import { useTokenDispatch, useTokenState } from './TokenModel';
+import { useHistory } from 'react-router-dom';
 
-const userState = createContext<UserType | undefined>(undefined);
-const userDispatch = createContext<Dispatch<UserType>>(() => { });
+const userState = createContext<number | undefined>(undefined);
+const userDispatch = createContext<Dispatch<number>>(() => { });
 const userLoginFunction = createContext<(id: string, password: string) => void>(() => { });
-const nonUserLoginFunction = createContext<(user : UserType) => void>(() => { });
+const nonUserLoginFunction = createContext<(user: UserType) => void>(() => { });
+const adminState = createContext<number | undefined>(undefined);
+const adminDispatch = createContext<Dispatch<number>>(() => { });
+const adminLoginFunction = createContext<(id: string, password: string) => void>(() => { });
 const logoutFunction = createContext<() => void>(() => { });
 
 export const UserContextProvider = ({ children }: childrenObj) => {
-	const [user, setUser] = useState<UserType | undefined>(undefined);
-	const initialUser = {
-		user_name: "우희은",
-		phone_num: "010-4444-4444",
-		password: "hihello",
-		agreement: "1"
-	};
+	const setToken = useTokenDispatch();
+	const AUTH_TOKEN = useTokenState();
+	const history = useHistory();
 
-	function userLogin(id: string, password: string) {
-		// todo : api로 login하기 => 응답으로 setUser
-		setUser(initialUser);
+	const [user, setUser] = useState<number | undefined>(undefined);
+	const [admin, setAdmin] = useState<number | undefined>(undefined);
+
+	function userLogin(email: string, password: string) {
+		axios.post(`${SERVER_URL}/user/login`, {
+			"email": email,
+			"password": password
+		})
+			.then((res) => {
+				setToken(res.data.token); // token 세팅
+				setUser(res.data.user_id);
+				setAdmin(undefined);
+				history.push("/main");
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+			});
 	}
 
-	function nonUserLogin(user : UserType){
-		// todo : api로 nonuser-login하기 => 응답으로 setUser
-		setUser(initialUser);
+	function nonUserLogin(user: UserType) {
+		axios.post(`${SERVER_URL}/user/login/non-member`, {
+			"user_name": user.user_name,
+			"phone_num": user.phone_num,
+			"password": user.password,
+			"agreement": user.agreement
+		})
+			.then((res) => {
+				setToken(res.data.token); // token 세팅
+				setUser(res.data.user_id);
+				setAdmin(undefined);
+				localStorage.setItem("auth", res.data.token);
+				localStorage.setItem("type", "non-user");
+				history.push("/main");
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+			});
+	}
+
+	function adminLogin(email: string, password: string) {
+		axios.post(`${SERVER_URL}/admin/login`, {
+			"email": email,
+			"password": password
+		})
+			.then((res) => {
+				setToken(res.data.token); // token 세팅
+				setAdmin(res.data.admi_id);
+				setUser(undefined);
+				localStorage.setItem("auth", res.data.token);
+				localStorage.setItem("type", "admin");
+				history.push("/admin/main");
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+			});
 	}
 
 	function logout() {
-		// todo : api로 logout하기
 		setUser(undefined);
+		setAdmin(undefined);
+		setToken("");
 	}
 
 	return (
@@ -37,7 +89,13 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				<logoutFunction.Provider value={logout}>
 					<userDispatch.Provider value={setUser}>
 						<userState.Provider value={user}>
-							{children}
+							<adminState.Provider value={admin}>
+								<adminDispatch.Provider value={setAdmin}>
+									<adminLoginFunction.Provider value={adminLogin}>
+										{children}
+									</adminLoginFunction.Provider>
+								</adminDispatch.Provider>
+							</adminState.Provider>
 						</userState.Provider>
 					</userDispatch.Provider>
 				</logoutFunction.Provider>
@@ -64,5 +122,17 @@ export function useNonUserLogin() {
 }
 export function useLogout() {
 	const context = useContext(logoutFunction);
+	return context;
+}
+export function useAdminState() {
+	const context = useContext(adminState);
+	return context;
+}
+export function useAdminDispatch() {
+	const context = useContext(adminDispatch);
+	return context;
+}
+export function useAdminLogin() {
+	const context = useContext(adminLoginFunction);
 	return context;
 }

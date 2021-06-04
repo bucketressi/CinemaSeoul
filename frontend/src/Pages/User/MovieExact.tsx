@@ -1,12 +1,15 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { ExactMovie } from '../../Components';
 
-const MovieExact = () => {
-	const a = 1;
+interface MatchParams {
+	movie_id: string
+}
+
+const MovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
 	return (
-		<div>
-			상세 영화페이지
-		</div>
-	);
+		<ExactMovie movie_id={match.params.movie_id}/>
+	)
 }
 
 export default MovieExact;
