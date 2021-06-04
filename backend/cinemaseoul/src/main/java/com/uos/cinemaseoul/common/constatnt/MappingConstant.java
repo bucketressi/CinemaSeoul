@@ -4,6 +4,7 @@ public class MappingConstant {
 
     //로그인 없이 다 가능한 것들
     public static String[] All ={
+
             "/user/login",
             "/user/signup",
             "/user/login/non-member",
@@ -40,7 +41,10 @@ public class MappingConstant {
             "/faq/list",
 
             "/notice/{noti_id}",
-            "/notice/list"
+            "/notice/list",
+
+            "/event/list",
+            "/event/{event_id}"
     };
 
     //2 (비회원, 회원 둘다 가능)
@@ -53,8 +57,6 @@ public class MappingConstant {
             "/pay/book",
             "/pay/product",
             "/showschedule/{show_id}"
-
-
     };
 
     //1 (회원 가능)
@@ -86,14 +88,14 @@ public class MappingConstant {
             "/movie/add",
             "/movie/delete/{movi_id}",
 
+            "/showschedule",
+            "/showschedule/add",
+            "/showschedule/{show_id}/book",
+            "/showschedule/delete/{show_id}",
+
             "/point/update",
 
             "/hall/{hall_id}",
-
-            "/showschedule",
-            "/showschedule/{show_id}/book",
-            "/showschedule/add",
-            "/showschedule/delete/{show_id}",
 
             "/prod",
             "/prod/image",
@@ -118,7 +120,13 @@ public class MappingConstant {
 
             "/notice/add",
             "/notice/update",
-            "/notice/delete/{noti_id}"
+            "/notice/delete/{noti_id}",
+
+            "/event/add",
+            "/event/update",
+            "/event/image",
+            "/event/delete/{event_id}"
+
     };
 
     //3 (매니저(높은 관리자만) 가능)
@@ -148,6 +156,6 @@ public class MappingConstant {
 
             "/ask/list",
             "/ask/{ask_id}",
-            "/ask/delete/{ask_id}"
+            "/ask/delete/{ask_id}",
     };
 }

@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.dto.user.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class UserInfoDto {
     private String birth;
     private String phone_num;
     private String email;
+    @JsonIgnore
     private String password;
     private String agreement;
     private int curr_point;

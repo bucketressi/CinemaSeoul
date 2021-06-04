@@ -60,17 +60,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //1 (회원 가능)
                 .antMatchers(MappingConstant.User).hasRole("1")
 
+                //3 (매니저(높은 관리자만) 가능)
+                .antMatchers(MappingConstant.Manager).hasRole("3")
+
                 //4 (직원 가능 = 매너지도 가능)
                 .antMatchers(MappingConstant.Admin).hasAnyRole("3","4")
 
-                //3 (매니저(높은 관리자만) 가능)
-                .antMatchers(MappingConstant.Manager).hasAnyRole("3")
-
                 //5 모든 롤 가능
                 .antMatchers(MappingConstant.AllUser).hasAnyRole("1","2","3","4")
-
-
-
 
                 .and()
                 .cors()

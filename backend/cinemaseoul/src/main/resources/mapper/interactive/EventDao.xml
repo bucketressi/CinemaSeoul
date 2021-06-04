@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.interactive.EventDao">
+
+    <insert id="insertEvent" parameterType="EventVo">
+        INSERT INTO EVENT (EVENT_ID, ADMI_ID, ADMI_NAME, EVENT_TITLE, EVENT_CONTENTS, CREA_DATETIME, IMAGE)
+        VALUES ( SEQ_EVENT.nextval, #{admi_id},
+                (SELECT ADMI_NAME FROM ADMIN WHERE ADMIN.ADMI_ID = #{admi_id}),
+                #{event_title}, #{event_contents}, DEFAULT,
+                <choose>
+                    <when test= "image != null"> #{image, jdbcType=BLOB} </when>
+                    <otherwise> empty_blob() </otherwise>
+                </choose>
+               )
+    </insert>
+
+    <update id="updateEvent" parameterType="EventVo">
+        UPDATE EVENT SET ADMI_ID = #{admi_id},
+                         ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMIN.ADMI_ID = #{admi_id}),
+                         EVENT_TITLE = #{event_title},
+                         EVENT_CONTENTS = #{event_contents},
+                         CREA_DATETIME = SYSDATE
+        WHERE EVENT_ID = #{event_id}
+    </update>
+
+    <update id="updateEventImage" parameterType="EventVo">
+        UPDATE EVENT SET IMAGE =
+        <choose>
+            <when test= "image != NULL"> #{image, jdbcType=BLOB} </when>
+            <otherwise> empty_blob() </otherwise>
+        </choose>
+    </update>
+
+    <delete id="deleteEvent">
+        DELETE EVENT WHERE EVENT_ID = #{event_id}
+    </delete>
+
+    <select id="countList" resultType="Integer">
+        SELECT COUNT(EVENT_ID) FROM EVENT
+    </select>
+
+    <select id="selectEventList" parameterType="Criteria" resultType="EventVo">
+        SELECT B.EVENT_ID, B.ADMI_NAME, B.EVENT_TITLE, B.CREA_DATETIME
+        FROM (
+                 SELECT /*+index_desc(IDX_EVENT_PK)*/ ROWNUM AS RNUM,
+                                                       A.EVENT_ID, A.ADMI_NAME, A.EVENT_TITLE, A.CREA_DATETIME
+                 FROM(
+                         SELECT E.EVENT_ID, E.ADMI_NAME, E.EVENT_TITLE, E.CREA_DATETIME FROM EVENT E
+
+                         ORDER BY E.EVENT_ID DESC) A
+        <![CDATA[ WHERE ROWNUM <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount}
+        ]]>
+    </select>
+
+    <select id="selectEvent" resultType="EventVo">
+        SELECT EVENT_ID, ADMI_ID, ADMI_NAME, EVENT_TITLE, EVENT_CONTENTS, CREA_DATETIME FROM EVENT
+        WHERE EVENT_ID = #{event_id}
+    </select>
+
+</mapper>

@@ -4,6 +4,7 @@ import com.uos.cinemaseoul.dao.movie.BatchDao;
 import com.uos.cinemaseoul.dto.movie.batch.*;
 import com.uos.cinemaseoul.vo.movie.SalesVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,7 @@ public class BatchService {
 
     @Transactional
     //매일 새벽 1시에 업데이트, server zone = Asia/Seoul
-    //@Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
     public void updateAudience(){
         //어제 날짜 획득
        String yesterday = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -39,7 +40,7 @@ public class BatchService {
 
     @Transactional
     //매일 새벽 1시에 업데이트, server zone = Asia/Seoul
-    //@Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
     public void updateSales(){
 
         //어제 날짜 획득

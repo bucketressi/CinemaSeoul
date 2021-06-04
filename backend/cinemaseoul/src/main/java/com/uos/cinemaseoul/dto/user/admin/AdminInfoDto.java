@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.dto.user.admin;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class AdminInfoDto {
     private String birth;
     private String phone_num;
     private String email;
+    @JsonIgnore
     private String password;
     private String position;
     private String address;
