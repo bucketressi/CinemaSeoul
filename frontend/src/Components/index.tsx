@@ -8,3 +8,5 @@ export { default as SelectModule } from './SelectModule';
 export { default as SearchTab } from './SearchTab';
 export { default as ModalComponent } from './ModalComponent';
 export { default as ExactMovie } from './ExactMovie';
+export { default as ProductCard } from './ProductCard';
+export { default as Cart } from './Cart';

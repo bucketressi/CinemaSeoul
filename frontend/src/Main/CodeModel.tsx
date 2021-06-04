@@ -151,12 +151,12 @@ const initialPointTypeCode = [{
 {
 	"code_id": "300003",
 	"parent_code": "300",
-	"code_name": "취소"
+	"code_name": "적립취소"
 },
 {
 	"code_id": "300004",
 	"parent_code": "300",
-	"code_name": "적립취소"
+	"code_name": "사용취소"
 }];
 const initialProductCode = [{
 	"code_id": "310001",
@@ -166,17 +166,7 @@ const initialProductCode = [{
 {
 	"code_id": "310002",
 	"parent_code": "310",
-	"code_name": "관람권"
-},
-{
-	"code_id": "310003",
-	"parent_code": "310",
 	"code_name": "굿즈"
-},
-{
-	"code_id": "310004",
-	"parent_code": "310",
-	"code_name": "패키지"
 }];
 const initialPayTypeCode = [{
 	"code_id": "320001",

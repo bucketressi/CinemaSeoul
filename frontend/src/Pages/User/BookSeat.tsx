@@ -303,7 +303,7 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 					<div className="result-con">
 						<div className="total-price">
 							<div>총 결제 액</div>
-							<div>{payPrice}</div>
+							<div>{payPrice}원</div>
 						</div>
 						<div className="pay-btn">
 							<Button variant="contained" color="primary" onClick={gotoPay}>결제하러 가기</Button>

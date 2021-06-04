@@ -6,6 +6,7 @@ import { ShowScheduleListContextProvider } from './ShowScheduleModel';
 import { HallListContextProvider } from './HallListModel';
 import { TokenContextProvider } from './TokenModel';
 import { CodeContextProvider } from './CodeModel';
+import { CartSyncContextProvider } from './CartSync';
 
 const Provider: React.FC = () => {
 	const a = 1;
@@ -16,7 +17,9 @@ const Provider: React.FC = () => {
 					<MovieListContextProvider>
 						<ShowScheduleListContextProvider>
 							<HallListContextProvider>
-								<Router />
+								<CartSyncContextProvider>
+									<Router />
+								</CartSyncContextProvider>
 							</HallListContextProvider>
 						</ShowScheduleListContextProvider>
 					</MovieListContextProvider>

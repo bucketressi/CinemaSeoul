@@ -1,0 +1,43 @@
+@import "../base/variable";
+
+.product-exact-con{
+	display: flex;
+	flex-direction: column;
+	.product-header{
+		display: flex;
+		height: 500px;
+		.img-con{
+			width: 50%;
+			height: 100%;
+			flex-shrink: 0;
+			display: flex;
+			justify-content: center;
+			img{
+				padding: 30px;
+			}
+		}
+		.info-con{
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			font-size: 1.2rem;
+			&>div{
+				display : flex;
+				align-items: center;
+				margin-bottom: 1rem;
+			}
+			.name{
+				font-size: 2rem;
+				font-weight: 600;
+				padding: 1.5rem 0;
+				margin-bottom: 1.5rem;
+				border-bottom: 1px solid $border-color;
+			}
+			.sub-title{
+				padding : 5px 10px;
+				background-color: lightgray;
+				margin-right: 10px;
+			}
+		}
+	}
+}
