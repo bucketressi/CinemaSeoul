@@ -1,0 +1,60 @@
+.product-pay-con{
+	.pay-con>div{
+		margin-bottom: 3rem;
+	}
+	.MuiTableCell-head{
+		font-size: 1.3rem;
+		font-weight: 600;
+	}
+	.MuiTableCell-body{
+		font-size: 1.1rem;
+	}
+	.two-in-one-con{
+		display: flex;
+		justify-content: space-between;
+		&>div{
+			width: 48%;
+		}
+		.pay-type-con{
+			.MuiFormGroup-root{
+				flex-direction: row!important;
+			}
+		}
+		.point-con{
+			.current-point-con{
+				display: flex;
+				flex-direction: column;
+				&>div{
+					margin-bottom: 15px;
+				}
+				.point-info-con{
+					display : flex;
+					justify-content: space-between;
+				}
+				.MuiFormControl-root{
+					width: 100%!important;
+				}
+			}
+		}
+	}
+	.sub-title{
+		padding: 5px 10px;
+		border-radius: 10px;
+		background-color: lightgray;
+		text-align: center;
+		font-size: 1.3rem;
+		font-weight: 600;
+		margin-bottom: 10px;
+	}
+	.result-pay-con{
+		display: flex;
+		justify-content: space-between;
+		.total-price{
+			display: flex;
+			font-size: 1.5rem;
+			&>div{
+				margin-right: 10px;
+			}
+		}
+	}
+}

@@ -111,6 +111,7 @@
 			margin-bottom: 10px;
 			border-bottom: 1px solid $border-color;
 			justify-content: space-between;
+			align-items: center;
 			&>div{
 				width: 48%;
 			}
@@ -131,7 +132,7 @@
 		display: flex;
 		font-size: 1.4rem;
 		justify-content: space-between;
-		.total-price{
+		.total-price-con{
 			display: flex;
 			&>div{
 				margin-right: 10px;
@@ -145,19 +146,49 @@
 	display: flex;
 	justify-content: space-between;
 	&>div{
-		width: 33.3%;
+		width: 30%;
 		flex-direction: column;
 	}
 	.pay-type-con{
 		&>div{
 			margin-bottom: 1rem;
 		}
-		.selected-seat-con{
+		
+	}
+	.point-con{
+		.current-point-con{
 			display: flex;
+			flex-direction: column;
 			&>div{
-				margin-right: 10px;
+				margin-bottom: 15px;
+			}
+			.point-info-con{
+				display : flex;
+				justify-content: space-between;
+			}
+			.MuiFormControl-root{
+				width: 100%;
 			}
 		}
+	}
+	.result-pay-con{
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		.total-price{
+			font-size: 1.5rem;
+			font-weight: 600;
+			margin-bottom: 2rem;
+		}
+	}
+	.sub-title{
+		padding: 5px 10px;
+		border-radius: 10px;
+		background-color: lightgray;
+		text-align: center;
+		font-size: 1.3rem;
+		font-weight: 600;
+		margin-bottom: 10px;
 	}
 }
 
@@ -166,6 +197,7 @@
 	height: 100px;
 	display: flex;
 	flex-wrap: wrap;
+    text-align: center;
 	img{
 		height: 100%;
 		&.full-width{

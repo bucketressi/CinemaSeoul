@@ -186,8 +186,90 @@ export type BookShowScheduleType = {
 
 export type BookSeatListType = BookSeat[];
 export type BookSeat = {
-	hall_id: 66,
-	seat_num: 0,
-	seat_type: "230001",
-	booked: false
+	hall_id: number,//66,
+	seat_num: number,//0,
+	seat_type: string,//"230001",
+	booked: boolean, //false
 };
+
+/* Product */
+export type ProductAPIType = {
+    products: ProductType[],
+    page: number, //1,
+    totalpage: number,//1,
+    amount: number//15
+}
+
+export type ProductType = {
+	prod_id: number,//6,
+	prod_name: string, //팝콘(소),
+	price: number, //7000,
+	limit: number, //0,
+	image: string, 
+}
+
+export type ProductExactType = {
+    prod_id: number,//6,
+    prod_name: string,//"팝콘(소)",
+    price: number,//7000,
+    prod_type_code: string,//"310001",
+    limit: number,//9997,
+    prod_contents: string,//"카라멜맛 양파맛 선택 가능한 팝콘 (소)",
+    image: string//""
+}
+
+export type CartProductType = {
+	[prod_id : number] : {
+		"product" : ProductExactType,
+		"number" : number
+	}
+}
+
+export type ProductRequestType = {
+	prod_id : number,//6,
+	amount : number,//2,
+	price : number//7000
+}
+
+/* Mypage */
+export type MypageUserType = {
+    user_id: number,//149,
+    user_name: string, //우희은,
+    birth: string, //20221230,
+    phone_num: string, //01045117731,
+    email: string, //희은2@,
+    agreement: string, //1,
+    curr_point: number,//3449,
+    accu_point: number,//11489,
+    user_type: string//Friends
+}
+
+export type UserBookType = {
+	book_datetime: string, //"2021-06-05 01:09:48"
+	book_id: number, //74
+	book_pay_id: number, //97
+	hall_name: string, //"66관"
+	movi_name: string, //"분노의 질주"
+	show_date: string, //"20210606"
+	show_time: string, //"2143"
+	user_name: string //"우희은"
+}
+
+export type UserBookExactType = {
+    book_id: number,// 74,
+    book_pay_id: number,// 97,
+    user_name: string, //우희은,
+    teen: number, //1,
+    adult: number, //0,
+    senior: number, //0,
+    impaired: number, //0,
+    book_datetime: string, //2021-06-05 01:09:48,
+    show_date: string, //20210606,
+    show_time: string, //2143,
+    movi_name: string, //분노의 질주,
+    run_time: number, //145,
+    hall_name: string, //66관,
+    seat_num: number[],
+    use_code: string,//a28a9294ab6dd693,
+    use_datetime: string,
+}

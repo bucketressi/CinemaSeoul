@@ -11,6 +11,7 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router';
+import "../../scss/pages/productpay.scss";
 
 type Props = {
 	mode: number;
@@ -44,7 +45,6 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 	}
 
 	const fetchPoint = () => {
-		// todo : token 나중에 체크하는 걸로 변동되면 고치기
 		axios.get(`${SERVER_URL}/point/${userId}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
@@ -62,6 +62,10 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 	}
 
 	const bookPay = () => {
+		if(payType === ""){
+			alert("결제 수단을 선택해주세요");
+			return;
+		}
 		axios.post(`${SERVER_URL}/pay/book`, {
 			show_id: scheduleInfo.show_id,
 			user_id: userId,
@@ -109,15 +113,15 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 			<div className="pay-type-con">
 				<div className="top-title">결제정보</div>
 				<div className="selected-seat-con">
-					<div>선택한 좌석 : </div>
+					<div className="sub-title">선택한 좌석</div>
 					{
 						seatTypeNum.map((seat_num: number) =>
 							<div key={seat_num}>{seat_num}</div>
 						)
 					}
 				</div>
-				<FormControl>
-					<FormLabel>최종 결제 수단</FormLabel>
+				<div>
+					<div className="sub-title">최종 결제 수단</div>
 					<RadioGroup name="state" value={payType} onChange={(e: any) => setPayType(e.target.value)}>
 						{
 							payTypeCode.map((code) =>
@@ -125,28 +129,29 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 							)
 						}
 					</RadioGroup>
-				</FormControl>
+				</div>
 				<div className="point-con">
+					<div className="sub-title">포인트 사용</div>
 					<TextField
-						label="할인권"
 						value={pointMoney}
 						onChange={handlePointMoneyChange}
-					></TextField>
+					/>
 					<div className="current-point-con">
-						<div>{currentPoint}</div>
+						<div className="point-info-con">
+							<div className="point-header">사용가능 포인트</div>
+							<div>{currentPoint}원</div>
+						</div>
 						<Button variant="outlined" color="primary" onClick={fetchPoint}>포인트 불러오기</Button>
 					</div>
 				</div>
 			</div>
 			<div className="result-pay-con">
 				<div className="top-title">결제하기</div>
-				<div className="total-price">
-					<div>최종금액</div>
-					<div>{payPrice - pointMoney}</div>
+				<div className="total-price-con">
+					<div className="sub-title">최종 금액</div>
+					<div className="total-price">{payPrice - pointMoney}원</div>
 				</div>
-				<div>
-					<Button variant="contained" color="secondary" onClick={bookPay}>결제하기</Button>
-				</div>
+				<Button variant="contained" color="secondary" onClick={bookPay}>결제하기</Button>
 			</div>
 		</div>
 	);

@@ -29,7 +29,6 @@ const Main = () => {
 				if (!res.data || !res.data.movi_list)
 					return;
 				setNowMovie(res.data.movi_list);
-				console.log(res.data.movi_list);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
