@@ -51,7 +51,6 @@ const AdminShowSchedule = () => {
 	}, [modalOpen])
 
 	const handleModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(event.target.checked);
 		setMode(event.target.checked);
 	}
 
@@ -68,7 +67,6 @@ const AdminShowSchedule = () => {
 				}
 			})
 				.then((res) => {
-					console.log(res);
 					fetchShowSchedule();
 					setModalOpen(false);
 				})
@@ -90,7 +88,6 @@ const AdminShowSchedule = () => {
 						}
 					})
 						.then((res) => {
-							console.log(res);
 							fetchShowSchedule();
 							setModalOpen(false);
 						})
@@ -249,20 +246,23 @@ const AdminShowSchedule = () => {
 								<TableBody>
 									{
 										showScheduleList &&
-										showScheduleList.map((schedule: ShowScheduleType, index: number) => (
-											<TableRow key={schedule.show_id}>
-												<TableCell>{index + 1}</TableCell>
-												<TableCell>{schedule.hall_name}</TableCell>
-												<TableCell>{schedule.movi_name}</TableCell>
-												<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
-												<TableCell>{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
-												<TableCell>{`${schedule.end_time.substr(0, 2)}시 ${schedule.end_time.substr(2, 2)}분`}</TableCell>
-												<TableCell className="modify-btn-con">
-													<Button variant="contained" color="primary" onClick={() => handleModifyButtonClick(schedule.show_id)}>상영일정 수정</Button>
-													<Button variant="contained" color="secondary" onClick={() => removeShowSchedule(schedule.show_id)}>상영일정 삭제</Button>
-												</TableCell>
-											</TableRow>
-										))
+										showScheduleList.map((schedule: ShowScheduleType, index: number) => {
+											const endTime = schedule.end_time.split("/");
+											return(
+												<TableRow key={schedule.show_id}>
+													<TableCell>{index + 1}</TableCell>
+													<TableCell>{schedule.hall_name}</TableCell>
+													<TableCell>{schedule.movi_name}</TableCell>
+													<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
+													<TableCell>{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
+													<TableCell>{`${endTime[endTime.length-2]}시 ${endTime[endTime.length-1]}분`}</TableCell>
+													<TableCell className="modify-btn-con">
+														<Button variant="contained" color="primary" onClick={() => handleModifyButtonClick(schedule.show_id)}>상영일정 수정</Button>
+														<Button variant="contained" color="secondary" onClick={() => removeShowSchedule(schedule.show_id)}>상영일정 삭제</Button>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									}
 								</TableBody>
 							</Table>
