@@ -22,7 +22,7 @@ const ModalComponent = ({open, setOpen, title, children, button, buttonOnClick} 
 				<div className="modal-title">{title}</div>
 				{
 					button && buttonOnClick &&
-					<Button className="modal-button" variant="contained" color="primary" onClick={buttonOnClick}>{button}</Button>
+					<Button className="modal-button" variant="contained" color="secondary" onClick={buttonOnClick}>{button}</Button>
 				}
 				<div className="modal-content">
 					{children}

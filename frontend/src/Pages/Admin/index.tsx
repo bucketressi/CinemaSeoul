@@ -3,6 +3,7 @@ export { default as AdminModifyMovie } from './AdminModifyMovie';
 export { default as AdminHome } from './AdminHome';
 export { default as AdminTheater } from './AdminTheater';
 export { default as AdminHall } from './AdminHall';
+export { default as AdminMyPage } from './AdminMyPage';
 export { default as AdminMovieList } from './AdminMovieList';
 export { default as AdminPeople } from './AdminPeople';
 export { default as AdminShowSchedule } from './AdminShowSchedule';

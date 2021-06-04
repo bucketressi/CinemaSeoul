@@ -1,3 +1,7 @@
+.hall-add-con{
+	display:flex;
+	justify-content: flex-end;
+}
 .hall-list-con{
 	.MuiTableRow-root{
 		cursor: pointer;
@@ -29,13 +33,19 @@
 		background-color: rgb(146, 169, 218);
 		cursor: pointer;
 	}
-	&.disabled div{
+	&.장애인석 div{
 		background-color: green;
 	}
-	&.distance div{
+	&.거리두기 div{
 		background-color: rgb(194, 165, 35);
 	}
-	&.impossible div{
+	&.불가 div{
 		background-color: gray;
+	}
+}
+
+.add-hall-input-con{
+	&>div{
+		margin-right: 10px;
 	}
 }

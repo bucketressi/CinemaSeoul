@@ -1,53 +1,60 @@
 import React, { useState, useContext, createContext, Dispatch, useEffect } from 'react';
-import { MovieListType, childrenObj } from './Type';
+import { SimpleMovieType, childrenObj, MovieListObjType } from './Type';
+import axios from 'axios';
+import { SERVER_URL } from '../CommonVariable';
+import { errorHandler } from './ErrorHandler';
+import { useTokenState } from './TokenModel';
 
-const movieListState = createContext<MovieListType | undefined>(undefined);
-const movieListDispatch = createContext<Dispatch<MovieListType | undefined>>(() => { });
-const initialMovieData = {
-	movie_list: [
-		{
-			movi_id: 1,
-			movi_name: "귀멸의 칼날",
-			accu_audience: 408,
-			avi_age: 15,
-			open_date: new Date("2021/05/30"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202101/16908_103_1.jpg"
-		}, {
-			movi_id: 2,
-			movi_name: "보이저스",
-			accu_audience: 202,
-			avi_age: 18,
-			open_date: new Date("2021/06/03"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17322_103_1.jpg"
-		}, {
-			movi_id: 3,
-			movi_name: "파이프라인",
-			accu_audience: 500,
-			avi_age: 12,
-			open_date: new Date("2021/05/23"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17374_103_1.jpg"
-		}, {
-			movi_id: 4,
-			movi_name: "크루엘라",
-			accu_audience: 1035,
-			avi_age: 15,
-			open_date: new Date("2021/06/20"),
-			image: "https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg"
-		}
-	],
-	page: 1,
-	totalpage: 1,
-	amount: 2
-};
+const movieListState = createContext<SimpleMovieType[] | undefined>(undefined);
+const movieListDispatch = createContext<Dispatch<SimpleMovieType[] | undefined>>(() => { });
+const movieListObjState = createContext<MovieListObjType | undefined>(undefined);
+const fetchMovieFunction = createContext<()=>void>(() => {});
 
 export const MovieListContextProvider = ({ children }: childrenObj) => {
 	// 공통적으로 쓰이는 page가 많아서 model로 정의함 => 영화 리스트 데이터
-	const [movieList, setMovieList] = useState<MovieListType | undefined>(initialMovieData);
+	const AUTH_TOKEN = useTokenState();
+	const [movieList, setMovieList] = useState<SimpleMovieType[] | undefined>(undefined);
+	const [movieListObj, setMovieListObj] = useState<MovieListObjType | undefined>(undefined);
+
+	useEffect(() => {
+		// id로 접근하기 좋게 obj 형태로 만들기
+		const obj = Object.assign({}, movieListObj);
+		movieList?.forEach((movie) => {
+			obj[movie.movi_id] = movie;
+		});
+		setMovieListObj(obj);
+	}, [movieList]);
+
+	const fetchMovie = () => {
+		axios.post(`${SERVER_URL}/movie/list`, {
+			//전체 : 0, 상영중  1, 상영예정 : 2
+			"page": 1,
+			"stat": 0,
+			"sort": 0
+		}, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				if(!res.data || !res.data.movi_list)
+					return;
+				setMovieList(res.data.movi_list);
+				console.log(res.data.movi_list);
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["", "", "조건이 잘못 입력되었습니다.", ""]);
+			});
+	}
 
 	return (
 		<movieListState.Provider value={movieList}>
 			<movieListDispatch.Provider value={setMovieList}>
-				{children}
+				<fetchMovieFunction.Provider value={fetchMovie}>
+					<movieListObjState.Provider value={movieListObj}>
+						{children}
+					</movieListObjState.Provider>
+				</fetchMovieFunction.Provider>
 			</movieListDispatch.Provider>
 		</movieListState.Provider>
 	);
@@ -57,7 +64,15 @@ export function useMovieListState() {
 	const context = useContext(movieListState);
 	return context;
 }
+export function useMovieListObjState() {
+	const context = useContext(movieListObjState);
+	return context;
+}
 export function useMovieListDispatch() {
 	const context = useContext(movieListDispatch);
+	return context;
+}
+export function useFetchMovieFunction() {
+	const context = useContext(fetchMovieFunction);
 	return context;
 }

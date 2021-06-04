@@ -36,10 +36,13 @@ const Login = () => {
 
 	const handleUserLogin = () => {
 		userLogin(email, password);
-		history.push("/main");
 	}
 
 	const handleNonUserLogin = () => {
+		if(password !== passwordDual){
+			alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
+			return;
+		}
 		nonUserLogin({
 			user_name: name,
 			birth,
@@ -48,7 +51,6 @@ const Login = () => {
 			password,
 			agreement
 		});
-		history.push("/main");
 	}
 
 	return (
@@ -97,8 +99,8 @@ const Login = () => {
 				<div className="nonuser-form">
 					<div className="form-con">
 						<div className="input-con">
-							<TextField variant="outlined" placeholder="이름" onChange={(e) => { setName(e.target.value); }} />
-							<TextField variant="outlined" placeholder="핸드폰 번호" onChange={(e) => { setPhoneNum(e.target.value); }} />
+							<TextField variant="outlined" placeholder="이름" inputProps={{ maxLength: 20 }} onChange={(e) => { setName(e.target.value); }} />
+							<TextField variant="outlined" placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e) => { setPhoneNum(e.target.value); }} />
 							<div className="birth-con">
 								<SelectModule tag="Year" value={birthYear} handleValueChange={(e) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
 								<SelectModule tag="Month" value={birthMonth} handleValueChange={(e) => { setBirthMonth(e.target.value) }} start={1} end={12} />
