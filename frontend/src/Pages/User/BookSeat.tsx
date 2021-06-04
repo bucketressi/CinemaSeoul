@@ -16,19 +16,19 @@ import { useHistory } from 'react-router';
 import { PageTitle } from '../../Components';
 
 type Props = {
-	mode : number;
+	mode: number;
 	setMode: Dispatch<number>;
 	scheduleInfo: ShowScheduleType;
-	payPrice : number;
+	payPrice: number;
 	setPayPrice: Dispatch<number>;
 	seatNum: number[];
 	setSeatNum: Dispatch<number[]>;
 	seatTypeNum: number[];
 	setSeatTypeNum: Dispatch<number[]>;
-	seatList : BookSeatType[] | undefined;
+	seatList: BookSeatType[] | undefined;
 	setSeatList: Dispatch<BookSeatType[]>;
-	disabledSeat : number;
-	setDisabledSeat : Dispatch<number>;
+	disabledSeat: number;
+	setDisabledSeat: Dispatch<number>;
 };
 
 const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum, setSeatNum, seatTypeNum, setSeatTypeNum, seatList, setSeatList, disabledSeat, setDisabledSeat }: Props) => {
@@ -37,10 +37,11 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 	const user = useUserState();
 	const seatTypeCode = useSeatTypeCodeState();
 	const [seatTypeCodeObj, setSeatTypeCodeObj] = useState<CodeMatch>({});
-	
+
 	const [blackMode, setBlackMode] = useState<boolean>(false);
 	const [hallCol, setHallCol] = useState<number>(0);
 	const [hallRow, setHallRow] = useState<number>(0);
+	const [bookedSeat, setBookedSeat] = useState<number[]>([]); // 이미 예매된 좌석 저장
 
 	/* 각 좌석 선택 */
 	const [seatTotalNum, setSeatTotalNum] = useState<number>(0); // 좌석 수 합 저장
@@ -52,22 +53,22 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 	}, [seatNum]);
 
 	useEffect(() => {
-		if(seatTotalNum <= seatTypeNum.length){
+		if (seatTotalNum <= seatTypeNum.length) {
 			// 좌석 수를 모두 소모!
 			setBlackMode(true);
 			calculatePayPrice();
-		}else{
+		} else {
 			setBlackMode(false);
 		}
 	}, [seatTypeNum, seatTotalNum]);
 
 	useEffect(() => {
-		if(mode === 1)
+		if (mode === 1)
 			fetchBookSeat();
 	}, [mode]);
 
-	useEffect(()=> {
-		const obj : CodeMatch = {};
+	useEffect(() => {
+		const obj: CodeMatch = {};
 		seatTypeCode.forEach((code) => {
 			obj[Number(code.code_id)] = code.code_name;
 		})
@@ -100,8 +101,12 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 	const setSeatNumAboutType = (index: number, num: number) => { // 좌석 개수 setting
 		if (!seatNum)
 			return;
-		if (seatTotalNum - seatNum[index] + num > 8) {
+		const newSeatTotal = seatTotalNum - seatNum[index] + num; 
+		if (newSeatTotal > 8) {
 			alert("최대 8개의 좌석을 예매하실 수 있습니다.");
+			return;
+		}else if(newSeatTotal < seatTypeNum.length){
+			alert("현재 선택된 좌석이 더 많습니다. 현재 선택된 좌석을 먼저 해지해주세요.");
 			return;
 		}
 		const arr = seatNum.slice();
@@ -111,15 +116,15 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 
 	const calculatePayPrice = () => {
 		let price = 0;
-		price += (seatNum[0]*12000);
-		price += (seatNum[1]*9000);
-		price += (seatNum[2]*5000);
-		price += (seatNum[3]*5000);
+		price += (seatNum[0] * 12000);
+		price += (seatNum[1] * 9000);
+		price += (seatNum[2] * 5000);
+		price += (seatNum[3] * 5000);
 		setPayPrice(price);
 	}
 
 	const gotoPay = () => { // 결제로 가기
-		if(seatTotalNum !== seatTypeNum.length){
+		if (seatTotalNum !== seatTypeNum.length) {
 			// 모든 좌석 클릭하지 않았으면
 			alert("입력한 좌석 수에 맞는 모든 좌석을 선택해주세요.");
 			return;
@@ -142,13 +147,17 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 			return;
 
 		const DOM = [];
+		const booked = [];
 		for (let i = 0; i < hallCol; i++) {
 			const seat_num = seatList[idx + i].seat_num;
 			const type_code = seatList[idx + i].seat_type;
-			const isBooked = seatList[idx+i].booked;
+			const isBooked = seatList[idx + i].booked;
 			const bool = seatTypeNum.includes(seat_num);
-			
-			DOM.push(<td className={clsx("seat", seatTypeCodeObj[Number(type_code)], bool?"selected" : "", blackMode || isBooked ?"disable":"")} key={seat_num} onClick={() => handleSelectSeat(seatList[idx + i])}><div className={`${seat_num}`}>{seat_num}</div></td>);
+			if(isBooked){
+				booked.push(seat_num);
+			}
+
+			DOM.push(<td className={clsx("seat", seatTypeCodeObj[Number(type_code)], bool ? "selected" : "", blackMode || isBooked ? "불가" : "")} key={seat_num} onClick={() => handleSelectSeat(seatList[idx + i])}><div className={`${seat_num}`}>{seat_num}</div></td>);
 		}
 
 		return (
@@ -168,41 +177,53 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 				DOM.push(getSeatArray(i));
 			}
 		}
-		
+
 		return DOM;
 	}
 
-	const handleSelectSeat = (seat : BookSeatType) => {
-		// todo : 예매된 좌석은 안되게 하기
+	const handleSelectSeat = (seat: BookSeatType) => {
+		// 예매된 좌석, 불가 좌석, 거리두기 좌석 => 예매 x 클릭도 x
+		// 장애인 석 => 장애인 석의 개수가 남았으면 예매 가능
+		// 일반 석 => 개수가 남았으면 예매 가능 (blackmode가 아니면)
+
 		const arr = seatTypeNum.slice();
 		const type = seatTypeCodeObj[Number(seat.seat_type)];
-		if(arr.includes(seat.seat_num)) { // 이미 포함되어 있는 좌석은 해지
-			arr.splice(arr.findIndex((s) => s === seat.seat_num), 1);
-			setSeatTypeNum(arr);
-
-			if(type === "장애인석"){ // 장애인 석 개수 갱신
-				setDisabledSeat(disabledSeat-1);
-			}
-
+		switch (type) {
+		case "불가":
+		case "거리두기":
 			return;
-		}
-
-		if(blackMode){ // blackMode이면 모두 선택했으므로 더이상 선택하지 못함
-			return;
-		}
-
-		/* 좌석 타입 별 대응 */
-		if(type === "장애인석"){
-			if(disabledSeat >= seatNum[3]){ // 장애인 석 마감
+		case "장애인석":
+			if (arr.includes(seat.seat_num)) { // 이미 포함되어 있는 좌석은 해지
+				arr.splice(arr.findIndex((s) => s === seat.seat_num), 1);
+				setSeatTypeNum(arr);
+				setDisabledSeat(disabledSeat -1); // 장애인 석 수도 1 감소
 				return;
 			}
-			setDisabledSeat(disabledSeat+1);
-		}else if(type === "불가" || type === "거리두기"){
+			if (blackMode) // blackMode이면 모두 선택했으므로 더이상 선택하지 못함
+				return;
+			if (disabledSeat >= seatNum[3]) {// 장애인석이 마감되었으면
+				console.log(disabledSeat, seatNum[3]);
+				alert("선택된 장애인석 수만큼만 장애인 전용 좌석이 선택 가능합니다.");
+				return;
+			}
+			setDisabledSeat(disabledSeat + 1);
+			arr.push(seat.seat_num);
+			setSeatTypeNum(arr);
+			return;
+		case "일반":
+			if (arr.includes(seat.seat_num)) { // 이미 포함되어 있는 좌석은 해지
+				arr.splice(arr.findIndex((s) => s === seat.seat_num), 1);
+				setSeatTypeNum(arr);
+				return;
+			}
+			if (blackMode) // blackMode이면 모두 선택했으므로 더이상 선택하지 못함
+				return;
+			if(bookedSeat.includes(seat.seat_num)) // 이미 예매되어 있는 좌석은 불가
+				return;
+			arr.push(seat.seat_num);
+			setSeatTypeNum(arr);
 			return;
 		}
-		
-		arr.push(seat.seat_num);
-		setSeatTypeNum(arr);
 	}
 
 	return (
@@ -270,7 +291,7 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 									seatTypeCode.map((seat) => {
 										return (
 											<div key={seat.code_id}>
-												<div className={clsx("seat-shape", seat.code_name)}/>
+												<div className={clsx("seat-shape", seat.code_name)} />
 												<div className="seat-type">{seat.code_name}</div>
 											</div>
 										);
