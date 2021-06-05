@@ -14,6 +14,7 @@ const UserRouter : React.FC = () => (
 			<Route path="/login" component={Login}/>
 			<Route path="/main" component={Main}/>
 			<Route exact path="/movie" component={MovieList}/>
+			<Route exact path="/movie/search" component={MovieList}/>
 			<Route path="/movie/:movie_id" component={MovieExact}/>
 			<Route path="/mymovie" component={MyMovie}/>
 			<Route path="/mypage" component={Mypage}/>
