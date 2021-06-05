@@ -36,7 +36,7 @@ public class ProductController {
         productService.deleteProduct(prod_id);
     }
 
-    @GetMapping("/prod/{prod_id}")
+    @GetMapping("/prod/select/{prod_id}")
     public ResponseEntity<?> selectProduct(@PathVariable(name = "prod_id") int prod_int){
         return ResponseEntity.ok(productService.selectProduct(prod_int));
     }

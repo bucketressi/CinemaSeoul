@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.service.book;
 
+import com.uos.cinemaseoul.common.constatnt.ConstantTable;
 import com.uos.cinemaseoul.common.mapper.ShowScheduleMapper;
 import com.uos.cinemaseoul.common.paging.ScheduleCriteria;
 import com.uos.cinemaseoul.dao.book.ShowScheduleDao;
@@ -15,8 +16,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.PAY_STAT_FIN;
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.PAY_STAT_OK;
 
 @Service
 @RequiredArgsConstructor
@@ -108,5 +114,22 @@ public class ShowScheduleService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //상영일정 시작하기
+    public void startShowSchedule(int show_id) throws Exception{
+        ShowScheduleDto sDto = showScheduleDao.selectSchedule(show_id);
+        Long startTime = new SimpleDateFormat("yyyyMMddHHmm").parse(sDto.getShow_date()+ (sDto.getShow_time()+10)).getTime();
+        Long currTime = System.currentTimeMillis();
+
+        System.out.println(startTime + currTime);
+
+        if(startTime >= currTime){
+            throw new NotAllowedException("영화가 시작하기 10분 전부터만 누르실 수 있습니다.");
+        }
+
+        //취소 빼고는 다 사용완료로
+        showScheduleDao.startShowSchedule(show_id, PAY_STAT_FIN, PAY_STAT_OK);
+
     }
 }

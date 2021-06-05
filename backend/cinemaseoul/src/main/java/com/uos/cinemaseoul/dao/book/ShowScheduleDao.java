@@ -25,4 +25,6 @@ public interface ShowScheduleDao {
     int getBookedSeatNum(int show_id);
 
     ShowScheduleDto selectSchedule(int show_id);
+
+    void startShowSchedule(int show_id, String pay_stat_fin, String pay_stat_ok);
 }

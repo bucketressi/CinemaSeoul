@@ -27,6 +27,7 @@
         INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
 
         WHERE S.MOVI_ID = #{movi_id} AND S.SHOW_DATE = #{show_date}
+          <![CDATA[ AND CONCAT(SHOW_DATE,SHOW_TIME) >= TO_CHAR(SYSDATE, ('YYYYMMDDHH24MI')) ]]>
     </select>
 
 
@@ -89,17 +90,18 @@
     <!-- 페이지 수 -->
     <select id="countList" parameterType="BookSearchCriteria" resultType="Integer">
         SELECT COUNT(BOOK_ID) FROM BOOK B
+        INNER JOIN SHOWSCHEDULE S on S.SHOW_ID = B.SHOW_ID
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="user_id != null">
                 AND B.USER_ID = #{user_id}
             </if>
 
             <if test="start_date != null"><![CDATA[
-                AND TO_CHAR(B.BOOK_DATETIME, 'YYYYMMDD') >= #{start_date}
+                AND S.SHOW_DATE >= #{start_date}
             ]]></if>
 
             <if test="end_date != null"><![CDATA[
-                AND TO_CHAR(B.BOOK_DATETIME, 'YYYYMMDD') <= #{end_date}
+                AND S.SHOW_DATE <= #{end_date}
             ]]></if>
         </trim>
     </select>
@@ -134,11 +136,11 @@
                     </if>
 
                     <if test="start_date != null"><![CDATA[
-                        AND TO_CHAR(BK.BOOK_DATETIME, 'YYYYMMDD') >= #{start_date}
+                        AND S.SHOW_DATE >= #{start_date}
                     ]]></if>
 
                     <if test="end_date != null"><![CDATA[
-                        AND TO_CHAR(BK.BOOK_DATETIME, 'YYYYMMDD') <= #{end_date}
+                        AND  S.SHOW_DATE <= #{end_date}
                     ]]></if>
                 </trim>
                 ORDER BY BOOK_ID

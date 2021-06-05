@@ -117,8 +117,12 @@ public class UsersController {
         //자기 id 아니면
         if(Integer.parseInt(authentication.getName()) != usr.getUser_id()) throw new DuplicateException();
 
+        //비밀번호 있으면 암호화해서 저장
+        if(usr.getPassword() != null){
+            usr.setPassword(passwordEncoder.encode(usr.getPassword()));
+        }
         try{
-                        int result = usersService.updateUser(usr);
+            int result = usersService.updateUser(usr);
             if(result == 0){
                 throw new WrongArgException("Wrong Update Form");
             }

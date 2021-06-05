@@ -1,7 +1,6 @@
 package com.uos.cinemaseoul.controller.book;
 
 import com.uos.cinemaseoul.common.paging.BookSearchCriteria;
-import com.uos.cinemaseoul.dto.book.book.MovieShortCutDto;
 import com.uos.cinemaseoul.dto.book.book.ScheduleAskDto;
 import com.uos.cinemaseoul.service.book.BookService;
 import lombok.*;
@@ -55,7 +54,7 @@ public class BookController {
     public ResponseEntity<?> getBookList(Authentication authentication, @RequestBody BookSearchCriteria bookSearchCriteria){
 
         //매니저 아니면 자기 것만 조회 가능
-        if(!authentication.getAuthorities().toString().contains("ROLE_3")){
+        if(!authentication.getAuthorities().toString().contains("ROLE_4")){
             bookSearchCriteria.setUser_id(Integer.parseInt(authentication.getName()));
         }
 

@@ -27,4 +27,14 @@ public interface AdminDao {
 
     String findByPhoneAndName(AdminVo adminVo);
     int resetPassword(AdminVo adminVo);
+
+    void setDefaultFAQ(int admi_id);
+    void setDefaultEvent(int admi_id);
+    void setDefaultNotice(int admi_id);
+    void setDefaultAsk(int admi_id);
+
+    void updateAdminFAQ(String admi_name, int admi_id);
+    void updateAdminEvent(String admi_name, int admi_id);
+    void updateAdminNotice(String admi_name, int admi_id);
+    void updateAdminAsk(String admi_name, int admi_id);
 }

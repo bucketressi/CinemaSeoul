@@ -20,31 +20,31 @@ public class MappingConstant {
             "/admin/findId",
             "/admin/resetPw",
 
-            "/movie/{movi_id}",
+            "/movie/select/{movi_id}",
             "/movie/search",
             "/movie/list",
             "/movie/genre/list",
 
-            "/showschedule/list",
+            "/show/list",
 
             "/book/movie",
             "/book/schedule",
 
-            "/prod/{prod_id}",
+            "/prod/select/{prod_id}",
             "/prod/list",
 
             "/people/search",
             "/people/list",
-            "/people/{peop_id}",
+            "/people/select/{peop_id}",
 
-            "/faq/{faq_id}",
+            "/faq/select/{faq_id}",
             "/faq/list",
 
-            "/notice/{noti_id}",
+            "/notice/select/{noti_id}",
             "/notice/list",
 
             "/event/list",
-            "/event/{event_id}"
+            "/event/select/{event_id}"
     };
 
     //2 (비회원, 회원 둘다 가능)
@@ -52,11 +52,11 @@ public class MappingConstant {
             "/adult",
             "/user/delete/{user_id}",
 
-            "/point/{user_id}",
+            "/point/select/{user_id}",
 
             "/pay/book",
             "/pay/product",
-            "/showschedule/{show_id}"
+            "/showschedule/select/{show_id}"
     };
 
     //1 (회원 가능)
@@ -88,25 +88,24 @@ public class MappingConstant {
             "/movie/add",
             "/movie/delete/{movi_id}",
 
-            "/showschedule",
             "/showschedule/add",
             "/showschedule/{show_id}/book",
             "/showschedule/delete/{show_id}",
+            "/showschedule/update",
+            "/showschedule/start/{show_id}",
 
             "/point/update",
 
-            "/hall/{hall_id}",
+            "/hall/select/{hall_id}",
 
             "/prod",
             "/prod/image",
             "/prod/delete/{prod_id}",
 
             "/people/add",
-            "/people/",
+            "/people/update",
             "/people/image",
             "/people/delete/{peop_id}",
-            "/pay/use/book",
-            "/pay/use/product",
 
             "/record",
             "/sales",
@@ -157,5 +156,9 @@ public class MappingConstant {
             "/ask/list",
             "/ask/{ask_id}",
             "/ask/delete/{ask_id}",
+
+            "/pay/use/book",
+            "/pay/use/product"
+
     };
 }

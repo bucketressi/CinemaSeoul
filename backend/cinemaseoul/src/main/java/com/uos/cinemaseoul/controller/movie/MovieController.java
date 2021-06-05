@@ -51,7 +51,7 @@ public class MovieController {
         movieService.updateMovieImage(movi_id, image);
     }
 
-    @GetMapping("/{movi_id}")
+    @GetMapping("/select/{movi_id}")
     public ResponseEntity<?> selectMovie(@PathVariable int movi_id){
         SelectMovieDto sMDto = movieService.selectMovie(movi_id);
         return ResponseEntity.ok(sMDto);

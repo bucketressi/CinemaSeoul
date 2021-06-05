@@ -120,4 +120,15 @@
 
         WHERE S.SHOW_ID = #{show_id}
     </select>
+
+    <update id="startShowSchedule">
+        UPDATE BOOKPAY BP SET BP.PAY_STATE_CODE = #{pay_stat_fin},
+                              BP.USE_DATETIME = SYSDATE
+        WHERE BP.BOOK_PAY_ID IN (
+            SELECT B.BOOK_PAY_ID FROM BOOK B
+            INNER JOIN SHOWSCHEDULE S on B.SHOW_ID = S.SHOW_ID
+            WHERE S.SHOW_ID = #{show_id}
+            )
+        AND BP.PAY_STATE_CODE = #{pay_stat_ok}
+    </update>
 </mapper>

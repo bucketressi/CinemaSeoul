@@ -58,10 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(MappingConstant.NonUser).hasAnyRole("2","1")
 
                 //1 (회원 가능)
-                .antMatchers(MappingConstant.User).hasRole("1")
+                .antMatchers(MappingConstant.User).hasAnyRole("1")
 
                 //3 (매니저(높은 관리자만) 가능)
-                .antMatchers(MappingConstant.Manager).hasRole("3")
+                .antMatchers(MappingConstant.Manager).hasAnyRole("3")
 
                 //4 (직원 가능 = 매너지도 가능)
                 .antMatchers(MappingConstant.Admin).hasAnyRole("3","4")

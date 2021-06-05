@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.uos.cinemaseoul.common.constatnt.ConstantTable.POINT_CODE_ADD;
-import static com.uos.cinemaseoul.common.constatnt.ConstantTable.POINT_CODE_NOTADD;
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +50,6 @@ public class ReviewService {
     }
     @Transactional
     public List<MovieReviewDto> getMyMovie(int user_id) {
-        return reviewDao.getMyMovie(user_id);
+        return reviewDao.getMyMovie(user_id, PAY_STAT_FIN);
     }
 }

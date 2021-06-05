@@ -27,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.uos.cinemaseoul.common.constatnt.ConstantTable.PAY_STAT_CANCEL;
-import static com.uos.cinemaseoul.common.constatnt.ConstantTable.PAY_STAT_FIN;
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.*;
 
 @Service
 @RequiredArgsConstructor
@@ -105,11 +104,20 @@ public class ProductPayService {
         //결제ID, 사용 포인트, 적립 포인트 받아오기
         ProductPayVo productPayVo = productPayDao.getCancelInfo(prod_pay_id);
 
+        //만약 이미 사용되었거나, 취소된거면 결제 취소 안되게
+        if(productPayVo.getPay_state_code().equals(PAY_STAT_CANCEL)){
+            throw new NotAllowedException("Already Canceld");
+        }
+
+        if(productPayVo.getPay_state_code().equals(PAY_STAT_FIN)){
+            throw new DuplicateException("Already Used");
+        }
+
         //사용 포인트가 있으면
         if(productPayVo.getUse_point() > 0){
             pointService.updatePoint(productPayVo.getUser_id(),
                     productPayVo.getUse_point(),
-                    ConstantTable.POINT_CODE_NOTUSE,
+                    POINT_CODE_NOTUSE,
                     "예매 취소로 인한 사용 포인트 재적립");
         }
 
@@ -117,7 +125,7 @@ public class ProductPayService {
         if(productPayVo.getAccu_point() > 0){
             pointService.updatePoint(productPayVo.getUser_id(),
                     productPayVo.getAccu_point(),
-                    ConstantTable.POINT_CODE_NOTADD,
+                    POINT_CODE_NOTADD,
                     "예매 취소로 인한 적립 포인트 취소");
         }
 
@@ -128,7 +136,7 @@ public class ProductPayService {
         }
 
         //make
-        productPayDao.setCancel(prod_pay_id, ConstantTable.PAY_STAT_CANCEL);
+        productPayDao.setCancel(prod_pay_id, PAY_STAT_CANCEL);
 
     }
 
@@ -141,6 +149,7 @@ public class ProductPayService {
         if(vo == null){
             throw new NotFoundException("not founded Code");
         }
+
         //이미 사용
         if(vo.getUse_datetime() != null && vo.getPay_state_code().equals(PAY_STAT_FIN)){
             throw new DuplicateException("Already Used");

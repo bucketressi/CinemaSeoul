@@ -26,8 +26,6 @@ public class CustomDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String type, String id) throws UsernameNotFoundException {
 
-        System.out.println("type = " + type + " id = " + id);
-
         //사용자일때
         if(type.equals(UserType.USERS.toString())){
             UsersVo vo = usersDao.findById(Integer.parseInt(id));

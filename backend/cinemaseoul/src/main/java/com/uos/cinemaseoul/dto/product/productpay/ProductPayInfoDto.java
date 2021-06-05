@@ -20,7 +20,7 @@ public class ProductPayInfoDto {
     private int accu_point;
 
     private String pay_type;
-    private String pay_state;
+    private String pay_state_code;
     private String pay_datetime;
 
     private String use_datetime;

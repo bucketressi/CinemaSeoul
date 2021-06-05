@@ -38,7 +38,7 @@ public class HallController {
         return ResponseEntity.ok(new Result(hallService.selectList()));
     }
 
-    @GetMapping("/hall/{hall_id}")
+    @GetMapping("/hall/select/{hall_id}")
     public ResponseEntity<?> getHall(@PathVariable(name = "hall_id") int hall_id){
         return ResponseEntity.ok(hallService.selectHall(hall_id));
     }

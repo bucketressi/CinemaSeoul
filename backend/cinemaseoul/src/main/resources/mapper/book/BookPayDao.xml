@@ -42,8 +42,8 @@
 
     <!--[사용 취소]-->
     <select id="getCancelInfo" resultType="BookPayVo">
-        SELECT BOOK_PAY_ID, USER_ID, ACCU_POINT, USE_POINT FROM BOOKPAY
-        WHERE BOOK_PAY_ID  = (SELECT BOOK_PAY_ID FROM BOOK WHERE BOOK_ID = #{book_id})
+        SELECT BP.BOOK_PAY_ID, BP.USER_ID, BP.ACCU_POINT, BP.PAY_STATE_CODE, BP.USE_POINT FROM BOOKPAY BP
+        WHERE BP.BOOK_PAY_ID = #{book_id}
     </select>
 
 
@@ -59,7 +59,7 @@
     </select>
 
     <update id="useCode" parameterType="String">
-        UPDATE PRODUCTPAY SET PAY_STATE_CODE = #{pay_state_fin},
+        UPDATE BOOKPAY SET PAY_STATE_CODE = #{pay_state_fin},
                               USE_DATETIME = SYSDATE
         WHERE USE_CODE = #{use_code}
     </update>
@@ -85,25 +85,29 @@
     <select id="selectBookPayList" parameterType="PayListCriteria" resultType="BookPayInfoDto">
         SELECT
             B.BOOK_PAY_ID, B.USER_ID, B.USE_POINT, B.PRICE, B.ACCU_POINT,
-            B.PAY_TYPE, B.PAY_STATE, B.PAY_DATETIME,
+            B.PAY_STATE_CODE, B.PAY_TYPE, B.PAY_DATETIME,
             B.USE_DATETIME, B.USE_CODE,
-            B.BOOK_ID
+            B.BOOK_ID,
+            B.SHOW_DATE, B.SHOW_TIME, B.MOVI_NAME
         FROM (
             SELECT /*+index_desc(IDX_BOOK_PAY_PK)*/ ROWNUM AS RNUM,
                 A.BOOK_PAY_ID, A.USER_ID, A.USE_POINT, A.PRICE, A.ACCU_POINT,
-                A.PAY_TYPE, A.PAY_STATE, A.PAY_DATETIME,
+                A.PAY_STATE_CODE, A.PAY_TYPE, A.PAY_DATETIME,
                 A.USE_DATETIME, A.USE_CODE,
-                A.BOOK_ID
+                A.BOOK_ID,
+                A.SHOW_DATE, A.SHOW_TIME, A.MOVI_NAME
                 FROM(
                     SELECT
                            P.BOOK_PAY_ID, P.USER_ID, P.USE_POINT, P.PRICE, P.ACCU_POINT,
-                           CC.CODE_NAME AS PAY_TYPE, C.CODE_NAME AS PAY_STATE, P.PAY_DATETIME,
+                           C.CODE_NAME AS PAY_TYPE, P.PAY_STATE_CODE, P.PAY_DATETIME,
                            P.USE_DATETIME, P.USE_CODE,
-                           BB.BOOK_ID
+                           BB.BOOK_ID,
+                           S.SHOW_DATE, S.SHOW_TIME, M.MOVI_NAME
                     FROM BOOKPAY P
                     LEFT OUTER JOIN BOOK BB on P.BOOK_PAY_ID = BB.BOOK_PAY_ID
-                    INNER JOIN CODE C ON P.PAY_STATE_CODE = C.CODE_ID
-                    INNER JOIN CODE CC ON P.PAY_TYPE_CODE = CC.CODE_ID
+                    LEFT OUTER JOIN SHOWSCHEDULE S on S.SHOW_ID = BB.SHOW_ID
+                    LEFT OUTER JOIN MOVIE M ON S.MOVI_ID = M.MOVI_ID
+                    INNER JOIN CODE C ON CODE_ID = P.PAY_TYPE_CODE
 
                 <trim prefix="WHERE" prefixOverrides="AND">
                     <if test="user_id != null">

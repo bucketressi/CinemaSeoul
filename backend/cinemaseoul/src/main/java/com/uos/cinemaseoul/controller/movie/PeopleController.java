@@ -22,7 +22,7 @@ public class PeopleController {
         return ResponseEntity.ok(peopleService.getPeopleSearchList(map.get("peop_name")));
     }
 
-    @GetMapping("/people/{peop_id}")
+    @GetMapping("/people/select/{peop_id}")
     public ResponseEntity<?> getPeopleDetail(@PathVariable(name = "peop_id") int peop_id){
         return ResponseEntity.ok(peopleService.getPeopleDetail(peop_id));
     }
@@ -36,7 +36,7 @@ public class PeopleController {
     public void addPeople(@RequestBody PeopleDto peopleDto){
         peopleService.addPeople(peopleDto);
     }
-    @PutMapping("/people")
+    @PutMapping("/people/update")
     public void updatePeople(@RequestBody PeopleDto peopleDto){
         peopleService.updatePeople(peopleDto);
     }

@@ -40,7 +40,7 @@
     <!--[상품결제 취소]-->
     <!--포인트 원복용-->
     <select id="getCancelInfo" resultType="ProductPayVo">
-        SELECT PROD_PAY_ID, USER_ID, ACCU_POINT, USE_POINT FROM PRODUCTPAY
+        SELECT PROD_PAY_ID, USER_ID, ACCU_POINT, PAY_STATE_CODE, USE_POINT FROM PRODUCTPAY
         WHERE PROD_PAY_ID  = #{prod_pay_id}
     </select>
     <!--결제상태취소-->
@@ -92,22 +92,21 @@
     <select id="selectProductPayList" parameterType="PayListCriteria" resultType="ProductPayInfoDto">
         SELECT
             B.PROD_PAY_ID, B.USER_ID, B.USE_POINT, B.PRICE, B.ACCU_POINT,
-            B.PAY_TYPE, B.PAY_STATE, B.PAY_DATETIME,
+            B.PAY_TYPE, B.PAY_STATE_CODE, B.PAY_DATETIME,
             B.USE_DATETIME, B.USE_CODE
         FROM (
         SELECT /*+index_desc(IDX_BOOK_PK)*/ ROWNUM AS RNUM,
         A.PROD_PAY_ID, A.USER_ID, A.USE_POINT, A.PRICE, A.ACCU_POINT,
-        A.PAY_TYPE, A.PAY_STATE, A.PAY_DATETIME,
+        A.PAY_STATE_CODE, A.PAY_TYPE, A.PAY_DATETIME,
         A.USE_DATETIME, A.USE_CODE
 
         FROM(
         SELECT
             P.PROD_PAY_ID, P.USER_ID, P.USE_POINT, P.PRICE, P.ACCU_POINT,
-            CC.CODE_NAME AS PAY_TYPE, C.CODE_NAME AS PAY_STATE, P.PAY_DATETIME,
+            P.PAY_STATE_CODE, C2.CODE_NAME AS PAY_TYPE, P.PAY_DATETIME,
             P.USE_DATETIME, P.USE_CODE
             FROM PRODUCTPAY P
-            INNER JOIN CODE C ON P.PAY_STATE_CODE = C.CODE_ID
-            INNER JOIN CODE CC ON P.PAY_TYPE_CODE = CC.CODE_ID
+            inner join CODE C2 on C2.CODE_ID = P.PAY_TYPE_CODE
 
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="user_id != null">

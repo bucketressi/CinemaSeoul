@@ -78,8 +78,10 @@ public class AdminService {
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int updateAdmin(AdminVo adv) throws Exception{
 
+        AdminVo vo =adminDao.findById(adv.getAdmi_id());
+
         //전화번호가 바뀌었으면
-        if(!adminDao.findById(adv.getAdmi_id()).getPhone_num().equals(adv.getPhone_num())){
+        if(!vo.getPhone_num().equals(adv.getPhone_num())){
 
             //일단 전화번호 체크해서 중복인지 확인
             if(!phoneCheck(adv.getPhone_num())){
@@ -90,17 +92,35 @@ public class AdminService {
             //아니면 번호 아에 없애기
             adv.setPhone_num(null);
         }
+
         //1보다 더 많이 수정되어버리면
         int result = adminDao.updateAdmin(adv);
         if(result > 1){
             throw new Exception("too much updated");
         }
+
+        //이름 바뀌면 참조 무결성 실행
+        if(!vo.getAdmi_name().equals(adv.getAdmi_name())){
+            adminDao.updateAdminFAQ(adv.getAdmi_name(), adv.getAdmi_id());
+            adminDao.updateAdminEvent(adv.getAdmi_name(), adv.getAdmi_id());
+            adminDao.updateAdminNotice(adv.getAdmi_name(), adv.getAdmi_id());
+            adminDao.updateAdminAsk(adv.getAdmi_name(), adv.getAdmi_id());
+        }
+
         return result;
     }
 
     //탈퇴
+    /***탈퇴시 참조무결성 제약조건을 만족하기 위해 -> ASK, FAQ, NOTICE, EVENT에서 디폴트(0)로***/
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public int deleteAdmin(int admi_id) throws Exception{
+
+        //무결성 제약
+        adminDao.setDefaultFAQ(admi_id);
+        adminDao.setDefaultEvent(admi_id);
+        adminDao.setDefaultNotice(admi_id);
+        adminDao.setDefaultAsk(admi_id);
+
 
         //1보다 더 많이 삭제되어버리면
         int result =adminDao.deleteAdmin(admi_id);

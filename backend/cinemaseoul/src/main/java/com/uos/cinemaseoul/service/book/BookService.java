@@ -6,6 +6,8 @@ import com.uos.cinemaseoul.dao.book.BookDao;
 import com.uos.cinemaseoul.dao.book.BookPayDao;
 import com.uos.cinemaseoul.dao.user.PointDao;
 import com.uos.cinemaseoul.dto.book.book.*;
+import com.uos.cinemaseoul.exception.DuplicateException;
+import com.uos.cinemaseoul.exception.NotAllowedException;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.service.user.PointService;
 import com.uos.cinemaseoul.vo.book.BookPayVo;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.uos.cinemaseoul.common.constatnt.ConstantTable.*;
 
 @Service
 @AllArgsConstructor
@@ -58,12 +62,20 @@ public class BookService {
     @Transactional
     public void cancelBook(int book_id) {
 
-        //결제ID, 사용 포인트, 적립 포인트 받아오기
+        //결제ID, 사용 포인트, 적립 포인트, 상영시간표 받아오기
         BookPayVo bookPayVo = bookPayDao.getCancelInfo(book_id);
+
+        //만약 이미 사용되었거나, 취소된거면 결제 취소 안되게
+        if(bookPayVo.getPay_state_code().equals(PAY_STAT_CANCEL)){
+            throw new NotAllowedException("Already Canceld");
+        }
+
+        if(bookPayVo.getPay_state_code().equals(PAY_STAT_FIN)){
+            throw new DuplicateException("Already Used");
+        }
 
         //결제 취소로 변경
         bookPayDao.setCancel(bookPayVo.getBook_pay_id(), ConstantTable.PAY_STAT_CANCEL);
-
 
         //사용 포인트가 있으면
         if(bookPayVo.getUse_point() > 0){

@@ -170,7 +170,6 @@ public class UsersService  {
 
     public boolean adultCheck(String phone_num, String birth){
         int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(birth)/10000;
-        System.out.println(age + " " + Integer.parseInt(birth)/10000);
         return (age >= 19) ? true : false;
     }
 
