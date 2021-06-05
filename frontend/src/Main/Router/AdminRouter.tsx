@@ -58,6 +58,7 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/hall" component={AdminHall} />
 				<Route path="/admin/home" component={AdminHome} />
 				<Route exact path="/admin/movie" component={AdminMovieList} />
+				<Route exact path="/admin/movie/search" component={AdminMovieList} />
 				<Route path="/admin/movie/:movie_id" component={AdminMovieExact} />
 				<Route path="/admin/modify/movie/:movie_id" component={AdminModifyMovie} />
 				<Route path="/admin/notice" component={AdminNotice} />
