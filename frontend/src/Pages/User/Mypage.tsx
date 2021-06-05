@@ -10,7 +10,7 @@ import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router-dom';
 import { MypageUserType} from '../../Main/Type';
-import { MypageBook, MypagePay, MypageMovie } from '.';
+import { MypageBook, MypagePay, MypageMovie, MypageInfo } from '.';
 
 const Mypage = () => {
 	const userId = useUserState();
@@ -113,7 +113,11 @@ const Mypage = () => {
 							role="tabpanel"
 							hidden={mode !== 4}
 						>
-							4
+							<MypageInfo
+								mode={mode}
+								userInfo={userInfo}
+								fetchUserInfo={fetchUserInfo}
+							/>	
 						</div>
 					</div>
 				</div>
