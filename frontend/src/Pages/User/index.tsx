@@ -11,6 +11,7 @@ export { default as MovieList } from './MovieList';
 export { default as MovieExact } from './MovieExact';
 export { default as MyMovie } from './MyMovie';
 export { default as Mypage } from './Mypage';
+export { default as MypageBook } from './MypageBook';
 export { default as Notice } from './Notice';
 export { default as ProductPay } from './ProductPay';
 export { default as PointDescription } from './PointDescription';
