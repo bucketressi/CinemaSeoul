@@ -11,8 +11,6 @@ import { ProductCard } from '../../Components';
 const Store = () => {
 	const [productList, setProductList] = useState<ProductType[] | undefined>(undefined);
 
-	// todo : 재고가 없으면 담기 불가
-
 	useEffect(() => {
 		fetchAllProduct();
 	}, []);
@@ -47,6 +45,7 @@ const Store = () => {
 						<ProductCard
 							key={product.prod_id}
 							product={product}
+							auth="user"
 						/>
 					)
 				}
