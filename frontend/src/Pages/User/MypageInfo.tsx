@@ -52,8 +52,8 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			return;
 		setName(userInfo.user_name);
 		setBirthYear(userInfo.birth.substr(0, 4));
-		setBirthMonth(userInfo.birth.substr(4, 2));
-		setBirthDate(userInfo.birth.substr(6, 2));
+		setBirthMonth(Number(userInfo.birth.substr(4, 2)).toString());
+		setBirthDate(Number(userInfo.birth.substr(6, 2)).toString());
 		setPhoneNum(userInfo.phone_num);
 		setEmail(userInfo.email);
 		setAgreement(userInfo.agreement);

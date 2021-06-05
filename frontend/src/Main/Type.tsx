@@ -112,6 +112,7 @@ export type AdminType = {
 	admi_name: string,
 	birth: string,
 	phone_num: string,
+	email: string,
 	password: string,
 	admi_auth_code: string,
 	position: string,
