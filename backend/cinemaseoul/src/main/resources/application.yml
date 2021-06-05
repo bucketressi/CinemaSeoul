@@ -3,10 +3,10 @@ server:
 
 spring :
   datasource:
-    #driver-class-name: oracle.jdbc.OracleDriver
-    #url: jdbc:oracle:thin:@3.35.176.97:1521/xe
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:oracle:thin:@3.35.176.97:1521/xe
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@3.35.229.230:1521/xe
+    #driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    #url: jdbc:log4jdbc:oracle:thin:@3.35.229.230:1521/xe
 
     username: root
     password: 1234
@@ -48,6 +48,10 @@ mybatis:
 #[Install]
 #WantedBy=multi-user.target
 
+#로그확인, 로그 청소
+#journalctl -u server_start.service
+#journalctl --vacuum-time=1s
+
 #sudo systemctl daemon-reload
 #sudo systemctl stop server_start.service
 #sudo systemctl enable server_start.service
@@ -56,3 +60,11 @@ mybatis:
 
 #우분투 시간대 설정 필요 (Asia로)
 #sudo dpkg-reconfigure tzdata
+
+#오라클 시간대 설정 필요
+#su - oracle
+#export TZ=Asia/Seoul
+#sqlplus / as sysdba (재접속)
+#SQL> shutdown immediate
+#SQL> startup
+#SQL> quit
