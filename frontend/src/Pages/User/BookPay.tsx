@@ -114,11 +114,13 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 				<div className="top-title">결제정보</div>
 				<div className="selected-seat-con">
 					<div className="sub-title">선택한 좌석</div>
-					{
-						seatTypeNum.map((seat_num: number) =>
-							<div key={seat_num}>{seat_num}</div>
-						)
-					}
+					<div className="seat-con">
+						{
+							seatTypeNum.map((seat_num: number) =>
+								<div key={seat_num}>{seat_num}</div>
+							)
+						}
+					</div>
 				</div>
 				<div>
 					<div className="sub-title">최종 결제 수단</div>
