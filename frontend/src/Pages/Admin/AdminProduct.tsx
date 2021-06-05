@@ -9,13 +9,16 @@ import { useTokenState } from '../../Main/TokenModel';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { ProductCard } from '../../Components';
-import { Button, FormControl, InputLabel, Menu, MenuItem, Modal, Select, TextField } from '@material-ui/core';
+import { Button, FormControl, InputLabel, Menu, MenuItem, Modal, Select, Tab, Tabs, TextField } from '@material-ui/core';
 
 const AdminProduct = () => {
 	const AUTH_TOKEN = useTokenState();
 	const productType = useProductTypeCodeState();
 	const [productTypeObj, setProductTypeObj] = useState<CodeMatch>({});
+
+	/* 상품 조회 */
 	const [productList, setProductList] = useState<ProductType[] | undefined>(undefined);
+	const [mode, setMode] = useState<number>(0); // 0 : 전체, 1: 굿즈, 2: 스낵
 
 	/* 상품 추가 */
 	const [openModal, setOpenModal] = useState<boolean>(false);
@@ -35,16 +38,39 @@ const AdminProduct = () => {
 		setProductTypeObj(obj);
 	}, [productType]);
 
+	
+	useEffect(() => {
+		fetchFromMode();
+	}, [mode]);
+
 	useEffect(() => {
 		fetchAllProduct();
 	}, []);
 
-	const fetchAllProduct = () => {
+	const fetchFromMode = () => {
+		let type = "";
+		if (mode !== 0) {
+			type = productType[mode-1].code_id;
+		}
+
+		switch (mode) {
+		case 0:
+			fetchAllProduct();
+			break;
+		case 1:
+		case 2:
+			fetchAllProduct(type);
+			break;
+
+		}
+	}
+
+	const fetchAllProduct = (typeString?: string) => {
 		// 전체 상품 받아오기
 		axios.post(`${SERVER_URL}/prod/list`, {
 			page: 1,
 			amount: 30,
-			prod_type_code: null
+			prod_type_code: typeString ? typeString : null
 		})
 			.then((res) => {
 				if (!res.data || !res.data.products)
@@ -88,12 +114,28 @@ const AdminProduct = () => {
 			}
 		})
 			.then((res) => {
-				fetchAllProduct();
+				fetchFromMode();
 				setOpenModal(false);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
 			});
+	}
+
+	const deleteProduct = (prod_id : number) => {
+		// 상품 삭제
+		// todo : api 수정되면 다시 하기
+		// axios.post(`${SERVER_URL}/prod/delete/${prod_id}`, {
+		// 	headers: {
+		// 		TOKEN: AUTH_TOKEN
+		// 	}
+		// })
+		// 	.then((res) => {
+		// 		console.log(res);
+		// 	})
+		// 	.catch((e) => {
+		// 		errorHandler(e, true);
+		// 	});
 	}
 
 	return (
@@ -106,16 +148,31 @@ const AdminProduct = () => {
 				<Button variant="contained" color="primary" onClick={() => setOpenModal(true)}>상품 추가</Button>
 			</div>
 			<div className="product-list-con">
-				{
-					productList &&
-					productList.map((product) =>
-						<ProductCard
-							key={product.prod_id}
-							product={product}
-							auth="admin"
-						/>
-					)
-				}
+				<Tabs
+					value={mode}
+					onChange={(e: any, newValue: number) => {
+						setMode(newValue)
+					}}
+					className="product-tab"
+					indicatorColor="primary"
+				>
+					<Tab label="전체" />
+					<Tab label="굿즈" />
+					<Tab label="스낵" />
+				</Tabs>
+				<div className="contents-con">
+					{
+						productList &&
+						productList.map((product) =>
+							<ProductCard
+								key={product.prod_id}
+								product={product}
+								auth="admin"
+								deleteFunction={() => deleteProduct(product.prod_id)}
+							/>
+						)
+					}
+				</div>
 			</div>
 			<ModalComponent
 				open={openModal}

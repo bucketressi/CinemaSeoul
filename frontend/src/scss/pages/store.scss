@@ -1,4 +1,17 @@
 .product-list-con{
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: column;
+	.contents-con{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.product-tab{
+		width: 100%;
+		.MuiTabs-flexContainer{
+			width: 100%!important;
+			&>button{
+				width: 33.3%!important;
+			}
+		}
+	}
 }

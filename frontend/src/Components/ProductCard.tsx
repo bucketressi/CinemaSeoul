@@ -1,4 +1,4 @@
-import { Paper } from '@material-ui/core';
+import { Button, Paper } from '@material-ui/core';
 import React from 'react';
 import { ProductType } from '../Main/Type';
 import "../scss/component/_productcard.scss";
@@ -8,10 +8,11 @@ import { useHistory } from 'react-router';
 type Auth = ["admin", "user"];
 type Props = {
 	product : ProductType,
-	auth: Auth[number]
+	auth: Auth[number],
+	deleteFunction? : () => void
 }
 
-const ProductCard = ({product, auth} : Props) => {
+const ProductCard = ({product, auth, deleteFunction} : Props) => {
 	const history = useHistory();
 
 	return (
@@ -23,6 +24,10 @@ const ProductCard = ({product, auth} : Props) => {
 			<div className="name">{product.prod_name}</div>
 			<div className="price">{product.price}원</div>
 			<div className="limit">재고 : {product.limit}개</div>
+			{
+				deleteFunction &&
+				<Button variant="contained" color="secondary" onClick={deleteFunction}>삭제하기</Button>
+			}
 		</Paper>
 	);
 }
