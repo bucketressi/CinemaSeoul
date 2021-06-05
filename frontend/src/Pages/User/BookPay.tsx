@@ -45,7 +45,7 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 	}
 
 	const fetchPoint = () => {
-		axios.get(`${SERVER_URL}/point/${userId}`, {
+		axios.get(`${SERVER_URL}/point/select/${userId}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
 			}

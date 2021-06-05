@@ -80,7 +80,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 
 	const fetchExactMovie = () => {
 		// movie의 정보 받아오기
-		axios.get(`${SERVER_URL}/movie/${match.params.movie_id}`, {
+		axios.get(`${SERVER_URL}/movie/select/${match.params.movie_id}`, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
 			}

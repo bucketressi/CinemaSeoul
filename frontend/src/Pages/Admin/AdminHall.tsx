@@ -59,7 +59,7 @@ const AdminHall = () => {
 	}, [modalID]);
 
 	const fetchSeat = () => {
-		axios.get(`${SERVER_URL}/hall/${modalID}`, { // seat 받아오기
+		axios.get(`${SERVER_URL}/hall/select/${modalID}`, { // seat 받아오기
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}

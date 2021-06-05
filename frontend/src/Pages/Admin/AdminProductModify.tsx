@@ -44,7 +44,7 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 	}, []);
 
 	const fetchProduct = () => {
-		axios.get(`${SERVER_URL}/prod/${match.params.product_id}`)
+		axios.get(`${SERVER_URL}/prod/select/${match.params.product_id}`)
 			.then((res) => {
 				if (!res.data)
 					return;

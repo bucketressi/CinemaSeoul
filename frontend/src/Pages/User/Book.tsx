@@ -41,7 +41,7 @@ const Book = () => {
 	useEffect(() => {
 		if(selectedSchedule === -1)
 			return;
-		axios.get(`${SERVER_URL}/showschedule/${selectedSchedule}`, {
+		axios.get(`${SERVER_URL}/showschedule/select/${selectedSchedule}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
 			}
@@ -64,7 +64,7 @@ const Book = () => {
 		// 선택된 상영일정에 대한 자세한 정보 받아오기
 		if(selectedSchedule === -1)
 			return;
-		axios.get(`${SERVER_URL}/showschedule/${selectedSchedule}`, {
+		axios.get(`${SERVER_URL}/showschedule/select/${selectedSchedule}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
 			}
