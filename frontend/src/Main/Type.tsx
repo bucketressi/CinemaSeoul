@@ -85,13 +85,13 @@ export type MovieCastingType = {
 }
 
 export type PeopleExactType = {
-    peop_id: number,//2,
-    peop_name: string,//"강동원",
-    nation: string,//"한국",
-    birth: string,//"19810118",
-    peop_contents: string,//"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다.",
-    image: string,//"",
-    movies: CastMovieType[]
+	peop_id: number,//2,
+	peop_name: string,//"강동원",
+	nation: string,//"한국",
+	birth: string,//"19810118",
+	peop_contents: string,//"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다.",
+	image: string,//"",
+	movies: CastMovieType[]
 }
 
 /* User */
@@ -135,7 +135,7 @@ export type ShowScheduleType = {
 
 export type ShowScheduleListType = ShowScheduleType[];
 export type ShowScheduleListObjType = {
-	[show_id : number] : ShowScheduleType
+	[show_id: number]: ShowScheduleType
 };
 
 /* hall */
@@ -169,15 +169,15 @@ export type BookSeatType = {
 	hall_id: number; //42,
 	seat_num: number; //0,
 	seat_type: string; //"230001"
-	booked : boolean
+	booked: boolean
 }
 
 /* Book */
 
 export type BookShowScheduleType = {
 	show_id: number,
-	movi_name : string,
-	hall_name : string,
+	movi_name: string,
+	hall_name: string,
 	show_date: string, //  "2021/05/25",
 	show_time: string, //  "01/41",
 	rema_amount: number,
@@ -194,10 +194,10 @@ export type BookSeat = {
 
 /* Product */
 export type ProductAPIType = {
-    products: ProductType[],
-    page: number, //1,
-    totalpage: number,//1,
-    amount: number//15
+	products: ProductType[],
+	page: number, //1,
+	totalpage: number,//1,
+	amount: number//15
 }
 
 export type ProductType = {
@@ -205,43 +205,43 @@ export type ProductType = {
 	prod_name: string, //팝콘(소),
 	price: number, //7000,
 	limit: number, //0,
-	image: string, 
+	image: string,
 }
 
 export type ProductExactType = {
-    prod_id: number,//6,
-    prod_name: string,//"팝콘(소)",
-    price: number,//7000,
-    prod_type_code: string,//"310001",
-    limit: number,//9997,
-    prod_contents: string,//"카라멜맛 양파맛 선택 가능한 팝콘 (소)",
-    image: string//""
+	prod_id: number,//6,
+	prod_name: string,//"팝콘(소)",
+	price: number,//7000,
+	prod_type_code: string,//"310001",
+	limit: number,//9997,
+	prod_contents: string,//"카라멜맛 양파맛 선택 가능한 팝콘 (소)",
+	image: string//""
 }
 
 export type CartProductType = {
-	[prod_id : number] : {
-		"product" : ProductExactType,
-		"number" : number
+	[prod_id: number]: {
+		"product": ProductExactType,
+		"number": number
 	}
 }
 
 export type ProductRequestType = {
-	prod_id : number,//6,
-	amount : number,//2,
-	price : number//7000
+	prod_id: number,//6,
+	amount: number,//2,
+	price: number//7000
 }
 
 /* Mypage */
 export type MypageUserType = {
-    user_id: number,//149,
-    user_name: string, //우희은,
-    birth: string, //20221230,
-    phone_num: string, //01045117731,
-    email: string, //희은2@,
-    agreement: string, //1,
-    curr_point: number,//3449,
-    accu_point: number,//11489,
-    user_type: string//Friends
+	user_id: number,//149,
+	user_name: string, //우희은,
+	birth: string, //20221230,
+	phone_num: string, //01045117731,
+	email: string, //희은2@,
+	agreement: string, //1,
+	curr_point: number,//3449,
+	accu_point: number,//11489,
+	user_type: string//Friends
 }
 
 export type UserBookType = {
@@ -256,20 +256,55 @@ export type UserBookType = {
 }
 
 export type UserBookExactType = {
-    book_id: number,// 74,
-    book_pay_id: number,// 97,
-    user_name: string, //우희은,
-    teen: number, //1,
-    adult: number, //0,
-    senior: number, //0,
-    impaired: number, //0,
-    book_datetime: string, //2021-06-05 01:09:48,
-    show_date: string, //20210606,
-    show_time: string, //2143,
-    movi_name: string, //분노의 질주,
-    run_time: number, //145,
-    hall_name: string, //66관,
-    seat_num: number[],
-    use_code: string,//a28a9294ab6dd693,
-    use_datetime: string,
+	book_id: number,// 74,
+	book_pay_id: number,// 97,
+	user_name: string, //우희은,
+	teen: number, //1,
+	adult: number, //0,
+	senior: number, //0,
+	impaired: number, //0,
+	book_datetime: string, //2021-06-05 01:09:48,
+	show_date: string, //20210606,
+	show_time: string, //2143,
+	movi_name: string, //분노의 질주,
+	run_time: number, //145,
+	hall_name: string, //66관,
+	seat_num: number[],
+	use_code: string,//a28a9294ab6dd693,
+	use_datetime: string,
+}
+
+export type UserBookPayType = {
+	book_pay_id: number,//70,
+	book_id: number,//0,
+	user_id: number,//149,
+	use_point: number,//0,
+	price: number,//10000,
+	accu_point: number, //0,
+	pay_type: string, //신용카드,
+	pay_state: string, //결제취소,
+	pay_datetime: string, //2021-06-03 19:13:20,
+	use_datetime: string, //null,
+	use_code: string, //9e230beaa34df8ca
+}
+
+export type UserProductPayType = {
+	prod_pay_id: number, //62,
+	user_id: number, //0,
+	productPayDetails: MypageProductType[],
+	use_point: number, //500,
+	price: number, //24000,
+	accu_point: number, //0,
+	pay_type: string, // 간편결제,
+	pay_state: string, // 결제완료,
+	pay_datetime: string, //2021-06-03 03:35:47,
+	use_datetime: string, //null,
+	use_code: string, //b567e16a2e4c2a13,
+}
+
+export type MypageProductType = {
+	prod_id: number, //6,
+	prod_name: string, //팝콘(소),
+	price: number, //7000,
+	amount: number,//2
 }

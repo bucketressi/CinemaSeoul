@@ -9,8 +9,8 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router-dom';
-import { MypageUserType, UserBookType, UserBookExactType } from '../../Main/Type';
-import { MypageBook } from '.';
+import { MypageUserType} from '../../Main/Type';
+import { MypageBook, MypagePay } from '.';
 
 const Mypage = () => {
 	const userId = useUserState();
@@ -57,6 +57,9 @@ const Mypage = () => {
 				<div className="mypage-con">
 					<div className="pointer-con">
 						<div>
+							등급 : {userInfo?.user_type}
+						</div>
+						<div>
 							현재 포인트 : {userInfo?.curr_point}포인트
 						</div>
 						<div>
@@ -66,7 +69,7 @@ const Mypage = () => {
 					<Tabs
 						value={mode}
 						onChange={handleModeChange}
-						className="book-tab"
+						className="mypage-tab"
 						indicatorColor="primary"
 					>
 						<Tab label="예매내역조회" />
@@ -88,7 +91,9 @@ const Mypage = () => {
 							role="tabpanel"
 							hidden={mode !== 1}
 						>
-							1
+							<MypagePay
+								mode={mode}
+							/>
 						</div>
 						<div
 							role="tabpanel"

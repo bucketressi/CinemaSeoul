@@ -88,6 +88,7 @@ const MypageBook = ({ mode }: Props) => {
 	return (
 		<div className="user-book-con">
 			<div className="select-date-con">
+				<div>상영일자별 검색</div>
 				<TextField
 					type="date"
 					label="시작일자"
