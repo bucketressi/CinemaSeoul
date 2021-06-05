@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { getDateString } from '../../Function';
-import { UserBookPayType, UserProductPayType } from '../../Main/Type';
+import { CodeMatch, CodeType, UserBookPayType, UserProductPayType } from '../../Main/Type';
+import { usePayStateCodeState } from '../../Main/CodeModel';
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
@@ -15,8 +16,10 @@ type Props = {
 }
 
 const MypagePay = ({ mode }: Props) => {
+	const payStateCode = usePayStateCodeState();
 	const userId = useUserState();
 	const AUTH_TOKEN = useTokenState();
+	const [payStateCodeObj, setPayStateCodeObj] = useState<CodeMatch>({});
 
 	const [payMode, setPayMode] = useState<number>(0); // 0 : 예매 결제, 1: 상품 결제
 
@@ -27,6 +30,14 @@ const MypagePay = ({ mode }: Props) => {
 	/* 정보 저장 */
 	const [bookPayInfo, setBookPayInfo] = useState<UserBookPayType[] | undefined>(undefined);
 	const [productPayInfo, setProductPayInfo] = useState<UserProductPayType[] | undefined>(undefined);
+
+	useEffect(() => {
+		const obj: CodeMatch = {};
+		payStateCode.forEach((code: CodeType) => {
+			obj[Number(code.code_id)] = code.code_name;
+		});
+		setPayStateCodeObj(obj);
+	}, [payStateCode]);
 
 	useEffect(() => {
 		if (mode !== 1)
@@ -108,7 +119,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserBookPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["", "", "", "지난 내역은 사용할 수 없습니다."]);
 			});
 
 	}
@@ -145,10 +156,10 @@ const MypagePay = ({ mode }: Props) => {
 		</TableHead>
 	);
 
-	const cancelBookPay = (book_id : number) => {
-		if(!confirm("정말 해당 예매를 취소하시겠습니까? 예매 티켓도 함께 취소됩니다."))
+	const cancelBookPay = (book_pay_id: number) => {
+		if (!confirm("정말 해당 예매를 취소하시겠습니까? 예매 티켓도 함께 취소됩니다."))
 			return;
-		axios.delete(`${SERVER_URL}/book/cancel/${book_id}`, {
+		axios.delete(`${SERVER_URL}/book/cancel/${book_pay_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
@@ -162,8 +173,8 @@ const MypagePay = ({ mode }: Props) => {
 			});
 	}
 
-	const cancelProductPay = (prod_pay_id : number) => {
-		if(!confirm("정말 해당 상품 결제를 취소하시겠습니까?"))
+	const cancelProductPay = (prod_pay_id: number) => {
+		if (!confirm("정말 해당 상품 결제를 취소하시겠습니까?"))
 			return;
 		axios.delete(`${SERVER_URL}/product/cancel/${prod_pay_id}`, {
 			headers: {
@@ -240,13 +251,19 @@ const MypagePay = ({ mode }: Props) => {
 													</TableCell>
 													<TableCell>
 														{
-															book.use_datetime === null ?
-																<Button variant="contained" color="primary" onClick={() => usePayCode(book.use_code)}>사용하기</Button> :
+															book.use_datetime !== null ?
 																<Button variant="contained" color="default">이미 사용됨</Button>
+																: payStateCodeObj[Number(book.pay_state_code)] === "결제완료" ?
+																	<Button variant="contained" color="primary" onClick={() => usePayCode(book.use_code)}>사용하기</Button> :
+																	<Button variant="contained" color="default">결제 취소됨</Button>
 														}
 													</TableCell>
 													<TableCell>
-														<Button variant="contained" color="secondary" onClick={() => cancelBookPay(book.book_id)}>예매 취소</Button>
+														{
+															payStateCodeObj[Number(book.pay_state_code)] === "결제완료" ?
+																<Button variant="contained" color="secondary" onClick={() => cancelBookPay(book.book_pay_id)}>예매 취소</Button> :
+																<Button variant="contained" color="default">결제 취소 불가</Button>
+														}
 													</TableCell>
 													<TableCell>
 														<div>
@@ -290,15 +307,20 @@ const MypagePay = ({ mode }: Props) => {
 														</div>
 													</TableCell>
 													<TableCell>
-
 														{
-															product.use_datetime === null ?
-																<Button variant="contained" color="primary" onClick={() => useProductCode(product.use_code)}>사용하기</Button> :
+															product.use_datetime !== null ?
 																<Button variant="contained" color="default">이미 사용됨</Button>
+																: payStateCodeObj[Number(product.pay_state_code)] === "결제완료" ?
+																	<Button variant="contained" color="primary" onClick={() => usePayCode(product.use_code)}>사용하기</Button> :
+																	<Button variant="contained" color="default">결제 취소됨</Button>
 														}
 													</TableCell>
 													<TableCell>
-														<Button variant="contained" color="secondary" onClick={() => cancelProductPay(product.prod_pay_id)}>결제 취소</Button>
+														{
+															payStateCodeObj[Number(product.pay_state_code)] === "결제완료" ?
+																<Button variant="contained" color="secondary" onClick={() => cancelProductPay(product.prod_pay_id)}>결제 취소</Button> :
+																<Button variant="contained" color="default">결제 취소 불가</Button>
+														}
 													</TableCell>
 													<TableCell>
 														<div>

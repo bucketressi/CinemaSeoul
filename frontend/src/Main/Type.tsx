@@ -283,12 +283,14 @@ export type UserBookPayType = {
 	price: number,//10000,
 	accu_point: number, //0,
 	pay_type: string, //신용카드,
-	pay_state: string, //결제취소,
+	pay_state_code: string, //결제취소,
 	pay_datetime: string, //2021-06-03 19:13:20,
 	use_datetime: string, //null,
 	use_code: string, //9e230beaa34df8ca
+	show_date: string, //20210601,
+	show_time: string, //1650,
+	movi_name: string,//귀멸의 칼날
 }
-
 export type UserProductPayType = {
 	prod_pay_id: number, //62,
 	user_id: number, //0,
@@ -297,7 +299,7 @@ export type UserProductPayType = {
 	price: number, //24000,
 	accu_point: number, //0,
 	pay_type: string, // 간편결제,
-	pay_state: string, // 결제완료,
+	pay_state_code: string, // 결제완료,
 	pay_datetime: string, //2021-06-03 03:35:47,
 	use_datetime: string, //null,
 	use_code: string, //b567e16a2e4c2a13,

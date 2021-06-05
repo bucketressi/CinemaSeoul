@@ -33,6 +33,8 @@ const Mypage = () => {
 	}
 
 	const fetchUserInfo = () => {
+		if(!userId)
+			return;
 		axios.get(`${SERVER_URL}/user/${userId}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
