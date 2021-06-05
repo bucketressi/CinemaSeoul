@@ -8,18 +8,18 @@ import { useTokenState } from './TokenModel';
 const showScheduleListState = createContext<ShowScheduleListType | undefined>(undefined);
 const showScheduleListObjState = createContext<ShowScheduleListObjType | undefined>(undefined);
 const showScheduleListDispatch = createContext<Dispatch<ShowScheduleListType | undefined>>(() => { });
-const fetchShowScheduleFunction = createContext<()=>void>(()=>{});
+const fetchShowScheduleFunction = createContext<(movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => void>(() => { });
 
 export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
 	const AUTH_TOKEN = useTokenState();
 
 	const [showScheduleList, setShowScheduleList] = useState<ShowScheduleListType | undefined>(undefined);
-	const [showScheduleObjList, setShowScheduleObjList] = useState<ShowScheduleListObjType| undefined>(undefined);
+	const [showScheduleObjList, setShowScheduleObjList] = useState<ShowScheduleListObjType | undefined>(undefined);
 
 	useEffect(() => {
-		if(!showScheduleList)
+		if (!showScheduleList)
 			return;
-		const obj : ShowScheduleListObjType = {};
+		const obj: ShowScheduleListObjType = {};
 		showScheduleList.map((showSchedule) => {
 			obj[showSchedule.show_id] = showSchedule;
 		})
@@ -27,23 +27,26 @@ export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
 	}, [showScheduleList]);
 
 
-	const fetchShowSchedule = () => {
+	const fetchShowSchedule = (movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => {
 		const dateObj = new Date();
-		const month = (dateObj.getMonth()+1).toString.length !== 1 ? (dateObj.getMonth()+1) : "0" + (dateObj.getMonth()+1);
+		const month = (dateObj.getMonth() + 1).toString.length !== 1 ? (dateObj.getMonth() + 1) : "0" + (dateObj.getMonth() + 1);
 		const date = (dateObj.getDate()).toString.length !== 1 ? (dateObj.getDate()) : "0" + (dateObj.getDate());
 		const dateString = `${dateObj.getFullYear()}${month}${date}`;
 
 		axios.post(`${SERVER_URL}/showschedule/list`, {
-			"page" : 1,
-			"start_date" : dateString, // 오늘 날짜 
-			"end_date" : null
+			"page": 1,
+			//아래 각각에 해당 하는 정보가 안넘어오거나 비어있으면 default 처리
+			"movi_id": !movi_id || movi_id.length ? null : movi_id,
+			"hall_id": !hall_id || hall_id.length ? null : hall_id,
+			"start_date": !start_date || start_date === "" ? dateString : start_date, //yyyymmdd
+			"end_date": !end_date ||end_date === "" ? null : end_date
 		}, {
-			headers : {
-				TOKEN : AUTH_TOKEN
+			headers: {
+				TOKEN: AUTH_TOKEN
 			}
 		})
 			.then((res) => {
-				if(!res.data || !res.data.showschedule_list)
+				if (!res.data || !res.data.showschedule_list)
 					return;
 				setShowScheduleList(res.data.showschedule_list);
 			})
