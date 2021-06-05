@@ -29,6 +29,22 @@ const MypageMovie = ({ mode }: Props) => {
 		if (mode !== 2)
 			return;
 		fetchUserMovieList();
+		// setMovieList([
+		// 	{
+		// 		"comments": null,
+		// 		"rating": null,
+		// 		"movi_id": 126,
+		// 		"movi_name": "트랜스포머1",
+		// 		"images": null
+		// 	},
+		// 	{
+		// 		"comments": null,
+		// 		"rating": null,
+		// 		"movi_id": 67,
+		// 		"movi_name": "기생충",
+		// 		"images": ""
+		// 	}
+		// ]);
 	}, [mode]);
 
 	const fetchUserMovieList = () => {
@@ -100,6 +116,20 @@ const MypageMovie = ({ mode }: Props) => {
 		}
 	}
 
+	const deleteReview = (movi_id : number) => {
+		axios.delete(`${SERVER_URL}/review/delete/${userId}/${movi_id}`,{
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("관람평이 성공적으로 삭제되었습니다.")
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
 	const MovieCard = (movie: MypageMovieType) => (
 		movie &&
 		<Paper elevation={4} className="mypage-movie-card">
@@ -111,10 +141,13 @@ const MypageMovie = ({ mode }: Props) => {
 						<div>
 							<div>평점: {movie.rating}</div>
 							<div>관람평 : {movie.comments}</div>
-							<Button variant="contained" color="primary" onClick={() => handleMakeReview(movie, 1)}>관람평 수정하기</Button>
+							<div className="btn-con">
+								<Button variant="contained" color="primary" onClick={() => handleMakeReview(movie, 1)}>수정하기</Button>
+								<Button variant="contained" color="primary" onClick={() => deleteReview(movie.movi_id)}>삭제하기</Button>
+							</div>
 						</div>
 						: <div>
-							<Button variant="contained" color="primary" onClick={() => handleMakeReview(movie, 0)}>관람평 작성하기</Button>
+							<Button variant="contained" color="primary" onClick={() => handleMakeReview(movie, 0)}>작성하기</Button>
 						</div>
 				}
 			</div>
