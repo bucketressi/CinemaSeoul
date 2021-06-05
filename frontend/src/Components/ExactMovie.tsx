@@ -84,7 +84,6 @@ const MovieExact = ({ movie_id } : Props) => {
 		})
 			.then((res) => {
 				setMovie(res.data);
-				console.log(res.data);
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
@@ -240,6 +239,16 @@ const MovieExact = ({ movie_id } : Props) => {
 						<div className="menu">
 							<div className="menu-subtitle">인물소개</div>
 							<div>{selectedPeople.peop_contents}</div>
+						</div>
+						<div className="menu">
+							<div className="menu-subtitle">출연작</div>
+							<div>
+								{selectedPeople.movies.map((movie) => {
+									return (
+										<div key={movie.movi_id}>{movie.movi_name}</div>
+									)
+								})}
+							</div>
 						</div>
 					</div>
 				</ModalComponent>
