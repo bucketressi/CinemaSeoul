@@ -128,7 +128,7 @@ const MypageBook = ({ mode }: Props) => {
 									<TableRow key={book.book_id} onClick={() => openUserBookModal(book.book_id)}>
 										<TableCell>{book.hall_name}</TableCell>
 										<TableCell>{book.movi_name}</TableCell>
-										<TableCell>{book.show_date} {book.show_time}</TableCell>
+										<TableCell>{`${getDateString(book.show_date)} ${book.show_time.substr(0,2)}:${book.show_time.substr(2,4)}`}</TableCell>
 										<TableCell>{book.book_datetime}</TableCell>
 									</TableRow>
 								);

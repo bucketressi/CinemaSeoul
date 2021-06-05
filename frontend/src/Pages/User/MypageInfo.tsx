@@ -25,6 +25,8 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 	const [phoneNum, setPhoneNum] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [agreement, setAgreement] = useState<string>("1");
+	const [password, setPassword] = useState<string>("");
+	const [passwordDual, setPasswordDual] = useState<string>("");
 
 	/* 생년월일 */
 	const [birthYear, setBirthYear] = useState<string>("");
@@ -49,9 +51,9 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 		if (!userInfo)
 			return;
 		setName(userInfo.user_name);
-		setBirthYear(userInfo.birth.substr(0,4));
-		setBirthMonth(userInfo.birth.substr(4,2));
-		setBirthDate(userInfo.birth.substr(6,2));
+		setBirthYear(userInfo.birth.substr(0, 4));
+		setBirthMonth(userInfo.birth.substr(4, 2));
+		setBirthDate(userInfo.birth.substr(6, 2));
 		setPhoneNum(userInfo.phone_num);
 		setEmail(userInfo.email);
 		setAgreement(userInfo.agreement);
@@ -61,6 +63,14 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 	const preTreatment = () => {
 		if (name === "") {
 			alert("이름을 입력해주세요.");
+			return false;
+		}
+		if (password === "") {
+			alert("패스워드를 입력해주세요.");
+			return false;
+		}
+		if (password !== passwordDual) {
+			alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
 			return false;
 		}
 		if (!email.includes("@")) {
@@ -92,7 +102,7 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			alert("정확한 핸드폰 번호를 입력해주세요.");
 			return;
 		}
-		if(phoneNum === userInfo.phone_num){
+		if (phoneNum === userInfo.phone_num) {
 			// 기존 핸드폰 번호에서 안 바뀌었으면 통과
 			setPhoneNumExist(0);
 			alert("해당 핸드폰 번호를 사용할 수 있습니다.");
@@ -120,7 +130,7 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			alert("정확한 이메일을 입력해주세요.");
 			return;
 		}
-		if(email === userInfo.email){
+		if (email === userInfo.email) {
 			// 기존 이메일에서 안 바뀌었으면 통과
 			setEmailExist(0);
 			alert("해당 이메일을 사용할 수 있습니다.");
@@ -152,6 +162,7 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			"birth": birth, //"16451212",
 			"phone_num": phoneNum, //"01012345678",
 			"email": email, //"sample@naver.com",
+			"password": password,
 			"agreement": agreement// 1
 		}, {
 			headers: {
@@ -159,7 +170,7 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			}
 		})
 			.then((res) => {
-				console.log(res);
+				alert("정상적으로 수정되었습니다.")
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -184,6 +195,8 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 						<TextField label="이메일" variant="outlined" value={email} onChange={(e: any) => { setEmail(e.target.value); }} />
 						<Button variant="contained" color={isEmailExist !== 0 ? "primary" : "default"} onClick={checkEmail}>이메일 중복 체크</Button>
 					</div>
+					<TextField label="비밀번호" variant="outlined" type="password" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
+					<TextField label="비밀번호 확인" variant="outlined" type="password" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
 				</div>
 				<div className="btn-con">
 					<Button className="btn" variant="contained" color="primary" onClick={updateInfo}>수정</Button>

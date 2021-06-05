@@ -93,7 +93,6 @@ const SignUp = () => {
 			.catch((e) => {
 				errorHandler(e, true);
 			});
-		//"{"user_name":"우희은","birth":"1947/6/16","phone_num":"01045117733","email":"희은@","password":"1234","agreement":"1"}"
 	}
 
 	const checkPhoneNum = () => {

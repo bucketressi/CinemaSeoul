@@ -41,6 +41,7 @@ const MypageMovie = ({ mode }: Props) => {
 				if (!res.data)
 					return;
 				setMovieList(res.data);
+				console.log(res);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
