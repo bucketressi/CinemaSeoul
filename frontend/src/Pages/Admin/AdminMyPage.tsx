@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageTitle, SelectModule } from '../../Components';
 import { AdminType } from '../../Main/Type';
+import "../../scss/pages/adminmypage.scss";
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
@@ -195,6 +196,9 @@ const AdminMyPage = () => {
 					<div className="btn-con">
 						<Button className="btn" variant="contained" color="primary">수정</Button>
 					</div>
+				</div>
+				<div className="img-con">
+					<img src="/img/thanku.png" alt="감사합니다."/>
 				</div>
 			</div>
 		</div>

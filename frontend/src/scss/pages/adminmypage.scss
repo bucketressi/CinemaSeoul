@@ -1,0 +1,16 @@
+
+.admin-mypage-con{
+	display: flex;
+	justify-content: space-between;
+	&>div{
+		width: 48%;
+	}
+	.img-con{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		img{
+			width: 100%;
+		}
+	}
+}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import "../../scss/pages/mypagemovie.scss";
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
