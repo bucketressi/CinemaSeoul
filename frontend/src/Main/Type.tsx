@@ -308,3 +308,11 @@ export type MypageProductType = {
 	price: number, //7000,
 	amount: number,//2
 }
+
+export type MypageMovieType = {
+	comments: string | null, //null,
+	rating: number | null, //null,
+	movi_id: number, //126,
+	movi_name: string, //트랜스포머1,
+	images: string | null //
+}

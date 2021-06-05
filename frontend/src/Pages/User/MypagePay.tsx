@@ -208,7 +208,7 @@ const MypagePay = ({ mode }: Props) => {
 														{
 															book.use_datetime === null ?
 																<Button variant="contained" color="secondary" onClick={() => usePayCode(book.use_code)}>사용하기</Button> :
-																<div>이미 사용되었습니다.</div>
+																<Button variant="contained" color="default">이미 사용됨</Button>
 														}
 													</TableCell>
 													<TableCell>
