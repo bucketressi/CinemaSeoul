@@ -85,6 +85,7 @@ const MypageBook = ({ mode }: Props) => {
 		setOpenBookModal(true); // 예매 모달 열기
 		setSelectedBookId(book_id);
 	}
+
 	return (
 		<div className="user-book-con">
 			<div className="select-date-con">
@@ -125,11 +126,11 @@ const MypageBook = ({ mode }: Props) => {
 							bookInfo.map((book: UserBookType) => {
 								// 각 row는 cursor: pointer로 클릭하도록 유도
 								return (
-									<TableRow key={book.book_id} onClick={() => openUserBookModal(book.book_id)}>
-										<TableCell>{book.hall_name}</TableCell>
-										<TableCell>{book.movi_name}</TableCell>
-										<TableCell>{`${getDateString(book.show_date)} ${book.show_time.substr(0,2)}:${book.show_time.substr(2,4)}`}</TableCell>
-										<TableCell>{book.book_datetime}</TableCell>
+									<TableRow key={book.book_id}>
+										<TableCell onClick={() => openUserBookModal(book.book_id)}>{book.hall_name}</TableCell>
+										<TableCell onClick={() => openUserBookModal(book.book_id)}>{book.movi_name}</TableCell>
+										<TableCell onClick={() => openUserBookModal(book.book_id)}>{`${getDateString(book.show_date)} ${book.show_time.substr(0,2)}:${book.show_time.substr(2,4)}`}</TableCell>
+										<TableCell onClick={() => openUserBookModal(book.book_id)}>{book.book_datetime}</TableCell>
 									</TableRow>
 								);
 							})

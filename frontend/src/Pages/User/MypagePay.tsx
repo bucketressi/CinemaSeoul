@@ -139,11 +139,45 @@ const MypagePay = ({ mode }: Props) => {
 				<TableCell>결제 내용</TableCell>
 				<TableCell>결제 정보</TableCell>
 				<TableCell>결제 상태</TableCell>
+				<TableCell>결제 취소</TableCell>
 				<TableCell>사용 정보</TableCell>
 			</TableRow>
 		</TableHead>
 	);
 
+	const cancelBookPay = (book_id : number) => {
+		if(!confirm("정말 해당 예매를 취소하시겠습니까? 예매 티켓도 함께 취소됩니다."))
+			return;
+		axios.delete(`${SERVER_URL}/book/cancel/${book_id}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("성공적으로 취소되었습니다.");
+				fetchUserBookPayList();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
+	const cancelProductPay = (prod_pay_id : number) => {
+		if(!confirm("정말 해당 상품 결제를 취소하시겠습니까?"))
+			return;
+		axios.delete(`${SERVER_URL}/product/cancel/${prod_pay_id}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("성공적으로 취소되었습니다.");
+				fetchUserProductPayList();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
 	return (
 		<div className="user-pay-con">
 			<div className="select-date-con">
@@ -207,9 +241,12 @@ const MypagePay = ({ mode }: Props) => {
 													<TableCell>
 														{
 															book.use_datetime === null ?
-																<Button variant="contained" color="secondary" onClick={() => usePayCode(book.use_code)}>사용하기</Button> :
+																<Button variant="contained" color="primary" onClick={() => usePayCode(book.use_code)}>사용하기</Button> :
 																<Button variant="contained" color="default">이미 사용됨</Button>
 														}
+													</TableCell>
+													<TableCell>
+														<Button variant="contained" color="secondary" onClick={() => cancelBookPay(book.book_id)}>예매 취소</Button>
 													</TableCell>
 													<TableCell>
 														<div>
@@ -256,9 +293,12 @@ const MypagePay = ({ mode }: Props) => {
 
 														{
 															product.use_datetime === null ?
-																<Button variant="contained" color="secondary" onClick={() => useProductCode(product.use_code)}>사용하기</Button> :
-																<div>이미 사용되었습니다.</div>
+																<Button variant="contained" color="primary" onClick={() => useProductCode(product.use_code)}>사용하기</Button> :
+																<Button variant="contained" color="default">이미 사용됨</Button>
 														}
+													</TableCell>
+													<TableCell>
+														<Button variant="contained" color="secondary" onClick={() => cancelProductPay(product.prod_pay_id)}>결제 취소</Button>
 													</TableCell>
 													<TableCell>
 														<div>
