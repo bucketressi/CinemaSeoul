@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab, Button, TextField, TableBody, TableRow, TableCell, TableHead, Table, TableContainer } from '@material-ui/core';
 import { ModalComponent, PageTitle } from '../../Components';
 import "../../scss/pages/mypage.scss";
 
@@ -9,8 +9,9 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router-dom';
-import { MypageUserType} from '../../Main/Type';
+import { MypageUserType, MypagePointType } from '../../Main/Type';
 import { MypageBook, MypagePay, MypageMovie, MypageInfo } from '.';
+import { getDateString, getDateStringFromDate } from '../../Function';
 
 const Mypage = () => {
 	const userId = useUserState();
@@ -19,6 +20,10 @@ const Mypage = () => {
 	const [mode, setMode] = useState<number>(0); // 0 : 결제내역조회, 1 : 내가 본 영화, 2 : 1:1문의, 3 : 정보 관리
 
 	const [userInfo, setUserInfo] = useState<MypageUserType | undefined>(undefined); // user 전체 정보
+	const [point, setPoint] = useState<MypagePointType[] | undefined>(undefined); // 포인트 내역 정보
+	const [startDate, setStartDate] = useState<string>(getDateStringFromDate(new Date()));
+
+	const [openPointModal, setOpenPointModal] = useState<boolean>(false);
 
 	useEffect(() => { // 로그인 된 유저만 마이페이지 가능, 유저 정보 받아오기
 		if (userId === undefined) {
@@ -33,7 +38,7 @@ const Mypage = () => {
 	}
 
 	const fetchUserInfo = () => {
-		if(!userId)
+		if (!userId)
 			return;
 		axios.get(`${SERVER_URL}/user/${userId}`, {
 			headers: {
@@ -46,6 +51,34 @@ const Mypage = () => {
 			.catch((e) => {
 				errorHandler(e, true);
 			});
+	}
+
+	// 포인트 내역 조회 모달
+	useEffect(() => {
+		fetchPointList();
+	}, [startDate]);
+
+	const fetchPointList = () => {
+		if (!userId)
+			return;
+		axios.get(`${SERVER_URL}/point/${userId}/${startDate}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				if (!res.data || !res.data.point)
+					return;
+				setPoint(res.data.point);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
+	const handlePointModal = () => {
+		setOpenPointModal(true);
+		fetchPointList();
 	}
 
 	return (
@@ -67,6 +100,7 @@ const Mypage = () => {
 						<div>
 							누적 포인트 : {userInfo?.accu_point}포인트
 						</div>
+						<Button variant="outlined" color="primary" onClick={handlePointModal}>포인트 내역 조회</Button>
 					</div>
 					<Tabs
 						value={mode}
@@ -119,11 +153,43 @@ const Mypage = () => {
 								mode={mode}
 								userInfo={userInfo}
 								fetchUserInfo={fetchUserInfo}
-							/>	
+							/>
 						</div>
 					</div>
 				</div>
 			}
+			<ModalComponent
+				open={openPointModal}
+				setOpen={setOpenPointModal}
+				title="포인트 내역 조회"
+			>
+				<TextField type="date" label="조회 시작 일자" value={getDateString(startDate)} onChange={(e: any) => { setStartDate(e.target.value.split("-").join("")) }} />
+				<TableContainer>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell>일자</TableCell>
+								<TableCell>타입</TableCell>
+								<TableCell>포인트</TableCell>
+								<TableCell>메시지</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{
+								point &&
+								point.map((p) => (
+									<TableRow key={p.poin_id}>
+										<TableCell>{p.poin_datetime}</TableCell>
+										<TableCell>{p.poin_type}</TableCell>
+										<TableCell>{p.poin_amount}</TableCell>
+										<TableCell>{p.message}</TableCell>
+									</TableRow>
+								))
+							}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</ModalComponent>
 		</div>
 	);
 }

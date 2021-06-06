@@ -319,3 +319,11 @@ export type MypageMovieType = {
 	movi_name: string, //트랜스포머1,
 	images: string | null //
 }
+
+export type MypagePointType = {
+	poin_id : number,
+	poin_amount : number,
+	poin_type : string,
+	message : string,
+	poin_datetime : string
+}
