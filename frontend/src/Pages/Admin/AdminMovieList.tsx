@@ -152,12 +152,12 @@ const AdminMovie = () => {
 				>
 					<div className="add-container">
 						<div>
-							<TextField variant="outlined" placeholder="제목" inputProps={{ maxLength: 50 }} value={name} onChange={handleNameChange} />
-							<TextField variant="outlined" placeholder="회사" inputProps={{ maxLength: 20 }} value={company} onChange={handleCompanyChange} />
+							<TextField variant="outlined" placeholder="제목" label="제목" inputProps={{ maxLength: 50 }} value={name} onChange={handleNameChange} />
+							<TextField variant="outlined" placeholder="회사" label="회사" inputProps={{ maxLength: 20 }} value={company} onChange={handleCompanyChange} />
 						</div>
 						<div>
-							<TextField variant="outlined" placeholder="런타임" inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
-							<TextField variant="outlined" placeholder="설명" inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
+							<TextField variant="outlined" placeholder="런타임" label="런타임" inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
+							<TextField variant="outlined" placeholder="설명" label="설명" inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
 
 						</div>
 						<div>

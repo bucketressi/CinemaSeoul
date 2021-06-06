@@ -214,6 +214,21 @@ const AdminShowSchedule = () => {
 		});
 	}
 
+	/** 상영 시작 */
+	const startShow = (show_id : number) => {
+		axios.get(`${SERVER_URL}/showschedule/start/${show_id}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("상영이 시작되었습니다.");
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["","","","영화가 시작하기 10분 전부터만 시작하실 수 있습니다."]);
+			});
+	}
+
 	return (
 		<div>
 			<PageTitle title="상영일정 페이지" isButtonVisible={true} />
@@ -296,6 +311,7 @@ const AdminShowSchedule = () => {
 										<TableCell>개봉일자</TableCell>
 										<TableCell>상영시작시각</TableCell>
 										<TableCell>상영종료시각</TableCell>
+										<TableCell>상영시작</TableCell>
 										<TableCell>수정</TableCell>
 									</TableRow>
 								</TableHead>
@@ -312,6 +328,13 @@ const AdminShowSchedule = () => {
 													<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
 													<TableCell>{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
 													<TableCell>{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
+													<TableCell>
+														{
+															schedule.started && schedule.started === "0" ?
+																<Button onClick={() => startShow(schedule.show_id)} variant="outlined" color="secondary">상영시작</Button> :
+																<Button variant="outlined" color="default" disabled={true}>상영완료</Button>
+														}
+													</TableCell>
 													<TableCell className="modify-btn-con">
 														<Button variant="contained" color="primary" onClick={() => handleModifyButtonClick(schedule.show_id)}>상영일정 수정</Button>
 														<Button variant="contained" color="secondary" onClick={() => removeShowSchedule(schedule.show_id)}>상영일정 삭제</Button>

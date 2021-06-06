@@ -132,6 +132,7 @@ export type ShowScheduleType = {
 	end_time: string, // "2021/12/30/06/03",
 	hall_seat: number,
 	rema_amount: number,
+	started?: string
 }
 
 export type ShowScheduleListType = ShowScheduleType[];
