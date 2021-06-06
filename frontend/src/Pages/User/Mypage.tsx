@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Tab, Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, } from '@material-ui/core';
+import { Tabs, Tab, Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, TextField, Button } from '@material-ui/core';
 import { ModalComponent, PageTitle } from '../../Components';
+import {getDateString} from '../../Function';
 import "../../scss/pages/mypage.scss";
 
 import axios from 'axios';
@@ -18,31 +19,31 @@ const Mypage = () => {
 	const [mode, setMode] = useState<number>(0); // 0 : 결제내역조회, 1 : 내가 본 영화, 2 : 1:1문의, 3 : 정보 관리
 
 	const [userInfo, setUserInfo] = useState<MypageUserType | undefined>(undefined); // user 전체 정보
+	/* 예매 */
 	const [bookInfo, setBookInfo] = useState<UserBookType[] | undefined>(undefined); // 예매 정보
 	const [openBookModal, setOpenBookModal] = useState<boolean>(false); // 예매 모달
 	const [selectedBookId, setSelectedBookId] = useState<number>(-1); // 선택된 예매
 	const [bookExactInfo, setBookExactInfo] = useState<UserBookExactType | undefined>(undefined); // 예매 상세 정보
+	const [startDate, setStartDate] = useState<string>("");
+	const [endDate, setEndDate] = useState<string>("");
 
-	useEffect(() => {
+
+	useEffect(() => { // 탭 바뀔 때마다 정보 받아오기
+		switch (mode) {
+		case 0:
+			// 예매 내역 조회
+			fetchUserBookList();
+			return;
+		}
+	}, [mode]);
+
+	useEffect(() => { // 로그인 된 유저만 마이페이지 가능, 유저 정보 받아오기
 		if (userId === undefined) {
 			alert("로그인 후 이용 가능합니다.")
 			history.push("/login");
 		}
 		fetchUserInfo();
 	}, []);
-
-	useEffect(() => {
-		switch (mode) {
-		case 0:
-			// 예매 내역 조회
-			fecthUserBookList();
-			return;
-		}
-	}, [mode]);
-
-	useEffect(() => {
-		fetchUserExactBookInfo();
-	}, [selectedBookId]);
 
 	const fetchUserInfo = () => {
 		axios.get(`${SERVER_URL}/user/${userId}`, {
@@ -58,11 +59,17 @@ const Mypage = () => {
 			});
 	}
 
-	const fecthUserBookList = (start_date?: string, end_date?: string) => {
+	/* 예매 내역 조회 */
+
+	useEffect(() => {
+		fetchUserExactBookInfo();
+	}, [selectedBookId]);
+
+	const fetchUserBookList = () => {
 		axios.post(`${SERVER_URL}/book/list`, {
 			user_id: userId,     //회원은 강제로 본인으로 바뀝니다.
-			start_date: start_date ? null : start_date, // 없으면 전체, 있으면 할당
-			end_date: end_date ? null : end_date, // 없으면 전체, 있으면 할당
+			start_date: startDate==="" ? null : startDate, // 없으면 전체, 있으면 할당
+			end_date: endDate==="" ? null : endDate, // 없으면 전체, 있으면 할당
 			page: 1
 		}, {
 			headers: {
@@ -107,6 +114,9 @@ const Mypage = () => {
 		setSelectedBookId(book_id);
 	}
 
+	/* 결제 내역 조회 */
+
+
 	return (
 		<div>
 			<PageTitle
@@ -144,6 +154,27 @@ const Mypage = () => {
 							{
 								bookInfo &&
 								<div className="user-book-con">
+									<div className="select-date-con">
+										<TextField
+											type="date"
+											label="시작일자"
+											value={getDateString(startDate)}
+											InputLabelProps={{
+												shrink:true
+											}}
+											onChange={(e: any) => setStartDate(e.target.value.split('-').join(''))}
+										/>
+										<TextField
+											type="date"
+											label="종료일자"
+											value={getDateString(endDate)}
+											InputLabelProps={{
+												shrink:true
+											}}
+											onChange={(e: any) => setEndDate(e.target.value.split('-').join(''))}
+										/>
+										<Button variant="contained" color="primary" onClick={() => fetchUserBookList()}>검색</Button>
+									</div>
 									<TableContainer>
 										<Table>
 											<TableHead>
