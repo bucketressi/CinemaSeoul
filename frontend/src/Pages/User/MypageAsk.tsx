@@ -123,21 +123,23 @@ const MypageAsk = ({ mode }: Props) => {
 								<TableCell>답변 여부 </TableCell>
 							</TableRow>
 						</TableHead>
-						{
-							askList &&
-							askList.map((ask) => (
-								<TableBody key={ask.ask_id}>
-									<TableCell>작성일자 : {ask.crea_datetime}</TableCell>
-									<TableCell>제목 : {ask.ask_title}</TableCell>
-									<TableCell>답변 여부 : {
-										ask.admi_name && ask.answ_datetime ?
-											<Button variant="contained" color="primary" onClick={() => fetchExactAsk(ask.ask_id)}>답변 보기</Button>
-											: <Button variant="contained" color="default" onClick={() => fetchExactAsk(ask.ask_id)}>자세히 보기</Button>
-									}</TableCell>
+						<TableBody>
+							{
+								askList &&
+								askList.map((ask) => (
+									<TableRow key={ask.ask_id}>
+										<TableCell>작성일자 : {ask.crea_datetime}</TableCell>
+										<TableCell>제목 : {ask.ask_title}</TableCell>
+										<TableCell>답변 여부 : {
+											ask.admi_name && ask.answ_datetime ?
+												<Button variant="contained" color="primary" onClick={() => fetchExactAsk(ask.ask_id)}>답변 보기</Button>
+												: <Button variant="contained" color="default" onClick={() => fetchExactAsk(ask.ask_id)}>자세히 보기</Button>
+										}</TableCell>
 
-								</TableBody>
-							))
-						}
+									</TableRow>
+								))
+							}
+						</TableBody>
 					</Table>
 				</TableContainer>
 				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
