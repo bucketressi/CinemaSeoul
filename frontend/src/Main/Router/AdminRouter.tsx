@@ -29,7 +29,8 @@ import {
 	AdminProductModify,
 	AdminTheater,
 	AdminError,
-	AdminLogin
+	AdminLogin,
+	AdminUser
 } from '../../Pages/Admin';
 
 const AdminRouter: React.FC = () => {
@@ -49,6 +50,7 @@ const AdminRouter: React.FC = () => {
 				<Route exact path="/admin" component={AdminMain} />
 				<Route path="/admin/ask" component={AdminAsk} />
 				<Route path="/admin/login" component={AdminLogin} />
+				<Route path="/admin/user" component={AdminUser} />
 				<Route path="/admin/myPage" component={AdminMyPage} />
 				<Route path="/admin/blacklist" component={AdminBlackList} />
 				<Route path="/admin/book" component={AdminBookRecord} />

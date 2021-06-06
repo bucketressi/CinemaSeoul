@@ -120,6 +120,13 @@ export type AdminType = {
 	start_date: string
 }
 
+export type UserPointType ={
+	user_id : number,
+	point : MypagePointType[],
+	curr_point : number,
+	accu_point : number
+}
+
 /* show schedule */
 export type ShowScheduleType = {
 	show_id: number,
