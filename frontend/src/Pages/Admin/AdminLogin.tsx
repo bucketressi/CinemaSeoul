@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Checkbox, Button } from '@material-ui/core';
-import { useAdminLogin } from '../../Main/UserModel';
+import { useAdminLogin, useAdminState } from '../../Main/UserModel';
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { ModalComponent } from '../../Components';
+import { useHistory } from 'react-router';
 
 const AdminLogin = () => {
 	// 관리자 로그인 페이지
+	const adminId = useAdminState();
 	const adminLogin = useAdminLogin();
+	const history = useHistory();
 
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
@@ -30,6 +33,14 @@ const AdminLogin = () => {
 		adminLogin(email, password);
 	}
 
+	useEffect(() => {
+		// 이미 로그인 했음
+		if(!adminId)
+			return;
+		alert("이미 로그인하였습니다.");
+		history.push("/admin/main");
+	},[]);
+
 	/** 아이디 비밀번호 찾기 */
 	
 	const findId = () => {
@@ -41,6 +52,7 @@ const AdminLogin = () => {
 				if(!res || !res.data)
 					return;
 				setFoundedId(res.data);
+				setModalEmail(res.data);
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["데이터를 제대로 입력해주세요.", "입력한 이름에 해당하는 관리자가 없습니다."]);

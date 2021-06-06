@@ -26,7 +26,6 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 	const [name, setName] = useState<string>("");
 	const [birth, setBirth] = useState<string>("");
 	const [phoneNum, setPhoneNum] = useState<string>("");
-	const [email, setEmail] = useState<string>("");
 	const [agreement, setAgreement] = useState<string>("1");
 	const [password, setPassword] = useState<string>("");
 	const [passwordDual, setPasswordDual] = useState<string>("");
@@ -38,10 +37,10 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 
 	/* 중복 체크 */
 	const [isPhoneNumExist, setPhoneNumExist] = useState<number>(-1); // -1 아직 안함, 0 중복된 번호 없음, 1 중복된 번호 있음
-	const [isEmailExist, setEmailExist] = useState<number>(-1); // -1 아직 안함, 0 중복된 이메일 없음, 1 중복된 이메일 있음
-
 	useEffect(() => {
-		setBirth(`${birthYear}${birthMonth}${birthDate}`);
+		const month = birthMonth.length === 1? "0"+birthMonth : birthMonth;
+		const date = birthDate.length ===1? "0"+birthDate :birthDate;
+		setBirth(`${birthYear}${month}${date}`);
 	}, [birthYear, birthMonth, birthDate]);
 
 	useEffect(() => {
@@ -58,7 +57,6 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 		setBirthMonth(Number(userInfo.birth.substr(4, 2)).toString());
 		setBirthDate(Number(userInfo.birth.substr(6, 2)).toString());
 		setPhoneNum(userInfo.phone_num);
-		setEmail(userInfo.email);
 		setAgreement(userInfo.agreement);
 	}, [userInfo]);
 
@@ -76,10 +74,6 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
 			return false;
 		}
-		if (!email.includes("@")) {
-			alert("이메일 형식을 확인해주세요.");
-			return false;
-		}
 		if (isPhoneNumExist === -1) {
 			alert("중복된 핸드폰 번호가 있는지 버튼을 눌러 체크해주세요.");
 			return false;
@@ -88,18 +82,8 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			alert("중복된 핸드폰 번호가 있어 회원가입할 수 없습니다. 다른 핸드폰 번호를 입력해주세요.");
 			return false;
 		}
-		if (isEmailExist === -1) {
-			alert("중복된 이메일이 있는지 버튼을 눌러 체크해주세요.");
-			return false;
-		}
-		if (isEmailExist === 1) {
-			alert("중복된 이메일이 있어 회원가입할 수 없습니다. 다른 이메일을 입력해주세요.");
-			return false;
-		}
 		return true;
 	}
-
-
 	const checkPhoneNum = () => {
 		if (phoneNum === "" || phoneNum.length !== 11) {
 			alert("정확한 핸드폰 번호를 입력해주세요.");
@@ -128,34 +112,6 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			});
 	}
 
-	const checkEmail = () => {
-		if (email === "" || !email.includes("@")) {
-			alert("정확한 이메일을 입력해주세요.");
-			return;
-		}
-		if (email === userInfo.email) {
-			// 기존 이메일에서 안 바뀌었으면 통과
-			setEmailExist(0);
-			alert("해당 이메일을 사용할 수 있습니다.");
-			return;
-		}
-		axios.post(`${SERVER_URL}/user/emailcheck`, {
-			"email": email,
-		}, {
-			headers: {
-				"TOKEN": AUTH_TOKEN
-			}
-		})
-			.then((res) => {
-				setEmailExist(0);
-				alert("해당 이메일을 사용할 수 있습니다.");
-			})
-			.catch((e) => {
-				setEmailExist(1);
-				alert("중복된 이메일이 존재합니다.");
-			});
-	}
-
 	const updateInfo = () => {
 		if (!userInfo || !preTreatment())
 			return;
@@ -164,7 +120,7 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			"user_name": name, //"이변경",
 			"birth": birth, //"16451212",
 			"phone_num": phoneNum, //"01012345678",
-			"email": email, //"sample@naver.com",
+			"email": userInfo.email, //"sample@naver.com",
 			"password": password,
 			"agreement": agreement// 1
 		}, {
@@ -203,19 +159,18 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			<div className="mypage-info-con">
 				<div className="form-con">
 					<div className="input-con">
-						<TextField label="이름" variant="outlined" value={name} inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
+						<div>
+							<TextField label="이메일" variant="outlined" InputLabelProps={{shrink:true}} value={userInfo?.email} disabled={true}/>
+						</div>
 						<div className="with-btn">
 							<TextField label="핸드폰 번호" variant="outlined" value={phoneNum} inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
 							<Button variant="contained" color={isPhoneNumExist !== 0 ? "primary" : "default"} onClick={checkPhoneNum}>핸드폰 번호 중복 체크</Button>
 						</div>
+						<TextField label="이름" variant="outlined" value={name} inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
 						<div className="birth-con">
 							<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
 							<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
 							<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
-						</div>
-						<div className="with-btn">
-							<TextField label="이메일" variant="outlined" value={email} onChange={(e: any) => { setEmail(e.target.value); }} />
-							<Button variant="contained" color={isEmailExist !== 0 ? "primary" : "default"} onClick={checkEmail}>이메일 중복 체크</Button>
 						</div>
 						<TextField label="비밀번호" variant="outlined" type="password" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
 						<TextField label="비밀번호 확인" variant="outlined" type="password" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />

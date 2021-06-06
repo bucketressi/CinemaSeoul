@@ -2,7 +2,7 @@ import React, { useEffect, useState, createRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { ModalComponent, PageTitle, SelectModule } from '../../Components';
 import { Tabs, Tab, TextField, Checkbox, Button, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
-import { useUserLogin, useNonUserLogin } from '../../Main/UserModel';
+import { useUserLogin, useNonUserLogin, useUserState } from '../../Main/UserModel';
 import "../../scss/pages/login.scss";
 
 import axios from 'axios';
@@ -10,6 +10,7 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 
 const Login = () => {
+	const userId = useUserState();
 	const [type, setType] = useState<boolean>(false); // true : 회원, false : 비회원
 
 	/* 회원가입 정보 */
@@ -48,6 +49,14 @@ const Login = () => {
 	const userLogin = useUserLogin();
 	const nonUserLogin = useNonUserLogin();
 
+	useEffect(() => {
+		// 이미 로그인 했음
+		if(!userId)
+			return;
+		alert("이미 로그인하였습니다.");
+		history.push("/main");
+	},[]);
+
 	const handleUserLogin = () => {
 		userLogin(email, password);
 	}
@@ -80,6 +89,7 @@ const Login = () => {
 				if(!res || !res.data)
 					return;
 				setFoundedId(res.data);
+				setModalEmail(res.data);
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["데이터를 제대로 입력해주세요.", "입력한 아이디에 해당하는 회원이 없습니다."]);
