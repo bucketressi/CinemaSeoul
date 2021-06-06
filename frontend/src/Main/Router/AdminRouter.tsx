@@ -25,7 +25,8 @@ import {
 	AdminSales,
 	AdminShowSchedule,
 	AdminModifyShowSchedule,
-	AdminStore,
+	AdminProduct,
+	AdminProductModify,
 	AdminTheater,
 	AdminError,
 	AdminLogin
@@ -66,7 +67,8 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/sales" component={AdminSales} />
 				<Route exact path="/admin/showschedule" component={AdminShowSchedule} />
 				<Route path="/admin/modify/showschedule/:schedule_id" component={AdminModifyShowSchedule} />
-				<Route path="/admin/store" component={AdminStore} />
+				<Route exact path="/admin/product" component={AdminProduct} />
+				<Route path="/admin/product/:product_id" component={AdminProductModify} />
 				<Route path="/admin/theater" component={AdminTheater} />
 				<Route path="/admin/error" component={AdminError} />
 				<Redirect to="/admin" />
