@@ -14,6 +14,7 @@ const AdminMain = () => {
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/movie")}>영화 리스트 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/hall")}>상영관 리스트 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/showschedule")}>상영일정 리스트 바로가기</Button>
+				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/product")}>상품 리스트 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/employee")}>직원 리스트 바로가기</Button>
 			</div>
 		</div>

@@ -26,7 +26,8 @@ import {
 	AdminSales,
 	AdminShowSchedule,
 	AdminModifyShowSchedule,
-	AdminStore,
+	AdminProduct,
+	AdminProductModify,
 	AdminTheater,
 	AdminError,
 	AdminLogin
@@ -59,6 +60,7 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/hall" component={AdminHall} />
 				<Route path="/admin/home" component={AdminHome} />
 				<Route exact path="/admin/movie" component={AdminMovieList} />
+				<Route exact path="/admin/movie/search" component={AdminMovieList} />
 				<Route path="/admin/movie/:movie_id" component={AdminMovieExact} />
 				<Route path="/admin/modify/movie/:movie_id" component={AdminModifyMovie} />
 				<Route path="/admin/notice" component={AdminNotice} />
@@ -67,7 +69,8 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/sales" component={AdminSales} />
 				<Route exact path="/admin/showschedule" component={AdminShowSchedule} />
 				<Route path="/admin/modify/showschedule/:schedule_id" component={AdminModifyShowSchedule} />
-				<Route path="/admin/store" component={AdminStore} />
+				<Route exact path="/admin/product" component={AdminProduct} />
+				<Route path="/admin/product/:product_id" component={AdminProductModify} />
 				<Route path="/admin/theater" component={AdminTheater} />
 				<Route path="/admin/error" component={AdminError} />
 				<Redirect to="/admin" />

@@ -153,7 +153,13 @@
 		&>div{
 			margin-bottom: 1rem;
 		}
-		
+		.selected-seat-con .seat-con{
+			display: flex;
+			flex-wrap: wrap;
+			&>div{
+				margin-right: 10px;
+			}
+		}
 	}
 	.point-con{
 		.current-point-con{
