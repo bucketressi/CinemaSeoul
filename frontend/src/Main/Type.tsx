@@ -351,3 +351,10 @@ export type MypageAskExactType = {
     answ_datetime: string, //2021-06-04 16:26:07 //없으면 null
 }
 
+/** blacklist */
+export type BlackList = {
+	"blac_name" : string,
+	"birth" : string,
+	"phone_num" : string
+}
+
