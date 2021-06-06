@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { TextField, Checkbox, Button } from '@material-ui/core';
 import { useAdminLogin } from '../../Main/UserModel';
+import axios from 'axios';
+import { SERVER_URL } from '../../CommonVariable';
+import { errorHandler } from '../../Main/ErrorHandler';
+import { ModalComponent } from '../../Components';
 
 const AdminLogin = () => {
 	// 관리자 로그인 페이지
@@ -9,11 +13,54 @@ const AdminLogin = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	const openFindIdModal = () => { console.log("id"); };
-	const openFindPWModal = () => { console.log("pw"); };
+	/* 아이디, 비밀번호 찾기 */
+	const [openIdModal, setOpenIdModal] = useState<boolean>(false);
+	const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(false);
+	const [modalName, setModalName] = useState<string>("");
+	const [modalPhoneNum, setModalPhoneNum] = useState<string>("");
+	const [foundedId, setFoundedId] = useState<string>("");
+
+	const [modalEmail, setModalEmail] = useState<string>("");
+	const [modalPassword, setModalPassword] = useState<string>("");
+
+	const openFindIdModal = () => {setOpenIdModal(true);};
+	const openFindPWModal = () => {setOpenPasswordModal(true);};
 
 	const handleAdminLogin = () => {
 		adminLogin(email, password);
+	}
+
+	/** 아이디 비밀번호 찾기 */
+	
+	const findId = () => {
+		axios.post(`${SERVER_URL}/admin/findId`, {
+			"admi_name" : modalName,
+			"phone_num" : modalPhoneNum
+		})
+			.then((res) => {
+				if(!res || !res.data)
+					return;
+				setFoundedId(res.data);
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["데이터를 제대로 입력해주세요.", "입력한 이름에 해당하는 관리자가 없습니다."]);
+			});
+	}
+	
+	const setNewPW = () => {
+		axios.post(`${SERVER_URL}/admin/resetPw`, {
+			"admi_name" : modalName,
+			"phone_num" : modalPhoneNum,//"01012345678",
+			"email" : modalEmail,//"sample@naver.com",
+			"password" : modalPassword,//"1234"
+		})
+			.then((res) => {
+				setOpenPasswordModal(false);
+				alert("비밀번호가 성공적으로 변경되었습니다.");
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
 	}
 
 
@@ -32,13 +79,38 @@ const AdminLogin = () => {
 					</div>
 					<div className="sub-menu">
 						<span onClick={openFindIdModal}>아이디 찾기</span>
-						<span className="last" onClick={openFindPWModal}>비밀번호 찾기</span>
+						<span className="last" onClick={openFindPWModal}>비밀번호 변경</span>
 					</div>
 				</div>
 			</div>
 			<div className="right-con">
 				<img src="/img/picture.jpg" alt="홍보 이미지" />
 			</div>
+			<ModalComponent
+				open={openIdModal}
+				setOpen={setOpenIdModal}
+				title="아이디 찾기"
+			>
+				<div>
+					<TextField label="이름" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
+					<TextField label="핸드폰 번호" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
+					<Button variant="contained" color="primary" onClick={findId}>아이디 찾기</Button>
+					<div>아이디 : {foundedId}</div>
+				</div>
+			</ModalComponent>
+			<ModalComponent
+				open={openPasswordModal}
+				setOpen={setOpenPasswordModal}
+				title="비밀번호 변경"
+			>
+				<div>
+					<TextField label="이름" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
+					<TextField label="핸드폰 번호" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
+					<TextField label="아이디(이메일)" value={modalEmail} onChange={(e: any) => setModalEmail(e.target.value)}  inputProps={{ maxLength: 40 }}/>
+					<TextField label="변경할 비밀번호" type="password" value={modalPassword} onChange={(e: any) => setModalPassword(e.target.value)}  inputProps={{ maxLength: 100 }}/>
+					<Button variant="contained" color="primary" onClick={setNewPW}>비밀번호 변경</Button>
+				</div>
+			</ModalComponent>
 		</div>
 	);
 };

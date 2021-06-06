@@ -7,8 +7,6 @@ import "../../scss/pages/login.scss";
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
-import { useUserState } from '../../Main/UserModel';
-import { useTokenState } from '../../Main/TokenModel';
 import { errorHandler } from '../../Main/ErrorHandler';
 
 const Login = () => {
@@ -84,16 +82,16 @@ const Login = () => {
 				setFoundedId(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["데이터를 제대로 입력해주세요.", "입력한 아이디에 해당하는 회원이 없습니다."]);
 			});
 	}
 	
 	const setNewPW = () => {
-		axios.post(`${SERVER_URL}/user/findId`, {
+		axios.post(`${SERVER_URL}/user/resetPw`, {
 			"user_name" : modalName,
-			"phone_num" : "01012345678",
-			"email" : "sample@naver.com",
-			"password" : "1234"
+			"phone_num" : modalPhoneNum,//"01012345678",
+			"email" : modalEmail,//"sample@naver.com",
+			"password" : modalPassword,//"1234"
 		})
 			.then((res) => {
 				setOpenPasswordModal(false);
