@@ -93,6 +93,24 @@ const AdminAsk = () => {
 			});
 	}
 
+	/* 삭제 */
+	const removeAsk = (ask_id : number) => {
+		if(!confirm("해당 문의를 정말로 삭제하시겠습니까?"))
+			return;
+		axios.delete(`${SERVER_URL}/ask/delete/${ask_id}`, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("문의가 성공적으로 삭제되었습니다.");
+				fetchAskList();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
 	return (
 		<div className="admin-ask-con">
 			<PageTitle
@@ -121,6 +139,7 @@ const AdminAsk = () => {
 								<TableCell>작성일자</TableCell>
 								<TableCell>제목</TableCell>
 								<TableCell>답변 여부 </TableCell>
+								<TableCell>문의삭제</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -135,7 +154,9 @@ const AdminAsk = () => {
 												<Button variant="contained" color="default" onClick={() => fetchExactAsk(ask.ask_id)}>답변 수정하기</Button>
 												: <Button variant="contained" color="primary" onClick={() => fetchExactAsk(ask.ask_id)}>답변 달기</Button>
 										}</TableCell>
-
+										<TableCell>
+											<Button variant="contained" color="secondary" onClick={() => removeAsk(ask.ask_id)}>삭제하기</Button>
+										</TableCell>
 									</TableRow>
 								))
 							}

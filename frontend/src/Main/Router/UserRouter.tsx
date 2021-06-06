@@ -1,13 +1,12 @@
 import React from 'react';
 
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Ask, Book, Error, Event, FAQ, Login, MovieList, MovieExact, MyMovie, Mypage, Notice, ProductPay, PointDescription, SignUp, Store, StoreExact, TheaterDescription, Main, AdultAuth } from '../../Pages/User';
+import { Book, Error, Event, FAQ, Login, MovieList, MovieExact, MyMovie, Mypage, Notice, ProductPay, PointDescription, SignUp, Store, StoreExact, TheaterDescription, Main, AdultAuth } from '../../Pages/User';
 import { Layout } from '../../Components';
 
 const UserRouter : React.FC = () => (
 	<Layout>
 		<Switch>
-			<Route path="/ask" component={Ask}/>
 			<Route exact path="/book" component={Book}/>
 			<Route path="/event" component={Event}/>
 			<Route path="/faq" component={FAQ}/>

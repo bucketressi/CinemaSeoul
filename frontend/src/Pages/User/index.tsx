@@ -1,5 +1,4 @@
 export { default as Main } from './Main';
-export { default as Ask } from './Ask';
 export { default as Book } from './Book';
 export { default as BookSchedule } from './BookSchedule';
 export { default as BookSeat } from './BookSeat';
