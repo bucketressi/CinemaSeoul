@@ -10,7 +10,7 @@ import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router-dom';
 import { MypageUserType, MypagePointType } from '../../Main/Type';
-import { MypageBook, MypagePay, MypageMovie, MypageInfo } from '.';
+import { MypageBook, MypagePay, MypageMovie, MypageInfo, MypageAsk } from '.';
 import { getDateString, getDateStringFromDate } from '../../Function';
 
 const Mypage = () => {
@@ -26,10 +26,10 @@ const Mypage = () => {
 	const [openPointModal, setOpenPointModal] = useState<boolean>(false);
 
 	useEffect(() => { // 로그인 된 유저만 마이페이지 가능, 유저 정보 받아오기
-		if (userId === undefined) {
-			alert("로그인 후 이용 가능합니다.")
-			history.push("/login");
-		}
+		// if (userId === undefined) {
+		// 	alert("로그인 후 이용 가능합니다.")
+		// 	history.push("/login");
+		// }
 		fetchUserInfo();
 	}, []);
 
@@ -88,75 +88,78 @@ const Mypage = () => {
 				isButtonVisible={false}
 			/>
 			{
-				userInfo &&
-				<div className="mypage-con">
-					<div className="pointer-con">
-						<div>
-							등급 : {userInfo?.user_type}
+				userInfo ?
+					<div className="mypage-con">
+						<div className="pointer-con">
+							<div>
+								등급 : {userInfo?.user_type}
+							</div>
+							<div>
+								현재 포인트 : {userInfo?.curr_point}포인트
+							</div>
+							<div>
+								누적 포인트 : {userInfo?.accu_point}포인트
+							</div>
+							<Button variant="outlined" color="primary" onClick={handlePointModal}>포인트 내역 조회</Button>
 						</div>
-						<div>
-							현재 포인트 : {userInfo?.curr_point}포인트
+						<Tabs
+							value={mode}
+							onChange={handleModeChange}
+							className="mypage-tab"
+							indicatorColor="primary"
+						>
+							<Tab label="예매내역조회" />
+							<Tab label="결제내역조회" />
+							<Tab label="내가 본 영화" />
+							<Tab label="1:1 문의" />
+							<Tab label="정보 관리" />
+						</Tabs>
+						<div className="content-con">
+							<div
+								role="tabpanel"
+								hidden={mode !== 0}
+							>
+								<MypageBook
+									mode={mode}
+								/>
+							</div>
+							<div
+								role="tabpanel"
+								hidden={mode !== 1}
+							>
+								<MypagePay
+									mode={mode}
+								/>
+							</div>
+							<div
+								role="tabpanel"
+								hidden={mode !== 2}
+							>
+								<MypageMovie
+									mode={mode}
+								/>
+							</div>
+							<div
+								role="tabpanel"
+								hidden={mode !== 3}
+							>
+								<MypageAsk
+									mode={mode}
+								/>
+							</div>
+							<div
+								role="tabpanel"
+								hidden={mode !== 4}
+							>
+								<MypageInfo
+									mode={mode}
+									userInfo={userInfo}
+									fetchUserInfo={fetchUserInfo}
+								/>
+							</div>
 						</div>
-						<div>
-							누적 포인트 : {userInfo?.accu_point}포인트
-						</div>
-						<Button variant="outlined" color="primary" onClick={handlePointModal}>포인트 내역 조회</Button>
 					</div>
-					<Tabs
-						value={mode}
-						onChange={handleModeChange}
-						className="mypage-tab"
-						indicatorColor="primary"
-					>
-						<Tab label="예매내역조회" />
-						<Tab label="결제내역조회" />
-						<Tab label="내가 본 영화" />
-						<Tab label="1:1 문의" />
-						<Tab label="정보 관리" />
-					</Tabs>
-					<div className="content-con">
-						<div
-							role="tabpanel"
-							hidden={mode !== 0}
-						>
-							<MypageBook
-								mode={mode}
-							/>
-						</div>
-						<div
-							role="tabpanel"
-							hidden={mode !== 1}
-						>
-							<MypagePay
-								mode={mode}
-							/>
-						</div>
-						<div
-							role="tabpanel"
-							hidden={mode !== 2}
-						>
-							<MypageMovie
-								mode={mode}
-							/>
-						</div>
-						<div
-							role="tabpanel"
-							hidden={mode !== 3}
-						>
-							3
-						</div>
-						<div
-							role="tabpanel"
-							hidden={mode !== 4}
-						>
-							<MypageInfo
-								mode={mode}
-								userInfo={userInfo}
-								fetchUserInfo={fetchUserInfo}
-							/>
-						</div>
-					</div>
-				</div>
+					: <div>정보를 불러오는 중입니다.</div>
 			}
 			<ModalComponent
 				open={openPointModal}

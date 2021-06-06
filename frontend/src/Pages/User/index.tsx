@@ -15,6 +15,7 @@ export { default as MypageBook } from './MypageBook';
 export { default as MypagePay } from './MypagePay';
 export { default as MypageMovie } from './MypageMovie';
 export { default as MypageInfo } from './MypageInfo';
+export { default as MypageAsk } from './MypageAsk';
 export { default as Notice } from './Notice';
 export { default as ProductPay } from './ProductPay';
 export { default as PointDescription } from './PointDescription';

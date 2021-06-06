@@ -328,3 +328,25 @@ export type MypagePointType = {
 	message : string,
 	poin_datetime : string
 }
+
+export type MypageAskType = {
+	admi_name: string | null,
+	answ_datetime: string| null,
+	ask_id: number,
+	ask_title: string, //"저도 포인트 주세요"
+	crea_datetime: string, // "2021-06-04 16:23:27"
+	user_name: string, // "우희은"
+}
+
+export type MypageAskExactType = {
+    ask_id: number, //2,
+    user_id: number, //145,
+    user_name: string, //김손님,
+    ask_title: string, //제 포인트가 이상해요,
+    ask_contents: string ,//빨리 100000포인트 주세요,
+    admi_id: number, //121,
+    admi_name: string | null, //우희은,                     //없으면 null
+    answer: string | null, //안됩니다.,                       //없으면 null
+    crea_datetime: string, //2021-06-04 16:22:25,
+    answ_datetime: string, //2021-06-04 16:26:07 //없으면 null
+}
