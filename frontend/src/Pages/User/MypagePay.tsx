@@ -239,7 +239,16 @@ const MypagePay = ({ mode }: Props) => {
 											return (
 												<TableRow key={book.book_pay_id}>
 													<TableCell>{index}</TableCell>
-													<TableCell>결제 내용</TableCell>
+													<TableCell>
+														{
+															!book.book_id ?
+																<div>정보가 없습니다.</div> :
+																<div>
+																	<div>영화 : {book.movi_name}</div>
+																	<div>상영일자: {book.show_date} {book.show_time}</div>
+																</div>
+														}
+													</TableCell>
 													<TableCell>
 														<div>
 															<div>결제 가격 : {book.price}</div>
@@ -296,7 +305,16 @@ const MypagePay = ({ mode }: Props) => {
 											return (
 												<TableRow key={product.prod_pay_id}>
 													<TableCell>{index}</TableCell>
-													<TableCell>결제 내용</TableCell>
+													<TableCell>
+														{
+															product.productPayDetails.map((product) => (
+																<div key={product.prod_id}>
+																	<div>{product.prod_name}</div>
+																	<div>{product.price}원 * {product.amount}개 = {product.price*product.amount}원</div>
+																</div>
+															))
+														}
+													</TableCell>
 													<TableCell>
 														<div>
 															<div>결제 가격 : {product.price}</div>
