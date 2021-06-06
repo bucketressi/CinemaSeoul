@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MovieReviewDto {
-    private String commnets;
+    private String comments;
     private Integer rating;
     private int movi_id;
     private String movi_name;
