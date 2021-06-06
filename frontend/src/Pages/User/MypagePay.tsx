@@ -119,7 +119,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserBookPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "", "지난 내역은 사용할 수 없습니다."]);
+				errorHandler(e, true, ["", "이미 사용된 코드입니다.", "", "지난 내역은 사용할 수 없습니다."]);
 			});
 
 	}
@@ -139,7 +139,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserProductPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["", "이미 사용된 코드입니다."]);
 			});
 	}
 
@@ -169,7 +169,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserBookPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["", "이미 사용되어 취소할 수 없습니다.", "", "이미 취소된 결제입니다."]);
 			});
 	}
 
@@ -186,7 +186,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserProductPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["", "이미 사용되어 취소할 수 없습니다.", "", "이미 취소된 결제입니다."]);
 			});
 	}
 	return (
