@@ -35,51 +35,51 @@ const AdminBlackList = () => {
 			});
 	}
 
-	/* 수정 */
-	const [openModal, setOpenModal] = useState<boolean>(false);
-	const [name, setName] = useState<string>("");
-	const [birthYear, setBirthYear] = useState<string>("");
-	const [birthMonth, setBirthMonth] = useState<string>("");
-	const [birthDate, setBirthDate] = useState<string>("");
-	const [birth, setBirth] = useState<string>("");
-	const [phoneNum, setPhoneNum] = useState<string>("");
+	// /* 수정 */
+	// const [openModal, setOpenModal] = useState<boolean>(false);
+	// const [name, setName] = useState<string>("");
+	// const [birthYear, setBirthYear] = useState<string>("");
+	// const [birthMonth, setBirthMonth] = useState<string>("");
+	// const [birthDate, setBirthDate] = useState<string>("");
+	// const [birth, setBirth] = useState<string>("");
+	// const [phoneNum, setPhoneNum] = useState<string>("");
 
-	useEffect(() => {
-		const month = birthMonth.length === 1? "0"+birthMonth : birthMonth;
-		const date = birthDate.length ===1? "0"+birthDate :birthDate;
-		setBirth(`${birthYear}${month}${date}`);
-	}, [birthYear, birthMonth, birthDate]);
+	// useEffect(() => {
+	// 	const month = birthMonth.length === 1? "0"+birthMonth : birthMonth;
+	// 	const date = birthDate.length ===1? "0"+birthDate :birthDate;
+	// 	setBirth(`${birthYear}${month}${date}`);
+	// }, [birthYear, birthMonth, birthDate]);
 
-	const handleModify = (people : BlackList) => {
-		console.log(people);
-		setName(people.blac_name);
-		setBirthYear(people.birth.substr(0, 4));
-		setBirthMonth(Number(people.birth.substr(4, 2)).toString());
-		setBirthDate(Number(people.birth.substr(6, 2)).toString());
-		setPhoneNum(people.phone_num);
-		setOpenModal(true);
-	}
+	// const handleModify = (people : BlackList) => {
+	// 	console.log(people);
+	// 	setName(people.blac_name);
+	// 	setBirthYear(people.birth.substr(0, 4));
+	// 	setBirthMonth(Number(people.birth.substr(4, 2)).toString());
+	// 	setBirthDate(Number(people.birth.substr(6, 2)).toString());
+	// 	setPhoneNum(people.phone_num);
+	// 	setOpenModal(true);
+	// }
 
-	const modifyBlackList = () => {
-		// todo : api 수정 후 하기
-		// axios.put(`${SERVER_URL}/blacklist`,{
-		// 	"blac_name" : name,
-		// 	"birth" : birth,//"19880808",
-		// 	"phone_num" : phoneNum,//"01088888889"
-		// },{
-		// 	headers: {
-		// 		TOKEN: AUTH_TOKEN
-		// 	}
-		// })
-		// 	.then((res) => {
-		// 		alert("블랙리스트가 성공적으로 수정되었습니다.");
-		// 		setOpenModal(false);
-		// 		fetchBlackList();
-		// 	})
-		// 	.catch((e) => {
-		// 		errorHandler(e, true);
-		// 	});
-	}
+	// const modifyBlackList = () => {
+	// 	// todo : api 수정 후 하기
+	// 	// axios.put(`${SERVER_URL}/blacklist`,{
+	// 	// 	"blac_name" : name,
+	// 	// 	"birth" : birth,//"19880808",
+	// 	// 	"phone_num" : phoneNum,//"01088888889"
+	// 	// },{
+	// 	// 	headers: {
+	// 	// 		TOKEN: AUTH_TOKEN
+	// 	// 	}
+	// 	// })
+	// 	// 	.then((res) => {
+	// 	// 		alert("블랙리스트가 성공적으로 수정되었습니다.");
+	// 	// 		setOpenModal(false);
+	// 	// 		fetchBlackList();
+	// 	// 	})
+	// 	// 	.catch((e) => {
+	// 	// 		errorHandler(e, true);
+	// 	// 	});
+	// }
 
 	/* 삭제 */
 	const removeBlackList = (phone_num : string) => {
@@ -130,7 +130,7 @@ const AdminBlackList = () => {
 				fetchBlackList();
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["이미 등록된 블랙리스트입니다."]);
 			});
 	}
 
@@ -151,7 +151,6 @@ const AdminBlackList = () => {
 								<TableCell>이름</TableCell>
 								<TableCell>생년월일</TableCell>
 								<TableCell>핸드폰번호</TableCell>
-								<TableCell>수정</TableCell>
 								<TableCell>삭제</TableCell>
 							</TableRow>
 						</TableHead>
@@ -163,7 +162,6 @@ const AdminBlackList = () => {
 										<TableCell>{people.blac_name}</TableCell>
 										<TableCell>{people.birth}</TableCell>
 										<TableCell>{people.phone_num}</TableCell>
-										<TableCell><Button variant="contained" color="primary" onClick={()=>handleModify(people)}>수정</Button></TableCell>
 										<TableCell><Button variant="contained" color="secondary" onClick={() => removeBlackList(people.phone_num)}>삭제</Button></TableCell>
 									</TableRow>
 								))
@@ -172,7 +170,7 @@ const AdminBlackList = () => {
 					</Table>
 				</TableContainer>
 			</div>
-			<ModalComponent
+			{/* <ModalComponent
 				open={openModal}
 				setOpen={setOpenModal}
 				title="블랙리스트 수정"
@@ -188,10 +186,10 @@ const AdminBlackList = () => {
 					</div>
 					<TextField label="핸드폰 번호" value={phoneNum} disabled={true}/>
 				</div>
-			</ModalComponent>
+			</ModalComponent> */}
 			<ModalComponent
 				open={openAddModal}
-				setOpen={setOpenModal}
+				setOpen={setOpenAddModal}
 				title="블랙리스트 추가"
 				button="추가"
 				buttonOnClick={addBlackList}
