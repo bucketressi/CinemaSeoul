@@ -29,7 +29,8 @@ import {
 	AdminTheater,
 	AdminError,
 	AdminLogin,
-	AdminUser
+	AdminUser,
+	AdminAudienceRecord
 } from '../../Pages/Admin';
 
 const AdminRouter: React.FC = () => {
@@ -52,6 +53,7 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/user" component={AdminUser} />
 				<Route path="/admin/myPage" component={AdminMyPage} />
 				<Route path="/admin/blacklist" component={AdminBlackList} />
+				<Route path="/admin/audience" component={AdminAudienceRecord} />
 				<Route path="/admin/event" component={AdminEvent} />
 				<Route path="/admin/faq" component={AdminFAQ} />
 				<Route path="/admin/genre" component={AdminGenre} />

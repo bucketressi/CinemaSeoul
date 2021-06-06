@@ -386,3 +386,14 @@ export type SalesExactType = {
 	sale_date: string,//"20210601"
 	total_sale: number, //404040
 }
+
+/** audience */
+export type AudienceRecordType = {
+    "sum": number, //0,
+    "records": AudienceRecordComponentType[]
+}
+
+export type AudienceRecordComponentType = {
+	"reco_date": string, //"20210603",
+	"audi_amount": number, //20
+}
