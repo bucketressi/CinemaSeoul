@@ -1,9 +1,15 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { PageTitle, SelectModule } from '../../Components';
+import { ModalComponent, PageTitle, SelectModule } from '../../Components';
 import { Tabs, Tab, TextField, Checkbox, Button, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { useUserLogin, useNonUserLogin } from '../../Main/UserModel';
 import "../../scss/pages/login.scss";
+
+import axios from 'axios';
+import { SERVER_URL } from '../../CommonVariable';
+import { useUserState } from '../../Main/UserModel';
+import { useTokenState } from '../../Main/TokenModel';
+import { errorHandler } from '../../Main/ErrorHandler';
 
 const Login = () => {
 	const [type, setType] = useState<boolean>(false); // true : 회원, false : 비회원
@@ -21,13 +27,23 @@ const Login = () => {
 	const [birth, setBirth] = useState<string>("");
 	const [saveId, setSaveId] = useState<boolean>(false);
 
+	/* 아이디, 비밀번호 찾기 */
+	const [openIdModal, setOpenIdModal] = useState<boolean>(false);
+	const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(false);
+	const [modalName, setModalName] = useState<string>("");
+	const [modalPhoneNum, setModalPhoneNum] = useState<string>("");
+	const [foundedId, setFoundedId] = useState<string>("");
+
+	const [modalEmail, setModalEmail] = useState<string>("");
+	const [modalPassword, setModalPassword] = useState<string>("");
+
 	useEffect(() => {
 		setBirth(`${birthYear}/${birthMonth}/${birthDate}`);
 	}, [birthYear, birthMonth, birthDate]);
 
 	const handleTypeChange = (event: any, newValue: boolean) => { setType(newValue); };
-	const openFindIdModal = () => { console.log("id"); };
-	const openFindPWModal = () => { console.log("pw"); };
+	const openFindIdModal = () => {setOpenIdModal(true);};
+	const openFindPWModal = () => {setOpenPasswordModal(true);};
 	const history = useHistory();
 
 	/* 로그인 */
@@ -57,6 +73,37 @@ const Login = () => {
 		});
 	}
 
+	const findId = () => {
+		axios.post(`${SERVER_URL}/user/findId`, {
+			"user_name" : modalName,
+			"phone_num" : modalPhoneNum
+		})
+			.then((res) => {
+				if(!res || !res.data)
+					return;
+				setFoundedId(res.data);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+	
+	const setNewPW = () => {
+		axios.post(`${SERVER_URL}/user/findId`, {
+			"user_name" : modalName,
+			"phone_num" : "01012345678",
+			"email" : "sample@naver.com",
+			"password" : "1234"
+		})
+			.then((res) => {
+				setOpenPasswordModal(false);
+				alert("비밀번호가 성공적으로 변경되었습니다.");
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
 	return (
 		<div className="login-con">
 			<PageTitle
@@ -79,7 +126,7 @@ const Login = () => {
 				<div className="user-form">
 					<div className="form-con">
 						<div className="input-con">
-							<TextField variant="outlined" placeholder="이메일을 입력해주세요." onChange={(e) => { setEmail(e.target.value); }} />
+							<TextField variant="outlined" placeholder="이메일을 입력해주세요." inputProps={{ maxLength: 40 }} onChange={(e) => { setEmail(e.target.value); }} />
 							<TextField variant="outlined" type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => { setPassword(e.target.value); }} />
 						</div>
 						<Button className="btn" variant="contained" color="primary" onClick={handleUserLogin}>로그인</Button>
@@ -91,7 +138,7 @@ const Login = () => {
 							<div className="sub-menu">
 								<Link to="/SignUp"><span>회원가입</span></Link>
 								<span onClick={openFindIdModal}>아이디 찾기</span>
-								<span className="last" onClick={openFindPWModal}>비밀번호 찾기</span>
+								<span className="last" onClick={openFindPWModal}>비밀번호 변경</span>
 							</div>
 						</div>
 					</div>
@@ -108,7 +155,7 @@ const Login = () => {
 					<div className="form-con">
 						<div className="input-con">
 							<TextField variant="outlined" value={name} placeholder="이름" inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
-							<TextField variant="outlined" value={name} placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
+							<TextField variant="outlined" value={phoneNum} placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
 							<div className="birth-con">
 								<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
 								<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
@@ -144,6 +191,31 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
+			<ModalComponent
+				open={openIdModal}
+				setOpen={setOpenIdModal}
+				title="아이디 찾기"
+			>
+				<div>
+					<TextField label="이름" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
+					<TextField label="핸드폰 번호" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
+					<Button variant="contained" color="primary" onClick={findId}>아이디 찾기</Button>
+					<div>아이디 : {foundedId}</div>
+				</div>
+			</ModalComponent>
+			<ModalComponent
+				open={openPasswordModal}
+				setOpen={setOpenPasswordModal}
+				title="비밀번호 변경"
+			>
+				<div>
+					<TextField label="이름" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
+					<TextField label="핸드폰 번호" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
+					<TextField label="아이디(이메일)" value={modalEmail} onChange={(e: any) => setModalEmail(e.target.value)}  inputProps={{ maxLength: 40 }}/>
+					<TextField label="변경할 비밀번호" type="password" value={modalPassword} onChange={(e: any) => setModalPassword(e.target.value)}  inputProps={{ maxLength: 100 }}/>
+					<Button variant="contained" color="primary" onClick={setNewPW}>비밀번호 변경</Button>
+				</div>
+			</ModalComponent>
 		</div>
 	);
 }
