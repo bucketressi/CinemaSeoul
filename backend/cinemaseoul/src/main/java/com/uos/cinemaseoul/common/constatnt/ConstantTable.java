@@ -113,4 +113,11 @@ public class ConstantTable {
         else if(user_type_code.equals(USER_TYPE_VIP)) return 5;
         else return 0;
     }
+
+    public static int getUpdateablePoint(String user_type_code){
+        if(user_type_code.equals(USER_TYPE_FRIENDS)) return 0;
+        else if(user_type_code.equals(USER_TYPE_FAMILY)) return 10000;
+        else if(user_type_code.equals(USER_TYPE_VIP)) return 30000;
+        else return 0;
+    }
 }

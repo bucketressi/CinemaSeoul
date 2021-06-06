@@ -98,6 +98,14 @@
     <select id="adultCheck" resultType="String">
         SELECT BIRTH FROM USERS WHERE PHONE_NUM = #{phone_num}
     </select>
+    <select id="updateAdult">
+        UPDATE USERS SET ADULT_STATE = 1
+        WHERE PHONE_NUM = #{phone_num}
+    </select>
+
+    <select id="adultState" resultType="Integer">
+        SELECT ADULT_STATE FROM USERS WHERE USER_ID = #{user_id}
+    </select>
 
     <!-- 비밀번호 재설정 -->
     <update id="resetPassword" parameterType="UsersVo">

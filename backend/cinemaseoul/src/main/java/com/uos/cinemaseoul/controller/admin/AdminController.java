@@ -87,6 +87,11 @@ public class AdminController {
             throw new DuplicateException("에러");
         }
 
+        //비밀번호 있으면 암호화해서 저장
+        if(adv.getPassword() != null){
+            adv.setPassword(passwordEncoder.encode(adv.getPassword()));
+        }
+
         try{
             int result = adminService.updateAdmin(adv);
             if(result == 0){

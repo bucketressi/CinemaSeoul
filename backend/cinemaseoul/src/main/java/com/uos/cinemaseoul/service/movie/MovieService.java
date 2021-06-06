@@ -71,6 +71,7 @@ public class MovieService {
     }
 
     //이미지 업데이트
+    @Transactional
     public void updateMovieImage(int movi_id, byte[] image) {
         MovieVo movieVo = MovieVo.builder().movi_id(movi_id).image(image).build();
         if(movieDao.updateMovieImage(movieVo) != 1){

@@ -54,15 +54,15 @@
 
     <select id="selectScheduleList" parameterType="ScheduleCriteria" resultType="ScheduleInfoDto">
         SELECT B.RNUM, B.SHOW_ID, B.MOVI_ID, B.MOVI_NAME, B.HALL_ID, B.HALL_NAME,
-               B.SHOW_DATE, B.SHOW_TIME, B.END_TIME,
+               B.SHOW_DATE, B.SHOW_TIME, B.STARTED, B.END_TIME,
                B.AVAI_SEAT_AMOUNT, B.HALL_SEAT
         FROM (
             SELECT /*+index_desc(IDX_SHOWSCHEDULE_PK)*/ ROWNUM AS RNUM,
                    A.SHOW_ID, A.MOVI_ID, A.MOVI_NAME, A.HALL_ID, A.HALL_NAME,
-                   A.SHOW_DATE, A.SHOW_TIME, A.END_TIME,
+                   A.SHOW_DATE, A.SHOW_TIME, A.STARTED, A.END_TIME,
                    A.AVAI_SEAT_AMOUNT, A.HALL_SEAT
             FROM(
-                SELECT S.SHOW_ID, S.MOVI_ID, S.HALL_ID, S.SHOW_DATE, S.SHOW_TIME,
+                SELECT S.SHOW_ID, S.MOVI_ID, S.HALL_ID, S.SHOW_DATE, S.SHOW_TIME, S.STARTED,
                        M.MOVI_NAME, M.RUN_TIME AS END_TIME,
                        H.HALL_NAME, H.AVAI_SEAT_AMOUNT, H.HALL_ROW* H.HALL_COL AS HALL_SEAT
 
@@ -109,7 +109,7 @@
 
 
     <select id="selectSchedule" resultType="ShowScheduleDto" parameterType="Integer">
-        SELECT S.SHOW_ID, S.SHOW_DATE, S.SHOW_TIME,
+        SELECT S.SHOW_ID, S.SHOW_DATE, S.SHOW_TIME, S.STARTED,
                M.MOVI_ID, M.MOVI_NAME, M.RUN_TIME AS END_TIME,
                H.HALL_ID, H.HALL_NAME,
                H.AVAI_SEAT_AMOUNT - (SELECT COUNT(BOOK_ID) FROM BOOKSEAT BS WHERE BS.SHOW_ID = S.SHOW_ID) AS REMA_AMOUNT,
@@ -121,6 +121,11 @@
         WHERE S.SHOW_ID = #{show_id}
     </select>
 
+    <update id="startShowScheduleState">
+        UPDATE SHOWSCHEDULE SET STARTED = '1'
+        WHERE SHOW_ID = #{show_id}
+    </update>
+
     <update id="startShowSchedule">
         UPDATE BOOKPAY BP SET BP.PAY_STATE_CODE = #{pay_stat_fin},
                               BP.USE_DATETIME = SYSDATE
@@ -130,5 +135,23 @@
             WHERE S.SHOW_ID = #{show_id}
             )
         AND BP.PAY_STATE_CODE = #{pay_stat_ok}
+    </update>
+
+
+    <update id="cancelShowScheduleState">
+        UPDATE SHOWSCHEDULE SET STARTED = '0'
+        WHERE SHOW_ID = #{show_id}
+    </update>
+
+
+    <update id="cancelShowSchedule">
+        UPDATE BOOKPAY BP SET BP.PAY_STATE_CODE = #{pay_stat_ok},
+                              BP.USE_DATETIME = NULL
+        WHERE BP.BOOK_PAY_ID IN (
+            SELECT B.BOOK_PAY_ID FROM BOOK B
+                                          INNER JOIN SHOWSCHEDULE S on B.SHOW_ID = S.SHOW_ID
+            WHERE S.SHOW_ID = #{show_id}
+        )
+          AND BP.PAY_STATE_CODE = #{pay_stat_fin}
     </update>
 </mapper>

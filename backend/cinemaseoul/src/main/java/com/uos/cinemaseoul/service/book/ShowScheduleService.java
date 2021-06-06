@@ -8,8 +8,10 @@ import com.uos.cinemaseoul.dto.book.book.ShowScheduleDto;
 import com.uos.cinemaseoul.dto.book.showschedule.InsertScheduleDto;
 import com.uos.cinemaseoul.dto.book.showschedule.ScheduleInfoDto;
 import com.uos.cinemaseoul.dto.book.showschedule.ShowScheduleListDto;
+import com.uos.cinemaseoul.exception.BlackListException;
 import com.uos.cinemaseoul.exception.NotAllowedException;
 import com.uos.cinemaseoul.exception.NotFoundException;
+import com.uos.cinemaseoul.exception.StopException;
 import com.uos.cinemaseoul.vo.book.ShowScheduleVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -102,7 +104,7 @@ public class ShowScheduleService {
 
         return showDto;
     }
-
+    @Transactional
     public String calEndTime(String startDate, String startTime, String runtime) throws Exception{
 
         try{
@@ -116,20 +118,41 @@ public class ShowScheduleService {
         return null;
     }
 
+    @Transactional
     //상영일정 시작하기
     public void startShowSchedule(int show_id) throws Exception{
         ShowScheduleDto sDto = showScheduleDao.selectSchedule(show_id);
-        Long startTime = new SimpleDateFormat("yyyyMMddHHmm").parse(sDto.getShow_date()+ (sDto.getShow_time()+10)).getTime();
+
+        //이미 시작한거면
+        if(sDto.getStarted().equals("1")){
+            throw new StopException("이미 시작한 상영일정입니다.");
+        }
+        Long startTime = new SimpleDateFormat("yyyyMMddHHmm").parse(sDto.getShow_date()+ sDto.getShow_time()).getTime();
         Long currTime = System.currentTimeMillis();
 
-        System.out.println(startTime + currTime);
 
         if(startTime >= currTime){
-            throw new NotAllowedException("영화가 시작하기 10분 전부터만 누르실 수 있습니다.");
+            throw new NotAllowedException("영화가 시작한 후에만 시작하실 수 있습니다.");
         }
 
+        showScheduleDao.startShowScheduleState(show_id);
         //취소 빼고는 다 사용완료로
         showScheduleDao.startShowSchedule(show_id, PAY_STAT_FIN, PAY_STAT_OK);
+    }
+
+    @Transactional
+    //상영일정 시작 취소하기
+    public void cancelShowSchedule(int show_id) {
+        ShowScheduleDto sDto = showScheduleDao.selectSchedule(show_id);
+
+        //이미 시작한거면
+        if(sDto.getStarted().equals("0")){
+            throw new StopException("아직 시작하지 않은 상영일정입니다.");
+        }
+
+        //취소 빼고는 다 결제완료로 (사용 이전으로 원복)
+        showScheduleDao.cancelShowScheduleState(show_id);
+        showScheduleDao.cancelShowSchedule(show_id, PAY_STAT_FIN, PAY_STAT_OK);
 
     }
 }

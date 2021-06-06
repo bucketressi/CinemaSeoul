@@ -170,7 +170,13 @@ public class UsersService  {
 
     public boolean adultCheck(String phone_num, String birth){
         int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(birth)/10000;
-        return (age >= 19) ? true : false;
+        if(age>=19){
+            usersDao.updateAdult(phone_num);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     //번호 검사
@@ -206,5 +212,12 @@ public class UsersService  {
             throw new DuplicateException("no available email");
 
         usersDao.resetPassword(usersVo);
+    }
+
+    //성인인증 여부 확인
+    public void adultCheck(int user_id) {
+        if(usersDao.adultState(user_id) != 1){
+            throw new DuplicateException();
+        }
     }
 }

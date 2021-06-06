@@ -27,6 +27,7 @@
         INNER JOIN HALL H on S.HALL_ID = H.HALL_ID
 
         WHERE S.MOVI_ID = #{movi_id} AND S.SHOW_DATE = #{show_date}
+          AND S.STARTED = '0'
           <![CDATA[ AND CONCAT(SHOW_DATE,SHOW_TIME) >= TO_CHAR(SYSDATE, ('YYYYMMDDHH24MI')) ]]>
     </select>
 
@@ -35,8 +36,6 @@
 
     <!-- [상영일정 좌석 조회]-->
     <!-- 상영관 가능좌석 조회-->
-    
-    
     <resultMap id="bookseatlist" type="BookSeatListDto">
         <id property="hall_id" column="HALL_ID"/>
         <result property="hall_row" column="HALL_ROW"/>

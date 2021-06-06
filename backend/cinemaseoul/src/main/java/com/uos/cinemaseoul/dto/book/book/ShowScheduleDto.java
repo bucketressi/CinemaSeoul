@@ -20,6 +20,8 @@ public class ShowScheduleDto {
     private String show_time;
     private String end_time;
 
+    private String started;
+
     private int hall_seat;
     private int rema_amount;
 }

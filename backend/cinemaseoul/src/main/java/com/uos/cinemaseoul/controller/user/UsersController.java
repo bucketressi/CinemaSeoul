@@ -197,4 +197,9 @@ public class UsersController {
         usersService.resetPassword(userFindDto);
     }
 
+    //성인여부확인
+    @GetMapping("/adult/{user_id}")
+    public void checkAdult(@PathVariable(name = "user_id")int user_id){
+        usersService.adultCheck(user_id);
+    }
 }

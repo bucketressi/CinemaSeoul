@@ -12,4 +12,5 @@ public class ShowScheduleVo {
     private String hall_name;
     private String show_date;
     private String show_time;
+    private String started;
 }

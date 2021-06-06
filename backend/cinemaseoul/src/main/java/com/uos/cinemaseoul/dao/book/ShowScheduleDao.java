@@ -27,4 +27,8 @@ public interface ShowScheduleDao {
     ShowScheduleDto selectSchedule(int show_id);
 
     void startShowSchedule(int show_id, String pay_stat_fin, String pay_stat_ok);
+    void cancelShowSchedule(int show_id, String pay_stat_fin, String pay_stat_ok);
+
+    void startShowScheduleState(int show_id);
+    void cancelShowScheduleState(int show_id);
 }

@@ -22,6 +22,13 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
+
+    //402
+    @ExceptionHandler({StopException.class})
+    public ResponseEntity<?> StopException(final StopException ex){
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(ex.getMessage());
+    }
+
     //403
     @ExceptionHandler({BlackListException.class})
     public ResponseEntity<?> ForbiddenException(final BlackListException ex){

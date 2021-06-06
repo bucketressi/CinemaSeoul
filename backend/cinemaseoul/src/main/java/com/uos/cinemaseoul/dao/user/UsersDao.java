@@ -27,7 +27,11 @@ public interface UsersDao {
     void setProductPayDefault(int user_id);
 
     String adultCheck(String phone_num);
+    void updateAdult(String phone_num);
+    int adultState(int user_id);
+
     Integer resetPassword(UsersVo vo);
+
 
 
 }

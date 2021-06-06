@@ -44,12 +44,13 @@ public class MappingConstant {
             "/notice/list",
 
             "/event/list",
-            "/event/select/{event_id}"
+            "/event/select/{event_id}",
     };
 
     //2 (비회원, 회원 둘다 가능)
     public static String[] NonUser = {
-            "/adult",
+            "/user/adult",
+            "/user/adult/{user_id}",
             "/user/delete/{user_id}",
 
             "/point/select/{user_id}",
@@ -70,7 +71,9 @@ public class MappingConstant {
             "/mymovie/{user_id}",
 
             "/ask/add",
-            "/ask/update"
+            "/ask/update",
+
+            "/usertyperecord/{user_id}"
     };
 
     //4 (직원 가능 = 매너지도 가능)
@@ -93,6 +96,7 @@ public class MappingConstant {
             "/showschedule/delete/{show_id}",
             "/showschedule/update",
             "/showschedule/start/{show_id}",
+            "/showschedule/cancel/{show_id}",
 
             "/point/update",
 

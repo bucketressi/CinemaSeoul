@@ -15,6 +15,7 @@ public class ScheduleInfoDto {
     private String show_time;
     private String movi_name;
     private String end_time;
+    private String started;
 
     private int hall_seat;
     @JsonIgnore

@@ -4,10 +4,7 @@ import com.uos.cinemaseoul.dto.movie.batch.DateRangeDto;
 import com.uos.cinemaseoul.service.movie.BatchService;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +25,10 @@ public class BatchController {
     @GetMapping("/sales/update")
     public void updateSales(){
         batchService.updateSalesToday();
+    }
+
+    @GetMapping("/usertyperecord/{user_id}")
+    public ResponseEntity<?> getUserTypeRecord(@PathVariable(name = "user_id") int user_id){
+        return  ResponseEntity.ok(batchService.getUserTypeRecord(user_id));
     }
 }

@@ -50,4 +50,10 @@ public class ShowScheduleController {
     }
 
 
+    @GetMapping("/showschedule/cancel/{show_id}")
+    public void cancelShowSchedule(@PathVariable(name = "show_id") int show_id) throws Exception {
+        showScheduleService.cancelShowSchedule(show_id);
+    }
+
+
 }
