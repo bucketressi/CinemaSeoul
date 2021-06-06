@@ -237,6 +237,7 @@ const AdminShowSchedule = () => {
 		})
 			.then((res) => {
 				alert("상영이 시작되었습니다.");
+				fetchShowSchedule(page);
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["","","","영화가 시작하기 10분 전부터만 시작하실 수 있습니다."]);
