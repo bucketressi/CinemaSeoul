@@ -2,16 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { PageTitle, SelectModule } from '../../Components';
 import { AdminType } from '../../Main/Type';
 import "../../scss/pages/adminmypage.scss";
+import { useAdminCodeState } from '../../Main/CodeModel';
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
-import { Button, TextField } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import { useAdminState } from '../../Main/UserModel';
+import { getDateString } from '../../Function';
+
+const positionArr = ["사장", "부장", "과장", "대리", "사원", "인턴"];
 
 const AdminMyPage = () => {
 	const AUTH_TOKEN = useTokenState();
+	const adminCode = useAdminCodeState();
 	const adminId = useAdminState();
 	const [admin, setAdmin] = useState<AdminType | undefined>(undefined);
 
@@ -24,7 +29,7 @@ const AdminMyPage = () => {
 	const [passwordDual, setPasswordDual] = useState<string>("");
 	const [position, setPosition] = useState<string>("");
 	const [address, setAddress] = useState<string>("");
-	const [start_date, setStartDate] = useState<string>("");
+	const [startDate, setStartDate] = useState<string>("");
 
 	/* 생년월일 */
 	const [birthYear, setBirthYear] = useState<string>("");
@@ -37,6 +42,8 @@ const AdminMyPage = () => {
 
 	useEffect(() => {
 		fetchAdminInfo();
+		setPhoneNumExist(-1);
+		setEmailExist(-1);
 	}, []);
 
 	useEffect(() => {
@@ -120,7 +127,7 @@ const AdminMyPage = () => {
 			alert("해당 핸드폰 번호를 사용할 수 있습니다.");
 			return;
 		}
-		axios.post(`${SERVER_URL}/user/phonecheck`, {
+		axios.post(`${SERVER_URL}/admin/phonecheck`, {
 			"phone_num": phoneNum,
 		}, {
 			headers: {
@@ -150,7 +157,7 @@ const AdminMyPage = () => {
 			alert("해당 이메일을 사용할 수 있습니다.");
 			return;
 		}
-		axios.post(`${SERVER_URL}/user/emailcheck`, {
+		axios.post(`${SERVER_URL}/admin/emailcheck`, {
 			"email": email,
 		}, {
 			headers: {
@@ -166,6 +173,35 @@ const AdminMyPage = () => {
 				alert("중복된 이메일이 존재합니다.");
 			});
 	}
+	
+	const updateInfo = () => {
+		if (!preTreatment() || !admin)
+			return;
+		console.log(admin.admi_name); // todo : api 수정되면 다시 체크
+		const admi_auth_code = adminCode.find((code) => code.code_name === admin.admi_name);
+		axios.put(`${SERVER_URL}/admin/update`, {
+			"admi_id" : adminId,
+			"admi_name" : name,//"우희은",
+			"birth" : birth,//"20170716",
+			"phone_num": phoneNum,//"01045117731",
+			"email" : email, //"gmldms@gmail.com",
+			"password" : password,//"1234",
+			"admi_auth_code" : admi_auth_code, //"120002",
+			"position" : position, //"야간아르바이트생",
+			"address" : address, //"경기도 부천시",
+			"start_date" : startDate, //"20210531"
+		}, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("정상적으로 수정되었습니다.")
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
 
 	return (
 		<div>
@@ -177,7 +213,7 @@ const AdminMyPage = () => {
 				<div className="form-con">
 					<div className="input-con">
 						<TextField label="이름" variant="outlined" value={name} inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
-						<div className="with-btn">
+						<div>
 							<TextField label="핸드폰 번호" variant="outlined" value={phoneNum} inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
 							<Button variant="contained" color={isPhoneNumExist !== 0 ? "primary" : "default"} onClick={checkPhoneNum}>핸드폰 번호 중복 체크</Button>
 						</div>
@@ -186,15 +222,31 @@ const AdminMyPage = () => {
 							<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
 							<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
 						</div>
-						<div className="with-btn">
+						<div>
 							<TextField label="이메일" variant="outlined" value={email} onChange={(e: any) => { setEmail(e.target.value); }} />
 							<Button variant="contained" color={isEmailExist !== 0 ? "primary" : "default"} onClick={checkEmail}>이메일 중복 체크</Button>
 						</div>
+						<FormControl>
+							<InputLabel id="select-label">직급</InputLabel>
+							<Select
+								labelId="select-label"
+								value={position}
+								onChange={(e: any) => setPosition(e.target.value)}
+							>
+								{
+									positionArr.map((pos : string, index : number) => (
+										<MenuItem key={index} value={pos}>{pos}</MenuItem>
+									))
+								}
+							</Select>
+						</FormControl>
+						<TextField label="주소" variant="outlined" value={address} inputProps={{ maxLength: 200 }} onChange={(e: any) => { setAddress(e.target.value); }} />
+						<TextField label="시작 일자" variant="outlined" type="date" value={getDateString(startDate)} onChange={(e: any) => { setStartDate(e.target.value.split("-").join("")); }} />
 						<TextField label="비밀번호" variant="outlined" type="password" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
 						<TextField label="비밀번호 확인" variant="outlined" type="password" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
 					</div>
 					<div className="btn-con">
-						<Button className="btn" variant="contained" color="primary">수정</Button>
+						<Button className="btn" variant="contained" color="primary" onClick={updateInfo}>수정</Button>
 					</div>
 				</div>
 				<div className="img-con">

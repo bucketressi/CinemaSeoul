@@ -3,7 +3,7 @@ import { UserType, childrenObj } from './Type';
 import axios from 'axios';
 import { SERVER_URL } from '../CommonVariable';
 import { errorHandler } from './ErrorHandler';
-import { useTokenDispatch, useTokenState } from './TokenModel';
+import { useTokenDispatch } from './TokenModel';
 import { useHistory } from 'react-router-dom';
 
 const userState = createContext<number | undefined>(undefined);
@@ -17,7 +17,6 @@ const logoutFunction = createContext<() => void>(() => { });
 
 export const UserContextProvider = ({ children }: childrenObj) => {
 	const setToken = useTokenDispatch();
-	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
 
 	const [user, setUser] = useState<number | undefined>(undefined);

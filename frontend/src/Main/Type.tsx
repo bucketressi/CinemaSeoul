@@ -114,7 +114,7 @@ export type AdminType = {
 	phone_num: string,
 	email: string,
 	password: string,
-	admi_auth_code: string,
+	admi_auth: string,
 	position: string,
 	address: string,
 	start_date: string
