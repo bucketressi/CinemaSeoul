@@ -365,3 +365,17 @@ export type BlackList = {
 	"phone_num" : string
 }
 
+/** sales */
+export type SalesType ={
+	"movi_total" :number,
+	"prod_total" :number,
+	"total_sum" :number,
+	"sales" : SalesExactType[]
+}
+
+export type SalesExactType = {
+	movi_sale: number,//200
+	prod_sale: number,//505
+	sale_date: string,//"20210601"
+	total_sale: number, //404040
+}

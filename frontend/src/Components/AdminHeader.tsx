@@ -74,6 +74,7 @@ const AdminHeader = () => {
 							<li><Link to="/admin/ask">1:1 문의</Link></li>
 							<li><Link to="/admin/blacklist">블랙리스트</Link></li>
 							<li><Link to="/admin/list">내역관리</Link></li>
+							<li><Link to="/admin/sales">매출관리</Link></li>
 						</ul>
 					</div>
 					<div className="sub-menu">
