@@ -54,7 +54,7 @@ const initialMovieAuthCode = [{
 {
 	"code_id": "200004",
 	"parent_code": "200",
-	"code_name": "18세(청소년 이용 불가)"
+	"code_name": "18세(청소년 관람 불가)"
 }];
 const initialPeopleTypeCode = [{
 	"code_id": "210001",

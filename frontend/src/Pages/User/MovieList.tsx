@@ -11,6 +11,9 @@ const MovieList = () => {
 	const movieListData = useMovieListState();
 
 	useEffect(()=>{
+		if(location.pathname === "/movie/search") // search를 통해 왔으면 다시 fetch 안 함
+			return;
+			
 		fetchMovie();
 	}, []);
 
