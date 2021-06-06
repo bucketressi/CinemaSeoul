@@ -137,18 +137,19 @@ const AdminProduct = () => {
 
 	const deleteProduct = (prod_id : number) => {
 		// 상품 삭제
-		// todo : api 수정되면 다시 하기
-		// axios.post(`${SERVER_URL}/prod/delete/${prod_id}`, {
-		// 	headers: {
-		// 		TOKEN: AUTH_TOKEN
-		// 	}
-		// })
-		// 	.then((res) => {
-		// 		console.log(res);
-		// 	})
-		// 	.catch((e) => {
-		// 		errorHandler(e, true);
-		// 	});
+		// todo : api 고치고 다시
+		axios.delete(`${SERVER_URL}/prod/delete/${prod_id}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("정상적으로 삭제되었습니다.");
+				fetchFromMode();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
 	}
 
 	return (
