@@ -65,8 +65,8 @@ const MypageMovie = ({ mode }: Props) => {
 			axios.post(`${SERVER_URL}/review`, {
 				"user_id": userId,
 				"movi_id": movie.movi_id,
-				"rating": movie.rating!==null?movie.rating:0,
-				"comments": movie.comments!==null?movie.comments:""
+				"rating": movie.rating !== null ? movie.rating : 0,
+				"comments": movie.comments !== null ? movie.comments : ""
 			}, {
 				headers: {
 					TOKEN: AUTH_TOKEN
@@ -74,18 +74,18 @@ const MypageMovie = ({ mode }: Props) => {
 			})
 				.then((res) => {
 					fetchUserMovieList();
+					setOpenModal(false);
 				})
 				.catch((e) => {
 					errorHandler(e, true);
-					setOpenModal(false);
 				});
 		} else {
 			// 수정
 			axios.put(`${SERVER_URL}/review`, {
 				"user_id": userId,
 				"movi_id": movie.movi_id,
-				"rating": movie.rating!==null?movie.rating:0,
-				"comments": movie.comments!==null?movie.comments:""
+				"rating": movie.rating !== null ? movie.rating : 0,
+				"comments": movie.comments !== null ? movie.comments : ""
 			}, {
 				headers: {
 					TOKEN: AUTH_TOKEN
@@ -101,14 +101,15 @@ const MypageMovie = ({ mode }: Props) => {
 		}
 	}
 
-	const deleteReview = (movi_id : number) => {
-		axios.delete(`${SERVER_URL}/review/delete/${userId}/${movi_id}`,{
+	const deleteReview = (movi_id: number) => {
+		axios.delete(`${SERVER_URL}/review/delete/${userId}/${movi_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
 		})
 			.then((res) => {
-				alert("관람평이 성공적으로 삭제되었습니다.")
+				alert("관람평이 성공적으로 삭제되었습니다.");
+				fetchUserMovieList();
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -124,7 +125,13 @@ const MypageMovie = ({ mode }: Props) => {
 				{
 					(movie.rating !== null && movie.comments !== null) ?
 						<div>
-							<div>평점: {movie.rating}</div>
+							<div>
+								<div>평점</div>
+								<Rating
+									value={movie.rating}
+									readOnly={true}
+								/>
+							</div>
 							<div>관람평 : {movie.comments}</div>
 							<div className="btn-con">
 								<Button variant="contained" color="primary" onClick={() => handleMakeReview(movie, 1)}>수정하기</Button>
