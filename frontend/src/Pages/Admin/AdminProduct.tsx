@@ -10,6 +10,7 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { ProductCard } from '../../Components';
 import { Button, FormControl, InputLabel, Menu, MenuItem, Modal, Select, Tab, Tabs, TextField } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 
 const AdminProduct = () => {
 	const AUTH_TOKEN = useTokenState();
@@ -29,6 +30,25 @@ const AdminProduct = () => {
 	const [contents, setContents] = useState<string>("");
 	const [image, setImage] = useState<string>("");
 
+	useEffect(() => {
+		fetchFromMode();
+	}, [mode]);
+
+	useEffect(() => {
+		fetchAllProduct();
+	}, []);
+
+	/** 페이지네이션 */
+	const [page, setPage] = useState<number>(1);
+	const [totalPage, setTotalPage] = useState<number>(1);
+
+	useEffect(() => {
+		// stat과 sort는 바뀔 때마다 재구성
+		fetchAllProduct();
+	}, [page]);
+	
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
+
 	/* 타입 코드 */
 	useEffect(() => {
 		const obj: CodeMatch = {};
@@ -38,14 +58,6 @@ const AdminProduct = () => {
 		setProductTypeObj(obj);
 	}, [productType]);
 
-	
-	useEffect(() => {
-		fetchFromMode();
-	}, [mode]);
-
-	useEffect(() => {
-		fetchAllProduct();
-	}, []);
 
 	const fetchFromMode = () => {
 		let type = "";
@@ -68,14 +80,15 @@ const AdminProduct = () => {
 	const fetchAllProduct = (typeString?: string) => {
 		// 전체 상품 받아오기
 		axios.post(`${SERVER_URL}/prod/list`, {
-			page: 1,
-			amount: 30,
+			page: page,
+			amount: 10,
 			prod_type_code: typeString ? typeString : null
 		})
 			.then((res) => {
 				if (!res.data || !res.data.products)
 					return;
 				setProductList(res.data.products);
+				setTotalPage(res.data.totalpage);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -172,6 +185,7 @@ const AdminProduct = () => {
 							/>
 						)
 					}
+					<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 				</div>
 			</div>
 			<ModalComponent

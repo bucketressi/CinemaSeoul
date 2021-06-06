@@ -3,7 +3,7 @@ import { PageTitle } from '../../Components';
 import { useHistory } from 'react-router-dom';
 import { FormControl, InputLabel, Select, MenuItem, Switch, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
 import { HallType, ShowScheduleType, HallListType } from '../../Main/Type';
-import { useShowScheduleListState, useFetchShowSchedule, useShowScheduleListObjState } from '../../Main/ShowScheduleModel';
+import { useShowScheduleListState, useFetchShowSchedule, useShowScheduleListObjState, useTotalPageState } from '../../Main/ShowScheduleModel';
 import { useFetchHallFunction, useHallListState } from '../../Main/HallListModel';
 import { useFetchMovieFunction, useMovieListObjState } from '../../Main/MovieListModel';
 import { ModalComponent } from '../../Components';
@@ -14,10 +14,12 @@ import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
+import { Pagination } from '@material-ui/lab';
 
 const AdminShowSchedule = () => {
 	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
+	const totalPage = useTotalPageState();
 	const fetchShowSchedule = useFetchShowSchedule();
 	const fetchHall = useFetchHallFunction();
 	const fetchMovie = useFetchMovieFunction();
@@ -29,10 +31,22 @@ const AdminShowSchedule = () => {
 	const [mode, setMode] = useState<boolean>(false); // 표 / 리스트
 
 	useEffect(() => {
-		fetchShowSchedule();
+		fetchShowSchedule(page);
 		fetchHall();
 		fetchMovie();
 	}, []);
+
+
+	/** 조건 */
+	const [page, setPage] = useState<number>(1);
+
+	useEffect(() => {
+		// stat과 sort는 바뀔 때마다 재구성
+		fetchShowSchedule(page);
+	}, [page]);
+	
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
+
 
 	/* 검색 조건 */
 	const [searchHallId, setSearchHallId] = useState<number[]>([]);
@@ -53,7 +67,7 @@ const AdminShowSchedule = () => {
 
 	/* 검색 조건 */
 	const search = () => {
-		fetchShowSchedule(searchMovieId, searchHallId, searchStartDate, searchEndDate);
+		fetchShowSchedule(page, searchMovieId, searchHallId, searchStartDate, searchEndDate);
 	}
 
 	/* 상영일정 관리 */
@@ -74,7 +88,7 @@ const AdminShowSchedule = () => {
 				}
 			})
 				.then((res) => {
-					fetchShowSchedule();
+					fetchShowSchedule(page);
 					setModalOpen(false);
 				})
 				.catch((e) => {
@@ -95,7 +109,7 @@ const AdminShowSchedule = () => {
 						}
 					})
 						.then((res) => {
-							fetchShowSchedule();
+							fetchShowSchedule(page);
 							setModalOpen(false);
 						})
 						.catch((e) => {
@@ -203,7 +217,7 @@ const AdminShowSchedule = () => {
 					}
 				})
 					.then((res) => {
-						fetchShowSchedule();
+						fetchShowSchedule(page);
 					})
 					.catch((e) => {
 						errorHandler(e, true);
@@ -347,6 +361,7 @@ const AdminShowSchedule = () => {
 							</Table>
 						</TableContainer>
 				}
+				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
 			<ModalComponent
 				open={modalOpen}
