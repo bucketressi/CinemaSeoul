@@ -9,7 +9,9 @@ import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useHistory } from 'react-router-dom';
+import { useTokenState} from '../../Main/TokenModel';
 import "../../scss/pages/book.scss";
+import { useUserState } from '../../Main/UserModel';
 
 type Props = {
 	fetchShowSchedule : (selectedMovie : AbleMovieType, selectedDate : string) => void;
@@ -20,6 +22,8 @@ type Props = {
 
 const BookSchedule = ({ fetchShowSchedule, resultSchedule, setMode, setSelectedSchedule } : Props) => {
 	const history = useHistory();
+	const userId = useUserState();
+	const AUTH_TOKEN = useTokenState();
 	const [ableMovie, setAbleMovie] = useState<AbleMovieType[]>([]);
 	const [selectedMovie, setSelectedMovie] = useState<AbleMovieType | undefined>(undefined);
 	const [selectedDate, setSelectedDate] = useState<string>("");
@@ -37,7 +41,11 @@ const BookSchedule = ({ fetchShowSchedule, resultSchedule, setMode, setSelectedS
 	},[selectedMovie, selectedDate]);
 
 	const fetchAbleMovie = () => {
-		axios.get(`${SERVER_URL}/book/movie`)
+		axios.get(`${SERVER_URL}/book/movie`, {
+			headers : {
+				TOKEN : AUTH_TOKEN
+			}
+		})
 			.then((res) => {
 				if (!res.data?.movie_list)
 					return;
@@ -65,8 +73,36 @@ const BookSchedule = ({ fetchShowSchedule, resultSchedule, setMode, setSelectedS
 
 	const handleShowScheduleClick = (show_id : number) => {
 		// 모드를 1로 바꾸기 => 좌석 선택으로 넘어가기
+		if(!selectedMovie)
+			return;
+		// 영화가 청불이면 성인인증 여부 검사
+		if(getAvailableAge(selectedMovie.avai_age) === "청불"){
+			isAdultChecked().then(res => {
+				console.log(res);
+				if(!res){
+					// 성인인증 안되어있음
+					alert("청소년 관람 불가 영화는 성인인증 후에 예매하실 수 있습니다.");
+					history.push("/adult/auth");
+				}
+			})
+		}
 		setSelectedSchedule(show_id);
 		setMode(1);
+	}
+
+	/* 성인 영화 검사 */
+	const isAdultChecked = () => {
+		return axios.get(`${SERVER_URL}/user/adult/${userId}`, {
+			headers : {
+				TOKEN : AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				return true;
+			})
+			.catch((e) => {
+				return false;
+			});
 	}
 	
 	return (

@@ -32,7 +32,9 @@ const SignUp = () => {
 	const [isEmailExist, setEmailExist] = useState<number>(-1); // -1 아직 안함, 0 중복된 이메일 없음, 1 중복된 이메일 있음
 
 	useEffect(() => {
-		setBirth(`${birthYear}${birthMonth}${birthDate}`);
+		const month = birthMonth.length === 1? "0"+birthMonth : birthMonth;
+		const date = birthDate.length === 1? "0" + birthDate : birthDate;
+		setBirth(`${birthYear}${month}${date}`);
 	}, [birthYear, birthMonth, birthDate]);
 
 	const preTreatment = () => {

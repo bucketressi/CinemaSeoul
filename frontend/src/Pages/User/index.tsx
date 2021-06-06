@@ -23,3 +23,4 @@ export { default as Store } from './Store';
 export { default as StoreExact } from './StoreExact';
 export { default as TheaterDescription } from './TheaterDescription';
 export { default as Error } from './Error';
+export { default as AdultAuth } from './AdultAuth';
