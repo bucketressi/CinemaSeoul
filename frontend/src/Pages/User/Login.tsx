@@ -35,9 +35,11 @@ const Login = () => {
 
 	const [modalEmail, setModalEmail] = useState<string>("");
 	const [modalPassword, setModalPassword] = useState<string>("");
-
+	
 	useEffect(() => {
-		setBirth(`${birthYear}/${birthMonth}/${birthDate}`);
+		const month = birthMonth.length === 1? "0"+birthMonth : birthMonth;
+		const date = birthDate.length ===1? "0"+birthDate :birthDate;
+		setBirth(`${birthYear}${month}${date}`);
 	}, [birthYear, birthMonth, birthDate]);
 
 	const handleTypeChange = (event: any, newValue: boolean) => { setType(newValue); };

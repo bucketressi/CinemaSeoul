@@ -350,3 +350,4 @@ export type MypageAskExactType = {
     crea_datetime: string, //2021-06-04 16:22:25,
     answ_datetime: string, //2021-06-04 16:26:07 //없으면 null
 }
+

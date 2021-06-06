@@ -15,6 +15,7 @@ const AdminMain = () => {
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/hall")}>상영관 리스트 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/showschedule")}>상영일정 리스트 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/product")}>상품 리스트 바로가기</Button>
+				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/people")}>인물 리스트 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/ask")}>1:1 문의 리스트 바로가기</Button>
 			</div>
 		</div>
