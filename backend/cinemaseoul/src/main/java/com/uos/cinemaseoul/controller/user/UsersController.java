@@ -73,7 +73,6 @@ public class UsersController {
     //회원가입
     @PostMapping("/signup")
     public void signup(@RequestBody UserSignUpDto userSignupDto) {
-        System.out.println("signupDto = " + userSignupDto.getUser_name());
         try{
             // 비밀번호 인코딩
             userSignupDto.encodePassword(passwordEncoder.encode(userSignupDto.getPassword()));
@@ -93,7 +92,6 @@ public class UsersController {
     //회원정보
     @GetMapping("/{user_id}")
     public ResponseEntity<UserInfoDto> selectById(Authentication authentication, @PathVariable int user_id){
-
         //자기 id 아니면
         if(Integer.parseInt(authentication.getName()) != user_id) throw new DuplicateException();
 

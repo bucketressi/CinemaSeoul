@@ -44,6 +44,7 @@ public class BlackListService {
         if(vos != null) {
             throw new DuplicateException("Already in User");
         }
+
         blackListDao.update(vo);
     }
 }

@@ -30,7 +30,6 @@ public class BatchService {
     public void updateAudience(){
         //어제 날짜 획득
        String yesterday = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-       System.out.println(yesterday);
        List<Integer> moviId = batchDao.getMovies(yesterday);
 
        if(moviId != null){
