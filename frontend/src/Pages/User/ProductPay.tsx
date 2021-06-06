@@ -88,6 +88,7 @@ const ProductPay = () => {
 			}
 		})
 			.then((res) => {
+				localStorage.setItem("product", "{}");
 				history.push("/myPage");
 			})
 			.catch((e) => {
@@ -107,7 +108,7 @@ const ProductPay = () => {
 	}
 
 	const fetchPoint = () => {
-		axios.get(`${SERVER_URL}/point/${userId}`, {
+		axios.get(`${SERVER_URL}/point/select/${userId}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
 			}
