@@ -10,3 +10,5 @@ export { default as ModalComponent } from './ModalComponent';
 export { default as ExactMovie } from './ExactMovie';
 export { default as ProductCard } from './ProductCard';
 export { default as Cart } from './Cart';
+export { default as BookComponent } from './BookComponent';
+export { default as PayComponent } from './PayComponent';

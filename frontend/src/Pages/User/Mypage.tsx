@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Button, TextField, TableBody, TableRow, TableCell, TableHead, Table, TableContainer } from '@material-ui/core';
-import { ModalComponent, PageTitle } from '../../Components';
+import { ModalComponent, PageTitle, BookComponent } from '../../Components';
 import "../../scss/pages/mypage.scss";
 
 import axios from 'axios';
@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import { MypageUserType, MypagePointType } from '../../Main/Type';
 import { MypageBook, MypagePay, MypageMovie, MypageInfo, MypageAsk } from '.';
 import { getDateString, getDateStringFromDate } from '../../Function';
+import PayComponent from '../../Components/PayComponent';
 
 const Mypage = () => {
 	const userId = useUserState();
@@ -26,10 +27,10 @@ const Mypage = () => {
 	const [openPointModal, setOpenPointModal] = useState<boolean>(false);
 
 	useEffect(() => { // 로그인 된 유저만 마이페이지 가능, 유저 정보 받아오기
-		// if (userId === undefined) {
-		// 	alert("로그인 후 이용 가능합니다.")
-		// 	history.push("/login");
-		// }
+		if (userId === undefined) {
+			alert("로그인 후 이용 가능합니다.")
+			history.push("/login");
+		}
 		fetchUserInfo();
 	}, []);
 
@@ -38,7 +39,7 @@ const Mypage = () => {
 	}
 
 	const fetchUserInfo = () => {
-		if (!userId)
+		if (userId === undefined)
 			return;
 		axios.get(`${SERVER_URL}/user/${userId}`, {
 			headers: {
@@ -119,7 +120,7 @@ const Mypage = () => {
 								role="tabpanel"
 								hidden={mode !== 0}
 							>
-								<MypageBook
+								<BookComponent
 									mode={mode}
 								/>
 							</div>
@@ -127,7 +128,7 @@ const Mypage = () => {
 								role="tabpanel"
 								hidden={mode !== 1}
 							>
-								<MypagePay
+								<PayComponent
 									mode={mode}
 								/>
 							</div>

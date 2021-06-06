@@ -17,7 +17,7 @@ export { default as AdminEvent } from './AdminEvent';
 export { default as AdminFAQ } from './AdminFAQ';
 export { default as AdminGenre } from './AdminGenre';
 export { default as AdminNotice } from './AdminNotice';
-export { default as AdminPay } from './AdminPay';
+export { default as AdminList } from './AdminList';
 export { default as AdminProduct } from './AdminProduct';
 export { default as AdminProductModify } from './AdminProductModify';
 export { default as AdminError } from './AdminError';

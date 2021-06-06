@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, TextField, Button } from '@material-ui/core';
 
-import {getDateString} from '../../Function';
-import { useUserState } from '../../Main/UserModel';
+import {getDateString} from '../Function';
+import { useUserState } from '../Main/UserModel';
 import { useHistory } from 'react-router-dom';
 
 import axios from 'axios';
-import { SERVER_URL } from '../../CommonVariable';
-import { errorHandler } from '../../Main/ErrorHandler';
-import { useTokenState } from '../../Main/TokenModel';
-import { UserBookType, UserBookExactType } from '../../Main/Type';
-import { ModalComponent } from '../../Components';
+import { SERVER_URL } from '../CommonVariable';
+import { errorHandler } from '../Main/ErrorHandler';
+import { useTokenState } from '../Main/TokenModel';
+import { UserBookType, UserBookExactType } from '../Main/Type';
+import { ModalComponent } from '../Components';
 
 type Props = {
-	mode: number
+	mode?: number
 }
 
-const MypageBook = ({ mode }: Props) => {
+const BookComponent = ({ mode }: Props) => {
 	const userId = useUserState();
 	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
@@ -28,6 +28,10 @@ const MypageBook = ({ mode }: Props) => {
 	const [bookExactInfo, setBookExactInfo] = useState<UserBookExactType | undefined>(undefined); // 예매 상세 정보
 	const [startDate, setStartDate] = useState<string>("");
 	const [endDate, setEndDate] = useState<string>("");
+
+	useEffect(() => {
+		fetchUserBookList();
+	}, []);
 
 	useEffect(() => {
 		if (mode !== 0)
@@ -54,7 +58,6 @@ const MypageBook = ({ mode }: Props) => {
 			.then((res) => {
 				if (!res.data || !res.data.bookrecord_list)
 					return;
-				console.log(res.data.bookrecord_list);
 				setBookInfo(res.data.bookrecord_list);
 			})
 			.catch((e) => {
@@ -114,6 +117,7 @@ const MypageBook = ({ mode }: Props) => {
 				<Table>
 					<TableHead>
 						<TableRow>
+							<TableCell>예매자</TableCell>
 							<TableCell>상영관</TableCell>
 							<TableCell>영화</TableCell>
 							<TableCell>상영 일자</TableCell>
@@ -127,6 +131,7 @@ const MypageBook = ({ mode }: Props) => {
 								// 각 row는 cursor: pointer로 클릭하도록 유도
 								return (
 									<TableRow onClick={() => openUserBookModal(book.book_id)} key={book.book_id}>
+										<TableCell>{book.user_name}</TableCell>
 										<TableCell>{book.hall_name}</TableCell>
 										<TableCell>{book.movi_name}</TableCell>
 										<TableCell>{`${getDateString(book.show_date)} ${book.show_time.substr(0,2)}:${book.show_time.substr(2,4)}`}</TableCell>
@@ -167,4 +172,4 @@ const MypageBook = ({ mode }: Props) => {
 	)
 }
 
-export default MypageBook;
+export default BookComponent;
