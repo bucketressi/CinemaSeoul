@@ -86,7 +86,6 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 			}
 		})
 			.then((res) => {
-				console.log(res.data);
 				setName(res.data.movi_name);
 				setCompany(res.data.company);
 				setCast(res.data.casting);

@@ -4,19 +4,26 @@ import { Button, MenuItem, TextField, Select } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useUserState, useLogout } from '../Main/UserModel';
 import {useMovieListDispatch} from '../Main/MovieListModel';
+import { usePeopleTypeCodeState } from '../Main/CodeModel';
 
+import axios from 'axios';
+import { SERVER_URL } from '../CommonVariable';
+import { errorHandler } from '../Main/ErrorHandler';
+import { useTokenState } from '../Main/TokenModel';
 
 // user 페이지의 header
 const Header = () => {
+	const AUTH_TOKEN = useTokenState();
 	const setMovieList = useMovieListDispatch();
 	const history = useHistory();
+	const peopleType = usePeopleTypeCodeState();
 
 	/* 회원 정보 */
 	const user = useUserState();
 	const logout = useLogout();
 
 	const [searchKeyword, setSearchKeyword] = useState<string>("");
-	const [searchType, setSearchType] = useState<number>(0);
+	const [searchType, setSearchType] = useState<number>(0); // 0: 제목, 1: 감독, 2: 배우
 
 	
 	const handleKeywordChange = (e : any) => {
@@ -29,8 +36,24 @@ const Header = () => {
 
 	const search = () => {
 		// 검색 시 type을 null, "감독", "배우"로 mapping
-		// movielist로 이동하면서 props로 api로부터 받은 moviedata 전달
-		history.push("/movie");
+		axios.post(`${SERVER_URL}/movie/search`, {
+			"page" : 1,             
+			"name" : searchKeyword,
+			"cast_type_code" : searchType === 0 ? null : peopleType[searchType-1].code_id
+		}, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				if (!res.data || !res.data.movi_list)
+					return;
+				history.push("/movie/search");
+				setMovieList(res.data.movi_list);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
 	}
 
 	return (
