@@ -177,8 +177,10 @@ const AdminMyPage = () => {
 	const updateInfo = () => {
 		if (!preTreatment() || !admin)
 			return;
-		console.log(admin.admi_name); // todo : api 수정되면 다시 체크
-		const admi_auth_code = adminCode.find((code) => code.code_name === admin.admi_name);
+		const admi_auth_code = adminCode.find((code) => code.code_name === admin.admi_auth);
+		if(!admi_auth_code)
+			return;
+		const admi_auth_code_id = admi_auth_code.code_id; 
 		axios.put(`${SERVER_URL}/admin/update`, {
 			"admi_id" : adminId,
 			"admi_name" : name,//"우희은",
@@ -186,7 +188,7 @@ const AdminMyPage = () => {
 			"phone_num": phoneNum,//"01045117731",
 			"email" : email, //"gmldms@gmail.com",
 			"password" : password,//"1234",
-			"admi_auth_code" : admi_auth_code, //"120002",
+			"admi_auth_code" : admi_auth_code_id, //"120002",
 			"position" : position, //"야간아르바이트생",
 			"address" : address, //"경기도 부천시",
 			"start_date" : startDate, //"20210531"
@@ -196,7 +198,7 @@ const AdminMyPage = () => {
 			}
 		})
 			.then((res) => {
-				alert("정상적으로 수정되었습니다.")
+				alert("정상적으로 수정되었습니다.");
 			})
 			.catch((e) => {
 				errorHandler(e, true);
