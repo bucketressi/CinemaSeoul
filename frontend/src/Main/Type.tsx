@@ -358,6 +358,13 @@ export type MypageAskExactType = {
     answ_datetime: string, //2021-06-04 16:26:07 //없으면 null
 }
 
+export type MypageAuthType = {
+	"user_id": number, //149,
+	"upda_datetime": string,// "2021-06-06 22:04:59",
+	"accu_point": number,//18124,
+	"user_type": string,//"Family"
+}
+
 /** blacklist */
 export type BlackList = {
 	"blac_name" : string,

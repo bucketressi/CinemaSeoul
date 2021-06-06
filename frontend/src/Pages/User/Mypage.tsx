@@ -9,7 +9,7 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router-dom';
-import { MypageUserType, MypagePointType } from '../../Main/Type';
+import { MypageUserType, MypagePointType, MypageAuthType } from '../../Main/Type';
 import { MypageBook, MypagePay, MypageMovie, MypageInfo, MypageAsk } from '.';
 import { getDateString, getDateStringFromDate } from '../../Function';
 import PayComponent from '../../Components/PayComponent';
@@ -21,10 +21,6 @@ const Mypage = () => {
 	const [mode, setMode] = useState<number>(0); // 0 : 결제내역조회, 1 : 내가 본 영화, 2 : 1:1문의, 3 : 정보 관리
 
 	const [userInfo, setUserInfo] = useState<MypageUserType | undefined>(undefined); // user 전체 정보
-	const [point, setPoint] = useState<MypagePointType[] | undefined>(undefined); // 포인트 내역 정보
-	const [startDate, setStartDate] = useState<string>(getDateStringFromDate(new Date()));
-
-	const [openPointModal, setOpenPointModal] = useState<boolean>(false);
 
 	useEffect(() => { // 로그인 된 유저만 마이페이지 가능, 유저 정보 받아오기
 		if (userId === undefined) {
@@ -55,12 +51,18 @@ const Mypage = () => {
 	}
 
 	// 포인트 내역 조회 모달
+	const [point, setPoint] = useState<MypagePointType[] | undefined>(undefined); // 포인트 내역 정보
+	const [startDate, setStartDate] = useState<string>(getDateStringFromDate(new Date()));
+	const [openPointModal, setOpenPointModal] = useState<boolean>(false);
+
 	useEffect(() => {
+		if (!openPointModal)
+			return;
 		fetchPointList();
-	}, [startDate]);
+	}, [startDate, openPointModal]);
 
 	const fetchPointList = () => {
-		if (!userId)
+		if (userId === undefined)
 			return;
 		axios.get(`${SERVER_URL}/point/${userId}/${startDate}`, {
 			headers: {
@@ -79,7 +81,38 @@ const Mypage = () => {
 
 	const handlePointModal = () => {
 		setOpenPointModal(true);
-		fetchPointList();
+	}
+
+	//등급 변경 내역 조회 모달
+	const [openAuthModal, setOpenAuthModal] = useState<boolean>(false);
+	const [authList, setAuthList] = useState<MypageAuthType[] | undefined>(undefined);
+
+	useEffect(() => {
+		if (!openAuthModal)
+			return;
+		fetchAuthList();
+	}, [openAuthModal]);
+
+	const fetchAuthList = () => {
+		if (userId === undefined)
+			return;
+		axios.get(`${SERVER_URL}/usertyperecord/${userId}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				if (!res.data)
+					return;
+				setAuthList(res.data);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
+	const handleAuthModal = () => {
+		setOpenAuthModal(true);
 	}
 
 	return (
@@ -102,6 +135,7 @@ const Mypage = () => {
 								누적 포인트 : {userInfo?.accu_point}포인트
 							</div>
 							<Button variant="outlined" color="primary" onClick={handlePointModal}>포인트 내역 조회</Button>
+							<Button variant="outlined" color="primary" onClick={handleAuthModal}>등급 변경 이력 조회</Button>
 						</div>
 						<Tabs
 							value={mode}
@@ -193,6 +227,37 @@ const Mypage = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
+			</ModalComponent>
+			<ModalComponent
+				open={openAuthModal}
+				setOpen={setOpenAuthModal}
+				title="등급 변경 조회"
+			>
+				{
+					authList &&
+					<TableContainer>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell>변경 일자</TableCell>
+									<TableCell>변경 시 포인트</TableCell>
+									<TableCell>변경 등급</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{
+									authList.map((auth) => (
+										<TableRow key={auth.upda_datetime}>
+											<TableCell>{auth.upda_datetime}</TableCell>
+											<TableCell>{auth.accu_point}</TableCell>
+											<TableCell>{auth.user_type}</TableCell>
+										</TableRow>
+									))
+								}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				}
 			</ModalComponent>
 		</div>
 	);
