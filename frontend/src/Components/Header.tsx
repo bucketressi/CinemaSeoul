@@ -67,7 +67,7 @@ const Header = () => {
 					<ul>
 						<li><Link to="/movie">영화</Link></li>
 						<li><Link to="/book">예매</Link></li>
-						<li>커뮤니티</li>
+						<li><Link to="/notice">공지사항</Link></li>
 						<li><Link to="/product">스토어</Link></li>
 					</ul>
 				</div>

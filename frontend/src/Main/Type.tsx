@@ -397,3 +397,27 @@ export type AudienceRecordComponentType = {
 	"reco_date": string, //"20210603",
 	"audi_amount": number, //20
 }
+
+/** notice */
+export type NoticeType = {
+    "page": number, //1,
+    "totalpage": number, //1,
+    "amount": number, //20,
+    "noti_list": NoticeComponentType[]
+}
+
+export type NoticeComponentType = {
+	"noti_id": number,//
+	"admi_name": string, //"관리자",
+	"noti_title": string, //"2021년 6월 넷째주 휴무 일정",
+	"crea_datetime": string, //"2021-06-04 20:31:58"
+}
+
+export type NoticeExactType = {
+    "noti_id": number,// 2,
+    "admi_id": number, //121,
+    "admi_name": string, // "우희은",
+    "noti_contents": string,// "2021년 6월 둘째주 수요일 (9일)은 영화관 보수공사로 인해 휴무입니다.
+    "noti_title": string,// "2021년 6월 둘째주 휴무 일정",
+    "crea_datetime": string,//"2021-06-04 20:31:03"
+}
