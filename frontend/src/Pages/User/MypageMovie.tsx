@@ -28,22 +28,6 @@ const MypageMovie = ({ mode }: Props) => {
 		if (mode !== 2)
 			return;
 		fetchUserMovieList();
-		// setMovieList([
-		// 	{
-		// 		"comments": null,
-		// 		"rating": null,
-		// 		"movi_id": 126,
-		// 		"movi_name": "트랜스포머1",
-		// 		"images": null
-		// 	},
-		// 	{
-		// 		"comments": null,
-		// 		"rating": null,
-		// 		"movi_id": 67,
-		// 		"movi_name": "기생충",
-		// 		"images": ""
-		// 	}
-		// ]);
 	}, [mode]);
 
 	const fetchUserMovieList = () => {
@@ -56,7 +40,6 @@ const MypageMovie = ({ mode }: Props) => {
 				if (!res.data)
 					return;
 				setMovieList(res.data);
-				console.log(res);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -78,36 +61,39 @@ const MypageMovie = ({ mode }: Props) => {
 
 		if (type === 0) {
 			// 생성
+			console.log(userId, movie.movi_id, movie.rating, movie.comments);
 			axios.post(`${SERVER_URL}/review`, {
 				"user_id": userId,
 				"movi_id": movie.movi_id,
-				"rating": movie.rating?movie.rating:0,
-				"comments": movie.comments?movie.comments:""
+				"rating": movie.rating!==null?movie.rating:0,
+				"comments": movie.comments!==null?movie.comments:""
 			}, {
 				headers: {
 					TOKEN: AUTH_TOKEN
 				}
 			})
 				.then((res) => {
-					console.log(res);
+					fetchUserMovieList();
 				})
 				.catch((e) => {
 					errorHandler(e, true);
+					setOpenModal(false);
 				});
 		} else {
 			// 수정
 			axios.put(`${SERVER_URL}/review`, {
 				"user_id": userId,
 				"movi_id": movie.movi_id,
-				"rating": movie.rating?movie.rating:0,
-				"comments": movie.comments?movie.comments:""
+				"rating": movie.rating!==null?movie.rating:0,
+				"comments": movie.comments!==null?movie.comments:""
 			}, {
 				headers: {
 					TOKEN: AUTH_TOKEN
 				}
 			})
 				.then((res) => {
-					console.log(res);
+					fetchUserMovieList();
+					setOpenModal(false);
 				})
 				.catch((e) => {
 					errorHandler(e, true);
@@ -131,12 +117,12 @@ const MypageMovie = ({ mode }: Props) => {
 
 	const MovieCard = (movie: MypageMovieType) => (
 		movie &&
-		<Paper elevation={4} className="mypage-movie-card">
+		<Paper key={movie.movi_id} elevation={4} className="mypage-movie-card">
 			<div className="img-con"><img src="https://i.pinimg.com/564x/38/cb/31/38cb31cee4b2da2676f1003a2fcf514d.jpg" alt="포스터" /></div>
 			<div className="info-con">
 				<div className="name">{movie.movi_name}</div>
 				{
-					(movie.rating && movie.comments) ?
+					(movie.rating !== null && movie.comments !== null) ?
 						<div>
 							<div>평점: {movie.rating}</div>
 							<div>관람평 : {movie.comments}</div>
@@ -171,6 +157,7 @@ const MypageMovie = ({ mode }: Props) => {
 					<div>
 						<div>평점</div>
 						<Rating
+							name="star"
 							value={movie.rating}
 							onChange={(event: any, newValue: number | null) => {
 								const obj: MypageMovieType = Object.assign({}, movie);
