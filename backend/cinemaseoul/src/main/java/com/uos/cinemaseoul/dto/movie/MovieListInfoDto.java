@@ -3,9 +3,11 @@ package com.uos.cinemaseoul.dto.movie;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class MovieListInfoDto {
     @JsonIgnore
     private int rnum;
@@ -16,5 +18,7 @@ public class MovieListInfoDto {
     private String open_date;
     private float rating;
     private int accu_audience;
+    @JsonIgnore
     private byte[] image;
+    private String imageBase64;
 }

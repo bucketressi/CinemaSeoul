@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -32,8 +34,12 @@ public class PeopleController {
         return ResponseEntity.ok(peopleService.getPeopleList(criteria));
     }
 
-    @PostMapping("/people/add")
-    public void addPeople(@RequestBody PeopleDto peopleDto){
+    @RequestMapping(path = "/people/add", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public void addPeople(@RequestPart("people") PeopleDto peopleDto,
+                          @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
+        if(image != null){
+            peopleDto.setImage(image.getBytes());
+        }
         peopleService.addPeople(peopleDto);
     }
     @PutMapping("/people/update")
@@ -41,8 +47,14 @@ public class PeopleController {
         peopleService.updatePeople(peopleDto);
     }
 
-    @PutMapping("/people/image")
-    public void updatePeopleImage(@RequestBody PeopleDto peopleDto){
+    @RequestMapping(path = "/people/image/{peop_id}",  method = RequestMethod.PUT,consumes = "multipart/form-data")
+    public void updatePeopleImage(@PathVariable(name = "peop_id") int peop_id
+            ,@RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
+
+        PeopleDto peopleDto = new PeopleDto();
+        peopleDto.setPeop_id(peop_id);
+        peopleDto.setImage(image.getBytes());
+
         peopleService.updatePeopleImage(peopleDto);
     }
     @DeleteMapping("/people/delete/{peop_id}")

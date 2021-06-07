@@ -6,10 +6,15 @@ import com.uos.cinemaseoul.common.paging.MovieCriteria;
 import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
 import com.uos.cinemaseoul.dto.movie.*;
 import com.uos.cinemaseoul.service.movie.MovieService;
+import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +26,12 @@ public class MovieController {
     private final MovieService movieService;
     private final ConstantTable constantTable;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> insertMovie(@RequestBody InsertMovieDto iMDto){
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public ResponseEntity<?> insertMovie(@RequestPart(value = "movie") InsertMovieDto iMDto,
+                                         @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
+        if(image != null){
+            iMDto.setImage(image.getBytes());
+        }
         return ResponseEntity.ok(movieService.insertMovie(iMDto));
     }
 
@@ -46,9 +55,18 @@ public class MovieController {
         movieService.updateMovie(uMDto);
     }
 
-    @PutMapping("/update/image")
-    public void updateMovieImage(@ModelAttribute(name = "movi_id") int movi_id, @ModelAttribute(name = "image") byte[] image){
-        movieService.updateMovieImage(movi_id, image);
+    @RequestMapping(name ="/image/{movi_id}", method = RequestMethod.PUT, consumes = "multipart/form-data")
+    public void updateMovieImage(@PathVariable(name = "movi_id") int movi_id,
+                                 @RequestPart("image") MultipartFile image) throws IOException {
+        MovieVo movieVo;
+
+        if(image != null){
+            movieVo = MovieVo.builder().movi_id(movi_id).image(image.getBytes()).build();
+        }else{
+            movieVo = MovieVo.builder().movi_id(movi_id).build();
+        }
+
+        movieService.updateMovieImage(movieVo);
     }
 
     @GetMapping("/select/{movi_id}")

@@ -11,9 +11,12 @@ import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.movie.PeopleVo;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -31,11 +34,17 @@ public class PeopleService {
     @Transactional
     public PeopleDetailDto getPeopleDetail(int peop_id) {
         PeopleDetailDto peopleDetailDto = peopleDao.getPeople(peop_id);
+
+        if(peopleDetailDto.getImage() != null){
+            peopleDetailDto.setImageBase64(Base64.encodeBase64String(peopleDetailDto.getImage()));
+        }
+
         if(peopleDetailDto != null){
             peopleDetailDto.setMovies(peopleDao.getCastMovies(peop_id));
         }else{
             throw new NotFoundException("No People");
         }
+
         return peopleDetailDto;
     }
 
@@ -55,7 +64,7 @@ public class PeopleService {
     }
 
     @Transactional
-    public void addPeople(PeopleDto peopleDto) {
+    public void addPeople(PeopleDto peopleDto){
         peopleDao.insertPeople(peopleMapper.insertPeopleVoFromPeopleDto(peopleDto));
     }
 

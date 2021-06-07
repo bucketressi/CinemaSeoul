@@ -10,9 +10,13 @@ import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 @Service
@@ -26,6 +30,7 @@ public class MovieService {
     @Transactional
     public int insertMovie(InsertMovieDto iMDto){
         MovieVo movieVo = movieMapper.insertMovieDtoToMovieVo(iMDto);
+
         movieDao.insertMovie(movieVo);
         return movieVo.getMovi_id();
     }
@@ -72,8 +77,7 @@ public class MovieService {
 
     //이미지 업데이트
     @Transactional
-    public void updateMovieImage(int movi_id, byte[] image) {
-        MovieVo movieVo = MovieVo.builder().movi_id(movi_id).image(image).build();
+    public void updateMovieImage(MovieVo movieVo) {
         if(movieDao.updateMovieImage(movieVo) != 1){
             throw new WrongArgException("too much");
         }
@@ -86,6 +90,10 @@ public class MovieService {
 
         if(sMDto == null){
             throw new NotFoundException("no Movie Detected");
+        }
+
+        if(sMDto.getImage() != null){
+            sMDto.setImageBase64(Base64.encodeBase64String(sMDto.getImage()));
         }
 
         sMDto.setCasting(movieDao.selectCast(movi_id));
@@ -107,7 +115,14 @@ public class MovieService {
             totalPage++;
         }
 
+
         movieListDto.setMovi_list(movieDao.selectMovieList(movieCriteria));
+        //byte[] to base64
+        for(MovieListInfoDto ml : movieListDto.getMovi_list()){
+            if(ml.getImage() != null){
+                ml.setImageBase64(Base64.encodeBase64String(ml.getImage()));
+            }
+        }
         movieListDto.setPageInfo(totalPage, movieCriteria.getPage(), movieCriteria.getAmount());
         return movieListDto;
     }
@@ -124,6 +139,12 @@ public class MovieService {
             totalPage++;
         }
         movieListDto.setMovi_list(movieDao.searchMovie(movieSearchCriteria));
+        //byte[] to base64
+        for(MovieListInfoDto ml : movieListDto.getMovi_list()){
+            if(ml.getImage() != null){
+                ml.setImageBase64(Base64.encodeBase64String(ml.getImage()));
+            }
+        }
         movieListDto.setPageInfo(totalPage, movieSearchCriteria.getPage(), movieSearchCriteria.getAmount());
         return movieListDto;
     }

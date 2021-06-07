@@ -1,17 +1,14 @@
 package com.uos.cinemaseoul.dto.movie;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
+import lombok.*;
 
-import java.util.List;
-
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InsertMovieDto {
-
+public class MovieDto {
+    private int movi_id;
     private String movi_name;
     private String avai_age_code;
     private int run_time;
@@ -20,8 +17,8 @@ public class InsertMovieDto {
     //nullable
     private String movi_contents;
     private String open_date;
-
+    private float rating;
+    private int accu_audience;
     //nullable
     private byte[] image;
-
 }

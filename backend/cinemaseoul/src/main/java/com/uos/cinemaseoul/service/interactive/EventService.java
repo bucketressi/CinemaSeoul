@@ -9,6 +9,7 @@ import com.uos.cinemaseoul.exception.DuplicateException;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.vo.interactive.EventVo;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +74,9 @@ public class EventService {
             throw new NotFoundException("Not Found Event");
         }
 
-        return eventMapper.insertIntoDtoFromVo(eventVo);
+        EventDto eventDto = eventMapper.insertIntoDtoFromVo(eventVo);
+        eventDto.setImageBase64(Base64.encodeBase64String(eventDto.getImage()));
+
+        return eventDto;
     }
 }

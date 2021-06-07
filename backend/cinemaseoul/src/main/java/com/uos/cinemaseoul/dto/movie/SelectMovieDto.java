@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.dto.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,9 @@ public class SelectMovieDto {
     private int run_time;
     private String company;
     private String movi_contents;
+    @JsonIgnore
     private byte[] image;
+    private String imageBase64;
     private String open_date;
 
     //장르

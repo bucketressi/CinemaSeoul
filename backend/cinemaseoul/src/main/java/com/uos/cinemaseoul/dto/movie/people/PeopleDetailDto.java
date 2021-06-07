@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.dto.movie.people;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,9 @@ public class PeopleDetailDto {
     private String nation;
     private String birth;
     private String peop_contents;
+    @JsonIgnore
     private byte[] image;
+    private String imageBase64;
 
     List<CastingMovieDto> movies = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.uos.cinemaseoul.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,7 @@ public class ProductInfoDto {
     private String prod_name;
     private int price;
     private int limit;
+    @JsonIgnore
     private byte[] image;
+    private String imageBase64;
 }

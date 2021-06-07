@@ -90,6 +90,7 @@ public class MappingConstant {
             "/movie/updateCast",
             "/movie/add",
             "/movie/delete/{movi_id}",
+            "/movie/image/{movi_id}",
 
             "/showschedule/add",
             "/showschedule/{show_id}/book",
@@ -103,12 +104,12 @@ public class MappingConstant {
             "/hall/select/{hall_id}",
 
             "/prod",
-            "/prod/image",
+            "/prod/image/{prod_id}",
             "/prod/delete/{prod_id}",
 
             "/people/add",
             "/people/update",
-            "/people/image",
+            "/people/image/{peop_id}",
             "/people/delete/{peop_id}",
 
             "/record",
@@ -127,7 +128,7 @@ public class MappingConstant {
 
             "/event/add",
             "/event/update",
-            "/event/image",
+            "/event/image/{event_id}",
             "/event/delete/{event_id}"
 
     };

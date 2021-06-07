@@ -5,10 +5,12 @@ import com.uos.cinemaseoul.common.paging.Criteria;
 import com.uos.cinemaseoul.common.paging.ProductCriteria;
 import com.uos.cinemaseoul.dao.product.ProductDao;
 import com.uos.cinemaseoul.dto.product.ProductDto;
+import com.uos.cinemaseoul.dto.product.ProductInfoDto;
 import com.uos.cinemaseoul.dto.product.ProductListDto;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.product.ProductVo;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,12 +48,19 @@ public class ProductService {
 
     @Transactional
     public ProductDto selectProduct(int prod_int) {
-        return productMapper.insertIntoProdcutDtoFromProdcutVo(productDao.selectProduct(prod_int));
+        ProductDto pdto = productMapper.insertIntoProdcutDtoFromProdcutVo(productDao.selectProduct(prod_int));
+
+        if(pdto.getImage() != null){
+            pdto.setImageBase64(Base64.encodeBase64String(pdto.getImage()));
+        }
+
+        return pdto;
     }
 
     @Transactional
     public ProductListDto selectProductList(ProductCriteria productCriteria) {
         ProductListDto productListDto = new ProductListDto();
+
         //페이지 계산
         int totalCount = productDao.countList(productCriteria);
         int totalPage =  totalCount / productCriteria.getAmount();
@@ -60,6 +69,13 @@ public class ProductService {
         }
 
         productListDto.setProducts(productDao.selectProductList(productCriteria));
+
+        for(ProductInfoDto pd : productListDto.getProducts()){
+            if(pd.getImage() != null){
+                pd.setImageBase64(Base64.encodeBase64String(pd.getImage()));
+            }
+        }
+
         productListDto.setPageInfo(totalPage, productCriteria.getPage(), productCriteria.getAmount());
         return productListDto;
     }
