@@ -8,6 +8,7 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
+import { Pagination } from '@material-ui/lab';
 
 const AdminNotice = () => {
 	const AUTH_TOKEN = useTokenState();
@@ -61,6 +62,8 @@ const AdminNotice = () => {
 				errorHandler(e, true);
 			});
 	}
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
+
 	
 
 	return (
@@ -94,6 +97,7 @@ const AdminNotice = () => {
 						}
 					</TableBody>
 				</Table>
+				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
 			<ModalComponent
 				open={openModal}

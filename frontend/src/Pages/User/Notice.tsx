@@ -7,6 +7,7 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { useHistory } from 'react-router';
+import { Pagination } from '@material-ui/lab';
 
 const Notice = () => {
 	const history = useHistory();
@@ -32,7 +33,7 @@ const Notice = () => {
 				errorHandler(e, true);
 			});
 	}
-
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
 
 	return (
 		<div>
@@ -62,6 +63,7 @@ const Notice = () => {
 						}
 					</TableBody>
 				</Table>
+				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
 		</div>
 	);
