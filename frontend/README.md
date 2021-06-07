@@ -54,6 +54,7 @@ URL별로 연결되는 라우팅 컴포넌트에 대해 정리
 | 주소       | 컴포넌트        | 메뉴 구분 | 비고             |
 | ---------- | --------------- | --------- | ---------------- |
 | /admin     | AdminAdmin      | 영화관    | 직원 관리        |
+| /login     | AdminLogin      | 서브메뉴  | 로그인          |
 | /ask       | AdminAsk        | 커뮤니티  | 문의사항 관리    |
 | /blacklist | AdminBlackList  | 운영      | 블랙리스트 관리  |
 | /book      | AdminBookRecord | 운영      | 예매현황 조회    |
@@ -61,7 +62,6 @@ URL별로 연결되는 라우팅 컴포넌트에 대해 정리
 | /faq       | AdminFAQ        | 커뮤니티  | FAQ 관리         |
 | /genre     | AdminGenre      | 영화관    | 장르 관리        |
 | /hall      | AdminHall       | 영화관    | 상영관 관리      |
-| /home      | AdminHome       |           |                  |
 | /main      | AdminMain       | -         | 메인 페이지      |
 | /movie     | AdminMovie      | 영화관    | 영화 관리        |
 | /notice    | AdminNotice     | 커뮤니티  | 공지사항 관리    |
