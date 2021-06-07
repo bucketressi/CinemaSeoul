@@ -77,7 +77,7 @@ const MovieExact = ({ movie_id } : Props) => {
 
 	const fetchExactMovie = () => {
 		// movie의 정보 받아오기
-		axios.get(`${SERVER_URL}/movie/${movie_id}`, {
+		axios.get(`${SERVER_URL}/movie/select/${movie_id}`, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
 			}
@@ -117,7 +117,7 @@ const MovieExact = ({ movie_id } : Props) => {
 
 	const handlePeopleClick = (peop_id : number) => {
 		// api 호출해서 인물 정보 받아오기
-		axios.get(`${SERVER_URL}/people/${peop_id}`, {
+		axios.get(`${SERVER_URL}/people/select/${peop_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}

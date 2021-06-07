@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { BookShowScheduleType, AbleMovieType, ShowScheduleType, BookSeatType } from '../../Main/Type';
 import { BookSchedule, BookSeat, BookPay } from '.';
 import { PageTitle } from '../../Components';
+import { Tabs, Tab } from '@material-ui/core';
 
 import axios from 'axios';
-import { Tabs, Tab } from '@material-ui/core';
 import { SERVER_URL } from '../../CommonVariable';
 import { useUserState } from '../../Main/UserModel';
 import { useTokenState } from '../../Main/TokenModel';
@@ -41,7 +41,7 @@ const Book = () => {
 	useEffect(() => {
 		if(selectedSchedule === -1)
 			return;
-		axios.get(`${SERVER_URL}/showschedule/${selectedSchedule}`, {
+		axios.get(`${SERVER_URL}/showschedule/select/${selectedSchedule}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
 			}
@@ -64,7 +64,7 @@ const Book = () => {
 		// 선택된 상영일정에 대한 자세한 정보 받아오기
 		if(selectedSchedule === -1)
 			return;
-		axios.get(`${SERVER_URL}/showschedule/${selectedSchedule}`, {
+		axios.get(`${SERVER_URL}/showschedule/select/${selectedSchedule}`, {
 			headers : {
 				TOKEN : AUTH_TOKEN
 			}
@@ -80,7 +80,6 @@ const Book = () => {
 	const fetchShowSchedule = (selectedMovie : AbleMovieType, selectedDate : string) => {
 		if(!selectedMovie || selectedDate === "")
 			return;
-			// api 수정 후 다시 하기
 		axios.post(`${SERVER_URL}/book/schedule`, {
 			movi_id : selectedMovie.movi_id,
 			show_date : Number(selectedDate)

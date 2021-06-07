@@ -196,8 +196,9 @@ const initialPayStateCode = [{
 {
 	"code_id": "330003",
 	"parent_code": "330",
-	"code_name": "결제확정"
+	"code_name": "사용완료"
 }];
+
 const userCodeState = createContext<CodeType[]>([]);
 const userAuthCodeState = createContext<CodeType[]>([]);
 const adminCodeState = createContext<CodeType[]>([]);

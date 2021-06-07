@@ -36,7 +36,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 	}, []);
 
 	const fetchProduct = () => {
-		axios.get(`${SERVER_URL}/prod/${match.params.prod_id}`)
+		axios.get(`${SERVER_URL}/prod/select/${match.params.prod_id}`)
 			.then((res) => {
 				if (!res.data)
 					return;

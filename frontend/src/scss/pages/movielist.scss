@@ -2,9 +2,11 @@
 @import "../base/common";
 
 .movie-wrap{
-	display: flex;
-	align-items: flex-start;
-	margin-top: 2rem;
+    display: flex;
+	flex-direction: column;
+	.movie-con{
+		display: flex;
+	}
 	.title{
 		font-weight: 600;
 		width: 100%;
@@ -32,12 +34,24 @@
 			width: 100%;
 			padding-bottom: 20px;
 		}
+		.movie-list-con{
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			justify-content: space-between;
+			.movie-list{
+				display: flex;
+				flex-wrap: wrap;
+			}
+			.pagination{
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
 	}
-	.movie-list-con{
-		width: 100%;
-		display: flex;
-		flex-wrap: wrap;
-	}
+	
 }
 
 /* add modal */

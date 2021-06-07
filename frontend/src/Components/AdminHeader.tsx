@@ -70,7 +70,15 @@ const AdminHeader = () => {
 							<li><Link to="/admin/hall">상영관</Link></li>
 							<li><Link to="/admin/showschedule">상영일정</Link></li>
 							<li><Link to="/admin/product">상품</Link></li>
-							<li><Link to="/admin/movie">영화</Link></li>
+							<li><Link to="/admin/people">인물</Link></li>
+							<li><Link to="/admin/ask">1:1 문의</Link></li>
+							<li><Link to="/admin/blacklist">블랙리스트</Link></li>
+							<li><Link to="/admin/list">내역관리</Link></li>
+							<li><Link to="/admin/sales">매출관리</Link></li>
+							<li><Link to="/admin/audience">관람현황</Link></li>
+							<li><Link to="/admin/notice">공지사항</Link></li>
+							<li><Link to="/admin/faq">FAQ</Link></li>
+							<li><Link to="/admin/event">이벤트</Link></li>
 						</ul>
 					</div>
 					<div className="sub-menu">

@@ -3,7 +3,7 @@ import { PageTitle } from '../../Components';
 import { useHistory } from 'react-router-dom';
 import { FormControl, InputLabel, Select, MenuItem, Switch, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
 import { HallType, ShowScheduleType, HallListType } from '../../Main/Type';
-import { useShowScheduleListState, useFetchShowSchedule, useShowScheduleListObjState } from '../../Main/ShowScheduleModel';
+import { useShowScheduleListState, useFetchShowSchedule, useShowScheduleListObjState, useTotalPageState } from '../../Main/ShowScheduleModel';
 import { useFetchHallFunction, useHallListState } from '../../Main/HallListModel';
 import { useFetchMovieFunction, useMovieListObjState } from '../../Main/MovieListModel';
 import { ModalComponent } from '../../Components';
@@ -14,10 +14,12 @@ import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
+import { Pagination } from '@material-ui/lab';
 
 const AdminShowSchedule = () => {
 	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
+	const totalPage = useTotalPageState();
 	const fetchShowSchedule = useFetchShowSchedule();
 	const fetchHall = useFetchHallFunction();
 	const fetchMovie = useFetchMovieFunction();
@@ -29,10 +31,22 @@ const AdminShowSchedule = () => {
 	const [mode, setMode] = useState<boolean>(false); // 표 / 리스트
 
 	useEffect(() => {
-		fetchShowSchedule();
+		fetchShowSchedule(page);
 		fetchHall();
 		fetchMovie();
 	}, []);
+
+
+	/** 조건 */
+	const [page, setPage] = useState<number>(1);
+
+	useEffect(() => {
+		// stat과 sort는 바뀔 때마다 재구성
+		fetchShowSchedule(page);
+	}, [page]);
+	
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
+
 
 	/* 검색 조건 */
 	const [searchHallId, setSearchHallId] = useState<number[]>([]);
@@ -53,7 +67,7 @@ const AdminShowSchedule = () => {
 
 	/* 검색 조건 */
 	const search = () => {
-		fetchShowSchedule(searchMovieId, searchHallId, searchStartDate, searchEndDate);
+		fetchShowSchedule(page, searchMovieId, searchHallId, searchStartDate, searchEndDate);
 	}
 
 	/* 상영일정 관리 */
@@ -74,7 +88,7 @@ const AdminShowSchedule = () => {
 				}
 			})
 				.then((res) => {
-					fetchShowSchedule();
+					fetchShowSchedule(page);
 					setModalOpen(false);
 				})
 				.catch((e) => {
@@ -95,7 +109,7 @@ const AdminShowSchedule = () => {
 						}
 					})
 						.then((res) => {
-							fetchShowSchedule();
+							fetchShowSchedule(page);
 							setModalOpen(false);
 						})
 						.catch((e) => {
@@ -203,7 +217,7 @@ const AdminShowSchedule = () => {
 					}
 				})
 					.then((res) => {
-						fetchShowSchedule();
+						fetchShowSchedule(page);
 					})
 					.catch((e) => {
 						errorHandler(e, true);
@@ -212,6 +226,22 @@ const AdminShowSchedule = () => {
 				alert("해당 상영일정의 예매가 있으므로 상영일정을 삭제할 수 없습니다. 예매를 먼저 삭제해주세요.");
 			}
 		});
+	}
+
+	/** 상영 시작 */
+	const startShow = (show_id : number) => {
+		axios.get(`${SERVER_URL}/showschedule/start/${show_id}`, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("상영이 시작되었습니다.");
+				fetchShowSchedule(page);
+			})
+			.catch((e) => {
+				errorHandler(e, true, ["","","","영화가 시작하기 10분 전부터만 시작하실 수 있습니다."]);
+			});
 	}
 
 	return (
@@ -296,6 +326,7 @@ const AdminShowSchedule = () => {
 										<TableCell>개봉일자</TableCell>
 										<TableCell>상영시작시각</TableCell>
 										<TableCell>상영종료시각</TableCell>
+										<TableCell>상영시작</TableCell>
 										<TableCell>수정</TableCell>
 									</TableRow>
 								</TableHead>
@@ -312,6 +343,13 @@ const AdminShowSchedule = () => {
 													<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
 													<TableCell>{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
 													<TableCell>{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
+													<TableCell>
+														{
+															schedule.started && schedule.started === "0" ?
+																<Button onClick={() => startShow(schedule.show_id)} variant="outlined" color="secondary">상영시작</Button> :
+																<Button variant="outlined" color="default" disabled={true}>상영완료</Button>
+														}
+													</TableCell>
 													<TableCell className="modify-btn-con">
 														<Button variant="contained" color="primary" onClick={() => handleModifyButtonClick(schedule.show_id)}>상영일정 수정</Button>
 														<Button variant="contained" color="secondary" onClick={() => removeShowSchedule(schedule.show_id)}>상영일정 삭제</Button>
@@ -324,6 +362,7 @@ const AdminShowSchedule = () => {
 							</Table>
 						</TableContainer>
 				}
+				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
 			<ModalComponent
 				open={modalOpen}

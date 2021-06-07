@@ -25,9 +25,14 @@ export const errorHandler = (error: AxiosError, alertOn: boolean, errorMsg?: str
 					alert(errorMsg[2]) :
 					alert("잘못된 접근입니다. 관리자에게 문의해주세요.");
 				break;
-			case 500:
+			case 405:
 				errorMsg && errorMsg[3] !== "" ?
-					alert(errorMsg[3]) :
+					alert(errorMsg[3]) : 
+					alert("허용되지 않는 요청입니다.");
+				break;
+			case 500:
+				errorMsg && errorMsg[4] !== "" ?
+					alert(errorMsg[4]) :
 					alert("서버의 응답이 없습니다. 잠시 후 다시 시도해주세요.");
 				break;
 			}

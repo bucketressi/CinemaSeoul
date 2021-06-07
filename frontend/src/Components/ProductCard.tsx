@@ -15,15 +15,17 @@ type Props = {
 const ProductCard = ({product, auth, deleteFunction} : Props) => {
 	const history = useHistory();
 
+	const gotoExact = () => history.push(auth==="admin"?`/admin/product/${product.prod_id}`:`/product/${product.prod_id}`);
+
 	return (
-		<Paper elevation={3} onClick={() => history.push(auth==="admin"?`/admin/product/${product.prod_id}`:`/product/${product.prod_id}`)} className={clsx("product-card", product.limit===0?"sold-out":"")}>
-			<div className="img-con">
+		<Paper elevation={3} className={clsx("product-card", product.limit===0?"sold-out":"")}>
+			<div onClick={gotoExact} className="img-con">
 				<span className="sold-out-cover"><p>sold out</p></span>
 				<img src="https://i.pinimg.com/236x/09/3f/84/093f8410929081023ec09091c8e71578.jpg" alt="상품 이미지"/>
 			</div>
-			<div className="name">{product.prod_name}</div>
-			<div className="price">{product.price}원</div>
-			<div className="limit">재고 : {product.limit}개</div>
+			<div onClick={gotoExact} className="name">{product.prod_name}</div>
+			<div onClick={gotoExact} className="price">{product.price}원</div>
+			<div onClick={gotoExact} className="limit">재고 : {product.limit}개</div>
 			{
 				deleteFunction &&
 				<Button variant="contained" color="secondary" onClick={deleteFunction}>삭제하기</Button>

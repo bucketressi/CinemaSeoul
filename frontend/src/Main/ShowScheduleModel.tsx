@@ -8,13 +8,15 @@ import { useTokenState } from './TokenModel';
 const showScheduleListState = createContext<ShowScheduleListType | undefined>(undefined);
 const showScheduleListObjState = createContext<ShowScheduleListObjType | undefined>(undefined);
 const showScheduleListDispatch = createContext<Dispatch<ShowScheduleListType | undefined>>(() => { });
-const fetchShowScheduleFunction = createContext<(movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => void>(() => { });
+const fetchShowScheduleFunction = createContext< (page: number, movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => void>( (page: number, movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => { });
+const totalPageState = createContext<number>(1);
 
 export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
 	const AUTH_TOKEN = useTokenState();
 
 	const [showScheduleList, setShowScheduleList] = useState<ShowScheduleListType | undefined>(undefined);
 	const [showScheduleObjList, setShowScheduleObjList] = useState<ShowScheduleListObjType | undefined>(undefined);
+	const [totalPage, setTotalPage] = useState<number>(1);
 
 	useEffect(() => {
 		if (!showScheduleList)
@@ -27,17 +29,17 @@ export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
 	}, [showScheduleList]);
 
 
-	const fetchShowSchedule = (movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => {
+	const fetchShowSchedule = (page: number, movi_id?: number[], hall_id?: number[], start_date?: string, end_date?: string) => {
 		const dateObj = new Date();
 		const month = (dateObj.getMonth() + 1).toString.length !== 1 ? (dateObj.getMonth() + 1) : "0" + (dateObj.getMonth() + 1);
 		const date = (dateObj.getDate()).toString.length !== 1 ? (dateObj.getDate()) : "0" + (dateObj.getDate());
 		const dateString = `${dateObj.getFullYear()}${month}${date}`;
 
 		axios.post(`${SERVER_URL}/showschedule/list`, {
-			"page": 1,
+			"page": page?page:1,
 			//아래 각각에 해당 하는 정보가 안넘어오거나 비어있으면 default 처리
-			"movi_id": !movi_id || movi_id.length ? null : movi_id,
-			"hall_id": !hall_id || hall_id.length ? null : hall_id,
+			"movi_id": !movi_id || !movi_id.length ? null : movi_id,
+			"hall_id": !hall_id || !hall_id.length ? null : hall_id,
 			"start_date": !start_date || start_date === "" ? dateString : start_date, //yyyymmdd
 			"end_date": !end_date ||end_date === "" ? null : end_date
 		}, {
@@ -46,9 +48,10 @@ export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
 			}
 		})
 			.then((res) => {
-				if (!res.data || !res.data.showschedule_list)
+				if (!res.data || !res.data.showschedule_list || !res.data.totalpage)
 					return;
 				setShowScheduleList(res.data.showschedule_list);
+				setTotalPage(res.data.totalpage)
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -60,7 +63,9 @@ export const ShowScheduleListContextProvider = ({ children }: childrenObj) => {
 			<showScheduleListObjState.Provider value={showScheduleObjList}>
 				<showScheduleListDispatch.Provider value={setShowScheduleList}>
 					<fetchShowScheduleFunction.Provider value={fetchShowSchedule}>
-						{children}
+						<totalPageState.Provider value={totalPage}>
+							{children}
+						</totalPageState.Provider>
 					</fetchShowScheduleFunction.Provider>
 				</showScheduleListDispatch.Provider>
 			</showScheduleListObjState.Provider>
@@ -82,5 +87,9 @@ export function useShowScheduleListDispatch() {
 }
 export function useFetchShowSchedule() {
 	const context = useContext(fetchShowScheduleFunction);
+	return context;
+}
+export function useTotalPageState() {
+	const context = useContext(totalPageState);
 	return context;
 }
