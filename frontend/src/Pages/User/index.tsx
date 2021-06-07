@@ -5,6 +5,7 @@ export { default as BookSeat } from './BookSeat';
 export { default as BookPay } from './BookPay';
 export { default as Event } from './Event';
 export { default as FAQ } from './FAQ';
+export { default as FAQExact } from './FAQExact';
 export { default as Login } from './Login';
 export { default as MovieList } from './MovieList';
 export { default as MovieExact } from './MovieExact';

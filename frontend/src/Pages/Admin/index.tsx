@@ -15,6 +15,7 @@ export { default as AdminBlackList } from './AdminBlackList';
 export { default as AdminBookRecord } from './AdminBookRecord';
 export { default as AdminEvent } from './AdminEvent';
 export { default as AdminFAQ } from './AdminFAQ';
+export { default as AdminFAQExact } from './AdminFAQExact';
 export { default as AdminGenre } from './AdminGenre';
 export { default as AdminNotice } from './AdminNotice';
 export { default as AdminNoticeExact } from './AdminNoticeExact';

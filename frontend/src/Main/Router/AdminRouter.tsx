@@ -14,6 +14,7 @@ import {
 	AdminBlackList,
 	AdminEvent,
 	AdminFAQ,
+	AdminFAQExact,
 	AdminGenre,
 	AdminHall,
 	AdminHome,
@@ -56,7 +57,8 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/blacklist" component={AdminBlackList} />
 				<Route path="/admin/audience" component={AdminAudienceRecord} />
 				<Route path="/admin/event" component={AdminEvent} />
-				<Route path="/admin/faq" component={AdminFAQ} />
+				<Route exact path="/admin/faq" component={AdminFAQ} />
+				<Route path="/admin/faq/:faq_id" component={AdminFAQExact} />
 				<Route path="/admin/genre" component={AdminGenre} />
 				<Route path="/admin/hall" component={AdminHall} />
 				<Route path="/admin/home" component={AdminHome} />

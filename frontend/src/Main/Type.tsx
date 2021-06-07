@@ -120,11 +120,11 @@ export type AdminType = {
 	start_date: string
 }
 
-export type UserPointType ={
-	user_id : number,
-	point : MypagePointType[],
-	curr_point : number,
-	accu_point : number
+export type UserPointType = {
+	user_id: number,
+	point: MypagePointType[],
+	curr_point: number,
+	accu_point: number
 }
 
 /* show schedule */
@@ -329,16 +329,16 @@ export type MypageMovieType = {
 }
 
 export type MypagePointType = {
-	poin_id : number,
-	poin_amount : number,
-	poin_type : string,
-	message : string,
-	poin_datetime : string
+	poin_id: number,
+	poin_amount: number,
+	poin_type: string,
+	message: string,
+	poin_datetime: string
 }
 
 export type MypageAskType = {
 	admi_name: string | null,
-	answ_datetime: string| null,
+	answ_datetime: string | null,
 	ask_id: number,
 	ask_title: string, //"저도 포인트 주세요"
 	crea_datetime: string, // "2021-06-04 16:23:27"
@@ -346,16 +346,16 @@ export type MypageAskType = {
 }
 
 export type MypageAskExactType = {
-    ask_id: number, //2,
-    user_id: number, //145,
-    user_name: string, //김손님,
-    ask_title: string, //제 포인트가 이상해요,
-    ask_contents: string ,//빨리 100000포인트 주세요,
-    admi_id: number, //121,
-    admi_name: string | null, //우희은,                     //없으면 null
-    answer: string | null, //안됩니다.,                       //없으면 null
-    crea_datetime: string, //2021-06-04 16:22:25,
-    answ_datetime: string, //2021-06-04 16:26:07 //없으면 null
+	ask_id: number, //2,
+	user_id: number, //145,
+	user_name: string, //김손님,
+	ask_title: string, //제 포인트가 이상해요,
+	ask_contents: string,//빨리 100000포인트 주세요,
+	admi_id: number, //121,
+	admi_name: string | null, //우희은,                     //없으면 null
+	answer: string | null, //안됩니다.,                       //없으면 null
+	crea_datetime: string, //2021-06-04 16:22:25,
+	answ_datetime: string, //2021-06-04 16:26:07 //없으면 null
 }
 
 export type MypageAuthType = {
@@ -367,17 +367,17 @@ export type MypageAuthType = {
 
 /** blacklist */
 export type BlackList = {
-	"blac_name" : string,
-	"birth" : string,
-	"phone_num" : string
+	"blac_name": string,
+	"birth": string,
+	"phone_num": string
 }
 
 /** sales */
-export type SalesType ={
-	"movi_total" :number,
-	"prod_total" :number,
-	"total_sum" :number,
-	"sales" : SalesExactType[]
+export type SalesType = {
+	"movi_total": number,
+	"prod_total": number,
+	"total_sum": number,
+	"sales": SalesExactType[]
 }
 
 export type SalesExactType = {
@@ -389,8 +389,8 @@ export type SalesExactType = {
 
 /** audience */
 export type AudienceRecordType = {
-    "sum": number, //0,
-    "records": AudienceRecordComponentType[]
+	"sum": number, //0,
+	"records": AudienceRecordComponentType[]
 }
 
 export type AudienceRecordComponentType = {
@@ -400,10 +400,10 @@ export type AudienceRecordComponentType = {
 
 /** notice */
 export type NoticeType = {
-    "page": number, //1,
-    "totalpage": number, //1,
-    "amount": number, //20,
-    "noti_list": NoticeComponentType[]
+	"page": number, //1,
+	"totalpage": number, //1,
+	"amount": number, //20,
+	"noti_list": NoticeComponentType[]
 }
 
 export type NoticeComponentType = {
@@ -414,10 +414,32 @@ export type NoticeComponentType = {
 }
 
 export type NoticeExactType = {
-    "noti_id": number,// 2,
-    "admi_id": number, //121,
-    "admi_name": string, // "우희은",
-    "noti_contents": string,// "2021년 6월 둘째주 수요일 (9일)은 영화관 보수공사로 인해 휴무입니다.
-    "noti_title": string,// "2021년 6월 둘째주 휴무 일정",
-    "crea_datetime": string,//"2021-06-04 20:31:03"
+	"noti_id": number,// 2,
+	"admi_id": number, //121,
+	"admi_name": string, // "우희은",
+	"noti_contents": string,// "2021년 6월 둘째주 수요일 (9일)은 영화관 보수공사로 인해 휴무입니다.
+	"noti_title": string,// "2021년 6월 둘째주 휴무 일정",
+	"crea_datetime": string,//"2021-06-04 20:31:03"
+}
+
+/** faq */
+export type FAQType = {
+	"page": number, //1,
+	"totalpage": number, //1,
+	"amount": number, //20,
+	"faq_lists": FAQComponentType[]
+}
+
+export type FAQComponentType = {
+	"faq_id": number,//3,
+	"admi_name": string,//"우희은",
+	"faq_title": string,//"온라인 예매 이용 방법"
+}
+
+export type FAQExactType = {
+	admi_id: number,//121
+	admi_name: string,//"우희은"
+	faq_contents:  string,//"지갑을 열고 결제를 합니다."
+	faq_id:number,// 3
+	faq_title: string,// "온라인 예매 이용 방법"
 }
