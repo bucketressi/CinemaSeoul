@@ -32,7 +32,8 @@ import {
 	AdminError,
 	AdminLogin,
 	AdminUser,
-	AdminAudienceRecord
+	AdminAudienceRecord,
+	AdminEventExact
 } from '../../Pages/Admin';
 
 const AdminRouter: React.FC = () => {
@@ -56,7 +57,8 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/myPage" component={AdminMyPage} />
 				<Route path="/admin/blacklist" component={AdminBlackList} />
 				<Route path="/admin/audience" component={AdminAudienceRecord} />
-				<Route path="/admin/event" component={AdminEvent} />
+				<Route exact path="/admin/event" component={AdminEvent} />
+				<Route path="/admin/event/:event_id" component={AdminEventExact} />
 				<Route exact path="/admin/faq" component={AdminFAQ} />
 				<Route path="/admin/faq/:faq_id" component={AdminFAQExact} />
 				<Route path="/admin/genre" component={AdminGenre} />

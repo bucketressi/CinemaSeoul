@@ -443,3 +443,28 @@ export type FAQExactType = {
 	faq_id:number,// 3
 	faq_title: string,// "온라인 예매 이용 방법"
 }
+
+/** event */
+
+export type EventType = {
+	"page": number, //1,
+	"totalpage": number, //1,
+	"amount": number, //20,
+	"event_list": EventComponentType[]
+}
+
+export type EventComponentType = {
+	"event_id": number,//24,
+	"admi_name": string,//null,
+	"event_title": string,//"2021년 하반기 이벤트",
+	"crea_datetime": string,//"2021-06-05 01:52:22"
+}
+
+export type EventExactType = {
+    "event_id": number,// 1,
+    "admi_id":  number,//121,
+    "event_title": string,//"2021년 하반기 이벤트",
+    "event_contents": string,//"계획이 없습니다.",
+    "crea_datetime": string,//"2021-06-05 01:48:53",
+    "image": string |null
+}

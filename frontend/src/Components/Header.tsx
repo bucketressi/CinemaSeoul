@@ -69,6 +69,7 @@ const Header = () => {
 						<li><Link to="/book">예매</Link></li>
 						<li><Link to="/notice">공지사항</Link></li>
 						<li><Link to="/faq">FAQ</Link></li>
+						<li><Link to="/event">이벤트</Link></li>
 						<li><Link to="/product">스토어</Link></li>
 					</ul>
 				</div>

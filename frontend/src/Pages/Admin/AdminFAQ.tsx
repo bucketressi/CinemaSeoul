@@ -22,6 +22,10 @@ const AdminFAQ = () => {
 		fetchFAQ();
 	},[]);
 
+	useEffect(() => {
+		fetchFAQ();
+	},[page]);
+
 	const fetchFAQ = () => {
 		axios.post(`${SERVER_URL}/faq/list`, {
 			page : page

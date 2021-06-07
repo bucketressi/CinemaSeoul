@@ -20,6 +20,10 @@ const Notice = () => {
 		fetchNotice();
 	},[]);
 
+	useEffect(() => {
+		fetchNotice();
+	},[page]);
+
 	const fetchNotice = () => {
 		axios.post(`${SERVER_URL}/notice/list`, {
 			page : page
