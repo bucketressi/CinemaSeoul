@@ -13,7 +13,6 @@ import {
 	AdminAsk,
 	AdminBlackList,
 	AdminEvent,
-	AdminEmployee,
 	AdminFAQ,
 	AdminFAQExact,
 	AdminGenre,
@@ -57,10 +56,6 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/user" component={AdminUser} />
 				<Route path="/admin/myPage" component={AdminMyPage} />
 				<Route path="/admin/blacklist" component={AdminBlackList} />
-        <Route path="/admin/book" component={AdminBookRecord} />
-				<Route path="/admin/event" component={AdminEvent} />
-				<Route path="/admin/employee" component={AdminEmployee} />
-				<Route path="/admin/faq" component={AdminFAQ} />
 				<Route path="/admin/audience" component={AdminAudienceRecord} />
 				<Route exact path="/admin/event" component={AdminEvent} />
 				<Route path="/admin/event/:event_id" component={AdminEventExact} />

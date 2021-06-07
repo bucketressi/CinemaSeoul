@@ -9,7 +9,7 @@ export { default as AdminPeople } from './AdminPeople';
 export { default as AdminShowSchedule } from './AdminShowSchedule';
 export { default as AdminModifyShowSchedule } from './AdminModifyShowSchedule';
 export { default as AdminSales } from './AdminSales';
-export { default as AdminEmployee } from './AdminEmployee';
+export { default as AdminAdmin } from './AdminAdmin';
 export { default as AdminAsk } from './AdminAsk';
 export { default as AdminBlackList } from './AdminBlackList';
 export { default as AdminBookRecord } from './AdminBookRecord';
