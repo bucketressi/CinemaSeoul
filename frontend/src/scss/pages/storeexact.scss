@@ -54,4 +54,14 @@
 			}
 		}
 	}
+	.product-content{
+		display: flex;
+		&>div{
+			width: 50%;
+			flex-shrink: 0;
+			display: flex;
+			justify-content: center;
+			margin-bottom: 5%;
+		}
+	}
 }

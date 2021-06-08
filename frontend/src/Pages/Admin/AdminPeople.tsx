@@ -255,7 +255,7 @@ const AdminPeople = () => {
 							<SelectModule tag="Month" value={addBirthMonth} handleValueChange={(e: any) => { setAddBirthMonth(e.target.value) }} start={1} end={12} />
 							<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={30} />
 						</div>
-						<TextField className="people-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} placeholder="설명" multiline={true} value={addContents} onChange={(e: any) => setAddContents(e.target.value)}/>
+						<TextField className="people-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} placeholder="설명" multiline={true} rows={3} value={addContents} onChange={(e: any) => setAddContents(e.target.value)}/>
 					</div>
 				</ModalComponent>
 			</div>

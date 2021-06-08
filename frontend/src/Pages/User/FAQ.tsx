@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/c
 import { useHistory } from 'react-router';
 import { Pagination } from '@material-ui/lab';
 
+import "../../scss/pages/faq.scss";
+
 const FAQ = () => {
 	const history = useHistory();
 	const [page, setPage] = useState<number>(1);
@@ -46,12 +48,12 @@ const FAQ = () => {
 				title="FAQ"
 				isButtonVisible={false}
 			/>
-			<div>
+			<div className="faq-con">
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>작성자</TableCell>
-							<TableCell>FAQ 제목</TableCell>
+							<TableCell className="table-title">작성자</TableCell>
+							<TableCell className="table-title">FAQ 제목</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -59,8 +61,8 @@ const FAQ = () => {
 							FAQList &&
 							FAQList.map((faq) => (
 								<TableRow key={faq.faq_id} onClick={() => history.push(`/faq/${faq.faq_id}`)}>
-									<TableCell>{faq.admi_name}</TableCell>
-									<TableCell>{faq.faq_title}</TableCell>
+									<TableCell className="table-content">{faq.admi_name}</TableCell>
+									<TableCell className="table-content-title">{faq.faq_title}</TableCell>
 								</TableRow>
 							))
 						}

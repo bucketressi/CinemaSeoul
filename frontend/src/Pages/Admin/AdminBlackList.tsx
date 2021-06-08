@@ -8,6 +8,7 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
 
+import "../../scss/pages/adminblacklist.scss";
 
 const AdminBlackList = () => {
 	const AUTH_TOKEN = useTokenState();
@@ -135,23 +136,20 @@ const AdminBlackList = () => {
 	}
 
 	return (
-		<div>
-			<PageTitle
-				title="블랙리스트"
-				isButtonVisible={false}
-			/>
-			<div>
-				<Button variant="contained" color="primary" onClick={() => setOpenAddModal(true)}>블랙리스트 추가</Button>
-			</div>
-			<div>
-				<TableContainer>
+		<>
+			<PageTitle title="블랙리스트" isButtonVisible={false} />
+			<div className="blacklist-wrap">
+				<div className="add-con">
+					<Button variant="outlined" color="primary" onClick={() => setOpenAddModal(true)}>블랙리스트 추가</Button>
+				</div>
+				<div className="blacklist-con">
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>이름</TableCell>
-								<TableCell>생년월일</TableCell>
-								<TableCell>핸드폰번호</TableCell>
-								<TableCell>삭제</TableCell>
+								<TableCell className="table-title">이름</TableCell>
+								<TableCell className="table-title">생년월일</TableCell>
+								<TableCell className="table-title">핸드폰번호</TableCell>
+								<TableCell className="table-title">삭제</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -159,34 +157,34 @@ const AdminBlackList = () => {
 								blackList &&
 								blackList.map((people) => (
 									<TableRow key={people.phone_num}>
-										<TableCell>{people.blac_name}</TableCell>
-										<TableCell>{people.birth}</TableCell>
-										<TableCell>{people.phone_num}</TableCell>
-										<TableCell><Button variant="contained" color="secondary" onClick={() => removeBlackList(people.phone_num)}>삭제</Button></TableCell>
+										<TableCell className="table-content">{people.blac_name}</TableCell>
+										<TableCell className="table-content">{people.birth}</TableCell>
+										<TableCell className="table-content">{people.phone_num}</TableCell>
+										<TableCell className="table-content"><Button variant="contained" color="secondary" onClick={() => removeBlackList(people.phone_num)}>삭제</Button></TableCell>
 									</TableRow>
 								))
 							}
 						</TableBody>
 					</Table>
-				</TableContainer>
+				</div>
 			</div>
 			{/* <ModalComponent
-				open={openModal}
-				setOpen={setOpenModal}
-				title="블랙리스트 수정"
-				button="수정"
-				buttonOnClick={modifyBlackList}
-			>
-				<div>
-					<TextField label="이름" value={name} onChange={(e: any) => setName(e.target.value)}/>
-					<div className="birth-con">
-						<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
-						<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
-						<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
+					open={openModal}
+					setOpen={setOpenModal}
+					title="블랙리스트 수정"
+					button="수정"
+					buttonOnClick={modifyBlackList}
+				>
+					<div>
+						<TextField label="이름" value={name} onChange={(e: any) => setName(e.target.value)}/>
+						<div className="birth-con">
+							<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
+							<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
+							<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
+						</div>
+						<TextField label="핸드폰 번호" value={phoneNum} disabled={true}/>
 					</div>
-					<TextField label="핸드폰 번호" value={phoneNum} disabled={true}/>
-				</div>
-			</ModalComponent> */}
+				</ModalComponent> */}
 			<ModalComponent
 				open={openAddModal}
 				setOpen={setOpenAddModal}
@@ -194,17 +192,19 @@ const AdminBlackList = () => {
 				button="추가"
 				buttonOnClick={addBlackList}
 			>
-				<div>
-					<TextField label="이름" value={addName} onChange={(e: any) => setAddName(e.target.value)}/>
+				<div className="blacklist-modal">
+					<div className="input-con">
+						<TextField className="blacklist-input" variant="outlined" label="이름" InputLabelProps={{shrink:true}} value={addName} inputProps={{ maxLength: 30 }} onChange={(e: any) => setAddName(e.target.value)}/>
+						<TextField className="blacklist-input" variant="outlined" label="핸드폰 번호"  InputLabelProps={{shrink:true}} value={addPhoneNum} inputProps={{maxLength: 11}} onChange={(e: any) => setAddPhoneNum(e.target.value)}/>
+					</div>
 					<div className="birth-con">
 						<SelectModule tag="Year" value={addBirthYear} handleValueChange={(e: any) => { setAddBirthYear(e.target.value) }} start={1930} end={2022} />
 						<SelectModule tag="Month" value={addBirthMonth} handleValueChange={(e: any) => { setAddBirthMonth(e.target.value) }} start={1} end={12} />
 						<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={30} />
 					</div>
-					<TextField label="핸드폰 번호" value={addPhoneNum} inputProps={{maxLength: 11}} onChange={(e: any) => setAddPhoneNum(e.target.value)}/>
 				</div>
 			</ModalComponent>
-		</div>
+		</>
 	);
 }
 

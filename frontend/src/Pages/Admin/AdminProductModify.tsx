@@ -113,7 +113,16 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 					</div>
 					<div className="info-con">
 						<div className="name">
-							<TextField className="info-input" label="상품 이름" inputProps={{ maxLength: 30 }} value={prodName} onChange={(e: any) => setProdName(e.target.value)} />
+							<TextField
+								className="info-input"
+								variant="outlined"
+								label="상품 이름"
+								placeholder="상품 이름"
+								InputLabelProps={{shrink:true}}
+								inputProps={{ maxLength: 30 }}
+								value={prodName}
+								onChange={(e: any) => setProdName(e.target.value)}
+							/>
 						</div>
 						<div className="price">
 							<div className="sub-title">가격</div>
@@ -144,7 +153,17 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 							<TextField className="info-input" label="재고" value={limit} onChange={handleLimitChange} />
 						</div>
 						<div className="contents">
-							<TextField label="설명" inputProps={{ maxLength: 1000 }}value={contents} onChange={(e: any) => setContents(e.target.value)} />
+							<TextField
+								label="상품 설명"
+								variant="outlined"
+								placeholder="상품 설명"
+								inputProps={{ maxLength: 1000 }}
+								InputLabelProps={{shrink:true}}
+								multiline={true}
+								rows={4}
+								value={contents}
+								onChange={(e: any) => setContents(e.target.value)}
+							/>
 						</div>
 					</div>
 					<div>

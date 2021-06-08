@@ -1,0 +1,85 @@
+@import "../base/variable";
+
+.blacklist-wrap{
+  display: flex;
+  flex-direction: column;
+  .add-con{
+    display:flex;
+    justify-content: flex-end;
+  }
+  .blacklist-con{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .table-title{
+      font-weight: bold;
+      text-align: center;
+    }
+    .table-content{
+      text-align: center;
+    }
+    .title-input{
+      width: 85%;
+      margin-left: 8%;
+    }
+    .blacklist-content{
+      margin-top: 5%;
+      width: 100%;
+      &>*{
+        width: 100%;
+      }
+    }
+  }
+}
+
+/* 인물 추가 modal */
+.people-modal{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .people-input{
+    width: 194px;
+    margin-bottom: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  .birth-con{
+    &>*{
+      width: 128px;
+      margin-bottom: 10px;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+  }
+  .people-input-long{
+    width: 100%;
+    margin-top: 2px;
+  }
+}
+
+/* 블랙리스트 추가 modal */
+.blacklist-modal{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .input-con{
+    margin-top: 25px;
+    width: 100%;
+    .blacklist-input{
+      width: 194px;
+      margin-bottom: 15px;
+      margin-left: 3px;
+      margin-right: 3px;
+    }
+  }
+  .birth-con{
+    &>*{
+      width: 128px;
+      margin-bottom: 10px;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+  }
+}

@@ -253,55 +253,84 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 		setCast(arr);
 	}
 
-
-
 	return (
-		<div>
+		<>
 			<PageTitle title="상영 중인 영화" isButtonVisible={true} />
-			<div className="add-container">
-				<div>
-					<TextField className="textfield" variant="outlined" placeholder="제목" InputLabelProps={{shrink:true}} label="제목" value={name} onChange={handleNameChange} />
-					<TextField className="textfield" variant="outlined" placeholder="회사" InputLabelProps={{shrink:true}} label="회사" value={company} onChange={handleCompanyChange} />
+			<div className="modify-movie-wrap">
+				<div className="modify-movie-btn">
+					<Button variant="outlined" color="secondary" onClick={openGenreModal}>장르 설정</Button>
+					<Button variant="outlined" color="secondary" onClick={openCastModal}>출연진 설정</Button>
 				</div>
-				<div>
-					<TextField className="textfield" variant="outlined" placeholder="설명" InputLabelProps={{shrink:true}} label="설명" value={content} multiline={true} onChange={handleContentChange} />
-					<TextField
-						className="textfield"
-						variant="outlined"
-						type="date"
-						label="개봉예정일"
-						InputLabelProps={{
-							shrink: true,
-						}}
-						value={openDate}
-						onChange={handleOpenDateChange}
-					/>
-				</div>
-				<div>
-					<FormControl>
-						<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
-						<RadioGroup name="age" value={age} onChange={handleAgeChange}>
-							{
-								movieAuthCode.map((auth) =>
-									<FormControlLabel key={auth.code_id} value={auth.code_id} control={<Radio color="primary" />} label={auth.code_name} />
-								)
-							}
-						</RadioGroup>
-					</FormControl>
+				<div className="modify-movie-con">
 					<div>
-						<div>포스터</div>
-						{
-							imgInfo && typeof (imgInfo.previewURL) === "string" &&
-							<img src={imgInfo.previewURL} alt="포스터" />
-						}
-						<input type="file" onChange={uploadImage} />
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							placeholder="제목"
+							InputLabelProps={{shrink:true}}
+							inputProps={{ maxLength: 50 }}
+							label="제목"
+							value={name}
+							onChange={handleNameChange}
+						/>
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							placeholder="배급사"
+							InputLabelProps={{shrink:true}}
+							inputProps={{ maxLength: 30 }}
+							label="배급사"
+							value={company}
+							onChange={handleCompanyChange}
+						/>
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							type="date"
+							label="개봉예정일"
+							InputLabelProps={{
+								shrink: true,
+							}}
+							value={openDate}
+							onChange={handleOpenDateChange}
+						/>
+					</div>
+					<div>
+						<TextField
+							className="movie-input-long"
+							variant="outlined"
+							placeholder="설명"
+							InputLabelProps={{shrink:true}}
+							inputProps={{ maxLength: 600 }}
+							label="설명"
+							value={content}
+							multiline={true}
+							rows={9}
+							onChange={handleContentChange}
+						/>
+						<FormControl className="movie-input">
+							<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
+							<RadioGroup name="age" value={age} onChange={handleAgeChange}>
+								{
+									movieAuthCode.map((auth) =>
+										<FormControlLabel key={auth.code_id} value={auth.code_id} control={<Radio color="primary" />} label={auth.code_name} />
+									)
+								}
+							</RadioGroup>
+						</FormControl>
+						<div className="movie-input-img">
+							<div>포스터</div>
+							{
+								imgInfo && typeof (imgInfo.previewURL) === "string" &&
+								<img src={imgInfo.previewURL} alt="포스터" />
+							}
+							<input type="file" onChange={uploadImage} />
+						</div>
+					</div>
+					<div className="button-con">
+						<Button variant="contained" color="secondary" onClick={saveMovie}>저장</Button>
 					</div>
 				</div>
-			</div>
-			<div className="button-con">
-				<Button className="save-btn" variant="contained" color="secondary" onClick={saveMovie}>저장</Button>
-				<Button variant="contained" color="primary" onClick={openGenreModal}>장르 설정</Button>
-				<Button variant="contained" color="primary" onClick={openCastModal}>출연진 설정</Button>
 			</div>
 			<ModalComponent
 				title="장르 설정"
@@ -382,7 +411,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 					<Button className="save-btn" variant="contained" color="secondary" onClick={saveCast}>출연진 저장</Button>
 				</div>
 			</ModalComponent>
-		</div>
+		</>
 	);
 }
 

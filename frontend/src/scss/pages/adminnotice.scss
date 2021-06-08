@@ -1,0 +1,66 @@
+@import "../base/variable";
+
+.notice-wrap{
+  display: flex;
+  flex-direction: column;
+  .add-con{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .modify-con{
+    display: flex;
+    justify-content: flex-end;
+    &>*{
+      margin-right: 2px;
+      margin-left: 2px;
+    }
+  }
+  .notice-con{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 80vh;
+    .table-title{
+      font-weight: bold;
+      text-align: center;
+    }
+    .table-content{
+      text-align: center;
+    }
+    .table-content-title{
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+    .title-input{
+      width: 85%;
+      margin-left: 8%;
+    }
+    .notice-content{
+      margin-top: 5%;
+      width: 100%;
+      &>*{
+        width: 100%;
+      }
+    }
+    .pagination{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 5%;
+      margin-bottom:2%;
+    }
+  }
+}
+
+/* 공지사항 추가 modal */
+.notice-modal{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .notice-input{
+    width: 400px;
+    margin-bottom: 10px;
+  }
+}

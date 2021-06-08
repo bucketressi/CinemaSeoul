@@ -31,21 +31,21 @@ const MovieList = () => {
 
 	return (
 		<div className="movie-wrap">
-			<div className="stat-sort-con">
-				<div>선택 및 정렬</div>
-				<Select label="상태" value={stat} onChange={(e: any) => setStat(e.target.value)}>
-					<MenuItem value={0}>전체</MenuItem>
-					<MenuItem value={1}>상영중</MenuItem>
-					<MenuItem value={2}>상영예정</MenuItem>
-				</Select>
-				<Select label="정렬" value={sort} onChange={(e: any) => setSort(e.target.value)}>
-					<MenuItem value={0}>기본</MenuItem>
-					<MenuItem value={1}>평점순</MenuItem>
-					<MenuItem value={2}>누적관람객순</MenuItem>
-				</Select>
-			</div>
 			<div className="movie-con">
-				<SearchTab />
+				<div className="stat-sort-con">
+					<p>선택 및 정렬</p>
+					<Select className="select" label="상태" value={stat} onChange={(e: any) => setStat(e.target.value)}>
+						<MenuItem value={0}>전체</MenuItem>
+						<MenuItem value={1}>상영중</MenuItem>
+						<MenuItem value={2}>상영예정</MenuItem>
+					</Select>
+					<Select className="select" label="정렬" value={sort} onChange={(e: any) => setSort(e.target.value)}>
+						<MenuItem value={0}>기본</MenuItem>
+						<MenuItem value={1}>평점순</MenuItem>
+						<MenuItem value={2}>누적관람객순</MenuItem>
+					</Select>
+					<SearchTab />
+				</div>
 				<div className="movie-content-con">
 					<div className="movie-list-con">
 						<div className="movie-list">

@@ -1,11 +1,83 @@
 .mypage-con{
+	.pointer-con{
+		display: flex;
+		flex-direction: column;
+		.table-title{
+			font-weight: bold;
+			text-align: center;
+			font-size: 0.95rem;
+		}
+		.table-content{
+			text-align: center;
+		}
+		.pointer-record-con{
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			.pointer-record{
+				margin-top: 10px;
+				margin-bottom: 20px;
+				.pointer-btn{
+					margin-left: 5px;
+					margin-right: 5px;
+				}
+			}
+		}
+	}
 	.MuiTabs-flexContainer>button {
     	width: 20%;
 		.MuiTab-wrapper{
 			font-size : 1.2rem!important;
 		}
 	}
+	.user-book-con{
+		display: flex;
+		flex-direction: column;
+		.select-date-con{
+			margin-top: 20px;
+			&>*{
+				margin-right: 10px;
+				margin-top: 7px;
+			}
+			&>div{
+				font-weight: bold;
+			}
+			&>button{
+				margin-top: 2%;
+			}
+		}
+		.table-title{ //이거 안먹음
+			font-weight: bold;
+			font-size: 0.95rem;
+		}
+	}
+	.user-pay-con{
+		display: flex;
+		flex-direction: column;
+		.select-date-con{
+			margin-top: 15px;
+			&>*{
+				margin-right: 10px;
+				margin-top: 7px;
+			}
+			&>div{
+				font-weight: bold;
+			}
+			&>button{
+				margin-top: 2%;
+			}
+		}
+		&>div{
+			margin-top: 15px;
+		}
+		.product-obj{ //이거 안먹음 ㅅㅂ..
+			.product-name{
+				font-weight: bold;
+			}
+		}
+	}
 }
+
 
 .mypage-movie-con{
 	display: flex;
@@ -43,5 +115,17 @@
 	justify-content: space-between;
 	&>div{
 		width: 48%;
+	}
+}
+
+/* 포인트/등급 내역 조회 modal */
+.point-record-modal{
+	margin-top: 15px;
+	.record-search{
+		margin : 3px;
+	}
+	.bold-text{
+		font-weight: bold;
+		font-size: 0.95rem;
 	}
 }

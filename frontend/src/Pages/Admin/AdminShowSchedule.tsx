@@ -245,8 +245,11 @@ const AdminShowSchedule = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<PageTitle title="상영일정 페이지" isButtonVisible={true} />
+			<div className="save-btn">
+				<Button variant="outlined" color="secondary" onClick={handleAddButtonClick}>상영일정 추가</Button>
+			</div>
 			<div className="schedule-con">
 				<div className="schedule-header">
 					<div className="switch-con">
@@ -289,8 +292,6 @@ const AdminShowSchedule = () => {
 									}
 								</Select>
 							</FormControl>
-						</div>
-						<div>
 							<TextField
 								className="search-input"
 								type="date"
@@ -311,29 +312,26 @@ const AdminShowSchedule = () => {
 								value={getDateString(searchEndDate)}
 								onChange={(e: any) => setSearchEndDate(e.target.value.split("-").join(""))}
 							/>
+							<Button className="search-btn" variant="contained" color="primary" onClick={search}>조건 검색</Button>
 						</div>
-						<Button className="search-btn" variant="contained" color="primary" onClick={search}>조건 검색</Button>
-					</div>
-					<div className="save-btn">
-						<Button variant="contained" color="secondary" onClick={handleAddButtonClick}>상영일정 추가</Button>
 					</div>
 				</div>
 				{
 					mode ?
 						<div>표</div>
 						:
-						<TableContainer>
+						<div className="schedule-con">
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>번호</TableCell>
-										<TableCell>상영관</TableCell>
-										<TableCell>영화</TableCell>
-										<TableCell>개봉일자</TableCell>
-										<TableCell>상영시작시각</TableCell>
-										<TableCell>상영종료시각</TableCell>
-										<TableCell>상영시작</TableCell>
-										<TableCell>수정</TableCell>
+										<TableCell className="table-title">번호</TableCell>
+										<TableCell className="table-title">상영관</TableCell>
+										<TableCell className="table-title">영화</TableCell>
+										<TableCell className="table-title">개봉일자</TableCell>
+										<TableCell className="table-title">상영시작시각</TableCell>
+										<TableCell className="table-title">상영종료시각</TableCell>
+										<TableCell className="table-title">상영시작</TableCell>
+										<TableCell className="table-title">수정</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -343,13 +341,13 @@ const AdminShowSchedule = () => {
 											const endTime = schedule.end_time.split("/");
 											return (
 												<TableRow key={schedule.show_id}>
-													<TableCell>{index + 1}</TableCell>
-													<TableCell>{schedule.hall_name}</TableCell>
-													<TableCell>{schedule.movi_name}</TableCell>
-													<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
-													<TableCell>{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
-													<TableCell>{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
-													<TableCell>
+													<TableCell className="table-content">{index + 1}</TableCell>
+													<TableCell className="table-content">{schedule.hall_name}</TableCell>
+													<TableCell className="table-content">{schedule.movi_name}</TableCell>
+													<TableCell className="table-content">{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
+													<TableCell className="table-content">{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
+													<TableCell className="table-content">{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
+													<TableCell className="table-content">
 														{
 															schedule.started && schedule.started === "0" ?
 																<Button onClick={() => startShow(schedule.show_id)} variant="outlined" color="secondary">상영시작</Button> :
@@ -366,7 +364,7 @@ const AdminShowSchedule = () => {
 									}
 								</TableBody>
 							</Table>
-						</TableContainer>
+						</div>
 				}
 				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
@@ -428,7 +426,7 @@ const AdminShowSchedule = () => {
 					</div>
 				</div>
 			</ModalComponent>
-		</div >
+		</>
 	);
 }
 

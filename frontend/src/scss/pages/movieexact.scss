@@ -1,5 +1,7 @@
 @import "../base/variable";
 .movie-exact-con{
+	display: flex;
+	flex-direction: column;
 	.btn-con{
 		width: 100%;
 		display: flex;

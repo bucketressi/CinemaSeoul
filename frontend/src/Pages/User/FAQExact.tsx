@@ -9,6 +9,8 @@ import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextFi
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/faq.scss";
+
 interface MatchParams {
 	faq_id: string
 }
@@ -47,22 +49,22 @@ const FAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ m
 			<div>
 				{
 					FAQ ?
-						<div style={{ display: 'flex', flexDirection: 'column' }}>
+						<div className="faq-con">
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>작성자</TableCell>
-										<TableCell>FAQ 제목</TableCell>
+										<TableCell className="table-title">작성자</TableCell>
+										<TableCell className="table-title">FAQ 제목</TableCell>
 									</TableRow>
 								</TableHead>
-								<TableBody>
+								<TableBody className="table-body">
 									<TableRow key={FAQ.faq_id}>
-										<TableCell>{FAQ.admi_name}</TableCell>
-										<TableCell>{FAQ.faq_title}</TableCell>
+										<TableCell className="table-content">{FAQ.admi_name}</TableCell>
+										<TableCell className="table-content">{FAQ.faq_title}</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>
-							<div>
+							<div className="faq-content">
 								{FAQ.faq_contents}
 							</div>
 						</div>
