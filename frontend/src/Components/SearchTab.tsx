@@ -45,7 +45,6 @@ const SearchTab = () => {
 	};
 
 	const handleSearch = () => { // 검색
-		console.log(age, genre);
 		axios.post(`${SERVER_URL}/movie/list`, {
 			page: 1,
 			stat: 0,
@@ -57,7 +56,6 @@ const SearchTab = () => {
 				if(!res.data || !res.data.movi_list)
 					return;
 				setMovieList(res.data.movi_list);
-				console.log(res.data.movi_list);
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "조건이 잘못 입력되었습니다.", ""]);

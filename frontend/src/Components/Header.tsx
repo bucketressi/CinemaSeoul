@@ -36,24 +36,25 @@ const Header = () => {
 
 	const search = () => {
 		// 검색 시 type을 null, "감독", "배우"로 mapping
-		axios.post(`${SERVER_URL}/movie/search`, {
-			"page" : 1,             
-			"name" : searchKeyword,
-			"cast_type_code" : searchType === 0 ? null : peopleType[searchType-1].code_id
-		}, {
-			headers: {
-				TOKEN: AUTH_TOKEN
-			}
-		})
-			.then((res) => {
-				if (!res.data || !res.data.movi_list)
-					return;
-				history.push("/movie/search");
-				setMovieList(res.data.movi_list);
-			})
-			.catch((e) => {
-				errorHandler(e, true);
-			});
+		history.push(`/movie/search/${searchKeyword===""?null:searchKeyword}/${searchType}`);
+		// axios.post(`${SERVER_URL}/movie/search`, {
+		// 	"page" : 1,             
+		// 	"name" : searchKeyword,
+		// 	"cast_type_code" : searchType === 0 ? null : peopleType[searchType-1].code_id
+		// }, {
+		// 	headers: {
+		// 		TOKEN: AUTH_TOKEN
+		// 	}
+		// })
+		// 	.then((res) => {
+		// 		if (!res.data || !res.data.movi_list)
+		// 			return;
+		// 		history.push(`/movie/search/${searchKeyword}/${searchType}`);
+		// 		setMovieList(res.data.movi_list);
+		// 	})
+		// 	.catch((e) => {
+		// 		errorHandler(e, true);
+		// 	});
 	}
 
 	return (
