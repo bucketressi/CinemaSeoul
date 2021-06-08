@@ -49,7 +49,7 @@ export type SimpleMovieType = {
 	movi_id: number,
 	movi_name: string,
 	accu_audience: number,
-	image: string,
+	imageBase64: string,
 	open_date?: string,
 	rating?: number,
 	avai_age?: string

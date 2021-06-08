@@ -12,3 +12,4 @@ export { default as ProductCard } from './ProductCard';
 export { default as Cart } from './Cart';
 export { default as BookComponent } from './BookComponent';
 export { default as PayComponent } from './PayComponent';
+export { default as ImgComponent } from './ImgComponent';

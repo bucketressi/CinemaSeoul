@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from "react-router-dom";
 import { Button, Checkbox, Select, MenuItem, Chip, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, InputLabel } from '@material-ui/core';
 import "../../scss/pages/adminmodifymovie.scss";
-import { ModalComponent, PageTitle } from '../../Components';
+import { ImgComponent, ModalComponent, PageTitle } from '../../Components';
 import { useGenreCodeState, useMovieAuthCodeState, usePeopleTypeCodeState } from '../../Main/CodeModel';
 import { MovieType, PeopleType, MovieCastingType, CodeType, CodeMatch, CastingType } from '../../Main/Type';
 
@@ -38,8 +38,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const [runtime, setRuntime] = useState<number>(0);
 	const [content, setContent] = useState<string>("");
 	const [genre, setGenre] = useState<string[]>([]);
-	const [img, setImg] = useState<File | undefined>(undefined);
-	const [imgInfo, setImgInfo] = useState<ImgInfoType | undefined>(undefined);
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 	const [peopleArr, setPeopleArr] = useState<PeopleType[]>([]);
 	const [cast, setCast] = useState<MovieCastingType[]>([]);
 	const [peopleTypeObj, setPeopleTypeObj] = useState<CodeMatch>({});
@@ -49,30 +48,6 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const handleAgeChange = (e: any) => { setAge(e.target.value.toString()); };
 	const handleOpenDateChange = (e: any) => { setOpenDate(e.target.value); };
 	const handleContentChange = (e: any) => { setContent(e.target.value); };
-	const uploadImage = (e: any) => {
-		setImg(e.target.files[0]);
-		const reader = new FileReader();
-		reader.onloadend = () => {
-			setImgInfo({
-				file: e.target.files[0],
-				previewURL: reader.result
-			})
-		};
-		reader.readAsDataURL(e.target.files[0]);
-	};
-
-	useEffect(() => {
-		if (img === undefined)
-			return;
-		const reader = new FileReader();
-		reader.onloadend = () => {
-			setImgInfo({
-				file: img,
-				previewURL: reader.result
-			})
-		};
-		reader.readAsDataURL(img);
-	}, [img]);
 
 	useEffect(() => {
 		fetchExactMovie();
@@ -112,6 +87,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const openCastModal = () => { setCastOpen(true); };
 	const saveMovie = () => {
 		// 영화 정보 저장
+		
 		axios.put(`${SERVER_URL}/movie/update`, {
 			movi_id: match.params.movie_id,
 			movi_name: name,
@@ -126,12 +102,34 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 			}
 		})
 			.then((res) => {
-				history.goBack();
+				saveImg();
 			})
 			.catch((e) => {
 				errorHandler(e, true, ["", "", "잘못된 정보를 입력하였습니다.", ""]);
 			});
 	};
+
+	const saveImg = () => {
+		if(!imgFile)
+			return;
+
+		const formData = new FormData();
+		formData.append("image", imgFile);
+
+		axios.put(`${SERVER_URL}/movie/image/${match.params.movie_id}`, formData, {
+			headers: {
+				TOKEN: AUTH_TOKEN,
+				"Content-Type": "multipart/form-data"
+			}
+		})
+			.then((res) => {
+				alert("영화 정보가 성공적으로 등록되었습니다.");
+				history.goBack();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
 
 	/* genre */
 	const saveGenre = () => {
@@ -195,7 +193,6 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	}, [isCastOpened]);
 
 	const saveCast = () => {
-		// api 오류 고치면 하기
 		const castingObj : CastingType[] = [];
 		cast.forEach((people) => {
 			castingObj.push({
@@ -289,11 +286,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 					</FormControl>
 					<div>
 						<div>포스터</div>
-						{
-							imgInfo && typeof (imgInfo.previewURL) === "string" &&
-							<img src={imgInfo.previewURL} alt="포스터" />
-						}
-						<input type="file" onChange={uploadImage} />
+						<ImgComponent setImgFile={setImgFile} />
 					</div>
 				</div>
 			</div>

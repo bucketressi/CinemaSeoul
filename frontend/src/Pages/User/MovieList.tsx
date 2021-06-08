@@ -56,7 +56,7 @@ const MovieList = () => {
 										<Link key={movie.movi_id} to={`/movie/${movie.movi_id}`}>
 											<MovieCard
 												movi_id={movie.movi_id}
-												image={movie.image}
+												imageBase64={movie.imageBase64}
 												movi_name={movie.movi_name}
 												accu_audience={movie.accu_audience}
 												avai_age={movie.avai_age}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../scss/component/_moviecard.scss";
 import { SimpleMovieType } from '../Main/Type';
 
-const MovieCard = ({movi_id, image, movi_name, accu_audience, open_date, avai_age, rating} : SimpleMovieType) => {
+const MovieCard = ({movi_id, imageBase64, movi_name, accu_audience, open_date, avai_age, rating} : SimpleMovieType) => {
 	const [dDay, setDDay] = useState<string>("Day");
 	useEffect(()=>{
 		if(open_date == undefined)
@@ -21,14 +21,14 @@ const MovieCard = ({movi_id, image, movi_name, accu_audience, open_date, avai_ag
 	}, [open_date]);
 
 	const isImgInvalid = () => {
-		return (image == undefined || image == null || image == "");
+		return (imageBase64 == undefined || imageBase64 == null || imageBase64 == "");
 	}
 
 	return (
 		<div className="movie-card">
 			<div className="movie-poster">
 				<span className="age-circle">{avai_age?.substr(0,3)}</span>
-				<img src={isImgInvalid()?"https://i.pinimg.com/564x/38/cb/31/38cb31cee4b2da2676f1003a2fcf514d.jpg":image} alt={`poster ${movi_name}`}/>
+				<img src={isImgInvalid()?"https://i.pinimg.com/564x/38/cb/31/38cb31cee4b2da2676f1003a2fcf514d.jpg":`data:image/png;base64,${imageBase64}`} alt={`poster ${movi_name}`}/>
 			</div>
 			<div className="movie-name">{movi_name}</div>
 			{
