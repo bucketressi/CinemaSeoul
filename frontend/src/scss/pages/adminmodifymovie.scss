@@ -1,36 +1,91 @@
-.genre-con{
-	display: flex;
-	flex-wrap: wrap;
-	width: 500px;
-	.genre-single{
-		display: flex;
-		align-items: center;
-		margin-right: 10px;
-		.title{
-			margin-left: 5px;
-		}
-	}
-}
-.button-con{
+.modify-movie-wrap{
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	button{
-		margin-bottom: 10px;
-	}
-	.save-btn{
+	align-items: center;
+	.modify-movie-btn{
+		display: flex;
+		justify-content: flex-end;
 		width: 100%;
+		&>*{
+			margin-right: 2px;
+      margin-left: 2px;
+		}
+	}
+	.modify-movie-con{
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		.movie-input{
+			margin-top: 3%;
+			margin-left: 4%;
+			margin-right: 4%;
+			&>*{
+				width: 130%;
+			}
+		}
+		.movie-input-long{
+			margin-top: 3%;
+			margin-left: 4%;
+			margin-right: 4%;
+			&>*{
+				width: 480px;
+			}
+		}
+		.movie-input-img{
+			text-align:center;
+			margin-top: 3%;
+			margin-bottom: 3%;
+		}
+		.button-con{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			&>*{
+				width: 30%;
+				margin-bottom: 40px;
+			}
+		}
 	}
 }
-.cast-select-con{
-	width: 500px;
-	&>div{
-		width: 100%;
-		margin-bottom: 1rem;
-	}
-	.cast-chip-con{
-		.chip-component{
-			z-index: 100;
+.genre-modal{
+	.genre-con{
+		display: flex;
+		flex-wrap: wrap;
+		width: 500px;
+		.genre-single{
+			display: flex;
+			align-items: center;
+			margin-right: 10px;
+			.title{
+				margin-left: 5px;
+			}
 		}
+	}
+	.save-btn{
+		width: 20%;
+		margin-left: 40%;
+		margin-right: 40%;
+		margin-top: 5%;
+	}
+}
+
+.cast-modal{
+	.cast-select-con{
+		width: 500px;
+		&>div{
+			width: 100%;
+			margin-bottom: 1rem;
+		}
+		.cast-chip-con{
+			.chip-component{
+				z-index: 100;
+			}
+		}
+	}
+	.save-btn{
+		width: 30%;
+		margin-left: 35%;
+		margin-right: 35%;
+		margin-top: 5%;
 	}
 }

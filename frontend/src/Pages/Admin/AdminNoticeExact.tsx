@@ -9,6 +9,8 @@ import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextFi
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/adminnotice.scss";
+
 interface MatchParams {
 	notice_id: string
 }
@@ -82,45 +84,64 @@ const AdminNoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>
 	}
 
 	return (
-		<div>
+		<>
 			<PageTitle
 				title="공지사항 세부"
 				isButtonVisible={true}
 			/>
-			<div>
-				<Button variant="contained" color="primary" onClick={updateNotice}>수정하기</Button>
-				<Button variant="contained" color="secondary" onClick={deleteNotice}>삭제하기</Button>
-			</div>
-			<div>
-				{
-					notice ?
-						<div style={{ display: 'flex', flexDirection: 'column' }}>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell>작성자</TableCell>
-										<TableCell>공지사항 제목</TableCell>
-										<TableCell>작성 날짜</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									<TableRow key={notice.noti_id}>
-										<TableCell>{notice.admi_name}</TableCell>
-										<TableCell>
-											<TextField value={title} onChange={(e:any) => setTitle(e.target.value)}/>
-										</TableCell>
-										<TableCell>{notice.crea_datetime}</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-							<div>
-								<TextField value={contents} onChange={(e:any)=> setContents(e.target.value)} multiline={true}/>
+			<div className="notice-wrap">
+				<div className="modify-con">
+					<Button variant="outlined" color="primary" onClick={updateNotice}>수정하기</Button>
+					<Button variant="outlined" color="secondary" onClick={deleteNotice}>삭제하기</Button>
+				</div>
+				<div>
+					{
+						notice ?
+							<div className="notice-con">
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell className="table-title">작성자</TableCell>
+											<TableCell className="table-title">공지사항 제목</TableCell>
+											<TableCell className="table-title">작성 날짜</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody className="table-body">
+										<TableRow key={notice.noti_id}>
+											<TableCell className="table-content">{notice.admi_name}</TableCell>
+											<TableCell className="table-content">
+												<TextField
+													className="title-input"
+													variant="outlined"
+													placeholder="제목을 입력하세요."
+													inputProps={{ maxLength: 50 }}
+													value={title}
+													onChange={(e:any) => setTitle(e.target.value)}
+												/>
+											</TableCell>
+											<TableCell className="table-content">{notice.crea_datetime}</TableCell>
+										</TableRow>
+									</TableBody>
+								</Table>
+								<div className="notice-content">
+									<TextField
+										label="내용"	
+										placeholder="내용을 입력하세요."
+										InputLabelProps={{shrink:true}}
+										variant="outlined"
+										value={contents}
+										inputProps={{ maxLength: 1000 }}
+										onChange={(e:any)=> setContents(e.target.value)}
+										multiline={true}
+										rows={10}
+									/>
+								</div>
 							</div>
-						</div>
-						: "데이터를 불러오는 중입니다."
-				}
+							: "데이터를 불러오는 중입니다."
+					}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

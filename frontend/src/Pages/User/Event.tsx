@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/c
 import { useHistory } from 'react-router';
 import { Pagination } from '@material-ui/lab';
 
+import "../../scss/pages/event.scss";
+
 const Event = () => {
 	const history = useHistory();
 	const [page, setPage] = useState<number>(1);
@@ -47,12 +49,12 @@ const Event = () => {
 				title="이벤트"
 				isButtonVisible={false}
 			/>
-			<div>
+			<div className="event-con">
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>작성자</TableCell>
-							<TableCell>이벤트 제목</TableCell>
+							<TableCell className="table-title">작성자</TableCell>
+							<TableCell className="table-title">이벤트 제목</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -60,8 +62,8 @@ const Event = () => {
 							EventList &&
 							EventList.map((event) => (
 								<TableRow key={event.event_id} onClick={() => history.push(`/event/${event.event_id}`)}>
-									<TableCell>{event.admi_name?event.admi_name:"관리자"}</TableCell>
-									<TableCell>{event.event_title}</TableCell>
+									<TableCell className="table-content">{event.admi_name?event.admi_name:"관리자"}</TableCell>
+									<TableCell className="table-content-title">{event.event_title}</TableCell>
 								</TableRow>
 							))
 						}

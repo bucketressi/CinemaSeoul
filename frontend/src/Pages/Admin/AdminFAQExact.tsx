@@ -9,6 +9,8 @@ import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextFi
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/adminfaq.scss";
+
 interface MatchParams {
 	faq_id: string
 }
@@ -82,41 +84,62 @@ const AdminFAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> =
 	}
 
 	return (
-		<div>
+		<>
 			<PageTitle
 				title="FAQ 세부"
 				isButtonVisible={true}
 			/>
-			<div>
-				<Button variant="contained" color="primary" onClick={updateFAQ}>수정하기</Button>
-				<Button variant="contained" color="secondary" onClick={deleteFAQ}>삭제하기</Button>
-			</div>
-			<div>
-				{
-					FAQ ?
-						<div style={{ display: 'flex', flexDirection: 'column' }}>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell>작성자</TableCell>
-										<TableCell>FAQ 제목</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									<TableRow key={FAQ.faq_id}>
-										<TableCell>{FAQ.admi_name}</TableCell>
-										<TextField value={title} onChange={(e:any) => setTitle(e.target.value)}/>
-									</TableRow>
-								</TableBody>
-							</Table>
-							<div>
-								<TextField value={contents} onChange={(e:any)=> setContents(e.target.value)} multiline={true}/>
+			<div className="faq-wrap">
+				<div className="modify-con">
+					<Button variant="outlined" color="primary" onClick={updateFAQ}>수정하기</Button>
+					<Button variant="outlined" color="secondary" onClick={deleteFAQ}>삭제하기</Button>
+				</div>
+				<div>
+					{
+						FAQ ?
+							<div className="faq-con">
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell className="table-title">작성자</TableCell>
+											<TableCell className="table-title">FAQ 제목</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody className="table-body">
+										<TableRow key={FAQ.faq_id}>
+											<TableCell className="table-content">{FAQ.admi_name}</TableCell>
+											<TableCell className="table-content">
+												<TextField
+													className="title-input"
+													variant="outlined"
+													placeholder="제목을 입력하세요."
+													inputProps={{ maxLength: 50 }}
+													value={title}
+													onChange={(e:any) => setTitle(e.target.value)}
+												/>
+											</TableCell>
+										</TableRow>
+									</TableBody>
+								</Table>
+								<div className="faq-content">
+									<TextField
+										label="내용"	
+										placeholder="내용을 입력하세요."
+										InputLabelProps={{shrink:true}}
+										variant="outlined"
+										inputProps={{ maxLength: 600 }}
+										value={contents}
+										onChange={(e:any)=> setContents(e.target.value)}
+										multiline={true}
+										rows={10}
+									/>
+								</div>
 							</div>
-						</div>
-						: "데이터를 불러오는 중입니다."
-				}
+							: "데이터를 불러오는 중입니다."
+					}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

@@ -47,20 +47,20 @@ const EventExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 			<div>
 				{
 					Event ?
-						<div style={{ display: 'flex', flexDirection: 'column' }}>
+						<div className="event-con">
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>이벤트 명</TableCell>
+										<TableCell className="table-title">이벤트 명</TableCell>
 									</TableRow>
 								</TableHead>
-								<TableBody>
+								<TableBody className="table-body">
 									<TableRow key={Event.event_id}>
-										<TableCell>{Event.event_title}</TableCell>
+										<TableCell className="table-content">{Event.event_title}</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>
-							<div>
+							<div className="event-content">
 								{Event.event_contents}
 							</div>
 						</div>

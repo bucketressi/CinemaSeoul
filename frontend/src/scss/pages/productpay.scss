@@ -1,6 +1,11 @@
 .product-pay-con{
-	.pay-con>div{
-		margin-bottom: 3rem;
+	.pay-con{
+		&>div{
+			margin-bottom: 3rem;
+		}
+		.bold-text{
+			font-weight: bold;
+		}
 	}
 	.MuiTableCell-head{
 		font-size: 1.3rem;
@@ -16,20 +21,37 @@
 			width: 48%;
 		}
 		.pay-type-con{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.sub-title{
+				width: 100%;
+			}
 			.MuiFormGroup-root{
 				flex-direction: row!important;
 			}
 		}
 		.point-con{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.sub-title{
+				width: 100%;
+			}
 			.current-point-con{
 				display: flex;
 				flex-direction: column;
-				&>div{
-					margin-bottom: 15px;
-				}
+				margin-top: 15px;
 				.point-info-con{
 					display : flex;
 					justify-content: space-between;
+					&>*{
+						margin-left: 10px;
+						margin-right: 10px;
+					}
+					.point-header{
+						font-weight: bold;
+					}
 				}
 				.MuiFormControl-root{
 					width: 100%!important;

@@ -12,6 +12,8 @@ import { useTokenState } from '../../Main/TokenModel';
 import { UserBookType, UserBookExactType } from '../../Main/Type';
 import { ModalComponent } from '../../Components';
 
+import "../../scss/pages/mypage.scss";
+
 type Props = {
 	mode: number
 }
@@ -114,10 +116,10 @@ const MypageBook = ({ mode }: Props) => {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>상영관</TableCell>
-							<TableCell>영화</TableCell>
-							<TableCell>상영 일자</TableCell>
-							<TableCell>예매 날짜</TableCell>
+							<TableCell className="table-title">상영관</TableCell>
+							<TableCell className="table-title">영화</TableCell>
+							<TableCell className="table-title">상영 일자</TableCell>
+							<TableCell className="table-title">예매 날짜</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>

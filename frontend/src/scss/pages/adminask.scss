@@ -1,0 +1,12 @@
+.admin-ask-con{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  .MuiTabs-flexContainer>button {
+    width: 20%;
+  .MuiTab-wrapper{
+    font-size : 1.2rem!important;
+  }
+}
+}

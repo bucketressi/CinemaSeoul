@@ -192,7 +192,7 @@ const MypagePay = ({ mode }: Props) => {
 	return (
 		<div className="user-pay-con">
 			<div className="select-date-con">
-				<div>결제 일자 별 검색</div>
+				<div>결제일자 별 검색</div>
 				<TextField
 					type="date"
 					label="시작일자"
@@ -215,9 +215,9 @@ const MypagePay = ({ mode }: Props) => {
 			</div>
 			<div>
 				<Tabs
+					className="pay-tab"
 					value={payMode}
 					onChange={handleModeChange}
-					className="pay-tab"
 					indicatorColor="primary"
 				>
 					<Tab label="예매결제조회" />
@@ -254,8 +254,8 @@ const MypagePay = ({ mode }: Props) => {
 															<div>결제 가격 : {book.price}</div>
 															<div>결제 종류 : {book.pay_type}</div>
 															<div>결제 일자 : {book.pay_datetime}</div>
-															<div>사용 포인트 : {book.use_point}</div>
-															<div>적립 포인트 : {book.accu_point}</div>
+															<div>사용 포인트 : {book.use_point} P</div>
+															<div>적립 포인트 : {book.accu_point} P</div>
 														</div>
 													</TableCell>
 													<TableCell>
@@ -308,8 +308,8 @@ const MypagePay = ({ mode }: Props) => {
 													<TableCell>
 														{
 															product.productPayDetails.map((product) => (
-																<div key={product.prod_id}>
-																	<div>{product.prod_name}</div>
+																<div className="product-obj" key={product.prod_id}>
+																	<div className="product-name">{product.prod_name}</div>
 																	<div>{product.price}원 * {product.amount}개 = {product.price*product.amount}원</div>
 																</div>
 															))

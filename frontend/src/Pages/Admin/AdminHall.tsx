@@ -291,10 +291,10 @@ const AdminHall = () => {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>번호</TableCell>
-								<TableCell>상영관 이름</TableCell>
-								<TableCell>상영관 행, 열</TableCell>
-								<TableCell>수정</TableCell>
+								<TableCell className="table-title">번호</TableCell>
+								<TableCell className="table-title">상영관 이름</TableCell>
+								<TableCell className="table-title">상영관 행, 열</TableCell>
+								<TableCell className="table-title">수정</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -306,16 +306,16 @@ const AdminHall = () => {
 										return null;
 									return (
 										<TableRow key={hall.hall_id}>
-											<TableCell>{index + 1}</TableCell>
-											<TableCell>
-												<TextField className="hall-name" value={hall.hall_name} onChange={(e: any) => handleNameChange(e, hall.hall_id)} />
+											<TableCell className="table-content">{index + 1}</TableCell>
+											<TableCell className="table-content">
+												<TextField className="hall-name" placeholder="상영관 이름" value={hall.hall_name} onChange={(e: any) => handleNameChange(e, hall.hall_id)} />
 												<Button variant="contained" color="secondary" onClick={() => saveHallName(hall.hall_id)}>상영관 이름 수정</Button>
 											</TableCell>
-											<TableCell className="row-col-con">
+											<TableCell className="table-content">
 												<span>{`${hall.hall_row}행`}</span>
 												<span>{`${hall.hall_col}열`}</span>
 											</TableCell>
-											<TableCell>
+											<TableCell className="table-content">
 												<Button variant="contained" color="primary" onClick={() => handleSeatModal(hall.hall_id)}>좌석 수정</Button>
 												<Button variant="contained" color="secondary" onClick={() => removeHall(hall.hall_id)}>상영관 삭제</Button>
 											</TableCell>
@@ -370,18 +370,20 @@ const AdminHall = () => {
 					button="저장"
 					buttonOnClick={() => saveSeatType()}
 				>
-					<FormControl>
-						<InputLabel id="select-label">좌석 종류</InputLabel>
-						<Select
-							labelId="select-label"
-							value={seatType}
-							onChange={handleSeatTypeChange}
-						>
-							{
-								getSeatTypeSelect()
-							}
-						</Select>
-					</FormControl>
+					<div className="seat-modify-modal">
+						<FormControl>
+							<InputLabel className="seat-type-label" id="select-label">좌석 종류</InputLabel>
+							<Select
+								labelId="select-label"
+								value={seatType}
+								onChange={handleSeatTypeChange}
+							>
+								{
+									getSeatTypeSelect()
+								}
+							</Select>
+						</FormControl>
+					</div>
 				</ModalComponent>
 			}
 			{
@@ -397,7 +399,9 @@ const AdminHall = () => {
 						<div className="add-hall-input-con">
 							<TextField
 								variant="outlined"
-								placeholder="이름"
+								placeholder="상영관 이름"
+								label="상영관 이름"
+								InputLabelProps={{shrink:true}}
 								inputProps={{ maxLength: 50 }}
 								helperText="이름을 입력하지 않으면 자동 할당됩니다."
 								value={hallName}
@@ -406,6 +410,8 @@ const AdminHall = () => {
 							<TextField
 								variant="outlined"
 								placeholder="행"
+								label="행"
+								InputLabelProps={{shrink:true}}
 								inputProps={{ maxLength: 2 }}
 								value={hallCol}
 								onChange={handleHallColChange}
@@ -413,6 +419,8 @@ const AdminHall = () => {
 							<TextField
 								variant="outlined"
 								placeholder="열"
+								label="열"
+								InputLabelProps={{shrink:true}}
 								inputProps={{ maxLength: 2 }}
 								value={hallRow}
 								onChange={handleHallRowChange}

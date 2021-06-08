@@ -10,6 +10,8 @@ import { useHistory } from 'react-router';
 import { Pagination } from '@material-ui/lab';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/adminfaq.scss";
+
 const AdminFAQ = () => {
 	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
@@ -70,35 +72,37 @@ const AdminFAQ = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<PageTitle
 				title="FAQ"
 				isButtonVisible={false}
 			/>
-			<div>
-				<Button variant="contained" color="primary" onClick={handleOpenModal}>FAQ 추가</Button>
-			</div>
-			<div>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>작성자</TableCell>
-							<TableCell>FAQ 제목</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{
-							FAQList &&
-							FAQList.map((faq) => (
-								<TableRow key={faq.faq_id} onClick={() => history.push(`/admin/faq/${faq.faq_id}`)}>
-									<TableCell>{faq.admi_name}</TableCell>
-									<TableCell>{faq.faq_title}</TableCell>
-								</TableRow>
-							))
-						}
-					</TableBody>
-				</Table>
-				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
+			<div className="faq-wrap">
+				<div className="add-con">
+					<Button variant="outlined" color="primary" onClick={handleOpenModal}>FAQ 추가</Button>
+				</div>
+				<div className="faq-con">
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell className="table-title">작성자</TableCell>
+								<TableCell className="table-title">FAQ 제목</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{
+								FAQList &&
+								FAQList.map((faq) => (
+									<TableRow key={faq.faq_id} onClick={() => history.push(`/admin/faq/${faq.faq_id}`)}>
+										<TableCell className="table-content">{faq.admi_name}</TableCell>
+										<TableCell className="table-content-title">{faq.faq_title}</TableCell>
+									</TableRow>
+								))
+							}
+						</TableBody>
+					</Table>
+					<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
+				</div>
 			</div>
 			<ModalComponent
 				open={openModal}
@@ -107,12 +111,32 @@ const AdminFAQ = () => {
 				button="추가"
 				buttonOnClick={addFAQ}
 			>
-				<div>
-					<TextField label="제목" value={title} onChange={(e: any) => setTitle(e.target.value)} />
-					<TextField label="내용" multiline={true} value={contents} onChange={(e: any) => setContents(e.target.value)} />
+				<div className="faq-modal">
+					<TextField
+						className="faq-input"
+						label="제목"
+						placeholder="제목"
+						InputLabelProps={{shrink:true}}
+						inputProps={{ maxLength: 50 }}
+						variant="outlined"
+						value={title}
+						onChange={(e: any) => setTitle(e.target.value)}
+					/>
+					<TextField
+						className="faq-input"
+						label="내용"
+						placeholder="내용"
+						InputLabelProps={{shrink:true}}
+						variant="outlined"
+						inputProps={{ maxLength: 600 }}
+						rows={5}
+						multiline={true}
+						value={contents}
+						onChange={(e: any) => setContents(e.target.value)}
+					/>
 				</div>
 			</ModalComponent>
-		</div>
+		</>
 	);
 }
 

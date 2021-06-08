@@ -138,8 +138,8 @@ const MovieExact = ({ movie_id } : Props) => {
 			{
 				admin !== undefined &&
 				<div className="btn-con">
-					<Button variant="contained" color="primary" onClick={modifyMovie}>수정하기</Button>
-					<Button variant="contained" color="secondary" onClick={removeMovie}>삭제하기</Button>
+					<Button variant="outlined" color="primary" onClick={modifyMovie}>수정하기</Button>
+					<Button variant="outlined" color="secondary" onClick={removeMovie}>삭제하기</Button>
 				</div>
 			}
 			{
