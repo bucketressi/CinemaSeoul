@@ -10,6 +10,8 @@ import { useUserState } from '../../Main/UserModel';
 import { Button, TextField } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
+import "../../scss/pages/adminpeople.scss";
+
 const AdminPeople = () => {
 	const AUTH_TOKEN = useTokenState();
 
@@ -188,71 +190,76 @@ const AdminPeople = () => {
 	}
 
 	return (
-		<div className="admin-people-con">
-			<PageTitle
-				title="인물 리스트"
-				isButtonVisible={false}
-			/>
-			<div className="search-con">
-				<TextField label="이름으로 검색" value={searchName} onChange={(e: any) => setSearchName(e.target.value)}/>
-				<Button variant="contained" color="primary" onClick={searchPeople}>인물 검색</Button>
+		<>
+			<PageTitle title="인물 리스트" isButtonVisible={true} />
+			<div className="add-con">
+				<Button variant="outlined" color="primary" onClick={()=>setOpenAddModal(true)}>인물 추가</Button>
 			</div>
-			<Button variant="contained" color="primary" onClick={()=>setOpenAddModal(true)}>인물 추가</Button>
-			<div>
-				<div>
-					{
-						peopleList &&
-						peopleList.map((people) => (
-							<div key={people.peop_id}>
-								<Button variant="outlined" color="primary" onClick={() => fetchDetail(people.peop_id)}>{people.peop_name}</Button>
-								<Button variant="outlined" color="secondary" onClick={() => removePeople(people.peop_id)}>삭제하기</Button>
-							</div>
-						))
-					}
+			<div className="admin-people-con">
+				<div className="search-con">
+					<TextField className="search-input" label="이름으로 검색" value={searchName} onChange={(e: any) => setSearchName(e.target.value)}/>
+					<Button variant="contained" color="primary" onClick={searchPeople}>인물 검색</Button>
+				</div>
+				<div className="search-res-con">
+					<div className="people-obj-list">
+						<div className="people-obj">
+							{
+								peopleList &&
+								peopleList.map((people) => (
+									<div key={people.peop_id}>
+										<Button variant="outlined" color="primary" onClick={() => fetchDetail(people.peop_id)}>{people.peop_name}</Button>
+										<Button variant="outlined" color="secondary" onClick={() => removePeople(people.peop_id)}>삭제하기</Button>
+									</div>
+								))
+							}
+						</div>
+					</div>
 					<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 				</div>
-			</div>
-			{
-				selectedPeople &&
-				<ModalComponent
-					open={openModifyModal}
-					setOpen={setOpenModifyModal}
-					title="인물 수정"
-					button="수정"
-					buttonOnClick={modifyPeople}
-				>
-					<div>
-						<TextField label="이름" value={name} onChange={(e: any) => setName(e.target.value)}/>
-						<TextField label="국가" value={nation} onChange={(e: any) => setNation(e.target.value)}/>
-						<div className="birth-con">
-							<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
-							<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
-							<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
+				{
+					selectedPeople &&
+					<ModalComponent
+						open={openModifyModal}
+						setOpen={setOpenModifyModal}
+						title="인물 수정"
+						button="수정"
+						buttonOnClick={modifyPeople}
+					>
+						<div className="people-modal">
+							<TextField className="people-input" variant="outlined" label="이름" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 30 }} value={name} onChange={(e: any) => setName(e.target.value)}/>
+							<TextField className="people-input" variant="outlined" label="국적" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 30 }} value={nation} onChange={(e: any) => setNation(e.target.value)}/>
+							<div className="birth-con">
+								<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
+								<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
+								<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
+							</div>
+							<TextField className="people-input-long" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} multiline={true} value={contents} onChange={(e: any) => setContents(e.target.value)}/>
 						</div>
-						<TextField label="설명" multiline={true} value={contents} onChange={(e: any) => setContents(e.target.value)}/>
+					</ModalComponent>
+				}
+				{/* todo : 이미지 */}
+				<ModalComponent
+					open={openAddModal}
+					setOpen={setOpenAddModal}
+					title="인물 추가"
+					button="추가"
+					buttonOnClick={addPeople}
+				>
+					<div className="people-modal">
+						<div>
+							<TextField className="people-input" variant="outlined" label="이름" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 30 }} placeholder="이름" value={addName} onChange={(e: any) => setAddName(e.target.value)}/>
+							<TextField className="people-input" variant="outlined" label="국가" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 30 }} placeholder="국적"value={addNation} onChange={(e: any) => setAddNation(e.target.value)}/>
+						</div>
+						<div className="birth-con">
+							<SelectModule tag="Year" value={addBirthYear} handleValueChange={(e: any) => { setAddBirthYear(e.target.value) }} start={1930} end={2022} />
+							<SelectModule tag="Month" value={addBirthMonth} handleValueChange={(e: any) => { setAddBirthMonth(e.target.value) }} start={1} end={12} />
+							<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={30} />
+						</div>
+						<TextField className="people-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} placeholder="설명" multiline={true} value={addContents} onChange={(e: any) => setAddContents(e.target.value)}/>
 					</div>
 				</ModalComponent>
-			}
-			{/* todo : 이미지 */}
-			<ModalComponent
-				open={openAddModal}
-				setOpen={setOpenAddModal}
-				title="인물 추가"
-				button="추가"
-				buttonOnClick={addPeople}
-			>
-				<div>
-					<TextField label="이름" value={addName} onChange={(e: any) => setAddName(e.target.value)}/>
-					<TextField label="국가" value={addNation} onChange={(e: any) => setAddNation(e.target.value)}/>
-					<div className="birth-con">
-						<SelectModule tag="Year" value={addBirthYear} handleValueChange={(e: any) => { setAddBirthYear(e.target.value) }} start={1930} end={2022} />
-						<SelectModule tag="Month" value={addBirthMonth} handleValueChange={(e: any) => { setAddBirthMonth(e.target.value) }} start={1} end={12} />
-						<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={30} />
-					</div>
-					<TextField label="설명" multiline={true} value={addContents} onChange={(e: any) => setAddContents(e.target.value)}/>
-				</div>
-			</ModalComponent>
-		</div>
+			</div>
+		</>
 	);
 }
 

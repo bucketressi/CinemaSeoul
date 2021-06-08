@@ -32,11 +32,25 @@
 				padding: 1.5rem 0;
 				margin-bottom: 1.5rem;
 				border-bottom: 1px solid $border-color;
+				.info-input{
+					width: 300px;
+				}
+			}
+			.contents{
+				&>*{
+					width: 300px;
+				}
 			}
 			.sub-title{
 				padding : 5px 10px;
 				background-color: lightgray;
 				margin-right: 10px;
+			}
+			.info-input{
+				width: 150px;
+				margin-bottom: 10px;
+				margin-left: 2px;
+				margin-right: 2px;
 			}
 		}
 	}

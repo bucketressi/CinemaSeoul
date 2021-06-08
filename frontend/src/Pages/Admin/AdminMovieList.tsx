@@ -132,21 +132,21 @@ const AdminMovie = () => {
 		<>
 			<PageTitle title="영화 리스트" isButtonVisible={true} />
 			<div className="movie-wrap">
-				<div className="stat-sort-con">
-					<div>선택 및 정렬</div>
-					<Select label="상태" value={stat} onChange={(e: any) => setStat(e.target.value)}>
-						<MenuItem value={0}>전체</MenuItem>
-						<MenuItem value={1}>상영중</MenuItem>
-						<MenuItem value={2}>상영예정</MenuItem>
-					</Select>
-					<Select label="정렬" value={sort} onChange={(e: any) => setSort(e.target.value)}>
-						<MenuItem value={0}>기본</MenuItem>
-						<MenuItem value={1}>평점순</MenuItem>
-						<MenuItem value={2}>누적관람객순</MenuItem>
-					</Select>
-				</div>
 				<div className="movie-con">
-					<SearchTab />
+					<div className="stat-sort-con">
+						<p>선택 및 정렬</p>
+						<Select className="select" label="상태" value={stat} onChange={(e: any) => setStat(e.target.value)}>
+							<MenuItem value={0}>전체</MenuItem>
+							<MenuItem value={1}>상영중</MenuItem>
+							<MenuItem value={2}>상영예정</MenuItem>
+						</Select>
+						<Select className="select" label="정렬" value={sort} onChange={(e: any) => setSort(e.target.value)}>
+							<MenuItem value={0}>기본</MenuItem>
+							<MenuItem value={1}>평점순</MenuItem>
+							<MenuItem value={2}>누적관람객순</MenuItem>
+						</Select>
+						<SearchTab />
+					</div>
 					<div className="movie-content-con">
 						<div className="movie-menu">
 							<Button variant="outlined" color="primary" onClick={() => setOpen(true)}>영화 추가</Button>
@@ -185,12 +185,12 @@ const AdminMovie = () => {
 				>
 					<div className="add-container">
 						<div>
-							<TextField variant="outlined" placeholder="제목" label="제목" inputProps={{ maxLength: 50 }} value={name} onChange={handleNameChange} />
-							<TextField variant="outlined" placeholder="회사" label="회사" inputProps={{ maxLength: 20 }} value={company} onChange={handleCompanyChange} />
+							<TextField variant="outlined" placeholder="제목" label="제목" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 50 }} value={name} onChange={handleNameChange} />
+							<TextField variant="outlined" placeholder="회사" label="회사" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 20 }} value={company} onChange={handleCompanyChange} />
 						</div>
 						<div>
-							<TextField variant="outlined" placeholder="런타임" label="런타임" inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
-							<TextField variant="outlined" placeholder="설명" label="설명" inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
+							<TextField variant="outlined" placeholder="런타임" label="런타임" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
+							<TextField variant="outlined" placeholder="설명" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
 
 						</div>
 						<div>

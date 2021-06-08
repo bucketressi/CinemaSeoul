@@ -2,26 +2,41 @@
 @import "../base/common";
 
 .movie-wrap{
-    display: flex;
+  display: flex;
 	flex-direction: column;
 	.movie-con{
 		display: flex;
 	}
-	.title{
-		font-weight: 600;
-		width: 100%;
-		padding: 10px 0;
-		margin-bottom: 1rem;
-		border-bottom: 1px solid $border-color;
+	.stat-sort-con{
+		width: 25%;
+		padding: 0 1rem;
+		border-right: 1px solid $border-color;
 		p{
 			text-align: center;
 			font-size: 1.3rem;
 			margin-bottom: 10px;
+			font-weight: 600;
 		}
-		button{
+		.select{
+			width: 40%;
+			margin: 5%;
+		}
+		.title{
+			font-weight: 600;
 			width: 100%;
-			background-color: $red;
-			color: white;
+			padding: 10px 0;
+			margin-bottom: 1rem;
+			border-bottom: 1px solid $border-color;
+			p{
+				text-align: center;
+				font-size: 1.3rem;
+				margin-bottom: 10px;
+			}
+			button{
+				width: 100%;
+				background-color: $red;
+				color: white;
+			}
 		}
 	}
 	.movie-content-con{

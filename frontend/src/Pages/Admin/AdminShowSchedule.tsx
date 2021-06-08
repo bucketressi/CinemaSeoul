@@ -260,34 +260,39 @@ const AdminShowSchedule = () => {
 						<div>표</div>
 					</div>
 					<div className="search-con">
-						<FormControl>
-							<InputLabel id="select-label">상영관 선택</InputLabel>
-							<Select
-								multiple={true}
-								labelId="select-label"
-								value={searchHallId}
-								onChange={(e: any) => setSearchHallId(e.target.value)}
-							>
-								{
-									getHallListMenu()
-								}
-							</Select>
-						</FormControl>
-						<FormControl>
-							<InputLabel id="select-label">영화 선택</InputLabel>
-							<Select
-								multiple={true}
-								labelId="select-label"
-								value={searchMovieId}
-								onChange={(e: any) => setSearchMovieId(e.target.value)}
-							>
-								{
-									getMovieListMenu()
-								}
-							</Select>
-						</FormControl>
+						<div>
+							<FormControl>
+								<InputLabel id="select-label">상영관 선택</InputLabel>
+								<Select
+									className="search-input"
+									multiple={true}
+									labelId="select-label"
+									value={searchHallId}
+									onChange={(e: any) => setSearchHallId(e.target.value)}
+								>
+									{
+										getHallListMenu()
+									}
+								</Select>
+							</FormControl>
+							<FormControl>
+								<InputLabel id="select-label">영화 선택</InputLabel>
+								<Select
+									className="search-input"
+									multiple={true}
+									labelId="select-label"
+									value={searchMovieId}
+									onChange={(e: any) => setSearchMovieId(e.target.value)}
+								>
+									{
+										getMovieListMenu()
+									}
+								</Select>
+							</FormControl>
+						</div>
 						<div>
 							<TextField
+								className="search-input"
 								type="date"
 								label="기간 시작"
 								InputLabelProps={{
@@ -297,6 +302,7 @@ const AdminShowSchedule = () => {
 								onChange={(e: any) => setSearchStartDate(e.target.value.split("-").join(""))}
 							/>
 							<TextField
+								className="search-input"
 								type="date"
 								label="기간 종료"
 								InputLabelProps={{
@@ -306,7 +312,7 @@ const AdminShowSchedule = () => {
 								onChange={(e: any) => setSearchEndDate(e.target.value.split("-").join(""))}
 							/>
 						</div>
-						<Button variant="contained" color="primary" onClick={search}>조건 검색</Button>
+						<Button className="search-btn" variant="contained" color="primary" onClick={search}>조건 검색</Button>
 					</div>
 					<div className="save-btn">
 						<Button variant="contained" color="secondary" onClick={handleAddButtonClick}>상영일정 추가</Button>
@@ -371,10 +377,11 @@ const AdminShowSchedule = () => {
 				button={modalType ? "추가" : "수정"}
 				buttonOnClick={saveShowSchedule}
 			>
-				<div>
+				<div className="schedule-modal">
 					<FormControl>
 						<InputLabel id="select-label">상영관</InputLabel>
 						<Select
+							className="schedule-input"
 							labelId="select-label"
 							value={hallId}
 							onChange={handleHallChange}
@@ -387,6 +394,7 @@ const AdminShowSchedule = () => {
 					<FormControl>
 						<InputLabel id="select-label">영화</InputLabel>
 						<Select
+							className="schedule-input"
 							labelId="select-label"
 							value={movieId}
 							onChange={handleMovieChange}
@@ -398,7 +406,9 @@ const AdminShowSchedule = () => {
 					</FormControl>
 					<div>
 						<TextField
+							className="schedule-input"
 							type="date"
+							label="개봉일자"
 							InputLabelProps={{
 								shrink: true,
 							}}
@@ -406,7 +416,9 @@ const AdminShowSchedule = () => {
 							onChange={(e: any) => setShowDate(e.target.value.split("-").join(""))}
 						/>
 						<TextField
+							className="schedule-input"
 							type="time"
+							label="상영시작시각"
 							InputLabelProps={{
 								shrink: true,
 							}}

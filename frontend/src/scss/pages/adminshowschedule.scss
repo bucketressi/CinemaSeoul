@@ -12,6 +12,20 @@
 				width: 50px;
 			}
 		}
+		.search-con{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.search-input{
+				width: 150px;
+				margin-bottom: 10px;
+				margin-left: 2px;
+				margin-right: 2px;
+			}
+		}
+		.search-btn{
+			margin: 3px;
+		}
 	}
 	.MuiTableRow-root{
 		&:hover{
@@ -30,5 +44,16 @@
 		&>button{
 			margin-bottom: 5px;
 		}
+	}
+}
+
+/* 상영일정 추가/수정 modal */
+.schedule-modal{
+	margin-top: 40px;
+	.schedule-input{
+		width: 150px;
+		margin-bottom: 10px;
+		margin-left: 2px;
+		margin-right: 2px;
 	}
 }

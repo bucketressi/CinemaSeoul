@@ -370,18 +370,20 @@ const AdminHall = () => {
 					button="저장"
 					buttonOnClick={() => saveSeatType()}
 				>
-					<FormControl>
-						<InputLabel id="select-label">좌석 종류</InputLabel>
-						<Select
-							labelId="select-label"
-							value={seatType}
-							onChange={handleSeatTypeChange}
-						>
-							{
-								getSeatTypeSelect()
-							}
-						</Select>
-					</FormControl>
+					<div className="seat-modify-modal">
+						<FormControl>
+							<InputLabel className="seat-type-label" id="select-label">좌석 종류</InputLabel>
+							<Select
+								labelId="select-label"
+								value={seatType}
+								onChange={handleSeatTypeChange}
+							>
+								{
+									getSeatTypeSelect()
+								}
+							</Select>
+						</FormControl>
+					</div>
 				</ModalComponent>
 			}
 			{
@@ -398,6 +400,8 @@ const AdminHall = () => {
 							<TextField
 								variant="outlined"
 								placeholder="이름"
+								label="이름"
+								InputLabelProps={{shrink:true}}
 								inputProps={{ maxLength: 50 }}
 								helperText="이름을 입력하지 않으면 자동 할당됩니다."
 								value={hallName}
@@ -406,6 +410,8 @@ const AdminHall = () => {
 							<TextField
 								variant="outlined"
 								placeholder="행"
+								label="행"
+								InputLabelProps={{shrink:true}}
 								inputProps={{ maxLength: 2 }}
 								value={hallCol}
 								onChange={handleHallColChange}
@@ -413,6 +419,8 @@ const AdminHall = () => {
 							<TextField
 								variant="outlined"
 								placeholder="열"
+								label="열"
+								InputLabelProps={{shrink:true}}
 								inputProps={{ maxLength: 2 }}
 								value={hallRow}
 								onChange={handleHallRowChange}
