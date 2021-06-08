@@ -19,6 +19,7 @@ import {
 	AdminHall,
 	AdminHome,
 	AdminMovieList,
+	AdminMovieSearchList,
 	AdminNotice,
 	AdminNoticeExact,
 	AdminList,
@@ -65,7 +66,7 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/hall" component={AdminHall} />
 				<Route path="/admin/home" component={AdminHome} />
 				<Route exact path="/admin/movie" component={AdminMovieList} />
-				<Route exact path="/admin/movie/search" component={AdminMovieList} />
+				<Route exact path="/admin/movie/search/:keyword/:type" component={AdminMovieSearchList} />
 				<Route path="/admin/movie/:movie_id" component={AdminMovieExact} />
 				<Route path="/admin/modify/movie/:movie_id" component={AdminModifyMovie} />
 				<Route exact path="/admin/notice" component={AdminNotice} />

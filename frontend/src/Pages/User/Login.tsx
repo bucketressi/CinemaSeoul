@@ -60,16 +60,16 @@ const Login = () => {
 	},[]);
 
 	const handleUserLogin = () => {
+		if (!email.includes("@")) {
+			alert("이메일 형식을 확인해주세요.");
+			return;
+		}
 		userLogin(email, password);
 	}
 
 	const handleNonUserLogin = () => {
 		if (password !== passwordDual) {
 			alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
-			return;
-		}
-		if (!email.includes("@")) {
-			alert("이메일 형식을 확인해주세요.");
 			return;
 		}
 		nonUserLogin({

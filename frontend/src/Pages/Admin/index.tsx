@@ -5,6 +5,7 @@ export { default as AdminTheater } from './AdminTheater';
 export { default as AdminHall } from './AdminHall';
 export { default as AdminMyPage } from './AdminMyPage';
 export { default as AdminMovieList } from './AdminMovieList';
+export { default as AdminMovieSearchList } from './AdminMovieSearchList';
 export { default as AdminPeople } from './AdminPeople';
 export { default as AdminShowSchedule } from './AdminShowSchedule';
 export { default as AdminModifyShowSchedule } from './AdminModifyShowSchedule';

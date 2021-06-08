@@ -240,7 +240,7 @@ const AdminShowSchedule = () => {
 				fetchShowSchedule(page);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["","","","영화가 시작하기 10분 전부터만 시작하실 수 있습니다."]);
+				errorHandler(e, true, ["","","","상영일정 시작 시간 이후에만 누르실 수 있습니다."]);
 			});
 	}
 

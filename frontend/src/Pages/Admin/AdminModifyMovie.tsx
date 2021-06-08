@@ -242,11 +242,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 		const typeCode = peopleTypeCode.find((code) => code.code_name == type);
 
 		const arr = cast.slice();
-		arr.splice(
-			arr.findIndex(
-				(people) => (people.peop_name === name && people.cast_type_code === typeCode?.code_id)
-			), 1
-		);
+		arr.splice(arr.findIndex((people) => (people.peop_name === name && people.cast_type_code === typeCode?.code_id)), 1);
 		setCast(arr);
 	}
 
