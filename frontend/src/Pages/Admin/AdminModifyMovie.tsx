@@ -246,127 +246,158 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 		setCast(arr);
 	}
 
-
-
 	return (
-		<div>
+		<>
 			<PageTitle title="상영 중인 영화" isButtonVisible={true} />
-			<div className="add-container page-width">
-				<div>
-					<TextField variant="outlined" placeholder="제목" value={name} onChange={handleNameChange} />
-					<TextField variant="outlined" placeholder="회사" value={company} onChange={handleCompanyChange} />
+			<div className="modify-movie-wrap">
+				<div className="modify-movie-btn">
+					<Button variant="outlined" color="secondary" onClick={openGenreModal}>장르 설정</Button>
+					<Button variant="outlined" color="secondary" onClick={openCastModal}>출연진 설정</Button>
 				</div>
-				<div>
-					<TextField variant="outlined" placeholder="설명" value={content} multiline={true} onChange={handleContentChange} />
-					<TextField
-						variant="outlined"
-						type="date"
-						label="개봉예정일"
-						InputLabelProps={{
-							shrink: true,
-						}}
-						value={openDate}
-						onChange={handleOpenDateChange}
-					/>
-				</div>
-				<div>
-					<FormControl>
-						<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
-						<RadioGroup name="age" value={age} onChange={handleAgeChange}>
-							{
-								movieAuthCode.map((auth) =>
-									<FormControlLabel key={auth.code_id} value={auth.code_id} control={<Radio color="primary" />} label={auth.code_name} />
-								)
-							}
-						</RadioGroup>
-					</FormControl>
+				<div className="modify-movie-con">
+					<div>
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							placeholder="제목"
+							InputLabelProps={{shrink:true}}
+							inputProps={{ maxLength: 50 }}
+							label="제목"
+							value={name}
+							onChange={handleNameChange}
+						/>
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							placeholder="배급사"
+							InputLabelProps={{shrink:true}}
+							inputProps={{ maxLength: 30 }}
+							label="배급사"
+							value={company}
+							onChange={handleCompanyChange}
+						/>
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							type="date"
+							label="개봉예정일"
+							InputLabelProps={{
+								shrink: true,
+							}}
+							value={openDate}
+							onChange={handleOpenDateChange}
+						/>
+					</div>
+					<div>
+						<TextField
+							className="movie-input-long"
+							variant="outlined"
+							placeholder="설명"
+							InputLabelProps={{shrink:true}}
+							inputProps={{ maxLength: 600 }}
+							label="설명"
+							value={content}
+							multiline={true}
+							rows={9}
+							onChange={handleContentChange}
+						/>
+						<FormControl className="movie-input">
+							<FormLabel className="search-field-title">시청 가능 연령</FormLabel>
+							<RadioGroup name="age" value={age} onChange={handleAgeChange}>
+								{
+									movieAuthCode.map((auth) =>
+										<FormControlLabel key={auth.code_id} value={auth.code_id} control={<Radio color="primary" />} label={auth.code_name} />
+									)
+								}
+							</RadioGroup>
+						</FormControl>
+					</div>
 					<div>
 						<div>포스터</div>
 						<ImgComponent setImgFile={setImgFile} />
 					</div>
 				</div>
 			</div>
-			<div className="button-con">
-				<Button className="save-btn" variant="contained" color="secondary" onClick={saveMovie}>저장</Button>
-				<Button variant="contained" color="primary" onClick={openGenreModal}>장르 설정</Button>
-				<Button variant="contained" color="primary" onClick={openCastModal}>출연진 설정</Button>
-			</div>
 			<ModalComponent
 				title="장르 설정"
 				open={isGenreOpened}
 				setOpen={setGenreOpen}
 			>
-				<div className="genre-con">
-					<FormControl>
-						<FormLabel className="search-field-title">장르</FormLabel>
-						<div>
-							{
-								genreCode.map((genreElement) =>
-									<FormControlLabel key={genreElement.code_id} value={genreElement.code_id} control={<Checkbox onChange={handleGenreChange} checked={genre.includes(genreElement.code_id)} color="primary" />} label={genreElement.code_name} />
-								)
-							}
-						</div>
-					</FormControl>
+				<div className="genre-modal">
+					<div className="genre-con">
+						<FormControl>
+							<FormLabel className="search-field-title">장르</FormLabel>
+							<div>
+								{
+									genreCode.map((genreElement) =>
+										<FormControlLabel key={genreElement.code_id} value={genreElement.code_id} control={<Checkbox onChange={handleGenreChange} checked={genre.includes(genreElement.code_id)} color="primary" />} label={genreElement.code_name} />
+									)
+								}
+							</div>
+						</FormControl>
+					</div>
+					<Button className="save-btn" variant="contained" color="secondary" onClick={saveGenre}>장르 저장</Button>
 				</div>
-				<Button className="save-btn" variant="contained" color="secondary" onClick={saveGenre}>장르 저장</Button>
 			</ModalComponent>
 			<ModalComponent
 				title="출연진 설정"
 				open={isCastOpened}
 				setOpen={setCastOpen}
 			>
-				<div className="cast-select-con">
-					<div className="cast-chip-con">
-						{cast.map((peop: MovieCastingType, index: number) =>
-							<Chip
-								key={`${peop.cast_type_code}/${peop.peop_id}`}
-								label={`[${peopleTypeObj[Number(peop.cast_type_code)]}]${peop.peop_name}`}
-								className="chip-component"
-								onDelete={handleRemoveCast}
-							/>
-						)}
-					</div>
-					<FormControl>
-						<InputLabel id="select-label">출연진</InputLabel>
-						<Select
-							labelId="select-label"
-							id="demo-mutiple-chip"
-							multiple
-							value={cast}
-							onChange={handleCheckCast}
-							MenuProps={{
-								PaperProps: {
-									style: {
-										maxHeight: 48 * 4.5 + 8,
-										width: 250,
+				<div className="cast-modal">
+					<div className="cast-select-con">
+						<div className="cast-chip-con">
+							{cast.map((peop: MovieCastingType, index: number) =>
+								<Chip
+									key={`${peop.cast_type_code}/${peop.peop_id}`}
+									label={`[${peopleTypeObj[Number(peop.cast_type_code)]}]${peop.peop_name}`}
+									className="chip-component"
+									onDelete={handleRemoveCast}
+								/>
+							)}
+						</div>
+						<FormControl>
+							<InputLabel id="select-label">출연진</InputLabel>
+							<Select
+								labelId="select-label"
+								id="demo-mutiple-chip"
+								multiple
+								value={cast}
+								onChange={handleCheckCast}
+								MenuProps={{
+									PaperProps: {
+										style: {
+											maxHeight: 48 * 4.5 + 8,
+											width: 250,
+										},
 									},
-								},
-							}}
+								}}
 
-						>
-							{peopleArr.map((people: PeopleType) => {
-								const arr: React.ReactElement[] = [];
-								peopleTypeCode.map((peopleType: CodeType) => {
-									// 이미 있는 사람 표시 x
-									if (cast.filter((peop) => (peop.peop_id == people.peop_id && peop.cast_type_code == peopleType.code_id)).length)
-										return null;
-									arr.push(
-										<MenuItem
-											key={`${people.peop_id}/${peopleType.code_id}`}
-											value={`${people.peop_id}/${people.peop_name}/${peopleType.code_id}`}
-										>
-											{`[${peopleType.code_name}]${people.peop_name}`}
-										</MenuItem>
-									);
-								})
-								return arr;
-							})}
-						</Select>
-					</FormControl>
+							>
+								{peopleArr.map((people: PeopleType) => {
+									const arr: React.ReactElement[] = [];
+									peopleTypeCode.map((peopleType: CodeType) => {
+										// 이미 있는 사람 표시 x
+										if (cast.filter((peop) => (peop.peop_id == people.peop_id && peop.cast_type_code == peopleType.code_id)).length)
+											return null;
+										arr.push(
+											<MenuItem
+												key={`${people.peop_id}/${peopleType.code_id}`}
+												value={`${people.peop_id}/${people.peop_name}/${peopleType.code_id}`}
+											>
+												{`[${peopleType.code_name}]${people.peop_name}`}
+											</MenuItem>
+										);
+									})
+									return arr;
+								})}
+							</Select>
+						</FormControl>
+					</div>
+					<Button className="save-btn" variant="contained" color="secondary" onClick={saveCast}>출연진 저장</Button>
 				</div>
-				<Button className="save-btn" variant="contained" color="secondary" onClick={saveCast}>출연진 저장</Button>
 			</ModalComponent>
-		</div>
+		</>
 	);
 }
 

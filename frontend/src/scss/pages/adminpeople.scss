@@ -1,0 +1,70 @@
+@import "../base/variable";
+
+.add-con{
+  display:flex;
+  justify-content: flex-end;
+}
+.admin-people-con{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .search-con{
+    margin: 20px;
+    .search-input{
+      width: 200px;
+    }
+    button{
+      margin: 10px;
+    }
+  }
+  .search-res-con{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 50vh;
+    .people-obj-list{
+      display: flex;
+			flex-wrap: wrap;
+      .people-obj{
+        button{
+          width: 100px;
+          margin: 3px;
+        }
+      }
+    }
+    .pagination{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 5%;
+      margin-bottom:2%;
+    }
+  }
+}
+
+/* 인물 추가 modal */
+.people-modal{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .people-input{
+    width: 194px;
+    margin-bottom: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  .birth-con{
+    &>*{
+      width: 128px;
+      margin-bottom: 10px;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+  }
+  .people-input-long{
+    width: 100%;
+    margin-top: 2px;
+  }
+}

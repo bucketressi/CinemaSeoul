@@ -100,7 +100,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 	return (
 		<div>
 			<PageTitle
-				title="상품 상세 페이지"
+				title="상품 상세"
 				isButtonVisible={true}
 			/>
 			<Cart />
@@ -133,7 +133,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 							</div>
 						</div>
 						<div className="product-content">
-							{product.prod_contents}
+							<div>{product.prod_contents}</div>
 						</div>
 					</div>
 					: <div>상품을 불러오는 중입니다.</div>

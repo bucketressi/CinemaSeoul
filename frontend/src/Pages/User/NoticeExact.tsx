@@ -9,6 +9,8 @@ import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextFi
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/notice.scss";
+
 interface MatchParams {
 	notice_id: string
 }
@@ -47,24 +49,24 @@ const NoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = (
 			<div>
 				{
 					notice ?
-						<div style={{ display: 'flex', flexDirection: 'column' }}>
+						<div className="notice-con">
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>작성자</TableCell>
-										<TableCell>공지사항 제목</TableCell>
-										<TableCell>작성 날짜</TableCell>
+										<TableCell className="table-title">작성자</TableCell>
+										<TableCell className="table-title">공지사항 제목</TableCell>
+										<TableCell className="table-title">작성 날짜</TableCell>
 									</TableRow>
 								</TableHead>
-								<TableBody>
+								<TableBody className="table-body">
 									<TableRow key={notice.noti_id}>
-										<TableCell>{notice.admi_name}</TableCell>
-										<TableCell>{notice.noti_title}</TableCell>
-										<TableCell>{notice.crea_datetime}</TableCell>
+										<TableCell className="table-content">{notice.admi_name}</TableCell>
+										<TableCell className="table-content-title">{notice.noti_title}</TableCell>
+										<TableCell className="table-content">{notice.crea_datetime}</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>
-							<div>
+							<div className="notice-content">
 								{notice.noti_contents}
 							</div>
 						</div>

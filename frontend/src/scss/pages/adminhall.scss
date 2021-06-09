@@ -5,9 +5,18 @@
 	justify-content: flex-end;
 }
 .hall-list-con{
+	display: flex;
+  flex-direction: column;
+  align-items: center;
+	.table-title{
+		font-weight: bold;
+		text-align: center;
+	}
+	.table-content{
+		text-align: center;
+	}
 	.MuiTableRow-root{
 		cursor: pointer;
-		
 		&:hover{
 			background-color: rgb(231, 231, 231);
 		}
@@ -31,3 +40,18 @@
 		margin-right: 10px;
 	}
 }
+
+/* 좌석 정보 수정 modal */
+.seat-modify-modal{
+	margin-top: 50px;
+	.seat-type-label{
+		width: 90px;
+	}
+}
+
+/* 상영관 추가 modal */
+.add-container{
+	margin-top: 50px;
+}
+
+

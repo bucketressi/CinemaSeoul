@@ -1,0 +1,34 @@
+@import "../base/variable";
+
+.faq-con{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  .table-title{
+    font-weight: bold;
+    text-align: center;
+  }
+  .table-content{
+    text-align: center;
+  }
+  .table-content-title{
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+  .faq-content{
+    margin-top: 5%;
+    width: 100%;
+    &>*{
+      width: 100%;
+    }
+  }
+  .pagination{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+    margin-bottom:2%;
+  }
+}

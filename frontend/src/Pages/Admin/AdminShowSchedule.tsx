@@ -245,8 +245,11 @@ const AdminShowSchedule = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<PageTitle title="상영일정 페이지" isButtonVisible={true} />
+			<div className="save-btn">
+				<Button variant="outlined" color="secondary" onClick={handleAddButtonClick}>상영일정 추가</Button>
+			</div>
 			<div className="schedule-con">
 				<div className="schedule-header">
 					<div className="switch-con">
@@ -260,34 +263,37 @@ const AdminShowSchedule = () => {
 						<div>표</div>
 					</div>
 					<div className="search-con">
-						<FormControl>
-							<InputLabel id="select-label">상영관 선택</InputLabel>
-							<Select
-								multiple={true}
-								labelId="select-label"
-								value={searchHallId}
-								onChange={(e: any) => setSearchHallId(e.target.value)}
-							>
-								{
-									getHallListMenu()
-								}
-							</Select>
-						</FormControl>
-						<FormControl>
-							<InputLabel id="select-label">영화 선택</InputLabel>
-							<Select
-								multiple={true}
-								labelId="select-label"
-								value={searchMovieId}
-								onChange={(e: any) => setSearchMovieId(e.target.value)}
-							>
-								{
-									getMovieListMenu()
-								}
-							</Select>
-						</FormControl>
 						<div>
+							<FormControl>
+								<InputLabel id="select-label">상영관 선택</InputLabel>
+								<Select
+									className="search-input"
+									multiple={true}
+									labelId="select-label"
+									value={searchHallId}
+									onChange={(e: any) => setSearchHallId(e.target.value)}
+								>
+									{
+										getHallListMenu()
+									}
+								</Select>
+							</FormControl>
+							<FormControl>
+								<InputLabel id="select-label">영화 선택</InputLabel>
+								<Select
+									className="search-input"
+									multiple={true}
+									labelId="select-label"
+									value={searchMovieId}
+									onChange={(e: any) => setSearchMovieId(e.target.value)}
+								>
+									{
+										getMovieListMenu()
+									}
+								</Select>
+							</FormControl>
 							<TextField
+								className="search-input"
 								type="date"
 								label="기간 시작"
 								InputLabelProps={{
@@ -297,6 +303,7 @@ const AdminShowSchedule = () => {
 								onChange={(e: any) => setSearchStartDate(e.target.value.split("-").join(""))}
 							/>
 							<TextField
+								className="search-input"
 								type="date"
 								label="기간 종료"
 								InputLabelProps={{
@@ -305,29 +312,26 @@ const AdminShowSchedule = () => {
 								value={getDateString(searchEndDate)}
 								onChange={(e: any) => setSearchEndDate(e.target.value.split("-").join(""))}
 							/>
+							<Button className="search-btn" variant="contained" color="primary" onClick={search}>조건 검색</Button>
 						</div>
-						<Button variant="contained" color="primary" onClick={search}>조건 검색</Button>
-					</div>
-					<div className="save-btn">
-						<Button variant="contained" color="secondary" onClick={handleAddButtonClick}>상영일정 추가</Button>
 					</div>
 				</div>
 				{
 					mode ?
 						<div>표</div>
 						:
-						<TableContainer>
+						<div className="schedule-con">
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>번호</TableCell>
-										<TableCell>상영관</TableCell>
-										<TableCell>영화</TableCell>
-										<TableCell>개봉일자</TableCell>
-										<TableCell>상영시작시각</TableCell>
-										<TableCell>상영종료시각</TableCell>
-										<TableCell>상영시작</TableCell>
-										<TableCell>수정</TableCell>
+										<TableCell className="table-title">번호</TableCell>
+										<TableCell className="table-title">상영관</TableCell>
+										<TableCell className="table-title">영화</TableCell>
+										<TableCell className="table-title">개봉일자</TableCell>
+										<TableCell className="table-title">상영시작시각</TableCell>
+										<TableCell className="table-title">상영종료시각</TableCell>
+										<TableCell className="table-title">상영시작</TableCell>
+										<TableCell className="table-title">수정</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -337,13 +341,13 @@ const AdminShowSchedule = () => {
 											const endTime = schedule.end_time.split("/");
 											return (
 												<TableRow key={schedule.show_id}>
-													<TableCell>{index + 1}</TableCell>
-													<TableCell>{schedule.hall_name}</TableCell>
-													<TableCell>{schedule.movi_name}</TableCell>
-													<TableCell>{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
-													<TableCell>{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
-													<TableCell>{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
-													<TableCell>
+													<TableCell className="table-content">{index + 1}</TableCell>
+													<TableCell className="table-content">{schedule.hall_name}</TableCell>
+													<TableCell className="table-content">{schedule.movi_name}</TableCell>
+													<TableCell className="table-content">{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
+													<TableCell className="table-content">{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
+													<TableCell className="table-content">{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
+													<TableCell className="table-content">
 														{
 															schedule.started && schedule.started === "0" ?
 																<Button onClick={() => startShow(schedule.show_id)} variant="outlined" color="secondary">상영시작</Button> :
@@ -360,7 +364,7 @@ const AdminShowSchedule = () => {
 									}
 								</TableBody>
 							</Table>
-						</TableContainer>
+						</div>
 				}
 				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
@@ -371,10 +375,11 @@ const AdminShowSchedule = () => {
 				button={modalType ? "추가" : "수정"}
 				buttonOnClick={saveShowSchedule}
 			>
-				<div>
+				<div className="schedule-modal">
 					<FormControl>
 						<InputLabel id="select-label">상영관</InputLabel>
 						<Select
+							className="schedule-input"
 							labelId="select-label"
 							value={hallId}
 							onChange={handleHallChange}
@@ -387,6 +392,7 @@ const AdminShowSchedule = () => {
 					<FormControl>
 						<InputLabel id="select-label">영화</InputLabel>
 						<Select
+							className="schedule-input"
 							labelId="select-label"
 							value={movieId}
 							onChange={handleMovieChange}
@@ -398,7 +404,9 @@ const AdminShowSchedule = () => {
 					</FormControl>
 					<div>
 						<TextField
+							className="schedule-input"
 							type="date"
+							label="개봉일자"
 							InputLabelProps={{
 								shrink: true,
 							}}
@@ -406,7 +414,9 @@ const AdminShowSchedule = () => {
 							onChange={(e: any) => setShowDate(e.target.value.split("-").join(""))}
 						/>
 						<TextField
+							className="schedule-input"
 							type="time"
+							label="상영시작시각"
 							InputLabelProps={{
 								shrink: true,
 							}}
@@ -416,7 +426,7 @@ const AdminShowSchedule = () => {
 					</div>
 				</div>
 			</ModalComponent>
-		</div >
+		</>
 	);
 }
 

@@ -70,7 +70,7 @@ const Store = () => {
 	return (
 		<div>
 			<PageTitle
-				title="상품 리스트 페이지"
+				title="스토어"
 				isButtonVisible={false}
 			/>
 			<Cart />

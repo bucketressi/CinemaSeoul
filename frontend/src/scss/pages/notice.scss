@@ -1,0 +1,31 @@
+@import "../base/variable";
+
+.notice-con{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80vh;
+  .table-title{
+    font-weight: bold;
+    text-align: center;
+  }
+  .table-content{
+    text-align: center;
+  }
+  .table-content-title{
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+  .notice-content{
+    margin-top: 5%;
+    width: 100%;
+  }
+  .pagination{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+    margin-bottom:2%;
+  }
+}

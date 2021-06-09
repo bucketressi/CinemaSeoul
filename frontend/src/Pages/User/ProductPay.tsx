@@ -168,7 +168,7 @@ const ProductPay = () => {
 									<TableCell></TableCell>
 									<TableCell></TableCell>
 									<TableCell></TableCell>
-									<TableCell>상품 총 가격</TableCell>
+									<TableCell className="bold-text">상품 총 가격</TableCell>
 									<TableCell>{totalPrice}원</TableCell>
 								</TableRow>
 							</TableBody>
@@ -196,8 +196,8 @@ const ProductPay = () => {
 							<div className="point-info-con">
 								<div className="point-header">사용가능 포인트</div>
 								<div>{currentPoint}원</div>
+								<Button variant="outlined" color="primary" onClick={fetchPoint}>포인트 불러오기</Button>
 							</div>
-							<Button variant="outlined" color="primary" onClick={fetchPoint}>포인트 불러오기</Button>
 						</div>
 					</div>
 				</div>

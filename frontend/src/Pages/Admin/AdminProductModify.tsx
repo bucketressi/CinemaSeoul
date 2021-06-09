@@ -113,17 +113,27 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 					</div>
 					<div className="info-con">
 						<div className="name">
-							<TextField label="상품 이름" value={prodName} onChange={(e: any) => setProdName(e.target.value)} />
+							<TextField
+								className="info-input"
+								variant="outlined"
+								label="상품 이름"
+								placeholder="상품 이름"
+								InputLabelProps={{shrink:true}}
+								inputProps={{ maxLength: 30 }}
+								value={prodName}
+								onChange={(e: any) => setProdName(e.target.value)}
+							/>
 						</div>
 						<div className="price">
 							<div className="sub-title">가격</div>
-							<TextField label="가격" value={price} onChange={handlePriceChange} />
+							<TextField className="info-input" label="가격" value={price} onChange={handlePriceChange} />
 						</div>
 						<div className="type">
 							<div className="sub-title">분류</div>
 							<FormControl>
 								<InputLabel id="select-label">상품 타입</InputLabel>
 								<Select
+									className="info-input"
 									labelId="select-label"
 									value={prodType}
 									onChange={(e: any) => setProdType(e.target.value)}
@@ -140,10 +150,20 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 						</div>
 						<div className="limit">
 							<div className="sub-title">재고</div>
-							<TextField label="재고" value={limit} onChange={handleLimitChange} />
+							<TextField className="info-input" label="재고" value={limit} onChange={handleLimitChange} />
 						</div>
 						<div className="contents">
-							<TextField label="설명" value={contents} onChange={(e: any) => setContents(e.target.value)} />
+							<TextField
+								label="상품 설명"
+								variant="outlined"
+								placeholder="상품 설명"
+								inputProps={{ maxLength: 1000 }}
+								InputLabelProps={{shrink:true}}
+								multiline={true}
+								rows={4}
+								value={contents}
+								onChange={(e: any) => setContents(e.target.value)}
+							/>
 						</div>
 					</div>
 					<div>

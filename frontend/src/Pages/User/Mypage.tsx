@@ -117,25 +117,33 @@ const Mypage = () => {
 
 	return (
 		<div>
-			<PageTitle
-				title="마이페이지"
-				isButtonVisible={false}
-			/>
+			<PageTitle title="마이페이지" isButtonVisible={false} />
 			{
 				userInfo ?
 					<div className="mypage-con">
 						<div className="pointer-con">
-							<div>
-								등급 : {userInfo?.user_type}
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell className="table-title">등급</TableCell>
+										<TableCell className="table-title">현재 포인트</TableCell>
+										<TableCell className="table-title">누적 포인트</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									<TableRow>
+										<TableCell className="table-content">{userInfo?.user_type}</TableCell>
+										<TableCell className="table-content">{userInfo?.curr_point} P</TableCell>
+										<TableCell className="table-content">{userInfo?.accu_point} P</TableCell>
+									</TableRow>
+								</TableBody>
+							</Table>
+							<div className="pointer-record-con">
+								<div className="pointer-record">
+									<Button className="pointer-btn" variant="outlined" color="primary" onClick={handlePointModal}>포인트 내역 조회</Button>
+									<Button className="pointer-btn" variant="outlined" color="primary" onClick={handleAuthModal}>등급 변경 이력 조회</Button>
+								</div>
 							</div>
-							<div>
-								현재 포인트 : {userInfo?.curr_point}포인트
-							</div>
-							<div>
-								누적 포인트 : {userInfo?.accu_point}포인트
-							</div>
-							<Button variant="outlined" color="primary" onClick={handlePointModal}>포인트 내역 조회</Button>
-							<Button variant="outlined" color="primary" onClick={handleAuthModal}>등급 변경 이력 조회</Button>
 						</div>
 						<Tabs
 							value={mode}
@@ -201,32 +209,34 @@ const Mypage = () => {
 				setOpen={setOpenPointModal}
 				title="포인트 내역 조회"
 			>
-				<TextField type="date" label="조회 시작 일자" value={getDateString(startDate)} onChange={(e: any) => { setStartDate(e.target.value.split("-").join("")) }} />
-				<TableContainer>
-					<Table>
-						<TableHead>
-							<TableRow>
-								<TableCell>일자</TableCell>
-								<TableCell>타입</TableCell>
-								<TableCell>포인트</TableCell>
-								<TableCell>메시지</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{
-								point &&
-								point.map((p) => (
-									<TableRow key={p.poin_id}>
-										<TableCell>{p.poin_datetime}</TableCell>
-										<TableCell>{p.poin_type}</TableCell>
-										<TableCell>{p.poin_amount}</TableCell>
-										<TableCell>{p.message}</TableCell>
-									</TableRow>
-								))
-							}
-						</TableBody>
-					</Table>
-				</TableContainer>
+				<div className="point-record-modal">
+					<TextField className="record-search" type="date" label="조회 시작 일자" value={getDateString(startDate)} onChange={(e: any) => { setStartDate(e.target.value.split("-").join("")) }} />
+					<TableContainer>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell className="bold-text">일자</TableCell>
+									<TableCell className="bold-text">타입</TableCell>
+									<TableCell className="bold-text">포인트</TableCell>
+									<TableCell className="bold-text">메시지</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{
+									point &&
+									point.map((p) => (
+										<TableRow key={p.poin_id}>
+											<TableCell>{p.poin_datetime}</TableCell>
+											<TableCell>{p.poin_type}</TableCell>
+											<TableCell>{p.poin_amount}</TableCell>
+											<TableCell>{p.message}</TableCell>
+										</TableRow>
+									))
+								}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</div>
 			</ModalComponent>
 			<ModalComponent
 				open={openAuthModal}
@@ -235,28 +245,30 @@ const Mypage = () => {
 			>
 				{
 					authList &&
-					<TableContainer>
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>변경 일자</TableCell>
-									<TableCell>변경 시 포인트</TableCell>
-									<TableCell>변경 등급</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{
-									authList.map((auth) => (
-										<TableRow key={auth.upda_datetime}>
-											<TableCell>{auth.upda_datetime}</TableCell>
-											<TableCell>{auth.accu_point}</TableCell>
-											<TableCell>{auth.user_type}</TableCell>
-										</TableRow>
-									))
-								}
-							</TableBody>
-						</Table>
-					</TableContainer>
+					<div className="point-record-modal">
+						<TableContainer>
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell className="bold-text">변경 일자</TableCell>
+										<TableCell className="bold-text">변경 시 포인트</TableCell>
+										<TableCell className="bold-text">변경 등급</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{
+										authList.map((auth) => (
+											<TableRow key={auth.upda_datetime}>
+												<TableCell>{auth.upda_datetime}</TableCell>
+												<TableCell>{auth.accu_point}</TableCell>
+												<TableCell>{auth.user_type}</TableCell>
+											</TableRow>
+										))
+									}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</div>
 				}
 			</ModalComponent>
 		</div>

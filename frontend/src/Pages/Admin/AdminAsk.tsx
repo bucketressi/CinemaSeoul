@@ -112,16 +112,13 @@ const AdminAsk = () => {
 	}
 
 	return (
-		<div className="admin-ask-con">
-			<PageTitle
-				title="1:1 문의 리스트"
-				isButtonVisible={false}
-			/>
-			<div>
+		<div>
+			<PageTitle title="1:1 문의 리스트" isButtonVisible={false} />
+			<div className="admin-ask-con">
 				<Tabs
 					value={answered}
 					onChange={(e: any, newValue: number) => setAnswered(newValue)}
-					className="mypage-tab"
+					className="admin-ask-tab"
 					indicatorColor="primary"
 				>
 					<Tab label="ALL" />
@@ -129,60 +126,62 @@ const AdminAsk = () => {
 					<Tab label="답변없는 문의" />
 				</Tabs>
 			</div>
-			<div
-				role="tabpanel"
-			>
-				<TableContainer>
-					<Table>
-						<TableHead>
-							<TableRow>
-								<TableCell>작성일자</TableCell>
-								<TableCell>제목</TableCell>
-								<TableCell>답변 여부 </TableCell>
-								<TableCell>문의삭제</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{
-								askList &&
-								askList.map((ask) => (
-									<TableRow key={ask.ask_id}>
-										<TableCell>작성일자 : {ask.crea_datetime}</TableCell>
-										<TableCell>제목 : {ask.ask_title}</TableCell>
-										<TableCell>답변 여부 : {
-											ask.admi_name && ask.answ_datetime ?
-												<Button variant="contained" color="default" onClick={() => fetchExactAsk(ask.ask_id)}>답변 수정하기</Button>
-												: <Button variant="contained" color="primary" onClick={() => fetchExactAsk(ask.ask_id)}>답변 달기</Button>
-										}</TableCell>
-										<TableCell>
-											<Button variant="contained" color="secondary" onClick={() => removeAsk(ask.ask_id)}>삭제하기</Button>
-										</TableCell>
-									</TableRow>
-								))
-							}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
-			</div>
-			{
-				selectedAsk &&
-				<ModalComponent
-					open={openExactModal}
-					setOpen={setOpenExactModal}
-					title="자세한 문의 내역"
-					button="답변 완료"
-					buttonOnClick={saveAskAnswer}
+			<div className="content-con">
+				<div
+					role="tabpanel"
 				>
-					<div>
-						<div>작성자 {selectedAsk.user_name}</div>
-						<div>제목 {selectedAsk.ask_title}</div>
-						<div>내용 {selectedAsk.ask_contents}</div>
-						<div>문의 일자 {selectedAsk.crea_datetime}</div>
-						<TextField value={answer} onChange={(e: any) => setAnswer(e.target.value)} label="답변" multiline={true} />
-					</div>
-				</ModalComponent>
-			}
+					<TableContainer>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<TableCell >작성일자</TableCell>
+									<TableCell>제목</TableCell>
+									<TableCell>답변 여부 </TableCell>
+									<TableCell>문의삭제</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{
+									askList &&
+									askList.map((ask) => (
+										<TableRow key={ask.ask_id}>
+											<TableCell>작성일자 : {ask.crea_datetime}</TableCell>
+											<TableCell>제목 : {ask.ask_title}</TableCell>
+											<TableCell>답변 여부 : {
+												ask.admi_name && ask.answ_datetime ?
+													<Button variant="contained" color="default" onClick={() => fetchExactAsk(ask.ask_id)}>답변 수정하기</Button>
+													: <Button variant="contained" color="primary" onClick={() => fetchExactAsk(ask.ask_id)}>답변 달기</Button>
+											}</TableCell>
+											<TableCell>
+												<Button variant="contained" color="secondary" onClick={() => removeAsk(ask.ask_id)}>삭제하기</Button>
+											</TableCell>
+										</TableRow>
+									))
+								}
+							</TableBody>
+						</Table>
+					</TableContainer>
+					<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
+				</div>
+				{
+					selectedAsk &&
+					<ModalComponent
+						open={openExactModal}
+						setOpen={setOpenExactModal}
+						title="자세한 문의 내역"
+						button="답변 완료"
+						buttonOnClick={saveAskAnswer}
+					>
+						<div>
+							<div>작성자 {selectedAsk.user_name}</div>
+							<div>제목 {selectedAsk.ask_title}</div>
+							<div>내용 {selectedAsk.ask_contents}</div>
+							<div>문의 일자 {selectedAsk.crea_datetime}</div>
+							<TextField value={answer} onChange={(e: any) => setAnswer(e.target.value)} label="답변" multiline={true} />
+						</div>
+					</ModalComponent>
+				}
+			</div>
 		</div>
 	)
 }

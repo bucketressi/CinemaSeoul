@@ -10,6 +10,8 @@ import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 import { Pagination } from '@material-ui/lab';
 
+import "../../scss/pages/adminnotice.scss";
+
 const AdminNotice = () => {
 	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
@@ -71,37 +73,39 @@ const AdminNotice = () => {
 	
 
 	return (
-		<div>
+		<>
 			<PageTitle
 				title="공지사항"
 				isButtonVisible={false}
 			/>
-			<div>
-				<Button variant="contained" color="primary" onClick={handleOpenModal}>공지사항 추가</Button>
-			</div>
-			<div>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>작성자</TableCell>
-							<TableCell>공지사항 제목</TableCell>
-							<TableCell>작성 날짜</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{
-							noticeList &&
-							noticeList.map((notice) => (
-								<TableRow key={notice.noti_id} onClick={() => history.push(`/admin/notice/${notice.noti_id}`)}>
-									<TableCell>{notice.admi_name}</TableCell>
-									<TableCell>{notice.noti_title}</TableCell>
-									<TableCell>{notice.crea_datetime}</TableCell>
-								</TableRow>
-							))
-						}
-					</TableBody>
-				</Table>
-				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
+			<div className="notice-wrap">
+				<div className="add-con">
+					<Button variant="outlined" color="primary" onClick={handleOpenModal}>공지사항 추가</Button>
+				</div>
+				<div className="notice-con">
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell className="table-title">작성자</TableCell>
+								<TableCell className="table-title">공지사항 제목</TableCell>
+								<TableCell className="table-title">작성 날짜</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{
+								noticeList &&
+								noticeList.map((notice) => (
+									<TableRow key={notice.noti_id} onClick={() => history.push(`/admin/notice/${notice.noti_id}`)}>
+										<TableCell className="table-content">{notice.admi_name}</TableCell>
+										<TableCell className="table-content-title">{notice.noti_title}</TableCell>
+										<TableCell className="table-content">{notice.crea_datetime}</TableCell>
+									</TableRow>
+								))
+							}
+						</TableBody>
+					</Table>
+					<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
+				</div>
 			</div>
 			<ModalComponent
 				open={openModal}
@@ -110,12 +114,32 @@ const AdminNotice = () => {
 				button="추가"
 				buttonOnClick={addNotice}
 			>
-				<div>
-					<TextField label="제목" value={title} onChange={(e: any) => setTitle(e.target.value)} />
-					<TextField label="내용" multiline={true} value={contents} onChange={(e: any) => setContents(e.target.value)} />
+				<div className="notice-modal">
+					<TextField
+						className="notice-input"
+						label="제목"
+						placeholder="제목"
+						InputLabelProps={{shrink:true}}
+						variant="outlined"
+						inputProps={{ maxLength: 50 }}
+						value={title}
+						onChange={(e: any) => setTitle(e.target.value)}
+					/>
+					<TextField
+						className="notice-input"
+						label="내용"
+						placeholder="내용"
+						InputLabelProps={{shrink:true}}
+						variant="outlined"
+						inputProps={{ maxLength: 1000 }}
+						rows={5}
+						multiline={true}
+						value={contents}
+						onChange={(e: any) => setContents(e.target.value)}
+					/>
 				</div>
 			</ModalComponent>
-		</div>
+		</>
 	);
 }
 

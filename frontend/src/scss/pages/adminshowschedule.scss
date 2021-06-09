@@ -1,15 +1,56 @@
+.save-btn{
+	display:flex;
+	justify-content: flex-end;
+}
 .schedule-con{
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 	.schedule-header{
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		margin-top: 2.3%;
+		margin-bottom: 2%;
 		.switch-con{
 			display: flex;
 			align-items: center;
 			&>div:first-child{
 				width: 50px;
+			}
+		}
+		.search-con{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.search-input{
+				width: 150px;
+				margin-left: 3px;
+				margin-right: 3px;
+			}
+			.search-btn{
+				margin-left: 10px;
+				margin-top: 10px;
+			}
+		}
+	}
+	.schedule-con{
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+		.table-title{
+      font-weight: bold;
+      text-align: center;
+    }
+    .table-content{
+      text-align: center;
+    }
+		.modify-btn-con{
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			&>button{
+				margin-bottom: 5px;
 			}
 		}
 	}
@@ -24,11 +65,23 @@
 			background-color: transparent;
 		}
 	}
-	.modify-btn-con{
+	.pagination{
+		width: 100%;
 		display: flex;
-		flex-direction: column;
-		&>button{
-			margin-bottom: 5px;
-		}
+		align-items: center;
+		justify-content: center;
+    margin-top: 5%;
+    margin-bottom:2%;
+	}
+}
+
+/* 상영일정 추가/수정 modal */
+.schedule-modal{
+	margin-top: 40px;
+	.schedule-input{
+		width: 150px;
+		margin-bottom: 10px;
+		margin-left: 2px;
+		margin-right: 2px;
 	}
 }

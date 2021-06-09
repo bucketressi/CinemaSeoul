@@ -154,12 +154,9 @@ const AdminProduct = () => {
 
 	return (
 		<div>
-			<PageTitle
-				title="상품 목록 리스트"
-				isButtonVisible={false}
-			/>
+			<PageTitle title="상품 목록 리스트" isButtonVisible={true} />
 			<div className="add-btn-con">
-				<Button variant="contained" color="primary" onClick={() => setOpenModal(true)}>상품 추가</Button>
+				<Button variant="outlined" color="primary" onClick={() => setOpenModal(true)}>상품 추가</Button>
 			</div>
 			<div className="product-list-con">
 				<Tabs
@@ -186,8 +183,8 @@ const AdminProduct = () => {
 							/>
 						)
 					}
-					<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 				</div>
+				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
 			<ModalComponent
 				open={openModal}
@@ -196,27 +193,32 @@ const AdminProduct = () => {
 				button="추가"
 				buttonOnClick={saveProduct}
 			>
-				<div>
-					<TextField label="상품 이름" value={prodName} onChange={(e: any) => setProdName(e.target.value)} />
-					<TextField label="가격" value={price} onChange={handlePriceChange} />
-					<TextField label="재고" value={limit} onChange={handleLimitChange} />
-					<TextField label="설명" value={contents} onChange={(e: any) => setContents(e.target.value)} />
-					<FormControl>
-						<InputLabel id="select-label">상품 타입</InputLabel>
-						<Select
-							labelId="select-label"
-							value={prodType}
-							onChange={(e: any) => setProdType(e.target.value)}
-						>
-							{
-								productType.map((type) => {
-									return (
-										<MenuItem key={type.code_id} value={type.code_id}>{type.code_name}</MenuItem>
-									)
-								})
-							}
-						</Select>
-					</FormControl>
+				<div className="add-product-modal">
+					<div>
+						<TextField className="product-input" variant="outlined" label="상품 이름" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 30 }} value={prodName} onChange={(e: any) => setProdName(e.target.value)} />
+						<TextField className="product-input" variant="outlined" label="가격" InputLabelProps={{shrink:true}} value={price} onChange={handlePriceChange} />
+					</div>
+					<div>
+						<TextField className="product-input" variant="outlined" label="재고" InputLabelProps={{shrink:true}} value={limit} onChange={handleLimitChange} />
+						<FormControl>
+							<InputLabel id="select-label">상품 타입</InputLabel>
+							<Select
+								className="product-input"
+								labelId="select-label"
+								value={prodType}
+								onChange={(e: any) => setProdType(e.target.value)}
+							>
+								{
+									productType.map((type) => {
+										return (
+											<MenuItem key={type.code_id} value={type.code_id}>{type.code_name}</MenuItem>
+										)
+									})
+								}
+							</Select>
+						</FormControl>
+					</div>
+					<TextField className="product-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} multiline={true} inputProps={{ maxLength: 1000 }} value={contents} onChange={(e: any) => setContents(e.target.value)} />
 					{/* todo : 이미지 */}
 				</div>
 			</ModalComponent>

@@ -9,6 +9,8 @@ import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextFi
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/adminevent.scss";
+
 interface MatchParams {
 	event_id: string
 }
@@ -82,39 +84,61 @@ const AdminEventExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 	}
 
 	return (
-		<div>
+		<>
 			<PageTitle
 				title="이벤트 세부"
 				isButtonVisible={true}
 			/>
-			<div>
-				<Button variant="contained" color="primary" onClick={updateEvent}>수정하기</Button>
-				<Button variant="contained" color="secondary" onClick={deleteEvent}>삭제하기</Button>
-			</div>
-			<div>
-				{
-					Event ?
-						<div style={{ display: 'flex', flexDirection: 'column' }}>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell>이벤트 명</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									<TableRow key={Event.event_id}>
-										<TextField label="이벤트 명" value={title} onChange={(e:any) => setTitle(e.target.value)}/>
-									</TableRow>
-								</TableBody>
-							</Table>
-							<div>
-								<TextField label="이벤트 내용" value={contents} onChange={(e:any)=> setContents(e.target.value)} multiline={true}/>
+			<div className="event-wrap">
+				<div className="modify-con">
+					<Button variant="outlined" color="primary" onClick={updateEvent}>수정하기</Button>
+					<Button variant="outlined" color="secondary" onClick={deleteEvent}>삭제하기</Button>
+				</div>
+				<div>
+					{
+						Event ?
+							<div className="event-con">
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell className="table-title">이벤트 제목</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody className="table-body">
+										<TableRow key={Event.event_id}>
+											<TableCell className="table-content">
+												<TextField
+													className="title-input"
+													variant="outlined"
+													placeholder="제목을 입력하세요."
+													inputProps={{ maxLength: 50 }}
+													label="이벤트 제목"
+													value={title}
+													onChange={(e:any) => setTitle(e.target.value)}
+												/>
+											</TableCell>
+										</TableRow>
+									</TableBody>
+								</Table>
+								<div className="event-content">
+									<TextField
+										label="이벤트 내용"
+										placeholder="내용을 입력하세요."
+										InputLabelProps={{shrink:true}}
+										variant="outlined"
+										inputProps={{ maxLength: 1000 }}
+										value={contents}
+										onChange={(e:any)=> setContents(e.target.value)}
+										multiline={true}
+										rows={10}
+									/>
+								</div>
 							</div>
-						</div>
-						: "데이터를 불러오는 중입니다."
-				}
+							: "데이터를 불러오는 중입니다."
+					}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
