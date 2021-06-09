@@ -65,6 +65,12 @@ export type AbleMovieType = {
 	avai_age: string
 }
 
+export type MovieReviewType = {
+	"user_name": string,// "김**",
+	"comments": string,//"희대의 명작입니다.",
+	"rating": number, //5
+}
+
 
 /* people */
 

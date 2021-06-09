@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { PageTitle, ModalComponent } from '../Components';
 import { useAdminState } from '../Main/UserModel';
 import { useGenreCodeState, usePeopleTypeCodeState } from '../Main/CodeModel';
 import { useFetchMovieFunction } from '../Main/MovieListModel';
-import { MovieType, CodeMatch, CodeType, PeopleType, PeopleExactType } from '../Main/Type';
+import { MovieType, CodeMatch, CodeType, PeopleType, PeopleExactType, MovieReviewType } from '../Main/Type';
 
 import axios from 'axios';
 import { SERVER_URL } from '../CommonVariable';
 import { errorHandler } from '../Main/ErrorHandler';
 import { useTokenState } from '../Main/TokenModel';
 import "../scss/pages/movieexact.scss";
+import { Pagination, Rating } from '@material-ui/lab';
 
 type Props = {
-	movie_id : string
+	movie_id: string
 }
 
-const MovieExact = ({ movie_id } : Props) => {
+const MovieExact = ({ movie_id }: Props) => {
 	const history = useHistory();
 	const fetchMovie = useFetchMovieFunction();
 	const AUTH_TOKEN = useTokenState();
@@ -37,7 +38,7 @@ const MovieExact = ({ movie_id } : Props) => {
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [selectedPeople, setSelectedPeople] = useState<PeopleExactType | undefined>(undefined);
 
-	useEffect(() => { fetchExactMovie() }, []);
+	useEffect(() => { fetchExactMovie(); fetchMovieReview(); }, []);
 
 	useEffect(() => {
 		if (!movie?.casting)
@@ -115,7 +116,7 @@ const MovieExact = ({ movie_id } : Props) => {
 			});
 	}
 
-	const handlePeopleClick = (peop_id : number) => {
+	const handlePeopleClick = (peop_id: number) => {
 		// api 호출해서 인물 정보 받아오기
 		axios.get(`${SERVER_URL}/people/select/${peop_id}`, {
 			headers: {
@@ -129,7 +130,33 @@ const MovieExact = ({ movie_id } : Props) => {
 			.catch((e) => {
 				errorHandler(e, true);
 			});
+	}
 
+	/** 관람평 */
+	const [page, setPage] = useState<number>(1);
+	const [totalPage, setTotalPage] = useState<number>(1);
+	const [reviewList, setReviewList] = useState<MovieReviewType[] | undefined>(undefined);
+
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
+
+	const fetchMovieReview = () => {
+		axios.post(`${SERVER_URL}/movie/review`, {
+			"movi_id": movie_id,//193,
+			"page": page, //1,
+			"amount": 20
+		}, {
+			headers: {
+				TOKEN: AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				if (!res.data || !res.data.reviews)
+					return;
+				setReviewList(res.data.reviews);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
 	}
 
 	return (
@@ -144,70 +171,109 @@ const MovieExact = ({ movie_id } : Props) => {
 			}
 			{
 				movie &&
-				<div className="info-con">
-					<div className="img-con"><img src="https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg" alt="포스터" /></div>
-					<div className="movie-info-con">
-						<div className="left-info-con">
-							<div className="movie-title">
-								<div className="movie-name">{movie.movi_name}</div>
-								<div className="movie-age">{movie.avai_age}</div>
-							</div>
-							<div>
-								<div className="menu">
-									<div className="menu-subtitle">런타임</div>
-									<div>{`${movie.run_time}분`}</div>
+				<div>
+					<div className="info-con">
+						<div className="img-con"><img src="https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg" alt="포스터" /></div>
+						<div className="movie-info-con">
+							<div className="left-info-con">
+								<div className="movie-title">
+									<div className="movie-name">{movie.movi_name}</div>
+									<div className="movie-age">{movie.avai_age}</div>
 								</div>
-								<div className="menu">
-									<div className="menu-subtitle">배급사</div>
-									<div>{movie.company}</div>
-								</div>
-							</div>
-							<div>
-								<div className="menu">
-									<div className="menu-subtitle">평점</div>
-									<div>{movie.rating}</div>
-								</div>
-								<div className="menu">
-									<div className="menu-subtitle">개봉일</div>
-									<div>{movie.open_date}</div>
-								</div>
-							</div>
-							<div className="menu">
-								<div className="menu-subtitle">누적관객수</div>
-								<div>{movie.accu_audience}</div>
-							</div>
-							{
-								Object.keys(genreCodeObj).length !== 0 &&
-								<div className="menu-genre menu">
-									<div className="menu-subtitle">장르</div>
-									<div>{movie.genre.map((code) => <span key={code}>{genreCodeObj[Number(code)]}</span>)}</div>
-								</div>
-							}
-							{
-								director &&
-								<div className="menu-director menu">
-									<div className="menu-subtitle">감독</div>
-									<div>{director.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
-								</div>
-							}
-							{
-								actor &&
-								<div className="menu-actor menu">
-									<div className="menu-subtitle">배우</div>
-									<div>{actor.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
-								</div>
-							}
-						</div>
-						<div className="right-info-con">
-							<div className="menu">
-								<div className="menu-subtitle">영화 설명</div>
-								<div>{movie.movi_contents}</div>
-							</div>
-							{
-								admin === undefined &&
 								<div>
-									<Button variant="contained" color="secondary" onClick={()=>{history.push("/book")}}>예매하기</Button>
+									<div className="menu">
+										<div className="menu-subtitle">런타임</div>
+										<div>{`${movie.run_time}분`}</div>
+									</div>
+									<div className="menu">
+										<div className="menu-subtitle">배급사</div>
+										<div>{movie.company}</div>
+									</div>
 								</div>
+								<div>
+									<div className="menu">
+										<div className="menu-subtitle">평점</div>
+										<div>{movie.rating}</div>
+									</div>
+									<div className="menu">
+										<div className="menu-subtitle">개봉일</div>
+										<div>{movie.open_date}</div>
+									</div>
+								</div>
+								<div className="menu">
+									<div className="menu-subtitle">누적관객수</div>
+									<div>{movie.accu_audience}</div>
+								</div>
+								{
+									Object.keys(genreCodeObj).length !== 0 &&
+									<div className="menu-genre menu">
+										<div className="menu-subtitle">장르</div>
+										<div>{movie.genre.map((code) => <span key={code}>{genreCodeObj[Number(code)]}</span>)}</div>
+									</div>
+								}
+								{
+									director &&
+									<div className="menu-director menu">
+										<div className="menu-subtitle">감독</div>
+										<div>{director.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
+									</div>
+								}
+								{
+									actor &&
+									<div className="menu-actor menu">
+										<div className="menu-subtitle">배우</div>
+										<div>{actor.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
+									</div>
+								}
+							</div>
+							<div className="right-info-con">
+								<div className="menu">
+									<div className="menu-subtitle">영화 설명</div>
+									<div>{movie.movi_contents}</div>
+								</div>
+								{
+									admin === undefined &&
+									<div>
+										<Button variant="contained" color="secondary" onClick={() => { history.push("/book") }}>예매하기</Button>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+					<div>
+						<div>관람평</div>
+						<div>
+							{
+								reviewList ?
+									<div>
+										<Table>
+											<TableHead>
+												<TableRow>
+													<TableCell>작성자</TableCell>
+													<TableCell>관람평</TableCell>
+													<TableCell>평점</TableCell>
+												</TableRow>
+											</TableHead>
+											<TableBody>
+												{
+													reviewList.map((review) => (
+														<TableRow key={`${review.user_name}/${review.comments}`}>
+															<TableCell>{review.user_name}</TableCell>
+															<TableCell>{review.comments}</TableCell>
+															<TableCell>
+																<Rating
+																	readOnly={true}
+																	value={review.rating}
+																/>
+															</TableCell>
+														</TableRow>
+													))
+												}
+											</TableBody>
+										</Table>
+										<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
+									</div>
+									: <p>받아오는 중입니다...</p>
 							}
 						</div>
 					</div>
@@ -229,11 +295,11 @@ const MovieExact = ({ movie_id } : Props) => {
 								</div>
 								<div className="menu">
 									<div className="menu-subtitle">생년월일</div>
-									<div>{`${selectedPeople.birth.substr(0,4)}/${selectedPeople.birth.substr(4,2)}/${selectedPeople.birth.substr(6,2)}`}</div>
+									<div>{`${selectedPeople.birth.substr(0, 4)}/${selectedPeople.birth.substr(4, 2)}/${selectedPeople.birth.substr(6, 2)}`}</div>
 								</div>
 							</div>
 							<div>
-								<img src="#" alt="인물 이미지"/>
+								<img src="#" alt="인물 이미지" />
 							</div>
 						</div>
 						<div className="menu">
