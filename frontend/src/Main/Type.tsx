@@ -96,7 +96,7 @@ export type PeopleExactType = {
 	nation: string,//"한국",
 	birth: string,//"19810118",
 	peop_contents: string,//"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다.",
-	image: string,//"",
+	imageBase64: string,//"",
 	movies: CastMovieType[]
 }
 

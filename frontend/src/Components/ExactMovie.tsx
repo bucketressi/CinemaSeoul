@@ -13,6 +13,7 @@ import { errorHandler } from '../Main/ErrorHandler';
 import { useTokenState } from '../Main/TokenModel';
 import "../scss/pages/movieexact.scss";
 import { Pagination, Rating } from '@material-ui/lab';
+import ImgComponent from './ImgComponent';
 
 type Props = {
 	movie_id: string
@@ -37,6 +38,7 @@ const MovieExact = ({ movie_id }: Props) => {
 	/* 인물 modal */
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [selectedPeople, setSelectedPeople] = useState<PeopleExactType | undefined>(undefined);
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	useEffect(() => { fetchExactMovie(); fetchMovieReview(); }, []);
 
@@ -124,6 +126,8 @@ const MovieExact = ({ movie_id }: Props) => {
 			}
 		})
 			.then((res) => {
+				if(!res.data)
+					return;
 				setSelectedPeople(res.data);
 				setModalOpen(true);
 			})
@@ -299,7 +303,8 @@ const MovieExact = ({ movie_id }: Props) => {
 								</div>
 							</div>
 							<div>
-								<img src="#" alt="인물 이미지" />
+								<div className="menu-subtitle">인물 사진</div>
+								<img src={selectedPeople.imageBase64 ? `data:image/png;base64,${selectedPeople.imageBase64}` : ""} alt="기존 인물 사진"/>
 							</div>
 						</div>
 						<div className="menu">

@@ -43,10 +43,10 @@ const ImgComponent = ({ setImgFile }: Props) => {
 
 	return (
 		<div className="img-component">
-			<div>포스터</div>
+			<div>이미지</div>
 			{
-				imgInfo && typeof (imgInfo.previewURL) === "string" && // 없으면 priview 포스터 보여주기
-				<img src={imgInfo.previewURL} alt="포스터" />
+				imgInfo && typeof (imgInfo.previewURL) === "string" &&
+				<img src={imgInfo.previewURL} alt="이미지" />
 			}
 			<input type="file" accept="image/*" onChange={uploadImage} />
 		</div>

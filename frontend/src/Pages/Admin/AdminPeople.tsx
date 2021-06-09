@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ModalComponent, PageTitle, SelectModule } from '../../Components';
+import { ImgComponent, ModalComponent, PageTitle, SelectModule } from '../../Components';
 import { PeopleType, PeopleExactType } from '../../Main/Type';
 
 import axios from 'axios';
@@ -42,6 +42,7 @@ const AdminPeople = () => {
 
 	/* 조회 */
 	const [peopleList, setPeopleList] = useState<PeopleType[] | undefined>(undefined);
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 	useEffect(() => {
 		fetchPeopleList();
 	}, []);
@@ -110,6 +111,7 @@ const AdminPeople = () => {
 				errorHandler(e, true);
 			});
 	}
+
 	const modifyPeople = () => {
 		if(!selectedPeople)
 			return;
@@ -120,6 +122,34 @@ const AdminPeople = () => {
 			"birth" : birth,//"19810118", 
 			"peop_contents" : contents, //"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다."
 		}, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				modifyImage();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
+	const modifyImage = () => {
+		if(!selectedPeople)
+			return;
+		if(!imgFile){
+			alert("인물이 성공적으로 수정되었습니다.")
+			setOpenModifyModal(false);
+			fetchPeopleList();
+			return;
+		}
+
+		const formData = new FormData();
+		if (imgFile) {
+			formData.append("image", imgFile);
+		}
+
+		axios.put(`${SERVER_URL}/people/image/${selectedPeople.peop_id}`, formData, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
 			}
@@ -152,15 +182,25 @@ const AdminPeople = () => {
 
 
 	const addPeople = () => {
-		axios.post(`${SERVER_URL}/people/add`,{
+		const formData = new FormData();
+
+		if (imgFile) {
+			formData.append("image", imgFile);
+		}
+		const jsonData = JSON.stringify({
 			"peop_name" : addName,//"강동원",
 			"nation" : addNation,//"한국",
 			"birth" : addBirth,//"19810118", 
 			"peop_contents" : addContents, //"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다."
 			"img" : null,
-		}, {
+		});
+		const blobData = new Blob([jsonData], { type: 'application/json' });
+
+		formData.append("people", blobData);
+		axios.post(`${SERVER_URL}/people/add`, formData, {
 			headers: {
-				"TOKEN": AUTH_TOKEN
+				"TOKEN": AUTH_TOKEN,
+				"Content-Type": "multipart/form-data"
 			}
 		})
 			.then((res) => {
@@ -234,10 +274,15 @@ const AdminPeople = () => {
 								<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
 							</div>
 							<TextField className="people-input-long" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} multiline={true} value={contents} onChange={(e: any) => setContents(e.target.value)}/>
+							<div>
+								<div>기존 사진</div>
+								<img src={selectedPeople.imageBase64 ? `data:image/png;base64,${selectedPeople.imageBase64}` : ""} alt="기존 인물 사진"/>
+								<div>사진 변경</div>
+								<ImgComponent setImgFile={setImgFile}/>
+							</div>
 						</div>
 					</ModalComponent>
 				}
-				{/* todo : 이미지 */}
 				<ModalComponent
 					open={openAddModal}
 					setOpen={setOpenAddModal}
@@ -256,6 +301,9 @@ const AdminPeople = () => {
 							<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={30} />
 						</div>
 						<TextField className="people-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} placeholder="설명" multiline={true} rows={3} value={addContents} onChange={(e: any) => setAddContents(e.target.value)}/>
+						<div>
+							<ImgComponent setImgFile={setImgFile}/>
+						</div>
 					</div>
 				</ModalComponent>
 			</div>
