@@ -110,8 +110,11 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	};
 
 	const saveImg = () => {
-		if(!imgFile)
+		if(!imgFile){
+			alert("영화 정보가 성공적으로 등록되었습니다.");
+			history.goBack();
 			return;
+		}
 
 		const formData = new FormData();
 		formData.append("image", imgFile);
@@ -163,6 +166,8 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	};
 
 	/* cast */
+	const [searchKeyword, setSearchKeyword] = useState<string>("");
+
 	useEffect(() => {
 		const obj: CodeMatch = {};
 		peopleTypeCode.forEach((type) => {
@@ -175,6 +180,10 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 		if (!isCastOpened)
 			return;
 		// cast 목록 저장
+		setAllCast();
+	}, [isCastOpened]);
+
+	const setAllCast = () => {
 		axios.post(`${SERVER_URL}/people/list`, {
 			"page": 1,
 			"amount": 30
@@ -184,13 +193,14 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 			}
 		})
 			.then((res) => {
+				if(!res.data || !res.data.peop_list)
+					return;
 				setPeopleArr(res.data.peop_list);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
 			});
-
-	}, [isCastOpened]);
+	}
 
 	const saveCast = () => {
 		const castingObj : CastingType[] = [];
@@ -216,6 +226,25 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				errorHandler(e, true);
 			});
 	};
+
+	const searchCast = () => {
+		axios.post(`${SERVER_URL}/people/search`, {
+			"peop_name" : searchKeyword
+		}, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				if(!res.data)
+					return;
+				console.log(res.data);
+				setPeopleArr(res.data);
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
 
 	const handleCheckCast = (event: React.ChangeEvent<{ value: unknown }>) => {
 		const arr: [] = event.target.value as [];
@@ -316,6 +345,9 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 						<div>포스터</div>
 						<ImgComponent setImgFile={setImgFile} />
 					</div>
+					<div>
+						<Button variant="contained" color="primary" onClick={saveMovie}>저장</Button>
+					</div>
 				</div>
 			</div>
 			<ModalComponent
@@ -346,6 +378,12 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 			>
 				<div className="cast-modal">
 					<div className="cast-select-con">
+						<div>
+							<TextField value={searchKeyword} onChange={(e:any) => setSearchKeyword(e.target.value)}/>
+							<Button variant="contained" color="primary" onClick={searchCast}>검색</Button>
+							<Button variant="contained" color="primary" onClick={setAllCast}>전체 인물 보기</Button>
+							<p>검색 후 아래에서 선택하실 수 있습니다.</p>
+						</div>
 						<div className="cast-chip-con">
 							{cast.map((peop: MovieCastingType, index: number) =>
 								<Chip

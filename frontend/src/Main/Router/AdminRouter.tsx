@@ -26,7 +26,6 @@ import {
 	AdminPeople,
 	AdminSales,
 	AdminShowSchedule,
-	AdminModifyShowSchedule,
 	AdminProduct,
 	AdminProductModify,
 	AdminTheater,
@@ -75,7 +74,6 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/people" component={AdminPeople} />
 				<Route path="/admin/sales" component={AdminSales} />
 				<Route exact path="/admin/showschedule" component={AdminShowSchedule} />
-				<Route path="/admin/modify/showschedule/:schedule_id" component={AdminModifyShowSchedule} />
 				<Route exact path="/admin/product" component={AdminProduct} />
 				<Route path="/admin/product/:product_id" component={AdminProductModify} />
 				<Route path="/admin/theater" component={AdminTheater} />

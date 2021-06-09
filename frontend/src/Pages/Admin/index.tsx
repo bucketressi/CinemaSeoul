@@ -8,7 +8,6 @@ export { default as AdminMovieList } from './AdminMovieList';
 export { default as AdminMovieSearchList } from './AdminMovieSearchList';
 export { default as AdminPeople } from './AdminPeople';
 export { default as AdminShowSchedule } from './AdminShowSchedule';
-export { default as AdminModifyShowSchedule } from './AdminModifyShowSchedule';
 export { default as AdminSales } from './AdminSales';
 export { default as AdminAdmin } from './AdminAdmin';
 export { default as AdminAsk } from './AdminAsk';
