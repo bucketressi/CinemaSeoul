@@ -356,7 +356,16 @@ const AdminHall = () => {
 							</Table>
 						</TableContainer>
 						<div className="seat-info-con">
-
+							{
+								seatTypeCode.map((seat) => {
+									return (
+										<div key={seat.code_id}>
+											<div className={clsx("seat-shape", seat.code_name)} />
+											<div className="seat-type">{seat.code_name}</div>
+										</div>
+									);
+								})
+							}
 						</div>
 					</div>
 				</ModalComponent>
@@ -401,7 +410,7 @@ const AdminHall = () => {
 								variant="outlined"
 								placeholder="상영관 이름"
 								label="상영관 이름"
-								InputLabelProps={{shrink:true}}
+								InputLabelProps={{ shrink: true }}
 								inputProps={{ maxLength: 50 }}
 								helperText="이름을 입력하지 않으면 자동 할당됩니다."
 								value={hallName}
@@ -411,7 +420,7 @@ const AdminHall = () => {
 								variant="outlined"
 								placeholder="행"
 								label="행"
-								InputLabelProps={{shrink:true}}
+								InputLabelProps={{ shrink: true }}
 								inputProps={{ maxLength: 2 }}
 								value={hallCol}
 								onChange={handleHallColChange}
@@ -420,7 +429,7 @@ const AdminHall = () => {
 								variant="outlined"
 								placeholder="열"
 								label="열"
-								InputLabelProps={{shrink:true}}
+								InputLabelProps={{ shrink: true }}
 								inputProps={{ maxLength: 2 }}
 								value={hallRow}
 								onChange={handleHallRowChange}
