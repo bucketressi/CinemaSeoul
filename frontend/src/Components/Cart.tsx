@@ -41,10 +41,12 @@ const Cart = () => {
 		const obj: CartProductType = Object.assign({}, cartProduct);
 		delete obj[id];
 		localStorage.setItem("product", JSON.stringify(obj));
+		alert("상품을 장바구니에서 제거하였습니다.");
 		cartChange();
 	}
 
 	const gotoPay = () => {
+		alert("결제 창으로 이동합니다.")
 		history.push("/product/pay")
 	}
 

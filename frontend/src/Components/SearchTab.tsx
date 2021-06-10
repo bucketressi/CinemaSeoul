@@ -45,22 +45,21 @@ const SearchTab = () => {
 	};
 
 	const handleSearch = () => { // 검색
-		console.log(age, genre);
 		axios.post(`${SERVER_URL}/movie/list`, {
 			page: 1,
 			stat: 0,
 			avai_age_code: age.length === 0 ? null : age,  //없으면 null
 			genre_code: genre.length === 0 ? null : genre,  //없으면 null
-			sort: 0
+			sort: 0,
+			amount: 9
 		})
 			.then((res) => {
 				if(!res.data || !res.data.movi_list)
 					return;
 				setMovieList(res.data.movi_list);
-				console.log(res.data.movi_list);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "조건이 잘못 입력되었습니다.", ""]);
+				errorHandler(e, true);
 			});
 	};
 

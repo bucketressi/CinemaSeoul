@@ -90,16 +90,17 @@ const SignUp = () => {
 			}
 		})
 			.then((res) => {
+				alert("회원가입이 정상적으로 완료되었습니다. 로그인 해주세요.")
 				history.push("/login");
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["","","블랙리스트에 등록되어있습니다. 관리자에게 문의해주세요."]);
 			});
 	}
 
 	const checkPhoneNum = () => {
-		if(phoneNum === "" || phoneNum.length !== 11){
-			alert("정확한 핸드폰 번호를 입력해주세요.");
+		if(phoneNum === "" || phoneNum.length !== 11 || isNaN(Number(phoneNum))){
+			alert("알맞은 핸드폰 번호를 입력해주세요.");
 			return;
 		}
 		axios.post(`${SERVER_URL}/user/phonecheck`, {
@@ -121,7 +122,7 @@ const SignUp = () => {
 
 	const checkEmail = () => {
 		if(email === "" || !email.includes("@")){
-			alert("정확한 이메일을 입력해주세요.");
+			alert("이메일 형식을 확인해주세요.");
 			return;
 		}
 		axios.post(`${SERVER_URL}/user/emailcheck`, {
@@ -150,7 +151,7 @@ const SignUp = () => {
 			<div className="signup-con">
 				<div className="form-con">
 					<div className="input-con">
-						<TextField label="이름" variant="outlined" value={name} inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
+						<TextField label="이름" variant="outlined" value={name} inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }}/>
 						<div className="with-btn">
 							<TextField label="핸드폰 번호" variant="outlined" value={phoneNum} inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
 							<Button variant="contained" color={isPhoneNumExist !== 0 ? "primary" : "default"} onClick={checkPhoneNum}>핸드폰 번호 중복 체크</Button>
@@ -161,11 +162,11 @@ const SignUp = () => {
 							<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
 						</div>
 						<div className="with-btn">
-							<TextField label="이메일" variant="outlined" value={email} onChange={(e: any) => { setEmail(e.target.value); }} />
+							<TextField label="이메일" inputProps={{ maxLength: 40 }} variant="outlined" value={email} onChange={(e: any) => { setEmail(e.target.value); }} />
 							<Button variant="contained" color={isEmailExist !== 0 ? "primary" : "default"} onClick={checkEmail}>이메일 중복 체크</Button>
 						</div>
-						<TextField label="비밀번호" variant="outlined" type="password" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
-						<TextField label="비밀번호 확인" variant="outlined" type="password" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
+						<TextField label="비밀번호"  inputProps={{ maxLength: 100 }} variant="outlined" type="password" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
+						<TextField label="비밀번호 확인" inputProps={{ maxLength: 100 }} variant="outlined" type="password" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
 					</div>
 					<div className="btn-con">
 						<Button className="btn" variant="contained" color="primary" onClick={signUp}>회원가입</Button>

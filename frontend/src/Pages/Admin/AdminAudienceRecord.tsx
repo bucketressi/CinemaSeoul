@@ -59,7 +59,7 @@ const AdminAudienceRecord = () => {
 				</div>
 				<div className="result-con">
 					{
-						audienceData &&
+						audienceData ?
 						<div>
 							<div className="total-audi-con">
 								<div className="result-title">해당 기간 동안의 총 관객수</div>
@@ -87,11 +87,12 @@ const AdminAudienceRecord = () => {
 								</Table>
 							</div>
 						</div>
+						: <div>아직까지 관람현황 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>
 		</div>
-	)
+	);
 }
 
 export default AdminAudienceRecord;

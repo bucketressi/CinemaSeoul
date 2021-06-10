@@ -13,6 +13,7 @@ interface MatchParams {
 	event_id: string
 }
 import { PageTitle } from '../../Components';
+import { returnValidImg } from '../../Function';
 
 const EventExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
 	const AUTH_TOKEN = useTokenState();
@@ -52,11 +53,15 @@ const EventExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 								<TableHead>
 									<TableRow>
 										<TableCell className="table-title">이벤트 명</TableCell>
+										<TableCell className="table-title">이미지</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody className="table-body">
 									<TableRow key={Event.event_id}>
 										<TableCell className="table-content">{Event.event_title}</TableCell>
+										<TableCell className="table-content">
+											<img src={returnValidImg(Event.imageBase64)} alt="이벤트 이미지"/>
+										</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>

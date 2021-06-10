@@ -39,23 +39,27 @@ const AdminFAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> =
 				errorHandler(e, true);
 			});
 	}
-	
-	/** 수정 */
-	const [title, setTitle] =useState<string>("");
-	const [contents, setContents] =useState<string>("");
 
-	useEffect(()=> {
-		if(!FAQ)
+	/** 수정 */
+	const [title, setTitle] = useState<string>("");
+	const [contents, setContents] = useState<string>("");
+
+	useEffect(() => {
+		if (!FAQ)
 			return;
 		setTitle(FAQ.faq_title);
 		setContents(FAQ.faq_contents);
 	}, [FAQ]);
 
 	const updateFAQ = () => {
-		axios.put(`${SERVER_URL}/faq/update`,{
-			"faq_id" : Number(match.params.faq_id), //2,
-			"faq_title" : title,//"2021년 6월 둘째주 휴무 일정",
-			"faq_contents" : contents//"2021년 6월 둘째주 목요일 (10일)은 영화관 보수공사로 인해 휴무입니다. \n 이용에 불편을 드려서 죄송합니다."
+		if (title === "") {
+			alert("제목을 입력해주세요.");
+			return;
+		}
+		axios.put(`${SERVER_URL}/faq/update`, {
+			"faq_id": Number(match.params.faq_id), //2,
+			"faq_title": title,//"2021년 6월 둘째주 휴무 일정",
+			"faq_contents": contents//"2021년 6월 둘째주 목요일 (10일)은 영화관 보수공사로 인해 휴무입니다. \n 이용에 불편을 드려서 죄송합니다."
 		}, {
 			headers: {
 				TOKEN: AUTH_TOKEN
@@ -70,7 +74,11 @@ const AdminFAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> =
 	}
 
 	const deleteFAQ = () => {
-		axios.delete(`${SERVER_URL}/faq/delete/${match.params.faq_id}`,{
+		if (!confirm("해당 FAQ를 정말로 삭제하시겠습니까?")) {
+			return;
+		}
+
+		axios.delete(`${SERVER_URL}/faq/delete/${match.params.faq_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
@@ -115,7 +123,7 @@ const AdminFAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> =
 													placeholder="제목을 입력하세요."
 													inputProps={{ maxLength: 50 }}
 													value={title}
-													onChange={(e:any) => setTitle(e.target.value)}
+													onChange={(e: any) => setTitle(e.target.value)}
 												/>
 											</TableCell>
 										</TableRow>
@@ -123,13 +131,13 @@ const AdminFAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> =
 								</Table>
 								<div className="faq-content">
 									<TextField
-										label="내용"	
+										label="내용"
 										placeholder="내용을 입력하세요."
-										InputLabelProps={{shrink:true}}
+										InputLabelProps={{ shrink: true }}
 										variant="outlined"
 										inputProps={{ maxLength: 600 }}
 										value={contents}
-										onChange={(e:any)=> setContents(e.target.value)}
+										onChange={(e: any) => setContents(e.target.value)}
 										multiline={true}
 										rows={10}
 									/>

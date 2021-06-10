@@ -14,7 +14,8 @@ import "../../scss/pages/adminevent.scss";
 interface MatchParams {
 	event_id: string
 }
-import { PageTitle } from '../../Components';
+import { ImgComponent, PageTitle } from '../../Components';
+import { returnValidImg } from '../../Function';
 
 const AdminEventExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
 	const AUTH_TOKEN = useTokenState();
@@ -43,15 +44,32 @@ const AdminEventExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 	/** 수정 */
 	const [title, setTitle] =useState<string>("");
 	const [contents, setContents] =useState<string>("");
+	const [imgBase64, setImgBase64] = useState<string>("");
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	useEffect(()=> {
 		if(!Event)
 			return;
+		console.log(Event);
 		setTitle(Event.event_title);
 		setContents(Event.event_contents);
+		if(!Event.imageBase64)
+			setImgBase64("");
+		else
+			setImgBase64(Event.imageBase64);
 	}, [Event]);
 
 	const updateEvent = () => {
+		if (title === "") {
+			alert("제목을 입력해주세요.");
+			return;
+		}
+		
+		if (contents === "") {
+			alert("내용을 입력해주세요.");
+			return;
+		}
+
 		axios.put(`${SERVER_URL}/event/update`,{
 			"event_id" : Number(match.params.event_id), //2,
 			"event_title" : title,//"2021년 6월 둘째주 휴무 일정",
@@ -61,8 +79,33 @@ const AdminEventExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 				TOKEN: AUTH_TOKEN
 			}
 		}).then((res) => {
+			updateImg();
+		})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
+	const updateImg = () => {
+		if(!imgFile){
 			alert("이벤트가 정상적으로 수정되었습니다.");
 			fetchEventExact();
+			history.push("/admin/event");
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append("image", imgFile);
+
+		axios.put(`${SERVER_URL}/event/image/${match.params.event_id}`,formData, {
+			headers: {
+				TOKEN: AUTH_TOKEN,
+				"Content-Type": "multipart/form-data"
+			}
+		}).then((res) => {
+			alert("이벤트가 정상적으로 수정되었습니다.");
+			fetchEventExact();
+			history.push("/admin/event");
 		})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -70,6 +113,10 @@ const AdminEventExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 	}
 
 	const deleteEvent = () => {
+		if (!confirm("해당 이벤트를 정말로 삭제하시겠습니까?")) {
+			return;
+		}
+		
 		axios.delete(`${SERVER_URL}/event/delete/${match.params.event_id}`,{
 			headers: {
 				TOKEN: AUTH_TOKEN
@@ -131,6 +178,14 @@ const AdminEventExact: React.FunctionComponent<RouteComponentProps<MatchParams>>
 										onChange={(e:any)=> setContents(e.target.value)}
 										multiline={true}
 										rows={10}
+									/>
+								</div>
+								<div className="img-comp-container">
+									<div>기존 이미지</div>
+									<img src={returnValidImg(imgBase64)} alt="이벤트 이미지"/>
+									<div>이미지 변경</div>
+									<ImgComponent
+										setImgFile={setImgFile}
 									/>
 								</div>
 							</div>

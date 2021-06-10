@@ -52,6 +52,10 @@ const AdminNotice = () => {
 	}
 
 	const addNotice = () => {
+		if(title === ""){
+			alert("제목을 입력해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/notice/add`, {
 			"noti_title" : title,// "2021년 6월 넷째주 휴무 일정",
 			"noti_contents" : contents,//"2021년 6월 넷재주 수요일 (23일)은 영화관 정기휴무입니다. \n 이용에 불편을 드려서 죄송합니다."

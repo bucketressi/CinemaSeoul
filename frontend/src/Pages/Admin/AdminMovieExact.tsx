@@ -6,10 +6,10 @@ interface MatchParams {
 	movie_id: string
 }
 
-const MovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
+const AdminMovieExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
 	return (
 		<ExactMovie movie_id={match.params.movie_id}/>
 	)
 }
 
-export default MovieExact;
+export default AdminMovieExact;

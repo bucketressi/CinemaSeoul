@@ -54,6 +54,10 @@ const AdminFAQ = () => {
 	}
 
 	const addFAQ = () => {
+		if(title === ""){
+			alert("제목을 입력해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/faq/add`, {
 			"faq_title" : title,//string,
 			"faq_contents" : contents,//string

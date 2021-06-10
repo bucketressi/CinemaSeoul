@@ -9,18 +9,13 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 
 import { Link } from 'react-router-dom';
-import { MovieCard, SearchTab, ModalComponent, PageTitle } from '../../Components';
+import { MovieCard, SearchTab, ModalComponent, PageTitle, ImgComponent } from '../../Components';
 import { SimpleMovieType } from '../../Main/Type';
 import { Button, TextField, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, Select, Menu, MenuItem } from '@material-ui/core';
 
 import { useMovieListState, useFetchMovieFunction, useTotalPageState } from '../../Main/MovieListModel';
 import { useMovieAuthCodeState } from '../../Main/CodeModel';
 import { Pagination } from '@material-ui/lab';
-
-type ImgInfoType = {
-	file: File;
-	previewURL: string | ArrayBuffer | null;
-}
 
 const AdminMovie = () => {
 	const AUTH_TOKEN = useTokenState();
@@ -39,8 +34,7 @@ const AdminMovie = () => {
 	const [runtime, setRuntime] = useState<number>(0);
 	const [content, setContent] = useState<string>("");
 	const [genre, setGenre] = useState<string[]>([]);
-	const [img, setImg] = useState<File | undefined>(undefined);
-	const [imgInfo, setImgInfo] = useState<ImgInfoType | undefined>(undefined);
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	/** 조건 */
 	const [stat, setStat] = useState<number>(0);
@@ -73,64 +67,49 @@ const AdminMovie = () => {
 		}
 		setRuntime(Number(e.target.value));
 	};
-	const handleOpenDateChange = (e: any) => {
-		setOpenDate(e.target.value);
-	};
+	const handleOpenDateChange = (e: any) => { setOpenDate(e.target.value); };
 	const handleContentChange = (e: any) => { setContent(e.target.value); };
-	const handleGenreChange = (e: any) => {
-		const arr = genre.slice();
-		const codeStr = e.target.value.toString();
-		if (arr.includes(codeStr)) {
-			arr.splice(arr.findIndex(code => code == codeStr), 1);
-			setGenre(arr);
-			return;
-		}
-		arr.push(codeStr);
-		setGenre(arr);
-	};
-	const handleAgeChange = (e: any) => {
-		setAge(e.target.value.toString());
-	};
-	const uploadImage = (e: any) => {
-		setImg(e.target.files[0]);
-		const reader = new FileReader();
-		reader.onloadend = () => {
-			setImgInfo({
-				file: e.target.files[0],
-				previewURL: reader.result
-			})
-		};
-		reader.readAsDataURL(e.target.files[0]);
-	};
+	const handleAgeChange = (e: any) => { setAge(e.target.value.toString()); };
 
 	const addMovie = () => {
 		// 영화 추가 api 호출
-		axios.post(`${SERVER_URL}/movie/add`, {
+
+		const formData = new FormData();
+		if (imgFile) {
+			formData.append("image", imgFile);
+		}
+		const jsonData = JSON.stringify({
 			movi_name: name,
 			avai_age_code: age,
 			run_time: runtime,
 			company: company,
 			movi_contents: content,
-			open_date: openDate.split("-").join(""),
-			image: null
-		}, {
+			open_date: openDate.split("-").join("")
+		});
+
+		const blobData = new Blob([jsonData], { type: 'application/json' });
+		formData.append("movie", blobData);
+
+		axios.post(`${SERVER_URL}/movie/add`, formData, {
 			headers: {
-				TOKEN: AUTH_TOKEN
+				TOKEN: AUTH_TOKEN,
+				"Content-Type": "multipart/form-data"
 			}
 		})
 			.then((res) => {
+				alert("영화가 정상적으로 추가되었습니다.");
 				setOpen(false);
 				fetchMovie(page, sort, stat);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "영화 생성에 실패하였습니다. 정보를 다시 확인해주세요.", ""]);
+				errorHandler(e, true);
 			});
 	}
 
 
 	return (
 		<>
-			<PageTitle title="영화 리스트" isButtonVisible={true} />
+			<PageTitle title="영화 리스트" isButtonVisible={false} />
 			<div className="movie-wrap">
 				<div className="movie-con">
 					<div className="stat-sort-con">
@@ -160,7 +139,7 @@ const AdminMovie = () => {
 											<Link key={movie.movi_id} to={`/admin/movie/${movie.movi_id}`}>
 												<MovieCard
 													movi_id={movie.movi_id}
-													image={movie.image}
+													imageBase64={movie.imageBase64}
 													movi_name={movie.movi_name}
 													accu_audience={movie.accu_audience}
 													avai_age={movie.avai_age}
@@ -191,16 +170,10 @@ const AdminMovie = () => {
 						<div>
 							<TextField variant="outlined" placeholder="런타임" label="런타임" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
 							<TextField variant="outlined" placeholder="설명" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
-
 						</div>
 						<div>
 							<div>
-								<div>포스터</div>
-								{
-									imgInfo && typeof (imgInfo.previewURL) === "string" && // 없으면 priview 포스터 보여주기
-									<img src={imgInfo.previewURL} alt="포스터" />
-								}
-								<input type="file" onChange={uploadImage} />
+								<ImgComponent setImgFile={setImgFile} />
 							</div>
 							<div>
 								<TextField

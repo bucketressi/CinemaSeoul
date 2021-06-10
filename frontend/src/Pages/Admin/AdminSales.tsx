@@ -39,7 +39,6 @@ const AdminSales = () => {
 				setSalesData(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true);
 			});
 	}
 
@@ -97,7 +96,7 @@ const AdminSales = () => {
 						</div>
 					}
 					{
-						salesData?.sales &&
+						salesData?.sales ?
 						<div className="record-sales-con">
 							<div className="result-title">일자별 매출내역</div>
 							<Table>
@@ -123,6 +122,7 @@ const AdminSales = () => {
 								</TableBody>
 							</Table>
 						</div>
+						: <div>아직 매출 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>

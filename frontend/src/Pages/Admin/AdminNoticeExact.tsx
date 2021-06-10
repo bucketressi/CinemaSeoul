@@ -41,21 +41,25 @@ const AdminNoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>
 	}
 
 	/** 수정 */
-	const [title, setTitle] =useState<string>("");
-	const [contents, setContents] =useState<string>("");
+	const [title, setTitle] = useState<string>("");
+	const [contents, setContents] = useState<string>("");
 
-	useEffect(()=> {
-		if(!notice)
+	useEffect(() => {
+		if (!notice)
 			return;
 		setTitle(notice.noti_title);
 		setContents(notice.noti_contents);
 	}, [notice]);
 
 	const updateNotice = () => {
-		axios.put(`${SERVER_URL}/notice/update`,{
-			"noti_id" : Number(match.params.notice_id), //2,
-			"noti_title" : title,//"2021년 6월 둘째주 휴무 일정",
-			"noti_contents" : contents//"2021년 6월 둘째주 목요일 (10일)은 영화관 보수공사로 인해 휴무입니다. \n 이용에 불편을 드려서 죄송합니다."
+		if (title === "") {
+			alert("제목을 입력해주세요.");
+			return;
+		}
+		axios.put(`${SERVER_URL}/notice/update`, {
+			"noti_id": Number(match.params.notice_id), //2,
+			"noti_title": title,//"2021년 6월 둘째주 휴무 일정",
+			"noti_contents": contents//"2021년 6월 둘째주 목요일 (10일)은 영화관 보수공사로 인해 휴무입니다. \n 이용에 불편을 드려서 죄송합니다."
 		}, {
 			headers: {
 				TOKEN: AUTH_TOKEN
@@ -63,6 +67,7 @@ const AdminNoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>
 		}).then((res) => {
 			alert("공지사항이 정상적으로 수정되었습니다.");
 			fetchNoticeExact();
+			history.push("/admin/notice");
 		})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -70,13 +75,16 @@ const AdminNoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>
 	}
 
 	const deleteNotice = () => {
-		axios.delete(`${SERVER_URL}/notice/delete/${match.params.notice_id}`,{
+		if (!confirm("해당 공지사항을 정말로 삭제하시겠습니까?")) {
+			return;
+		}
+		axios.delete(`${SERVER_URL}/notice/delete/${match.params.notice_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
 		}).then((res) => {
 			alert("공지사항이 정상적으로 삭제되었습니다.");
-			history.push("/notice");
+			history.push("/admin/notice");
 		})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -116,7 +124,7 @@ const AdminNoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>
 													placeholder="제목을 입력하세요."
 													inputProps={{ maxLength: 50 }}
 													value={title}
-													onChange={(e:any) => setTitle(e.target.value)}
+													onChange={(e: any) => setTitle(e.target.value)}
 												/>
 											</TableCell>
 											<TableCell className="table-content">{notice.crea_datetime}</TableCell>
@@ -125,13 +133,13 @@ const AdminNoticeExact: React.FunctionComponent<RouteComponentProps<MatchParams>
 								</Table>
 								<div className="notice-content">
 									<TextField
-										label="내용"	
+										label="내용"
 										placeholder="내용을 입력하세요."
-										InputLabelProps={{shrink:true}}
+										InputLabelProps={{ shrink: true }}
 										variant="outlined"
 										value={contents}
 										inputProps={{ maxLength: 1000 }}
-										onChange={(e:any)=> setContents(e.target.value)}
+										onChange={(e: any) => setContents(e.target.value)}
 										multiline={true}
 										rows={10}
 									/>

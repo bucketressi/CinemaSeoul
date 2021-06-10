@@ -7,6 +7,7 @@ export { default as Event } from './Event';
 export { default as FAQ } from './FAQ';
 export { default as FAQExact } from './FAQExact';
 export { default as Login } from './Login';
+export { default as MovieSearchList } from './MovieSearchList';
 export { default as MovieList } from './MovieList';
 export { default as MovieExact } from './MovieExact';
 export { default as MyMovie } from './MyMovie';

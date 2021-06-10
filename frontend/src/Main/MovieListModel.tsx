@@ -31,7 +31,8 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 		axios.post(`${SERVER_URL}/movie/list`, {
 			"page": page?page:1,
 			"stat": stat?stat:0, //전체 : 0, 상영중  1, 상영예정 : 2
-			"sort": sort?sort:0 //기본(id순) : 0, 평점순 : 1, 누적관람객순 : 2
+			"sort": sort?sort:0, //기본(id순) : 0, 평점순 : 1, 누적관람객순 : 2,
+			amount: 9
 		}, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
@@ -44,7 +45,7 @@ export const MovieListContextProvider = ({ children }: childrenObj) => {
 				setTotalPage(res.data.totalpage);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "조건이 잘못 입력되었습니다.", ""]);
+				errorHandler(e, true, ["조건이 잘못 입력되었습니다."]);
 			});
 	}
 

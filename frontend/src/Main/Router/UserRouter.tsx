@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Book, Error, Event, FAQ, FAQExact, Login, MovieList, MovieExact, MyMovie, Mypage, Notice, NoticeExact, ProductPay, PointDescription, SignUp, Store, StoreExact, TheaterDescription, Main, AdultAuth } from '../../Pages/User';
+import { Book, Error, Event, FAQ, FAQExact, Login, MovieList, MovieSearchList, MovieExact, MyMovie, Mypage, Notice, NoticeExact, ProductPay, PointDescription, SignUp, Store, StoreExact, TheaterDescription, Main, AdultAuth } from '../../Pages/User';
 import { Layout } from '../../Components';
 import EventExact from '../../Pages/User/EventExact';
 
@@ -16,7 +16,7 @@ const UserRouter : React.FC = () => (
 			<Route path="/login" component={Login}/>
 			<Route path="/main" component={Main}/>
 			<Route exact path="/movie" component={MovieList}/>
-			<Route exact path="/movie/search" component={MovieList}/>
+			<Route exact path="/movie/search/:keyword/:type" component={MovieSearchList}/>
 			<Route path="/movie/:movie_id" component={MovieExact}/>
 			<Route path="/mymovie" component={MyMovie}/>
 			<Route path="/mypage" component={Mypage}/>
