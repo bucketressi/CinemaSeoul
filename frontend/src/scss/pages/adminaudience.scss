@@ -1,0 +1,53 @@
+.audience-wrap{
+  display: flex;
+  flex-direction: column;
+  .search-con{
+    display: flex;
+    flex-direction: column;
+    &>div{
+      margin: 3px;
+    }
+    .search-obj{
+      margin-right: 4px;
+    }
+    .search-obj-btn{
+      margin-left: 4px;
+      margin-top: 10px;
+    }
+  }
+  .result-con{
+    display: flex;
+    flex-direction: column;
+    .total-audi-con{
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid lightgray;
+      .result-content{
+        font-size: 1rem;
+        margin-bottom: 25px;
+      }
+    }
+    .date-audi-con{
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      .table-title{
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px !important;
+      }
+      .table-content{
+        text-align: center;
+      }
+    }
+    .result-title{
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      margin-top: 10px;
+    }
+  }
+}
