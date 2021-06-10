@@ -86,7 +86,7 @@ const MypageAsk = ({ mode }: Props) => {
 			}
 		})
 			.then((res) => {
-				alert("문의가 등록되었습니다.")
+				alert("문의가 정상적으로 추가되었습니다.");
 				setOpenAskModal(false);
 				fetchAskList();
 			})
@@ -135,7 +135,7 @@ const MypageAsk = ({ mode }: Props) => {
 			}
 		})
 			.then((res) => {
-				alert("문의가 성공적으로 수정되었습니다.");
+				alert("문의가 정상적으로 수정되었습니다.");
 				fetchAskList();
 				setOpenModifyModal(false);
 			})
@@ -155,7 +155,7 @@ const MypageAsk = ({ mode }: Props) => {
 			}
 		})
 			.then((res) => {
-				alert("문의가 성공적으로 삭제되었습니다.");
+				alert("문의가 정상적으로 삭제되었습니다.");
 				fetchAskList();
 			})
 			.catch((e) => {
@@ -164,7 +164,7 @@ const MypageAsk = ({ mode }: Props) => {
 	}
 
 	return (
-		<div>
+		<div className="mypage-ask-con">
 			<Tabs
 				value={answered}
 				onChange={(e: any, newValue: number) => setAnswered(newValue)}
@@ -172,8 +172,8 @@ const MypageAsk = ({ mode }: Props) => {
 				indicatorColor="primary"
 			>
 				<Tab label="ALL" />
-				<Tab label="답변있는 문의" />
 				<Tab label="답변없는 문의" />
+				<Tab label="답변있는 문의" />
 			</Tabs>
 			<Button variant="outlined" color="primary" onClick={() => setOpenAskModal(true)}>문의하기</Button>
 			<div
@@ -186,7 +186,7 @@ const MypageAsk = ({ mode }: Props) => {
 								<TableCell>작성일자</TableCell>
 								<TableCell>제목</TableCell>
 								<TableCell>답변 여부 </TableCell>
-								<TableCell>문의삭제</TableCell>
+								<TableCell>문의 삭제</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -219,9 +219,9 @@ const MypageAsk = ({ mode }: Props) => {
 				button="완료"
 				buttonOnClick={addAsk}
 			>
-				<div>
+				<div className="modal-column-con">
 					<TextField value={title} onChange={(e: any) => setTitle(e.target.value)} label="문의 제목" />
-					<TextField value={contents} onChange={(e: any) => setContents(e.target.value)} label="문의 내용" multiline={true} />
+					<TextField variant="outlined" value={contents} onChange={(e: any) => setContents(e.target.value)} label="문의 내용" multiline={true} />
 				</div>
 			</ModalComponent>
 			{
@@ -231,13 +231,13 @@ const MypageAsk = ({ mode }: Props) => {
 					setOpen={setOpenExactModal}
 					title="자세한 문의 내역"
 				>
-					<div>
-						<div>제목 {selectedAsk.ask_title}</div>
-						<div>내용 {selectedAsk.ask_contents}</div>
-						<div>관리자 {selectedAsk.admi_name}</div>
-						<div>답변 {selectedAsk.answer}</div>
-						<div>문의 일자 {selectedAsk.crea_datetime}</div>
-						<div>답변 일자 {selectedAsk.answ_datetime}</div>
+					<div className="modal-column-con exact-ask">
+						<div><span>제목</span><p>{selectedAsk.ask_title}</p></div>
+						<div><span>내용</span><p> {selectedAsk.ask_contents}</p></div>
+						<div><span>관리자</span> <p>{selectedAsk.admi_name}</p></div>
+						<div><span>답변</span><p> {selectedAsk.answer}</p></div>
+						<div><span>문의 일자</span> <p>{selectedAsk.crea_datetime}</p></div>
+						<div><span>답변 일자</span><p>{selectedAsk.answ_datetime}</p></div>
 					</div>
 				</ModalComponent>
 			}
@@ -250,9 +250,9 @@ const MypageAsk = ({ mode }: Props) => {
 					button="수정"
 					buttonOnClick={updateAsk}
 				>
-					<div>
+					<div className="modal-column-con">
 						<TextField value={modifyTitle} label="제목" onChange={(e: any) => setModifyTitle(e.target.value)}/>
-						<TextField value={modifyContents} label="내용" onChange={(e: any) => setModifyContents(e.target.value)}/>
+						<TextField className="contents" variant="outlined" value={modifyContents} label="내용" onChange={(e: any) => setModifyContents(e.target.value)} multiline={true}/>
 					</div>
 				</ModalComponent>
 			}

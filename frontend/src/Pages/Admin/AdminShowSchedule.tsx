@@ -372,32 +372,34 @@ const AdminShowSchedule = () => {
 				buttonOnClick={saveShowSchedule}
 			>
 				<div className="schedule-modal">
-					<FormControl>
-						<InputLabel id="select-label">상영관</InputLabel>
-						<Select
-							className="schedule-input"
-							labelId="select-label"
-							value={hallId}
-							onChange={handleHallChange}
-						>
-							{
-								getHallListMenu()
-							}
-						</Select>
-					</FormControl>
-					<FormControl>
-						<InputLabel id="select-label">영화</InputLabel>
-						<Select
-							className="schedule-input"
-							labelId="select-label"
-							value={movieId}
-							onChange={handleMovieChange}
-						>
-							{
-								getMovieListMenu()
-							}
-						</Select>
-					</FormControl>
+					<div>
+						<FormControl>
+							<InputLabel id="select-label">상영관</InputLabel>
+							<Select
+								className="schedule-input"
+								labelId="select-label"
+								value={hallId}
+								onChange={handleHallChange}
+							>
+								{
+									getHallListMenu()
+								}
+							</Select>
+						</FormControl>
+						<FormControl>
+							<InputLabel id="select-label">영화</InputLabel>
+							<Select
+								className="schedule-input"
+								labelId="select-label"
+								value={movieId}
+								onChange={handleMovieChange}
+							>
+								{
+									getMovieListMenu()
+								}
+							</Select>
+						</FormControl>
+					</div>
 					<div>
 						<TextField
 							className="schedule-input"

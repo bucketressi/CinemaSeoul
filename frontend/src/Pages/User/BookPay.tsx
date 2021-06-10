@@ -38,7 +38,7 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 	const handlePointMoneyChange = (e: any) => {
 		const money = Number(e.target.value);
 		if (money > currentPoint) {
-			alert("현재 보유하고 있는 포인트보다 많이 쓸 수 없습니다.");
+			alert("보유 포인트 이하의 포인트만 사용할 수 있습니다.");
 			return;
 		}
 		setPointMoney(money);

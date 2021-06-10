@@ -45,6 +45,28 @@
 				margin-bottom: 40px;
 			}
 		}
+		.img-container{
+			display: flex;
+			justify-content: space-between;
+			padding: 40px;
+			&>div{
+				width: 48%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.menu-subtitle{
+				padding: 5px 10px;
+				border-radius: 10px;
+				background-color: lightgray;
+				margin-bottom: 15px;
+			}
+		}
+		.btn-con{
+			padding: 40px;
+			display: flex;
+			justify-content: flex-end;
+		}
 	}
 }
 .genre-modal{
@@ -79,6 +101,11 @@
 		.cast-chip-con{
 			.chip-component{
 				z-index: 100;
+			}
+		}
+		.search-cast-con{
+			button{
+				margin-left: 10px;
 			}
 		}
 	}

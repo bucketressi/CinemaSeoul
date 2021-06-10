@@ -43,7 +43,7 @@ const AdminMyPage = () => {
 	}, []);
 
 	useEffect(() => {
-		if(!admin)
+		if (!admin)
 			return;
 		setName(admin.admi_name);
 		setBirthYear(admin.birth.substr(0, 4));
@@ -56,12 +56,12 @@ const AdminMyPage = () => {
 	}, [admin]);
 
 	useEffect(() => {
-		const month = birthMonth.length === 1? "0"+birthMonth : birthMonth;
-		const date = birthDate.length ===1? "0"+birthDate : birthDate;
+		const month = birthMonth.length === 1 ? "0" + birthMonth : birthMonth;
+		const date = birthDate.length === 1 ? "0" + birthDate : birthDate;
 		setBirth(`${birthYear}${month}${date}`);
 	}, [birthYear, birthMonth, birthDate]);
 
-	const fetchAdminInfo= () => {
+	const fetchAdminInfo = () => {
 		axios.get(`${SERVER_URL}/admin/${adminId}`, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
@@ -98,9 +98,9 @@ const AdminMyPage = () => {
 		}
 		return true;
 	}
-	
+
 	const checkPhoneNum = () => {
-		if(!admin)
+		if (!admin)
 			return;
 		if (phoneNum === "" || phoneNum.length !== 11) {
 			alert("정확한 핸드폰 번호를 입력해주세요.");
@@ -133,20 +133,20 @@ const AdminMyPage = () => {
 		if (!preTreatment() || !admin)
 			return;
 		const admi_auth_code = adminCode.find((code) => code.code_name === admin.admi_auth);
-		if(!admi_auth_code)
+		if (!admi_auth_code)
 			return;
-		const admi_auth_code_id = admi_auth_code.code_id; 
+		const admi_auth_code_id = admi_auth_code.code_id;
 		axios.put(`${SERVER_URL}/admin/update`, {
-			"admi_id" : adminId,
-			"admi_name" : name,//"우희은",
-			"birth" : birth,//"20170716",
+			"admi_id": adminId,
+			"admi_name": name,//"우희은",
+			"birth": birth,//"20170716",
 			"phone_num": phoneNum,//"01045117731",
-			"email" : admin.email, //"gmldms@gmail.com",
-			"password" : password,//"1234",
-			"admi_auth_code" : admi_auth_code_id, //"120002",
-			"position" : position, //"야간아르바이트생",
-			"address" : address, //"경기도 부천시",
-			"start_date" : startDate, //"20210531"
+			"email": admin.email, //"gmldms@gmail.com",
+			"password": password,//"1234",
+			"admi_auth_code": admi_auth_code_id, //"120002",
+			"position": position, //"야간아르바이트생",
+			"address": address, //"경기도 부천시",
+			"start_date": startDate, //"20210531"
 		}, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
@@ -170,7 +170,7 @@ const AdminMyPage = () => {
 				<div className="form-con">
 					<div className="input-con">
 						<div>
-							<TextField label="이메일" variant="outlined" InputLabelProps={{shrink:true}} value={admin?.email} disabled={true}/>
+							<TextField label="이메일" variant="outlined" InputLabelProps={{ shrink: true }} value={admin?.email} disabled={true} />
 						</div>
 						<div>
 							<TextField label="핸드폰 번호" variant="outlined" value={phoneNum} inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
@@ -182,20 +182,7 @@ const AdminMyPage = () => {
 							<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
 							<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
 						</div>
-						<FormControl>
-							<InputLabel id="select-label">직급</InputLabel>
-							<Select
-								labelId="select-label"
-								value={position}
-								onChange={(e: any) => setPosition(e.target.value)}
-							>
-								{
-									positionArr.map((pos : string, index : number) => (
-										<MenuItem key={index} value={pos}>{pos}</MenuItem>
-									))
-								}
-							</Select>
-						</FormControl>
+						<TextField label="직급" variant="outlined" value={position} onChange={(e: any) => { setPosition(e.target.value); }} />
 						<TextField label="주소" variant="outlined" value={address} inputProps={{ maxLength: 200 }} onChange={(e: any) => { setAddress(e.target.value); }} />
 						<TextField label="시작 일자" variant="outlined" type="date" value={getDateString(startDate)} onChange={(e: any) => { setStartDate(e.target.value.split("-").join("")); }} />
 						<TextField label="비밀번호" variant="outlined" type="password" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
@@ -206,7 +193,7 @@ const AdminMyPage = () => {
 					</div>
 				</div>
 				<div className="img-con">
-					<img src="/img/thanku.png" alt="감사합니다."/>
+					<img src="/img/thanku.png" alt="감사합니다." />
 				</div>
 			</div>
 		</div>

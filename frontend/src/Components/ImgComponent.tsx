@@ -49,7 +49,6 @@ const ImgComponent = ({ setImgFile }: Props) => {
 
 	return (
 		<div className="img-component">
-			<div>이미지</div>
 			{
 				imgInfo && typeof (imgInfo.previewURL) === "string" &&
 				<img src={imgInfo.previewURL} alt="이미지" />

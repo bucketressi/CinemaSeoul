@@ -118,6 +118,12 @@
 	}
 }
 
+.mypage-ask-con{
+	.mypage-tab{
+		margin-bottom: 20px;
+	}
+}
+
 /* 포인트/등급 내역 조회 modal */
 .point-record-modal{
 	margin-top: 15px;
@@ -128,4 +134,35 @@
 		font-weight: bold;
 		font-size: 0.95rem;
 	}
+}
+
+.modal-content{
+	width: 100%;
+	.modal-column-con{
+		display: flex;
+		flex-direction: column;
+		.contents{
+			margin-top: 15px;
+		}
+		&.exact-ask{
+			&>div{
+				margin-bottom: 10px;
+				display: flex;
+				align-items: center;
+			}
+			span{
+				padding: 5px 10px;
+				border-radius: 10px;
+				background-color: lightgray;
+				margin-right: 10px;
+			}
+		}
+	}
+	.rating{
+		width: 100%!important;
+		margin-top: 10px;
+	}
+}
+.content-con{
+    margin-top: 20px;
 }
