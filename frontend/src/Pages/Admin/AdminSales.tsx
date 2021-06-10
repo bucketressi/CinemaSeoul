@@ -97,32 +97,32 @@ const AdminSales = () => {
 					}
 					{
 						salesData?.sales ?
-						<div className="record-sales-con">
-							<div className="result-title">일자별 매출내역</div>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell className="table-title">일자</TableCell>
-										<TableCell className="table-title">영화 매출</TableCell>
-										<TableCell className="table-title">상품 매출</TableCell>
-										<TableCell className="table-title">총 매출</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{
-										salesData.sales.map((sale) => (
-											<TableRow key={sale.sale_date}>
-												<TableCell className="table-content">{getDateString(sale.sale_date)}</TableCell>
-												<TableCell className="table-content">{sale.movi_sale}원</TableCell>
-												<TableCell className="table-content">{sale.prod_sale}원</TableCell>
-												<TableCell className="table-content">{sale.total_sale}원</TableCell>
-											</TableRow>
-										))
-									}
-								</TableBody>
-							</Table>
-						</div>
-						: <div>아직 매출 데이터가 없습니다.</div>
+							<div className="record-sales-con">
+								<div className="result-title">일자별 매출내역</div>
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell className="table-title">일자</TableCell>
+											<TableCell className="table-title">영화 매출</TableCell>
+											<TableCell className="table-title">상품 매출</TableCell>
+											<TableCell className="table-title">총 매출</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{
+											salesData.sales.map((sale) => (
+												<TableRow key={sale.sale_date}>
+													<TableCell className="table-content">{getDateString(sale.sale_date)}</TableCell>
+													<TableCell className="table-content">{sale.movi_sale}원</TableCell>
+													<TableCell className="table-content">{sale.prod_sale}원</TableCell>
+													<TableCell className="table-content">{sale.total_sale}원</TableCell>
+												</TableRow>
+											))
+										}
+									</TableBody>
+								</Table>
+							</div>
+							: <div className="none-data-text">아직 매출 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>

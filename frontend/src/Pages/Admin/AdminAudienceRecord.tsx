@@ -60,34 +60,34 @@ const AdminAudienceRecord = () => {
 				<div className="result-con">
 					{
 						audienceData ?
-						<div>
-							<div className="total-audi-con">
-								<div className="result-title">해당 기간 동안의 총 관객수</div>
-								<div className="result-content">{audienceData.sum}명</div>
+							<div>
+								<div className="total-audi-con">
+									<div className="result-title">해당 기간 동안의 총 관객수</div>
+									<div className="result-content">{audienceData.sum}명</div>
+								</div>
+								<div className="date-audi-con">
+									<div className="result-title">일자별 관객수</div>
+									<Table>
+										<TableHead>
+											<TableRow>
+												<TableCell className="table-title">일자</TableCell>
+												<TableCell className="table-title">관람객 수</TableCell>
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{
+												audienceData.records.map((component) => (
+													<TableRow key={component.reco_date}>
+														<TableCell className="table-content">{component.reco_date}</TableCell>
+														<TableCell className="table-content">{component.audi_amount}명</TableCell>
+													</TableRow>
+												))
+											}
+										</TableBody>
+									</Table>
+								</div>
 							</div>
-							<div className="date-audi-con">
-								<div className="result-title">일자별 관객수</div>
-								<Table>
-									<TableHead>
-										<TableRow>
-											<TableCell className="table-title">일자</TableCell>
-											<TableCell className="table-title">관람객 수</TableCell>
-										</TableRow>
-									</TableHead>
-									<TableBody>
-										{
-											audienceData.records.map((component) => (
-												<TableRow key={component.reco_date}>
-													<TableCell className="table-content">{component.reco_date}</TableCell>
-													<TableCell className="table-content">{component.audi_amount}명</TableCell>
-												</TableRow>
-											))
-										}
-									</TableBody>
-								</Table>
-							</div>
-						</div>
-						: <div>아직까지 관람현황 데이터가 없습니다.</div>
+							: <div className="none-data-text">아직까지 관람현황 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>
