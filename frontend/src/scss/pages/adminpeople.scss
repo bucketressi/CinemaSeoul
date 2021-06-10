@@ -26,9 +26,17 @@
       display: flex;
 			flex-wrap: wrap;
       .people-obj{
+        display: flex;
+        flex-wrap: wrap;
         button{
           width: 100px;
           margin: 3px;
+        }
+        div{
+          display: flex;
+          flex-shrink: 0;
+          padding : 20px;
+          margin: 0 20px 20px 0;
         }
       }
     }
@@ -68,3 +76,4 @@
     margin-top: 2px;
   }
 }
+

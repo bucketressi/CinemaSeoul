@@ -78,6 +78,14 @@
 /* 상영일정 추가/수정 modal */
 .schedule-modal{
 	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	&>div{
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 15px;
+	}
 	.schedule-input{
 		width: 150px;
 		margin-bottom: 10px;

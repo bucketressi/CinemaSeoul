@@ -43,7 +43,9 @@
 
 /* 좌석 정보 수정 modal */
 .seat-modify-modal{
-	margin-top: 50px;
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
 	.seat-type-label{
 		width: 90px;
 	}

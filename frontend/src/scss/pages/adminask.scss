@@ -1,12 +1,24 @@
-.admin-ask-con{
+.modal-content{
+.ask-answer-con{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  .MuiTabs-flexContainer>button {
-    width: 20%;
-  .MuiTab-wrapper{
-    font-size : 1.2rem!important;
+  &>div{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    span{
+      padding: 5px 10px;
+      border-radius: 10px;
+      background-color: lightgray;
+      margin-right: 10px;
+    }
+  }
+  .answer{
+    align-items: flex-start;
+    margin-top: 15px;
+    .MuiInputBase-root{
+      width: 100%!important;
+    }
   }
 }
 }

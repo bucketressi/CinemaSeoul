@@ -77,6 +77,9 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 	}
 
 	function logout() {
+		if(!confirm("로그아웃 하시겠습니까?"))
+			return;
+
 		let flag = 0; // 0 : 관리자 , 1 : 사용자
 		if(user !== undefined){
 			flag = 1;

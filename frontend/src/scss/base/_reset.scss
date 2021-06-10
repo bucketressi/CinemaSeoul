@@ -31,7 +31,7 @@ a{
 }
 .img-comp-container{
 	width: 300px;
-	height: 400px;
+	max-height: 400px;
 	img{
 		max-width: 100%;
 		height: auto;

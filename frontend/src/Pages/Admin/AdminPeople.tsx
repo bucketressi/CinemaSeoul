@@ -7,7 +7,7 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
-import { Button, TextField } from '@material-ui/core';
+import { Button, Paper, TextField } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
 import "../../scss/pages/adminpeople.scss";
@@ -35,6 +35,7 @@ const AdminPeople = () => {
 				if (!res.data)
 					return;
 				setPeopleList(res.data);
+				setTotalPage(res.data.totalpage);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -46,12 +47,12 @@ const AdminPeople = () => {
 	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 	useEffect(() => {
 		fetchPeopleList();
-	}, []);
+	}, [page]);
 
 	const fetchPeopleList = () => {
 		axios.post(`${SERVER_URL}/people/list`, {
 			"page" : page,
-			"amount" : 20
+			"amount" : 9
 		}, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
@@ -216,6 +217,8 @@ const AdminPeople = () => {
 
 	/* 삭제 */
 	const removePeople = (peop_id : number) => {
+		if(!confirm("인물을 삭제하실 경우 연관된 모든 영화에서 인물이 삭제됩니다. 진행하시겠습니까?"))
+			return;
 		axios.delete(`${SERVER_URL}/people/delete/${peop_id}`,{
 			headers: {
 				"TOKEN": AUTH_TOKEN
@@ -247,10 +250,10 @@ const AdminPeople = () => {
 							{
 								peopleList &&
 								peopleList.map((people) => (
-									<div key={people.peop_id}>
+									<Paper elevation={2} key={people.peop_id}>
 										<Button variant="outlined" color="primary" onClick={() => fetchDetail(people.peop_id)}>{people.peop_name}</Button>
 										<Button variant="outlined" color="secondary" onClick={() => removePeople(people.peop_id)}>삭제하기</Button>
-									</div>
+									</Paper>
 								))
 							}
 						</div>

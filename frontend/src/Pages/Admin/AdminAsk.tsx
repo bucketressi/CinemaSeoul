@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PageTitle } from '../../Components';
 import { MypageAskExactType, MypageAskType } from '../../Main/Type';
+import "../../scss/pages/adminask.scss";
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
@@ -85,6 +86,7 @@ const AdminAsk = () => {
 			}
 		})
 			.then((res) => {
+				alert("답변이 정상적으로 추가되었습니다.");
 				setOpenExactModal(false);
 				fetchAskList();
 			})
@@ -122,8 +124,8 @@ const AdminAsk = () => {
 					indicatorColor="primary"
 				>
 					<Tab label="ALL" />
-					<Tab label="답변있는 문의" />
 					<Tab label="답변없는 문의" />
+					<Tab label="답변있는 문의" />
 				</Tabs>
 			</div>
 			<div className="content-con">
@@ -172,12 +174,12 @@ const AdminAsk = () => {
 						button="답변 완료"
 						buttonOnClick={saveAskAnswer}
 					>
-						<div>
-							<div>작성자 {selectedAsk.user_name}</div>
-							<div>제목 {selectedAsk.ask_title}</div>
-							<div>내용 {selectedAsk.ask_contents}</div>
-							<div>문의 일자 {selectedAsk.crea_datetime}</div>
-							<TextField value={answer} onChange={(e: any) => setAnswer(e.target.value)} label="답변" multiline={true} />
+						<div className="ask-answer-con">
+							<div><span>작성자</span><p>{selectedAsk.user_name}</p></div>
+							<div><span>제목</span> <p>{selectedAsk.ask_title}</p></div>
+							<div><span>내용</span> <p>{selectedAsk.ask_contents}</p></div>
+							<div><span>문의 일자</span> <p>{selectedAsk.crea_datetime}</p></div>
+							<TextField className="answer" variant="outlined" value={answer} onChange={(e: any) => setAnswer(e.target.value)} label="답변" multiline={true} />
 						</div>
 					</ModalComponent>
 				}

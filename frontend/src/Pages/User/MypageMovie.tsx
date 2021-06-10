@@ -177,7 +177,7 @@ const MypageMovie = ({ mode }: Props) => {
 							}}
 						/>
 					</div>
-					<TextField value={movie.comments} onChange={(e: any) => {
+					<TextField className="rating" variant="outlined" value={movie.comments} onChange={(e: any) => {
 						const obj: MypageMovieType = Object.assign({}, movie);
 						obj.comments = e.target.value;
 						setMovie(obj);

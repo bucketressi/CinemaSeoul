@@ -354,15 +354,17 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 							</RadioGroup>
 						</FormControl>
 					</div>
-					<div>
+					<div className="img-container">
 						<div className="img-comp-container">
 							<div className="menu-subtitle">기존 포스터</div>
 							<img src={returnValidImg(prevImg)} alt="기존 인물 사진" />
 						</div>
-						<div>포스터</div>
-						<ImgComponent setImgFile={setImgFile} />
+						<div>
+							<div className="menu-subtitle">변경할 포스터</div>
+							<ImgComponent setImgFile={setImgFile} />
+						</div>
 					</div>
-					<div>
+					<div className="btn-con">
 						<Button variant="contained" color="primary" onClick={saveMovie}>저장</Button>
 					</div>
 				</div>
@@ -395,7 +397,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 			>
 				<div className="cast-modal">
 					<div className="cast-select-con">
-						<div>
+						<div className="search-cast-con">
 							<TextField value={searchKeyword} onChange={(e: any) => setSearchKeyword(e.target.value)} />
 							<Button variant="contained" color="primary" onClick={searchCast}>검색</Button>
 							<Button variant="contained" color="primary" onClick={setAllCast}>전체 인물 보기</Button>
