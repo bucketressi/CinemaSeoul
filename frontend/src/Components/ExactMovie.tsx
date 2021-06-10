@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Button, InputBase, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { PageTitle, ModalComponent } from '../Components';
 import { useAdminState } from '../Main/UserModel';
 import { useGenreCodeState, usePeopleTypeCodeState } from '../Main/CodeModel';
@@ -233,7 +233,9 @@ const MovieExact = ({ movie_id }: Props) => {
 							<div className="right-info-con">
 								<div className="menu">
 									<div className="menu-subtitle">영화 설명</div>
-									<div>{movie.movi_contents}</div>
+									<div className="black-color">
+										<InputBase value={movie.movi_contents} disabled={true} multiline={true} inputProps={{ 'aria-label': 'naked' }}/>
+									</div>
 								</div>
 								{
 									admin === undefined &&

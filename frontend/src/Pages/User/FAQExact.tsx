@@ -5,7 +5,7 @@ import { FAQExactType } from '../../Main/Type';
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
-import { Button, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@material-ui/core';
+import { Button, InputBase, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { useTokenState } from '../../Main/TokenModel';
 
@@ -65,7 +65,7 @@ const FAQExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ m
 								</TableBody>
 							</Table>
 							<div className="faq-content">
-								{FAQ.faq_contents}
+								<InputBase value={FAQ.faq_contents} disabled={true} multiline={true} inputProps={{ 'aria-label': 'naked' }}/>
 							</div>
 						</div>
 						: "데이터를 불러오는 중입니다."

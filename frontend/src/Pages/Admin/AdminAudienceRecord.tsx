@@ -38,7 +38,6 @@ const AdminAudienceRecord = () => {
 				setAudienceData(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true);
 			});
 	}
 

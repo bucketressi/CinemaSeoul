@@ -145,12 +145,22 @@
 			margin-top: 15px;
 		}
 		&.exact-ask{
+			div{
+				color: black;
+			}
+			.MuiInputBase-root{
+				width: 100%;
+				div{
+					width: 100%;
+				}
+			}
 			&>div{
 				margin-bottom: 10px;
 				display: flex;
 				align-items: center;
 			}
 			span{
+				flex-shrink: 0;
 				padding: 5px 10px;
 				border-radius: 10px;
 				background-color: lightgray;
