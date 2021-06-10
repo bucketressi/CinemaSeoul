@@ -40,7 +40,7 @@ export type MovieType = {
 	open_date: string,
 	genre: string[],
 	casting: MovieCastingType[],
-	image: string,
+	imageBase64: string,
 	accu_audience: number,
 	rating: number
 }
@@ -220,7 +220,7 @@ export type ProductType = {
 	prod_name: string, //팝콘(소),
 	price: number, //7000,
 	limit: number, //0,
-	image: string,
+	imageBase64: string,
 }
 
 export type ProductExactType = {
@@ -230,7 +230,7 @@ export type ProductExactType = {
 	prod_type_code: string,//"310001",
 	limit: number,//9997,
 	prod_contents: string,//"카라멜맛 양파맛 선택 가능한 팝콘 (소)",
-	image: string//""
+	imageBase64: string//""
 }
 
 export type CartProductType = {
@@ -331,7 +331,7 @@ export type MypageMovieType = {
 	rating: number | null, //null,
 	movi_id: number, //126,
 	movi_name: string, //트랜스포머1,
-	images: string | null //
+	imageBase64: string//
 }
 
 export type MypagePointType = {
@@ -472,5 +472,5 @@ export type EventExactType = {
     "event_title": string,//"2021년 하반기 이벤트",
     "event_contents": string,//"계획이 없습니다.",
     "crea_datetime": string,//"2021-06-05 01:48:53",
-    "image": string |null
+    "imageBase64": string
 }

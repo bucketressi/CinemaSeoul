@@ -98,7 +98,6 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 			<div className="info-con">
 				<div className="top-title">예매정보</div>
 				<div className="schedule-info-con">
-					<img className="full-width" src="https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg" alt="포스터" />
 					<div>
 						<div className="movie-name">{scheduleInfo.movi_name}</div>
 						<div>

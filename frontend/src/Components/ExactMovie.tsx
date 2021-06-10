@@ -13,7 +13,7 @@ import { errorHandler } from '../Main/ErrorHandler';
 import { useTokenState } from '../Main/TokenModel';
 import "../scss/pages/movieexact.scss";
 import { Pagination, Rating } from '@material-ui/lab';
-import ImgComponent from './ImgComponent';
+import { returnValidImg } from '../Function';
 
 type Props = {
 	movie_id: string
@@ -38,7 +38,6 @@ const MovieExact = ({ movie_id }: Props) => {
 	/* 인물 modal */
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [selectedPeople, setSelectedPeople] = useState<PeopleExactType | undefined>(undefined);
-	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	useEffect(() => { fetchExactMovie(); fetchMovieReview(); }, []);
 
@@ -86,10 +85,12 @@ const MovieExact = ({ movie_id }: Props) => {
 			}
 		})
 			.then((res) => {
+				if(!res.data)
+					return;
 				setMovie(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
+				errorHandler(e, true, ["", "","", "해당 영화가 없습니다.", ""]);
 				history.goBack();
 			});
 	}
@@ -100,7 +101,7 @@ const MovieExact = ({ movie_id }: Props) => {
 
 	const removeMovie = () => {
 		// 영화 리스트 다시 받기 => todo : api 해결되고 다시 하기
-		if (!confirm(`[${movie?.movi_name}] 영화를 정말로 삭제할까요?`))
+		if (!confirm(`[${movie?.movi_name}] 영화를 정말로 삭제하시겠습니까?`))
 			return;
 
 		axios.delete(`${SERVER_URL}/movie/delete/${movie_id}`, {
@@ -109,7 +110,7 @@ const MovieExact = ({ movie_id }: Props) => {
 			}
 		})
 			.then((res) => {
-				alert("삭제되었습니다.");
+				alert("영화가 정상적으로 삭제되었습니다.");
 				fetchMovie();
 				history.push("/admin/movie");
 			})
@@ -177,7 +178,7 @@ const MovieExact = ({ movie_id }: Props) => {
 				movie &&
 				<div>
 					<div className="info-con">
-						<div className="img-con"><img src="https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg" alt="포스터" /></div>
+						<div className="img-con"><img src={returnValidImg(movie.imageBase64)} alt="포스터" /></div>
 						<div className="movie-info-con">
 							<div className="left-info-con">
 								<div className="movie-title">
@@ -302,9 +303,9 @@ const MovieExact = ({ movie_id }: Props) => {
 									<div>{`${selectedPeople.birth.substr(0, 4)}/${selectedPeople.birth.substr(4, 2)}/${selectedPeople.birth.substr(6, 2)}`}</div>
 								</div>
 							</div>
-							<div>
+							<div className="img-comp-container">
 								<div className="menu-subtitle">인물 사진</div>
-								<img src={selectedPeople.imageBase64 ? `data:image/png;base64,${selectedPeople.imageBase64}` : ""} alt="기존 인물 사진"/>
+								<img src={returnValidImg(selectedPeople.imageBase64)} alt="기존 인물 사진"/>
 							</div>
 						</div>
 						<div className="menu">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ModalComponent, PageTitle } from '../../Components';
+import { ImgComponent, ModalComponent, PageTitle } from '../../Components';
 import { ProductType, CodeMatch } from '../../Main/Type';
 import { useProductTypeCodeState } from '../../Main/CodeModel';
 import "../../scss/pages/store.scss";
@@ -25,10 +25,10 @@ const AdminProduct = () => {
 	const [openModal, setOpenModal] = useState<boolean>(false);
 	const [prodName, setProdName] = useState<string>("");
 	const [price, setPrice] = useState<number>(0);
-	const [prodType, setProdType] = useState<string>("");
+	const [prodType, setProdType] = useState<string>("310001");
 	const [limit, setLimit] = useState<number>(0);
 	const [contents, setContents] = useState<string>("");
-	const [image, setImage] = useState<string>("");
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	useEffect(() => {
 		fetchFromMode();
@@ -114,19 +114,28 @@ const AdminProduct = () => {
 
 	const saveProduct = () => {
 		// 상품 추가
-		axios.post(`${SERVER_URL}/prod`, {
+		const formData = new FormData();
+		if (imgFile) {
+			formData.append("image", imgFile);
+		}
+		const jsonData = JSON.stringify({
 			"prod_name": prodName,
 			"price": price.toString(),
 			"prod_type_code": prodType,
 			"limit": limit,
-			"prod_contents": contents,
-			"image": null // todo
-		}, {
+			"prod_contents": contents
+		});
+
+		const blobData = new Blob([jsonData], { type: 'application/json' });
+		formData.append("product", blobData);
+
+		axios.post(`${SERVER_URL}/prod`, formData, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
 		})
 			.then((res) => {
+				alert("상품이 정상적으로 추가되었습니다.");
 				fetchFromMode();
 				setOpenModal(false);
 			})
@@ -136,15 +145,18 @@ const AdminProduct = () => {
 	}
 
 	const deleteProduct = (prod_id : number) => {
+		if(!confirm("상품을 정말로 삭제하시겠습니까?")){
+			return;
+		}
+
 		// 상품 삭제
-		// todo : api 고치고 다시
 		axios.delete(`${SERVER_URL}/prod/delete/${prod_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
 		})
 			.then((res) => {
-				alert("정상적으로 삭제되었습니다.");
+				alert("상품이 정상적으로 삭제되었습니다.");
 				fetchFromMode();
 			})
 			.catch((e) => {
@@ -154,7 +166,7 @@ const AdminProduct = () => {
 
 	return (
 		<div>
-			<PageTitle title="상품 목록 리스트" isButtonVisible={true} />
+			<PageTitle title="상품 목록 리스트" isButtonVisible={false} />
 			<div className="add-btn-con">
 				<Button variant="outlined" color="primary" onClick={() => setOpenModal(true)}>상품 추가</Button>
 			</div>
@@ -168,8 +180,8 @@ const AdminProduct = () => {
 					indicatorColor="primary"
 				>
 					<Tab label="전체" />
-					<Tab label="굿즈" />
 					<Tab label="스낵" />
+					<Tab label="굿즈" />
 				</Tabs>
 				<div className="contents-con">
 					{
@@ -219,7 +231,7 @@ const AdminProduct = () => {
 						</FormControl>
 					</div>
 					<TextField className="product-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} multiline={true} inputProps={{ maxLength: 1000 }} value={contents} onChange={(e: any) => setContents(e.target.value)} />
-					{/* todo : 이미지 */}
+					<ImgComponent setImgFile={setImgFile}/>
 				</div>
 			</ModalComponent>
 		</div>

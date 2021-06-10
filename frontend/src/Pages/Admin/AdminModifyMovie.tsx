@@ -11,14 +11,10 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useHistory } from 'react-router-dom';
+import { returnValidImg } from '../../Function';
 
 interface MatchParams {
 	movie_id: string
-}
-
-type ImgInfoType = {
-	file: File,
-	previewURL: string | ArrayBuffer | null
 }
 
 const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({ match }) => {
@@ -39,6 +35,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const [content, setContent] = useState<string>("");
 	const [genre, setGenre] = useState<string[]>([]);
 	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
+	const [prevImg, setPrevImg] = useState<string>("");
 	const [peopleArr, setPeopleArr] = useState<PeopleType[]>([]);
 	const [cast, setCast] = useState<MovieCastingType[]>([]);
 	const [peopleTypeObj, setPeopleTypeObj] = useState<CodeMatch>({});
@@ -46,6 +43,12 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const handleNameChange = (e: any) => { setName(e.target.value); };
 	const handleCompanyChange = (e: any) => { setCompany(e.target.value); };
 	const handleAgeChange = (e: any) => { setAge(e.target.value.toString()); };
+	const handleRuntimeChange = (e: any) => { 
+		if(isNaN(Number(e.target.value))){
+			alert("숫자를 입력해주세요.");
+		} 
+		setRuntime(e.target.value);
+	};
 	const handleOpenDateChange = (e: any) => { setOpenDate(e.target.value); };
 	const handleContentChange = (e: any) => { setContent(e.target.value); };
 
@@ -65,7 +68,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				setCompany(res.data.company);
 				setCast(res.data.casting);
 				setGenre(res.data.genre);
-				// setImg(res.data.image);
+				setPrevImg(res.data.imageBase64);
 				setContent(res.data.movi_contents);
 				const date: string = res.data.open_date;
 				const dateString = date.substr(0, 4) + "-" + date.substr(4, 2) + "-" + date.substr(6, 2);
@@ -74,7 +77,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				setAge(age[0].code_id);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "해당 영화가 없습니다.", ""]);
+				errorHandler(e, true);
 				history.goBack();
 			});
 	}
@@ -87,7 +90,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	const openCastModal = () => { setCastOpen(true); };
 	const saveMovie = () => {
 		// 영화 정보 저장
-		
+
 		axios.put(`${SERVER_URL}/movie/update`, {
 			movi_id: match.params.movie_id,
 			movi_name: name,
@@ -105,12 +108,12 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				saveImg();
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "잘못된 정보를 입력하였습니다.", ""]);
+				errorHandler(e, true);
 			});
 	};
 
 	const saveImg = () => {
-		if(!imgFile){
+		if (!imgFile) {
 			alert("영화 정보가 성공적으로 등록되었습니다.");
 			history.goBack();
 			return;
@@ -193,7 +196,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 			}
 		})
 			.then((res) => {
-				if(!res.data || !res.data.peop_list)
+				if (!res.data || !res.data.peop_list)
 					return;
 				setPeopleArr(res.data.peop_list);
 			})
@@ -203,11 +206,11 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 	}
 
 	const saveCast = () => {
-		const castingObj : CastingType[] = [];
+		const castingObj: CastingType[] = [];
 		cast.forEach((people) => {
 			castingObj.push({
-				"peop_id" : people.peop_id,
-				"cast_type_code" : people.cast_type_code
+				"peop_id": people.peop_id,
+				"cast_type_code": people.cast_type_code
 			})
 		});
 
@@ -229,14 +232,14 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 
 	const searchCast = () => {
 		axios.post(`${SERVER_URL}/people/search`, {
-			"peop_name" : searchKeyword
+			"peop_name": searchKeyword
 		}, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
 			}
 		})
 			.then((res) => {
-				if(!res.data)
+				if (!res.data)
 					return;
 				console.log(res.data);
 				setPeopleArr(res.data);
@@ -289,7 +292,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 							className="movie-input"
 							variant="outlined"
 							placeholder="제목"
-							InputLabelProps={{shrink:true}}
+							InputLabelProps={{ shrink: true }}
 							inputProps={{ maxLength: 50 }}
 							label="제목"
 							value={name}
@@ -299,11 +302,21 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 							className="movie-input"
 							variant="outlined"
 							placeholder="배급사"
-							InputLabelProps={{shrink:true}}
+							InputLabelProps={{ shrink: true }}
 							inputProps={{ maxLength: 30 }}
 							label="배급사"
 							value={company}
 							onChange={handleCompanyChange}
+						/>
+						<TextField
+							className="movie-input"
+							variant="outlined"
+							placeholder="런타임"
+							InputLabelProps={{ shrink: true }}
+							inputProps={{ maxLength: 4 }}
+							label="런타임"
+							value={runtime}
+							onChange={handleRuntimeChange}
 						/>
 						<TextField
 							className="movie-input"
@@ -322,7 +335,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 							className="movie-input-long"
 							variant="outlined"
 							placeholder="설명"
-							InputLabelProps={{shrink:true}}
+							InputLabelProps={{ shrink: true }}
 							inputProps={{ maxLength: 600 }}
 							label="설명"
 							value={content}
@@ -342,6 +355,10 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 						</FormControl>
 					</div>
 					<div>
+						<div className="img-comp-container">
+							<div className="menu-subtitle">기존 포스터</div>
+							<img src={returnValidImg(prevImg)} alt="기존 인물 사진" />
+						</div>
 						<div>포스터</div>
 						<ImgComponent setImgFile={setImgFile} />
 					</div>
@@ -379,7 +396,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				<div className="cast-modal">
 					<div className="cast-select-con">
 						<div>
-							<TextField value={searchKeyword} onChange={(e:any) => setSearchKeyword(e.target.value)}/>
+							<TextField value={searchKeyword} onChange={(e: any) => setSearchKeyword(e.target.value)} />
 							<Button variant="contained" color="primary" onClick={searchCast}>검색</Button>
 							<Button variant="contained" color="primary" onClick={setAllCast}>전체 인물 보기</Button>
 							<p>검색 후 아래에서 선택하실 수 있습니다.</p>

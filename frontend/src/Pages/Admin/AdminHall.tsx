@@ -74,7 +74,7 @@ const AdminHall = () => {
 				setModalSeat(obj);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "", ""]);
+				errorHandler(e, true, ["","","","해당 상영관이 없습니다"]);
 			});
 	}
 
@@ -103,6 +103,9 @@ const AdminHall = () => {
 				"TOKEN": AUTH_TOKEN
 			}
 		})
+			.then((res) => {
+				alert("상영관 이름이 정상적으로 수정되었습니다.")
+			})
 			.catch((e) => {
 				errorHandler(e, true);
 			});
@@ -111,7 +114,7 @@ const AdminHall = () => {
 	const removeHall = (hall_id: number) => {
 		if (!hallList)
 			return;
-		if (!confirm(`[${hallList[hall_id].hall_name}] 상영관을 삭제하시겠습니까?`))
+		if (!confirm(`[${hallList[hall_id].hall_name}] 상영관을 정말로 삭제하시겠습니까?`))
 			return;
 		axios.delete(`${SERVER_URL}/hall/delete/${hall_id}`, {
 			headers: {
@@ -119,15 +122,15 @@ const AdminHall = () => {
 			}
 		})
 			.then((res) => {
+				alert("상영관이 정상적으로 삭제되었습니다.");
 				fetchHall();
 			})
 			.catch((e) => {
-				errorHandler(e, true);
+				errorHandler(e, true, ["상영일정이 있으므로 삭제할 수 없습니다."]);
 			});
 	}
 
-	const saveSeat = () => {
-		// todo : modalID의 상영관 좌석 저장
+	const saveSeat = () => { // 모달을 끄는 역할만 함
 		setOpenSeatModal(false);
 	}
 
@@ -205,7 +208,6 @@ const AdminHall = () => {
 	const saveSeatType = () => {
 		if (!modalHall)
 			return;
-		console.log(seatType);
 		axios.put(`${SERVER_URL}/hall/seat`, {
 			"seats": [
 				{
@@ -220,6 +222,7 @@ const AdminHall = () => {
 			}
 		})
 			.then((res) => {
+				alert("좌석 종류가 정상적으로 수정되었습니다.");
 				fetchSeat();
 				setOpenSeatTypeModal(false);
 			})
@@ -231,12 +234,10 @@ const AdminHall = () => {
 	/* 상영관 추가 */
 	const handleHallNameChange = (e: any) => { setHallName(e.target.value); }
 	const handleHallColChange = (e: any) => {
-		let str: string = e.target.value;
+		const str: string = e.target.value;
 		if (str === "") { // 없으면 0으로 초기화
 			setHallCol(0);
 		}
-		if (str.length === 2)
-			str = str.slice(1);
 		if (isNaN(Number(str))) {
 			alert("숫자를 입력해주세요");
 			return;
@@ -244,12 +245,10 @@ const AdminHall = () => {
 		setHallCol(Number(str));
 	}
 	const handleHallRowChange = (e: any) => {
-		let str: string = e.target.value;
+		const str: string = e.target.value;
 		if (str === "") { // 없으면 0으로 초기화
 			setHallRow(0);
 		}
-		if (str.length === 2)
-			str = str.slice(1);
 		if (isNaN(Number(str))) {
 			alert("숫자를 입력해주세요");
 			return;
@@ -282,7 +281,7 @@ const AdminHall = () => {
 
 	return (
 		<div>
-			<PageTitle title="상영관 리스트 페이지" isButtonVisible={true} />
+			<PageTitle title="상영관 리스트 페이지" isButtonVisible={false} />
 			<div className="hall-add-con">
 				<Button variant="outlined" color="primary" onClick={() => { setOpenAddHall(true) }}>상영관 추가</Button>
 			</div>
@@ -421,7 +420,7 @@ const AdminHall = () => {
 								placeholder="행"
 								label="행"
 								InputLabelProps={{ shrink: true }}
-								inputProps={{ maxLength: 2 }}
+								inputProps={{ maxLength: 3 }}
 								value={hallCol}
 								onChange={handleHallColChange}
 							/>
@@ -430,7 +429,7 @@ const AdminHall = () => {
 								placeholder="열"
 								label="열"
 								InputLabelProps={{ shrink: true }}
-								inputProps={{ maxLength: 2 }}
+								inputProps={{ maxLength: 3 }}
 								value={hallRow}
 								onChange={handleHallRowChange}
 							/>

@@ -55,7 +55,7 @@ const Login = () => {
 		// 이미 로그인 했음
 		if(!userId)
 			return;
-		alert("이미 로그인하였습니다.");
+		alert("이미 로그인되어 있습니다.");
 		history.push("/main");
 	},[]);
 
@@ -83,6 +83,10 @@ const Login = () => {
 	}
 
 	const findId = () => {
+		if(modalPhoneNum === "" || modalPhoneNum.length !== 11 || isNaN(Number(modalPhoneNum))){
+			alert("알맞은 핸드폰 번호를 입력해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/user/findId`, {
 			"user_name" : modalName,
 			"phone_num" : modalPhoneNum
@@ -94,11 +98,19 @@ const Login = () => {
 				setModalEmail(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["데이터를 제대로 입력해주세요.", "입력한 아이디에 해당하는 회원이 없습니다."]);
+				errorHandler(e, true, ["","입력한 이름에 해당하는 회원 ID가 없습니다."]);
 			});
 	}
 	
 	const setNewPW = () => {
+		if(isNaN(Number(modalPhoneNum))){
+			alert("알맞은 핸드폰 번호를 입력해주세요.");
+			return;
+		}
+		if (!modalEmail.includes("@")) {
+			alert("이메일 형식을 확인해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/user/resetPw`, {
 			"user_name" : modalName,
 			"phone_num" : modalPhoneNum,//"01012345678",
@@ -107,7 +119,7 @@ const Login = () => {
 		})
 			.then((res) => {
 				setOpenPasswordModal(false);
-				alert("비밀번호가 성공적으로 변경되었습니다.");
+				alert("비밀번호가 성공적으로 수정되었습니다.");
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -136,8 +148,8 @@ const Login = () => {
 				<div className="user-form">
 					<div className="form-con">
 						<div className="input-con">
-							<TextField variant="outlined" placeholder="이메일을 입력해주세요." inputProps={{ maxLength: 40 }} onChange={(e) => { setEmail(e.target.value); }} />
-							<TextField variant="outlined" type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => { setPassword(e.target.value); }} />
+							<TextField variant="outlined" label="이메일" placeholder="이메일을 입력해주세요." inputProps={{ maxLength: 40 }} onChange={(e) => { setEmail(e.target.value); }} />
+							<TextField variant="outlined" label="비밀번호" type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => { setPassword(e.target.value); }} />
 						</div>
 						<Button className="btn" variant="contained" color="primary" onClick={handleUserLogin}>로그인</Button>
 						<div className="under-menu">
@@ -164,15 +176,15 @@ const Login = () => {
 				<div className="nonuser-form">
 					<div className="form-con">
 						<div className="input-con">
-							<TextField variant="outlined" value={name} placeholder="이름" inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
-							<TextField variant="outlined" value={phoneNum} placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
+							<TextField variant="outlined" label="이름" value={name} placeholder="이름" inputProps={{ maxLength: 20 }} onChange={(e: any) => { setName(e.target.value); }} />
+							<TextField variant="outlined" label="핸드폰 번호" value={phoneNum} placeholder="핸드폰 번호" inputProps={{ maxLength: 11 }} onChange={(e: any) => { setPhoneNum(e.target.value); }} />
 							<div className="birth-con">
 								<SelectModule tag="Year" value={birthYear} handleValueChange={(e: any) => { setBirthYear(e.target.value) }} start={1930} end={2022} />
 								<SelectModule tag="Month" value={birthMonth} handleValueChange={(e: any) => { setBirthMonth(e.target.value) }} start={1} end={12} />
 								<SelectModule tag="Date" value={birthDate} handleValueChange={(e: any) => { setBirthDate(e.target.value) }} start={1} end={30} />
 							</div>
-							<TextField variant="outlined" type="password" placeholder="예매 비밀번호" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
-							<TextField variant="outlined" type="password" placeholder="예매 비밀번호 확인" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
+							<TextField variant="outlined" label="예매 비밀번호" type="password" placeholder="예매 비밀번호" value={password} onChange={(e: any) => { setPassword(e.target.value); }} />
+							<TextField variant="outlined" label="예매 비밀번호 확인" type="password" placeholder="예매 비밀번호 확인" value={passwordDual} onChange={(e: any) => { setPasswordDual(e.target.value); }} />
 						</div>
 						<div className="btn-con">
 							<Link to="/SignUp"><Button className="btn" variant="outlined" color="primary">회원가입</Button></Link>
@@ -207,8 +219,8 @@ const Login = () => {
 				title="아이디 찾기"
 			>
 				<div>
-					<TextField label="이름" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
-					<TextField label="핸드폰 번호" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
+					<TextField label="이름" variant="outlined" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
+					<TextField label="핸드폰 번호" variant="outlined" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
 					<Button variant="contained" color="primary" onClick={findId}>아이디 찾기</Button>
 					<div>아이디 : {foundedId}</div>
 				</div>
@@ -219,10 +231,10 @@ const Login = () => {
 				title="비밀번호 변경"
 			>
 				<div>
-					<TextField label="이름" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
-					<TextField label="핸드폰 번호" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
-					<TextField label="아이디(이메일)" value={modalEmail} onChange={(e: any) => setModalEmail(e.target.value)}  inputProps={{ maxLength: 40 }}/>
-					<TextField label="변경할 비밀번호" type="password" value={modalPassword} onChange={(e: any) => setModalPassword(e.target.value)}  inputProps={{ maxLength: 100 }}/>
+					<TextField label="이름" variant="outlined" value={modalName} onChange={(e: any) => setModalName(e.target.value)}  inputProps={{ maxLength: 20 }}/>
+					<TextField label="핸드폰 번호" variant="outlined" value={modalPhoneNum} onChange={(e: any) => setModalPhoneNum(e.target.value)}  inputProps={{ maxLength: 11 }}/>
+					<TextField label="아이디(이메일)" variant="outlined" value={modalEmail} onChange={(e: any) => setModalEmail(e.target.value)}  inputProps={{ maxLength: 40 }}/>
+					<TextField label="변경할 비밀번호" variant="outlined" type="password" value={modalPassword} onChange={(e: any) => setModalPassword(e.target.value)}  inputProps={{ maxLength: 100 }}/>
 					<Button variant="contained" color="primary" onClick={setNewPW}>비밀번호 변경</Button>
 				</div>
 			</ModalComponent>

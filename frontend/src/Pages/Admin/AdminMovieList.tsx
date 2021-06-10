@@ -97,18 +97,19 @@ const AdminMovie = () => {
 			}
 		})
 			.then((res) => {
+				alert("영화가 정상적으로 추가되었습니다.");
 				setOpen(false);
 				fetchMovie(page, sort, stat);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "영화 생성에 실패하였습니다. 정보를 다시 확인해주세요.", ""]);
+				errorHandler(e, true);
 			});
 	}
 
 
 	return (
 		<>
-			<PageTitle title="영화 리스트" isButtonVisible={true} />
+			<PageTitle title="영화 리스트" isButtonVisible={false} />
 			<div className="movie-wrap">
 				<div className="movie-con">
 					<div className="stat-sort-con">
@@ -169,7 +170,6 @@ const AdminMovie = () => {
 						<div>
 							<TextField variant="outlined" placeholder="런타임" label="런타임" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 3 }} value={runtime} onChange={handleRuntimeChange} />
 							<TextField variant="outlined" placeholder="설명" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} value={content} multiline={true} onChange={handleContentChange} />
-
 						</div>
 						<div>
 							<div>

@@ -4,6 +4,7 @@ import { ProductType } from '../Main/Type';
 import "../scss/component/_productcard.scss";
 import clsx from 'clsx';
 import { useHistory } from 'react-router';
+import { returnValidImg } from '../Function';
 
 type Auth = ["admin", "user"];
 type Props = {
@@ -21,7 +22,7 @@ const ProductCard = ({product, auth, deleteFunction} : Props) => {
 		<Paper elevation={3} className={clsx("product-card", product.limit===0?"sold-out":"")}>
 			<div onClick={gotoExact} className="img-con">
 				<span className="sold-out-cover"><p>sold out</p></span>
-				<img src="https://i.pinimg.com/236x/09/3f/84/093f8410929081023ec09091c8e71578.jpg" alt="상품 이미지"/>
+				<img src={returnValidImg(product.imageBase64)} alt="상품 이미지"/>
 			</div>
 			<div onClick={gotoExact} className="name">{product.prod_name}</div>
 			<div onClick={gotoExact} className="price">{product.price}원</div>

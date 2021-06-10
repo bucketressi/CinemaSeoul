@@ -11,6 +11,7 @@ import { Button, TextField } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
 import "../../scss/pages/adminpeople.scss";
+import { returnValidImg } from '../../Function';
 
 const AdminPeople = () => {
 	const AUTH_TOKEN = useTokenState();
@@ -138,7 +139,7 @@ const AdminPeople = () => {
 		if(!selectedPeople)
 			return;
 		if(!imgFile){
-			alert("인물이 성공적으로 수정되었습니다.")
+			alert("인물이 정상적으로 수정되었습니다.")
 			setOpenModifyModal(false);
 			fetchPeopleList();
 			return;
@@ -155,7 +156,7 @@ const AdminPeople = () => {
 			}
 		})
 			.then((res) => {
-				alert("인물이 성공적으로 수정되었습니다.")
+				alert("인물이 정상적으로 수정되었습니다.")
 				setOpenModifyModal(false);
 				fetchPeopleList();
 			})
@@ -204,7 +205,7 @@ const AdminPeople = () => {
 			}
 		})
 			.then((res) => {
-				alert("인물이 성공적으로 추가되었습니다.")
+				alert("인물이 정상적으로 추가되었습니다.")
 				setOpenAddModal(false);
 				fetchPeopleList();
 			})
@@ -221,7 +222,7 @@ const AdminPeople = () => {
 			}
 		})
 			.then((res) => {
-				alert("인물이 성공적으로 삭제되었습니다.")
+				alert("인물이 정상적으로 삭제되었습니다.")
 				fetchPeopleList();
 			})
 			.catch((e) => {
@@ -231,7 +232,7 @@ const AdminPeople = () => {
 
 	return (
 		<>
-			<PageTitle title="인물 리스트" isButtonVisible={true} />
+			<PageTitle title="인물 리스트" isButtonVisible={false} />
 			<div className="add-con">
 				<Button variant="outlined" color="primary" onClick={()=>setOpenAddModal(true)}>인물 추가</Button>
 			</div>
@@ -275,9 +276,11 @@ const AdminPeople = () => {
 							</div>
 							<TextField className="people-input-long" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} multiline={true} value={contents} onChange={(e: any) => setContents(e.target.value)}/>
 							<div>
-								<div>기존 사진</div>
-								<img src={selectedPeople.imageBase64 ? `data:image/png;base64,${selectedPeople.imageBase64}` : ""} alt="기존 인물 사진"/>
-								<div>사진 변경</div>
+								<div className="img-comp-container">
+									<div>기존 이미지</div>
+									<img src={returnValidImg(selectedPeople.imageBase64)} alt="기존 인물 사진"/>
+								</div>
+								<div>이미지 변경</div>
 								<ImgComponent setImgFile={setImgFile}/>
 							</div>
 						</div>

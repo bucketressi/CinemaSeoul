@@ -15,9 +15,7 @@ import {
 	AdminEvent,
 	AdminFAQ,
 	AdminFAQExact,
-	AdminGenre,
 	AdminHall,
-	AdminHome,
 	AdminMovieList,
 	AdminMovieSearchList,
 	AdminNotice,
@@ -31,7 +29,6 @@ import {
 	AdminTheater,
 	AdminError,
 	AdminLogin,
-	AdminUser,
 	AdminAudienceRecord,
 	AdminEventExact
 } from '../../Pages/Admin';
@@ -53,7 +50,6 @@ const AdminRouter: React.FC = () => {
 				<Route exact path="/admin" component={AdminMain} />
 				<Route path="/admin/ask" component={AdminAsk} />
 				<Route path="/admin/login" component={AdminLogin} />
-				<Route path="/admin/user" component={AdminUser} />
 				<Route path="/admin/myPage" component={AdminMyPage} />
 				<Route path="/admin/blacklist" component={AdminBlackList} />
 				<Route path="/admin/audience" component={AdminAudienceRecord} />
@@ -61,9 +57,7 @@ const AdminRouter: React.FC = () => {
 				<Route path="/admin/event/:event_id" component={AdminEventExact} />
 				<Route exact path="/admin/faq" component={AdminFAQ} />
 				<Route path="/admin/faq/:faq_id" component={AdminFAQExact} />
-				<Route path="/admin/genre" component={AdminGenre} />
 				<Route path="/admin/hall" component={AdminHall} />
-				<Route path="/admin/home" component={AdminHome} />
 				<Route exact path="/admin/movie" component={AdminMovieList} />
 				<Route exact path="/admin/movie/search/:keyword/:type" component={AdminMovieSearchList} />
 				<Route path="/admin/movie/:movie_id" component={AdminMovieExact} />

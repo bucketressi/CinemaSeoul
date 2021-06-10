@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ModalComponent, PageTitle } from '../../Components';
+import { ImgComponent, ModalComponent, PageTitle } from '../../Components';
 import { EventComponentType } from '../../Main/Type';
 
 import axios from 'axios';
@@ -11,6 +11,7 @@ import { Pagination } from '@material-ui/lab';
 import { useTokenState } from '../../Main/TokenModel';
 
 import "../../scss/pages/adminevent.scss";
+import { returnValidImg } from '../../Function';
 
 const AdminEvent = () => {
 	const AUTH_TOKEN = useTokenState();
@@ -19,6 +20,7 @@ const AdminEvent = () => {
 	const [totalPage, setTotalPage] = useState<number>(1);
 
 	const [EventList, setEventList] = useState<EventComponentType[] | undefined>(undefined);
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	useEffect(() => {
 		fetchEvent();
@@ -54,12 +56,31 @@ const AdminEvent = () => {
 	}
 
 	const addEvent = () => {
-		axios.post(`${SERVER_URL}/event/add`, {
+		if(title==""){
+			alert("제목을 입력해주세요.");
+			return;
+		}
+		if(contents==""){
+			alert("내용을 입력해주세요.");
+			return;
+		}
+
+		const formData = new FormData();
+		if (imgFile) {
+			formData.append("image", imgFile);
+		}
+		const jsonData = JSON.stringify({
 			"event_title" : title,//string,
 			"event_contents" : contents,//string
-		}, {
+		});
+
+		const blobData = new Blob([jsonData], { type: 'application/json' });
+		formData.append("event", blobData);
+
+		axios.post(`${SERVER_URL}/event/add`, formData, {
 			headers: {
-				TOKEN : AUTH_TOKEN
+				TOKEN : AUTH_TOKEN,
+				"Content-Type": "multipart/form-data"
 			}
 		}).then((res) => {
 			alert("이벤트가 정상적으로 추가되었습니다.");
@@ -135,6 +156,7 @@ const AdminEvent = () => {
 							value={contents}
 							onChange={(e: any) => setContents(e.target.value)}
 						/>
+						<ImgComponent setImgFile={setImgFile}/>
 					</div>
 				</ModalComponent>
 			</div>

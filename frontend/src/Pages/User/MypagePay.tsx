@@ -119,7 +119,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserBookPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "이미 사용된 코드입니다.", "", "지난 내역은 사용할 수 없습니다."]);
+				errorHandler(e, true);
 			});
 
 	}
@@ -139,7 +139,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserProductPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "이미 사용된 코드입니다."]);
+				errorHandler(e, true);
 			});
 	}
 
@@ -169,7 +169,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserBookPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "이미 사용되어 취소할 수 없습니다.", "", "이미 취소된 결제입니다."]);
+				errorHandler(e, true);
 			});
 	}
 
@@ -186,7 +186,7 @@ const MypagePay = ({ mode }: Props) => {
 				fetchUserProductPayList();
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "이미 사용되어 취소할 수 없습니다.", "", "이미 취소된 결제입니다."]);
+				errorHandler(e, true);
 			});
 	}
 	return (
@@ -245,7 +245,7 @@ const MypagePay = ({ mode }: Props) => {
 																<div>정보가 없습니다.</div> :
 																<div>
 																	<div>영화 : {book.movi_name}</div>
-																	<div>상영일자: {book.show_date} {book.show_time}</div>
+																	<div>상영일자: {book.show_date} {book.show_time.substr(0,2) + ":" + book.show_time.substr(2,2)}</div>
 																</div>
 														}
 													</TableCell>

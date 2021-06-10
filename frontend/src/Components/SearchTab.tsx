@@ -50,7 +50,8 @@ const SearchTab = () => {
 			stat: 0,
 			avai_age_code: age.length === 0 ? null : age,  //없으면 null
 			genre_code: genre.length === 0 ? null : genre,  //없으면 null
-			sort: 0
+			sort: 0,
+			amount: 9
 		})
 			.then((res) => {
 				if(!res.data || !res.data.movi_list)
@@ -58,7 +59,7 @@ const SearchTab = () => {
 				setMovieList(res.data.movi_list);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "조건이 잘못 입력되었습니다.", ""]);
+				errorHandler(e, true);
 			});
 	};
 

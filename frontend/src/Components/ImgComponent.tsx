@@ -4,7 +4,7 @@ import Jimp, { AUTO } from 'jimp';
 import { type } from 'node:os';
 
 type ImgInfoType = {
-	file: File;
+	file: File | null;
 	previewURL: string | ArrayBuffer | null;
 }
 
@@ -15,28 +15,34 @@ type Props = {
 const ImgComponent = ({ setImgFile }: Props) => {
 	const [imgInfo, setImgInfo] = useState<ImgInfoType | undefined>(undefined);
 
-	// const optimizeImg = (imageBase64: string) => {
-	// 	const imageBuffer = new ArrayBuffer(imageBase64);
-	// 	return Jimp.read(imageBuffer, function (err, image) {
-	// 		image.resize(150, Jimp.AUTO)
-	// 			.quality(60);
-	// 		return image;
-	// 	});
-	// }
+	const optimizeImg = (imageBase64: string) => {
+		return Jimp.read(imageBase64, function (err, image) {
+			image.resize(300, Jimp.AUTO)
+				.quality(60);
+			image.getBuffer(Jimp.MIME_JPEG, (error, value) => {
+				setImgFile(new File([value], "output.jpg"));
+			})
+		});
+	}
 
 	const uploadImage = (e: any) => {
 		e.preventDefault();
-		setImgFile(e.target.files[0]);
+		if(!e.target.files[0]){
+			setImgInfo({
+				file : null,
+				previewURL : null
+			})
+			return;
+		}
 		const reader = new FileReader();
 		reader.onloadend = () => {
 			setImgInfo({ // 미리보기할 파일 저장
 				file: e.target.files[0],
 				previewURL: reader.result
 			})
-			// if (typeof (reader.result) == "string")
-			// optimizeImg(reader.result).then(res => res.getBuffer("image/jpeg", (error, value) => {
-			// 	setImgFile(new File([value], "output.jpg"));
-			// }));
+			if (typeof (reader.result) == "string"){
+				optimizeImg(reader.result);
+			}
 		};
 		reader.readAsDataURL(e.target.files[0]);
 	};

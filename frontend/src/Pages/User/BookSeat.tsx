@@ -236,7 +236,6 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 				<div className="bookseat-header">
 					<div className="select-con">
 						<div className="schedule-info-con">
-							<img src="https://caching.lottecinema.co.kr//Media/MovieFile/MovieImg/202105/17387_103_1.jpg" alt="포스터" />
 							<div>
 								<div className="movie-name">{scheduleInfo.movi_name}</div>
 								<div>

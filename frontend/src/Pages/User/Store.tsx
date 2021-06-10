@@ -84,8 +84,8 @@ const Store = () => {
 					indicatorColor="primary"
 				>
 					<Tab label="전체" />
-					<Tab label="굿즈" />
 					<Tab label="스낵" />
+					<Tab label="굿즈" />
 				</Tabs>
 				<div className="contents-con">
 					{

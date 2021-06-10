@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../scss/component/_moviecard.scss";
 import { SimpleMovieType } from '../Main/Type';
+import { returnValidImg } from '../Function';
 
 const MovieCard = ({movi_id, imageBase64, movi_name, accu_audience, open_date, avai_age, rating} : SimpleMovieType) => {
 	const [dDay, setDDay] = useState<string>("Day");
@@ -20,15 +21,11 @@ const MovieCard = ({movi_id, imageBase64, movi_name, accu_audience, open_date, a
 		}
 	}, [open_date]);
 
-	const isImgInvalid = () => {
-		return (imageBase64 == undefined || imageBase64 == null || imageBase64 == "");
-	}
-
 	return (
 		<div className="movie-card">
 			<div className="movie-poster">
 				<span className="age-circle">{avai_age?.substr(0,3)}</span>
-				<img src={isImgInvalid()?"https://i.pinimg.com/564x/38/cb/31/38cb31cee4b2da2676f1003a2fcf514d.jpg":`data:image/png;base64,${imageBase64}`} alt={`poster ${movi_name}`}/>
+				<img src={returnValidImg(imageBase64)} alt={`poster ${movi_name}`}/>
 			</div>
 			<div className="movie-name">{movi_name}</div>
 			{

@@ -9,6 +9,7 @@ import { useUserState } from '../../Main/UserModel';
 import { Button, Paper, TextField } from '@material-ui/core';
 import { ModalComponent } from '../../Components';
 import { Rating } from '@material-ui/lab';
+import { returnValidImg } from '../../Function';
 
 type Props = {
 	mode: number
@@ -73,6 +74,7 @@ const MypageMovie = ({ mode }: Props) => {
 				}
 			})
 				.then((res) => {
+					alert("관람평이 정상적으로 추가되었습니다.");
 					fetchUserMovieList();
 					setOpenModal(false);
 				})
@@ -102,13 +104,15 @@ const MypageMovie = ({ mode }: Props) => {
 	}
 
 	const deleteReview = (movi_id: number) => {
+		if(!confirm("정말로 관람평을 삭제하시겠습니까?"))
+			return;
 		axios.delete(`${SERVER_URL}/review/delete/${userId}/${movi_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
 		})
 			.then((res) => {
-				alert("관람평이 성공적으로 삭제되었습니다.");
+				alert("관람평이 정상적으로 삭제되었습니다.");
 				fetchUserMovieList();
 			})
 			.catch((e) => {
@@ -119,7 +123,7 @@ const MypageMovie = ({ mode }: Props) => {
 	const MovieCard = (movie: MypageMovieType) => (
 		movie &&
 		<Paper key={movie.movi_id} elevation={4} className="mypage-movie-card">
-			<div className="img-con"><img src="https://i.pinimg.com/564x/38/cb/31/38cb31cee4b2da2676f1003a2fcf514d.jpg" alt="포스터" /></div>
+			<div className="img-con"><img src={returnValidImg(movie.imageBase64)} alt="포스터" /></div>
 			<div className="info-con">
 				<div className="name">{movie.movi_name}</div>
 				{

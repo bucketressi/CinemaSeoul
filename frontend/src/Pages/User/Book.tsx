@@ -38,25 +38,11 @@ const Book = () => {
 		fetchScheduleInfo();
 	}, [selectedSchedule]);
 
-	useEffect(() => {
-		if(selectedSchedule === -1)
-			return;
-		axios.get(`${SERVER_URL}/showschedule/select/${selectedSchedule}`, {
-			headers : {
-				TOKEN : AUTH_TOKEN
-			}
-		})
-			.then((res) => {
-				setScheduleInfo(res.data);
-			})
-			.catch((e) => {
-				errorHandler(e, true);
-			});
-	}, [selectedSchedule]);
-
 	const handleModeChange = (e : any, newValue : number) => {
-		if(mode <= newValue)
+		if(mode <= newValue){
+			alert("이전 단계를 먼저 실행해주세요.");
 			return;
+		}
 		setMode(newValue);
 	}
 
