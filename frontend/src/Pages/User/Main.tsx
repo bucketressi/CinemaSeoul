@@ -38,6 +38,9 @@ const Main = () => {
 
 	return (
 		<>
+			<div>
+				<Link to="/event"><img src="https://img.cgv.co.kr/Front/Main/2021/0607/16230417703880.jpg" alt="배너"/></Link>
+			</div>
 			<PageTitle title="상영 중인 영화" isButtonVisible={false} />
 			<div className="movie-list">
 				{

@@ -124,6 +124,11 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 	}
 
 	const gotoPay = () => { // 결제로 가기
+		if(seatTotalNum === 0){
+			// 좌석 수를 선택하지 않았으면
+			alert("인원을 선택해주세요.");
+			return;
+		}
 		if (seatTotalNum !== seatTypeNum.length) {
 			// 모든 좌석 클릭하지 않았으면
 			alert("입력한 좌석 수에 맞는 모든 좌석을 선택해주세요.");
@@ -157,7 +162,7 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 				booked.push(seat_num);
 			}
 
-			DOM.push(<td className={clsx("seat", seatTypeCodeObj[Number(type_code)], bool ? "selected" : "", blackMode || isBooked ? "불가" : "")} key={seat_num} onClick={() => handleSelectSeat(seatList[idx + i])}><div className={`${seat_num}`}>{seat_num}</div></td>);
+			DOM.push(<td className={clsx("seat", seatTypeCodeObj[Number(type_code)], bool ? "selected" : "", blackMode || isBooked ? "불가" : "")} key={seat_num} onClick={(isBooked) => { if(isBooked){alert("이미 예매된 좌석입니다."); return;} handleSelectSeat(seatList[idx + i]);}}><div className={`${seat_num}`}>{seat_num}</div></td>);
 		}
 
 		return (
@@ -263,6 +268,9 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 								)
 							}
 						</div>
+					</div>
+					<div className="information">
+						<p>입장 전 전자출입명부 작성 및 관람 중 마스크 착용 필수, 예매 시 동반자 외 띄어앉기를 준수하여 주시기 바랍니다.(1인 예매 시 타일행과의 관람에 유의해 주세요)</p>
 					</div>
 					<div className="select-seat-num">
 						<div className="seat-map">

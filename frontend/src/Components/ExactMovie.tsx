@@ -85,12 +85,12 @@ const MovieExact = ({ movie_id }: Props) => {
 			}
 		})
 			.then((res) => {
-				if(!res.data)
+				if (!res.data)
 					return;
 				setMovie(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "","", "해당 영화가 없습니다.", ""]);
+				errorHandler(e, true, ["", "", "", "해당 영화가 없습니다.", ""]);
 				history.goBack();
 			});
 	}
@@ -100,7 +100,6 @@ const MovieExact = ({ movie_id }: Props) => {
 	}
 
 	const removeMovie = () => {
-		// 영화 리스트 다시 받기 => todo : api 해결되고 다시 하기
 		if (!confirm(`[${movie?.movi_name}] 영화를 정말로 삭제하시겠습니까?`))
 			return;
 
@@ -127,7 +126,7 @@ const MovieExact = ({ movie_id }: Props) => {
 			}
 		})
 			.then((res) => {
-				if(!res.data)
+				if (!res.data)
 					return;
 				setSelectedPeople(res.data);
 				setModalOpen(true);
@@ -183,7 +182,7 @@ const MovieExact = ({ movie_id }: Props) => {
 							<div className="left-info-con">
 								<div className="movie-title">
 									<div className="movie-name">{movie.movi_name}</div>
-									<div className="movie-age">{movie.avai_age}</div>
+									<div className="movie-age"><p>{movie.avai_age}</p></div>
 								</div>
 								<div>
 									<div className="menu">
@@ -220,14 +219,14 @@ const MovieExact = ({ movie_id }: Props) => {
 									director &&
 									<div className="menu-director menu">
 										<div className="menu-subtitle">감독</div>
-										<div>{director.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
+										<div className="tooltip-con">{director.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
 									</div>
 								}
 								{
 									actor &&
 									<div className="menu-actor menu">
 										<div className="menu-subtitle">배우</div>
-										<div>{actor.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
+										<div className="tooltip-con">{actor.map((peop: PeopleType) => <span key={peop.peop_id} onClick={() => handlePeopleClick(peop.peop_id)}>{peop.peop_name}</span>)}</div>
 									</div>
 								}
 							</div>
@@ -302,25 +301,25 @@ const MovieExact = ({ movie_id }: Props) => {
 									<div className="menu-subtitle">생년월일</div>
 									<div>{`${selectedPeople.birth.substr(0, 4)}/${selectedPeople.birth.substr(4, 2)}/${selectedPeople.birth.substr(6, 2)}`}</div>
 								</div>
+								<div className="menu">
+									<div className="menu-subtitle">출연작</div>
+									<div>
+										{selectedPeople.movies.map((movie) => {
+											return (
+												<div key={movie.movi_id}>{movie.movi_name}</div>
+											)
+										})}
+									</div>
+								</div>
 							</div>
-							<div className="img-comp-container">
+							<div className="right-con img-comp-container menu">
 								<div className="menu-subtitle">인물 사진</div>
-								<img src={returnValidImg(selectedPeople.imageBase64)} alt="기존 인물 사진"/>
+								<img src={returnValidImg(selectedPeople.imageBase64)} alt="기존 인물 사진" />
 							</div>
 						</div>
 						<div className="menu">
 							<div className="menu-subtitle">인물소개</div>
 							<div>{selectedPeople.peop_contents}</div>
-						</div>
-						<div className="menu">
-							<div className="menu-subtitle">출연작</div>
-							<div>
-								{selectedPeople.movies.map((movie) => {
-									return (
-										<div key={movie.movi_id}>{movie.movi_name}</div>
-									)
-								})}
-							</div>
 						</div>
 					</div>
 				</ModalComponent>
