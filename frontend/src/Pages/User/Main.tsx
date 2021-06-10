@@ -19,7 +19,8 @@ const Main = () => {
 			//전체 : 0, 상영중  1, 상영예정 : 2
 			"page": 1,
 			"stat": 1,
-			"sort": 0
+			"sort": 0,
+			"amount" :8
 		}, {
 			headers: {
 				"TOKEN": token
@@ -41,12 +42,14 @@ const Main = () => {
 			<div className="movie-list">
 				{
 					nowMovie &&
-					nowMovie.map((movie: SimpleMovieType) => {
+					nowMovie.map((movie: SimpleMovieType, index: number) => {
+						if(index > 3) // 4개만 나타내기
+							return null;
 						return (
 							<Link key={movie.movi_id} to={`/movie/${movie.movi_id}`}>
 								<MovieCard
 									movi_id={movie.movi_id}
-									image={movie.image}
+									imageBase64={movie.imageBase64}
 									movi_name={movie.movi_name}
 									accu_audience={movie.accu_audience}
 									avai_age={movie.avai_age}

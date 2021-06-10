@@ -36,7 +36,7 @@ const AdminBlackList = () => {
 			});
 	}
 
-	// /* 수정 */
+	// /* 수정 */ => 블랙리스트 수정 없앰
 	// const [openModal, setOpenModal] = useState<boolean>(false);
 	// const [name, setName] = useState<string>("");
 	// const [birthYear, setBirthYear] = useState<string>("");
@@ -73,7 +73,7 @@ const AdminBlackList = () => {
 	// 	// 	}
 	// 	// })
 	// 	// 	.then((res) => {
-	// 	// 		alert("블랙리스트가 성공적으로 수정되었습니다.");
+	// 	// 		alert("블랙리스트가 정상적으로 수정되었습니다.");
 	// 	// 		setOpenModal(false);
 	// 	// 		fetchBlackList();
 	// 	// 	})
@@ -92,7 +92,7 @@ const AdminBlackList = () => {
 			}
 		})
 			.then((res) => {
-				alert("블랙리스트가 성공적으로 삭제되었습니다.");
+				alert("블랙리스트가 정상적으로 삭제되었습니다.");
 				fetchBlackList();
 			})
 			.catch((e) => {
@@ -126,7 +126,7 @@ const AdminBlackList = () => {
 			}
 		})
 			.then((res) => {
-				alert("블랙리스트가 성공적으로 추가되었습니다.");
+				alert("블랙리스트가 정상적으로 추가되었습니다.");
 				setOpenAddModal(false);
 				fetchBlackList();
 			})

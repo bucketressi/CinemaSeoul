@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { ProductExactType, CodeMatch } from '../../Main/Type';
 import { useProductTypeCodeState } from '../../Main/CodeModel';
-import { PageTitle } from '../../Components';
+import { ImgComponent, PageTitle } from '../../Components';
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
@@ -10,6 +10,7 @@ import { errorHandler } from '../../Main/ErrorHandler';
 import "../../scss/pages/storeexact.scss";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import { useTokenState } from '../../Main/TokenModel';
+import { returnValidImg } from '../../Function';
 
 interface MatchParams {
 	product_id: string
@@ -27,7 +28,8 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 	const [prodType, setProdType] = useState<string>("");
 	const [limit, setLimit] = useState<number>(0);
 	const [contents, setContents] = useState<string>("");
-	const [image, setImage] = useState<string>("");
+	const [imageBase64, setImageBase64] = useState<string>("");
+	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	/* code */
 	useEffect(() => {
@@ -53,7 +55,7 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 				setProdType(res.data.prod_type_code);
 				setLimit(Number(res.data.limit));
 				setContents(res.data.prod_contents);
-				// todo : img
+				setImageBase64(res.data.imageBase64);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -84,14 +86,39 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 			"price" : price,
 			"prod_type_code" : prodType,
 			"limit" : limit,
-			"prod_contents" : contents,
-			"image" : null
+			"prod_contents" : contents
 		}, {
 			headers: {
 				TOKEN: AUTH_TOKEN
 			}
 		})
 			.then((res) => {
+				saveImage();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
+	const saveImage = () => {
+		if(!imgFile){
+			alert("상품이 정상적으로 수정되었습니다.");
+			history.push("/admin/product");
+		}
+
+		const formData = new FormData();
+		if (imgFile) {
+			formData.append("image", imgFile);
+		}
+
+		axios.put(`${SERVER_URL}/prod/image/${match.params.product_id}`, formData, {
+			headers: {
+				TOKEN: AUTH_TOKEN,
+				"Content-Type": "multipart/form-data"
+			}
+		})
+			.then((res) => {
+				alert("상품이 정상적으로 수정되었습니다.");
 				history.push("/admin/product");
 			})
 			.catch((e) => {
@@ -108,8 +135,7 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 			<div className="product-exact-con">
 				<div className="product-header">
 					<div className="img-con">
-						<img src="https://i.pinimg.com/236x/09/3f/84/093f8410929081023ec09091c8e71578.jpg" alt="상품 이미지" />
-						{/* todo: img */}
+						<img src={returnValidImg(imageBase64)} alt="상품 이미지" />
 					</div>
 					<div className="info-con">
 						<div className="name">
@@ -164,6 +190,9 @@ const AdminProductModify: React.FunctionComponent<RouteComponentProps<MatchParam
 								value={contents}
 								onChange={(e: any) => setContents(e.target.value)}
 							/>
+						</div>
+						<div>
+							<ImgComponent setImgFile={setImgFile}/>
 						</div>
 					</div>
 					<div>

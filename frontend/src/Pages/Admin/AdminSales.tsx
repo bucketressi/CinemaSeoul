@@ -37,7 +37,6 @@ const AdminSales = () => {
 				setSalesData(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true);
 			});
 	}
 
@@ -90,29 +89,30 @@ const AdminSales = () => {
 						</Table>
 					}
 					{
-						salesData?.sales &&
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>일자</TableCell>
-									<TableCell>영화 매출</TableCell>
-									<TableCell>상품 매출</TableCell>
-									<TableCell>총 매출</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{
-									salesData.sales.map((sale) => (
-										<TableRow key={sale.sale_date}>
-											<TableCell>{getDateString(sale.sale_date)}</TableCell>
-											<TableCell>{sale.movi_sale}원</TableCell>
-											<TableCell>{sale.prod_sale}원</TableCell>
-											<TableCell>{sale.total_sale}원</TableCell>
-										</TableRow>
-									))
-								}
-							</TableBody>
-						</Table>
+						salesData?.sales ?
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell>일자</TableCell>
+										<TableCell>영화 매출</TableCell>
+										<TableCell>상품 매출</TableCell>
+										<TableCell>총 매출</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{
+										salesData.sales.map((sale) => (
+											<TableRow key={sale.sale_date}>
+												<TableCell>{getDateString(sale.sale_date)}</TableCell>
+												<TableCell>{sale.movi_sale}원</TableCell>
+												<TableCell>{sale.prod_sale}원</TableCell>
+												<TableCell>{sale.total_sale}원</TableCell>
+											</TableRow>
+										))
+									}
+								</TableBody>
+							</Table>
+							: <div>아직 매출 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>

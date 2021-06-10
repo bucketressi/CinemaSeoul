@@ -92,12 +92,12 @@ const AdminShowSchedule = () => {
 					setModalOpen(false);
 				})
 				.catch((e) => {
-					errorHandler(e, true, ["정확한 정보를 입력했는지 다시 한 번 확인해주세요."]);
+					errorHandler(e, true);
 				});
 		} else {
 			isBookExist(showId).then((res) => {
 				if (!res) {
-					axios.put(`${SERVER_URL}/showschedule/`, {
+					axios.put(`${SERVER_URL}/showschedule/update`, {
 						"show_id": showId,
 						"movi_id": movieId,
 						"hall_id": hallId,
@@ -109,14 +109,15 @@ const AdminShowSchedule = () => {
 						}
 					})
 						.then((res) => {
+							alert("상영일정이 정상적으로 수정되었습니다.")
 							fetchShowSchedule(page);
 							setModalOpen(false);
 						})
 						.catch((e) => {
-							errorHandler(e, true, ["정확한 정보를 입력했는지 다시 한 번 확인해주세요."]);
+							errorHandler(e, true);
 						});
 				} else {
-					alert("해당 상영일정의 예매가 있으므로 상영일정을 수정할 수 없습니다. 예매를 먼저 삭제해주세요.");
+					alert("예매가 있으므로 수정할 수 없습니다.");
 				}
 			})
 		}
@@ -156,12 +157,6 @@ const AdminShowSchedule = () => {
 		let timeString = e.target.value as string;
 		timeString = timeString.split(':').join('');
 		setShowTime(timeString);
-	}
-
-	const handleShowDateChange = (e: any) => {
-		let dateString = e.target.value as string;
-		dateString = dateString.split('-').join('');
-		setShowDate(dateString);
 	}
 
 	const handleAddButtonClick = () => { // 추가 버튼 클릭 시
@@ -217,13 +212,14 @@ const AdminShowSchedule = () => {
 					}
 				})
 					.then((res) => {
+						alert("상영일정이 정상적으로 삭제되었습니다.")
 						fetchShowSchedule(page);
 					})
 					.catch((e) => {
 						errorHandler(e, true);
 					});
 			} else {
-				alert("해당 상영일정의 예매가 있으므로 상영일정을 삭제할 수 없습니다. 예매를 먼저 삭제해주세요.");
+				alert("예매가 있으므로 삭제할 수 없습니다.");
 			}
 		});
 	}
@@ -240,13 +236,13 @@ const AdminShowSchedule = () => {
 				fetchShowSchedule(page);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["","","","영화가 시작하기 10분 전부터만 시작하실 수 있습니다."]);
+				errorHandler(e, true, ["","","","","상영일정 시작 시간 이후에만 누르실 수 있습니다."]);
 			});
 	}
 
 	return (
 		<>
-			<PageTitle title="상영일정 페이지" isButtonVisible={true} />
+			<PageTitle title="상영일정 페이지" isButtonVisible={false} />
 			<div className="save-btn">
 				<Button variant="outlined" color="secondary" onClick={handleAddButtonClick}>상영일정 추가</Button>
 			</div>

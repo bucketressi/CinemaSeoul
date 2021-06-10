@@ -29,3 +29,12 @@ a{
 	color: black;
 	text-decoration: none;
 }
+.img-comp-container{
+	width: 300px;
+	height: 400px;
+	img{
+		max-width: 100%;
+		height: auto;
+		max-height: 100%;
+	}
+}

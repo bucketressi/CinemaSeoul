@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../scss/component/_header.scss";
 import { Button, MenuItem, TextField, Select } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
@@ -35,26 +35,12 @@ const Header = () => {
 	}
 
 	const search = () => {
-		// 검색 시 type을 null, "감독", "배우"로 mapping
-		axios.post(`${SERVER_URL}/movie/search`, {
-			"page" : 1,             
-			"name" : searchKeyword,
-			"cast_type_code" : searchType === 0 ? null : peopleType[searchType-1].code_id
-		}, {
-			headers: {
-				TOKEN: AUTH_TOKEN
-			}
-		})
-			.then((res) => {
-				if (!res.data || !res.data.movi_list)
-					return;
-				history.push("/movie/search");
-				setMovieList(res.data.movi_list);
-			})
-			.catch((e) => {
-				errorHandler(e, true);
-			});
+		history.push(`/movie/search/${searchKeyword===""?null:searchKeyword}/${searchType}`);
 	}
+	useEffect(()=> { // 페이지 바뀔 때마다 초기화
+		setSearchKeyword("");
+		setSearchType(0);
+	}, [location.pathname]);
 
 	return (
 		<header>

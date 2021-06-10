@@ -103,7 +103,7 @@ const AdminAsk = () => {
 			}
 		})
 			.then((res) => {
-				alert("문의가 성공적으로 삭제되었습니다.");
+				alert("문의가 정상적으로 삭제되었습니다.");
 				fetchAskList();
 			})
 			.catch((e) => {

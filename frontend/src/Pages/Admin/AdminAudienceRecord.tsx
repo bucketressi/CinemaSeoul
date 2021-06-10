@@ -36,7 +36,6 @@ const AdminAudienceRecord = () => {
 				setAudienceData(res.data);
 			})
 			.catch((e) => {
-				errorHandler(e, true);
 			});
 	}
 
@@ -55,29 +54,30 @@ const AdminAudienceRecord = () => {
 				</div>
 				<div>
 					{
-						audienceData &&
-						<div>
-							<div>{audienceData.sum}명</div>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell>일자</TableCell>
-										<TableCell>관람객 수</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{
-										audienceData.records.map((component) => (
-											<TableRow key={component.reco_date}>
-												<TableCell>{component.reco_date}</TableCell>
-												<TableCell>{component.audi_amount}명</TableCell>
-											</TableRow>
-										))
-									}
+						audienceData ?
+							<div>
+								<div>{audienceData.sum}명</div>
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell>일자</TableCell>
+											<TableCell>관람객 수</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{
+											audienceData.records.map((component) => (
+												<TableRow key={component.reco_date}>
+													<TableCell>{component.reco_date}</TableCell>
+													<TableCell>{component.audi_amount}명</TableCell>
+												</TableRow>
+											))
+										}
 
-								</TableBody>
-							</Table>
-						</div>
+									</TableBody>
+								</Table>
+							</div>
+							: <div>아직까지 관람현황 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>

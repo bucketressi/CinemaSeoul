@@ -11,3 +11,10 @@ export const getDateStringFromDate = (date : Date) => {
 	}
 	return ""+year+month+day;
 }
+export const returnValidImg = (imageBase64 : string) => {
+	if(imageBase64 == undefined || imageBase64 == null || imageBase64 == ""){
+		return "/img/noimage.png";
+	}else{
+		return `data:image/png;base64,${imageBase64}`;
+	}
+}

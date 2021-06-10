@@ -11,6 +11,7 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { PageTitle, Cart } from '../../Components';
 import { Button } from '@material-ui/core';
+import { returnValidImg } from '../../Function';
 
 interface MatchParams {
 	prod_id: string
@@ -79,7 +80,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 		if(cartProducts[Number(product.prod_id)]){ // 기존에 있었으면 개수 더해주기
 			const prevNum = cartProducts[Number(product.prod_id)].number;
 			if(product.limit < productNum + prevNum){ // 재고보다 많은 수는 넣을 수 없음
-				alert("재고보다 많이는 살 수 없습니다.");
+				alert("남아있는 재고 만큼만 구매 가능합니다.");
 				return;
 			}
 			cartProducts[Number(product.prod_id)] = {
@@ -93,6 +94,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 			};
 		}
 		localStorage.setItem("product", JSON.stringify(cartProducts));
+		alert("상품을 담았습니다.");
 		cartChange();
 		setProductNum(0);
 	}
@@ -109,7 +111,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 					<div className="product-exact-con">
 						<div className="product-header">
 							<div className="img-con">
-								<img src="https://i.pinimg.com/236x/09/3f/84/093f8410929081023ec09091c8e71578.jpg" alt="상품 이미지" />
+								<img src={returnValidImg(product.imageBase64)} alt="상품 이미지"/>
 							</div>
 							<div className="info-con">
 								<div className="name">{product.prod_name}</div>

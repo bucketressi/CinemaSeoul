@@ -40,7 +40,7 @@ export type MovieType = {
 	open_date: string,
 	genre: string[],
 	casting: MovieCastingType[],
-	image: string,
+	imageBase64: string,
 	accu_audience: number,
 	rating: number
 }
@@ -49,7 +49,7 @@ export type SimpleMovieType = {
 	movi_id: number,
 	movi_name: string,
 	accu_audience: number,
-	image: string,
+	imageBase64: string,
 	open_date?: string,
 	rating?: number,
 	avai_age?: string
@@ -63,6 +63,12 @@ export type AbleMovieType = {
 	movi_id: number,
 	movi_name: string,
 	avai_age: string
+}
+
+export type MovieReviewType = {
+	"user_name": string,// "김**",
+	"comments": string,//"희대의 명작입니다.",
+	"rating": number, //5
 }
 
 
@@ -90,7 +96,7 @@ export type PeopleExactType = {
 	nation: string,//"한국",
 	birth: string,//"19810118",
 	peop_contents: string,//"대한민국의 배우. 수려한 외모, 186cm의 키, 그리고 112cm의 긴 다리를 소유하고 있다.",
-	image: string,//"",
+	imageBase64: string,//"",
 	movies: CastMovieType[]
 }
 
@@ -214,7 +220,7 @@ export type ProductType = {
 	prod_name: string, //팝콘(소),
 	price: number, //7000,
 	limit: number, //0,
-	image: string,
+	imageBase64: string,
 }
 
 export type ProductExactType = {
@@ -224,7 +230,7 @@ export type ProductExactType = {
 	prod_type_code: string,//"310001",
 	limit: number,//9997,
 	prod_contents: string,//"카라멜맛 양파맛 선택 가능한 팝콘 (소)",
-	image: string//""
+	imageBase64: string//""
 }
 
 export type CartProductType = {
@@ -325,7 +331,7 @@ export type MypageMovieType = {
 	rating: number | null, //null,
 	movi_id: number, //126,
 	movi_name: string, //트랜스포머1,
-	images: string | null //
+	imageBase64: string//
 }
 
 export type MypagePointType = {
@@ -466,5 +472,5 @@ export type EventExactType = {
     "event_title": string,//"2021년 하반기 이벤트",
     "event_contents": string,//"계획이 없습니다.",
     "crea_datetime": string,//"2021-06-05 01:48:53",
-    "image": string |null
+    "imageBase64": string
 }

@@ -34,7 +34,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				history.push("/main");
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+				errorHandler(e, true, ["", "", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
 			});
 	}
 
@@ -54,7 +54,7 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				history.push("/main");
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+				errorHandler(e, true, ["", "", "블랙리스트에 등록되어있습니다. 관리자에게 문의해주세요.", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
 			});
 	}
 
@@ -72,14 +72,23 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 				history.push("/admin/main");
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
+				errorHandler(e, true, ["", "", "", "로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.", ""]);
 			});
 	}
 
 	function logout() {
+		let flag = 0; // 0 : 관리자 , 1 : 사용자
+		if(user !== undefined){
+			flag = 1;
+		}
 		setUser(undefined);
 		setAdmin(undefined);
 		setToken("");
+		alert("로그아웃 되었습니다.");
+		if(flag === 0)
+			history.push("/admin");
+		else
+			history.push("/");
 	}
 
 	return (
