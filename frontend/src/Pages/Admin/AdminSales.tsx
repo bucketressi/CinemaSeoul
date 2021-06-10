@@ -9,6 +9,8 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 
+import "../../scss/pages/adminsales.scss";
+
 const AdminSales = () => {
 	const AUTH_TOKEN = useTokenState();
 
@@ -60,59 +62,67 @@ const AdminSales = () => {
 				title="매출관리"
 				isButtonVisible={false}
 			/>
-			<div style={{ display: 'flex', flexDirection: 'column' }}>
-				<div>
+			<div className="sales-wrap">
+				<div className="search-con">
 					<div>특정 기간 동안의 매출 조회</div>
-					<TextField InputLabelProps={{ shrink: true }} label="시작일자" type="date" value={getDateString(startDate)} onChange={(e: any) => setStartDate(e.target.value.split("-").join(""))} />
-					<TextField InputLabelProps={{ shrink: true }} label="종료일자" type="date" value={getDateString(endDate)} onChange={(e: any) => setEndDate(e.target.value.split("-").join(""))} />
-					<Button variant="contained" color="primary" onClick={fetchSales}>조회</Button>
-					<Button variant="contained" color="secondary" onClick={calculateTodaySales}>오늘 매출 계산</Button>
+					<div>
+						<TextField className="search-obj" InputLabelProps={{ shrink: true }} label="시작일자" type="date" value={getDateString(startDate)} onChange={(e: any) => setStartDate(e.target.value.split("-").join(""))} />
+						<TextField className="search-obj" InputLabelProps={{ shrink: true }} label="종료일자" type="date" value={getDateString(endDate)} onChange={(e: any) => setEndDate(e.target.value.split("-").join(""))} />
+						<Button className="search-obj-btn" variant="contained" color="primary" onClick={fetchSales}>조회</Button>
+						<Button className="search-obj-btn" variant="contained" color="secondary" onClick={calculateTodaySales}>오늘 매출 계산</Button>
+					</div>
 				</div>
-				<div>
+				<div className="result-con">
 					{
 						salesData &&
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>영화 매출</TableCell>
-									<TableCell>상품 매출</TableCell>
-									<TableCell>총 매출</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								<TableRow>
-									<TableCell>{salesData.movi_total}원</TableCell>
-									<TableCell>{salesData.prod_total}원</TableCell>
-									<TableCell>{salesData.total_sum}원</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-					}
-					{
-						salesData?.sales ?
+						<div className="total-sales-con">
+							<div className="result-title">매출 합산</div>
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>일자</TableCell>
-										<TableCell>영화 매출</TableCell>
-										<TableCell>상품 매출</TableCell>
-										<TableCell>총 매출</TableCell>
+										<TableCell className="table-title">영화 매출</TableCell>
+										<TableCell className="table-title">상품 매출</TableCell>
+										<TableCell className="table-title">총 매출</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{
-										salesData.sales.map((sale) => (
-											<TableRow key={sale.sale_date}>
-												<TableCell>{getDateString(sale.sale_date)}</TableCell>
-												<TableCell>{sale.movi_sale}원</TableCell>
-												<TableCell>{sale.prod_sale}원</TableCell>
-												<TableCell>{sale.total_sale}원</TableCell>
-											</TableRow>
-										))
-									}
+									<TableRow>
+										<TableCell className="table-content">{salesData.movi_total}원</TableCell>
+										<TableCell className="table-content">{salesData.prod_total}원</TableCell>
+										<TableCell className="table-content">{salesData.total_sum}원</TableCell>
+									</TableRow>
 								</TableBody>
 							</Table>
-							: <div>아직 매출 데이터가 없습니다.</div>
+						</div>
+					}
+					{
+						salesData?.sales ?
+							<div className="record-sales-con">
+								<div className="result-title">일자별 매출내역</div>
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell className="table-title">일자</TableCell>
+											<TableCell className="table-title">영화 매출</TableCell>
+											<TableCell className="table-title">상품 매출</TableCell>
+											<TableCell className="table-title">총 매출</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{
+											salesData.sales.map((sale) => (
+												<TableRow key={sale.sale_date}>
+													<TableCell className="table-content">{getDateString(sale.sale_date)}</TableCell>
+													<TableCell className="table-content">{sale.movi_sale}원</TableCell>
+													<TableCell className="table-content">{sale.prod_sale}원</TableCell>
+													<TableCell className="table-content">{sale.total_sale}원</TableCell>
+												</TableRow>
+											))
+										}
+									</TableBody>
+								</Table>
+							</div>
+							: <div className="none-data-text">아직 매출 데이터가 없습니다.</div>
 					}
 				</div>
 			</div>

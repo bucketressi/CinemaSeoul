@@ -19,7 +19,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 80vh;
     .table-title{
       font-weight: bold;
       text-align: center;
@@ -37,6 +36,7 @@
     }
     .notice-content{
       margin-top: 5%;
+      margin-bottom: 7%;
       width: 100%;
       &>*{
         width: 100%;
