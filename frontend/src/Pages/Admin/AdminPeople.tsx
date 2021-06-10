@@ -301,7 +301,7 @@ const AdminPeople = () => {
 						<div className="birth-con">
 							<SelectModule tag="Year" value={addBirthYear} handleValueChange={(e: any) => { setAddBirthYear(e.target.value) }} start={1930} end={2022} />
 							<SelectModule tag="Month" value={addBirthMonth} handleValueChange={(e: any) => { setAddBirthMonth(e.target.value) }} start={1} end={12} />
-							<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={30} />
+							<SelectModule tag="Date" value={addBirthDate} handleValueChange={(e: any) => { setAddBirthDate(e.target.value) }} start={1} end={31} />
 						</div>
 						<TextField className="people-input-long" variant="outlined" label="설명" InputLabelProps={{shrink:true}} inputProps={{ maxLength: 600 }} placeholder="설명" multiline={true} rows={3} value={addContents} onChange={(e: any) => setAddContents(e.target.value)}/>
 						<div>
