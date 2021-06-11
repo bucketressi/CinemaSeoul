@@ -1,0 +1,70 @@
+.employee-wrap{
+  display: flex;
+  flex-direction: column;
+  .employee-content-con{
+    display: flex;
+    flex-direction: column;
+    .add-con{
+      display:flex;
+      justify-content: flex-end;
+    }
+    .employee-list-con{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .table-title{
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .table-content{
+        text-align: center;
+      }
+      .modify-btn-con{
+        display: flex;
+        flex-direction: column;
+        &>button{
+          margin-bottom: 5px;
+          width: 50%;
+          z-index: 1;
+        }
+      }
+    }
+  }
+}
+
+/* 직원 추가/수정 modal */
+.employee-modal{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  .modal-input{
+    width: 194px;
+    margin-bottom: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  .modal-info{
+    width: 194px;
+    margin-bottom: 10px;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  .modal-info-long{
+    width: 100%;
+    margin-top: 2px;
+  }
+  .start-con{
+    &>*{
+      width: 128px;
+      margin-bottom: 10px;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+  }
+  .modal-input-long{
+    width: 100%;
+    margin-top: 2px;
+  }
+}
+

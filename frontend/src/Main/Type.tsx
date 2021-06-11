@@ -115,6 +115,7 @@ export type UserType = {
 }
 
 export type AdminType = {
+	admi_id: number,
 	admi_name: string,
 	birth: string,
 	phone_num: string,
