@@ -24,6 +24,7 @@ const AdminMain = () => {
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/notice")}>공지사항 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/faq")}>FAQ 바로가기</Button>
 				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/event")}>이벤트 바로가기</Button>
+				<Button variant="outlined" color="primary" onClick={() => history.push("/admin/employee")}>직원 관리 바로가기</Button>
 			</div>
 		</div>
 	);
