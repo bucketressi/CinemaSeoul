@@ -33,38 +33,33 @@
   }
 }
 
-/* 직원 추가/수정 modal */
 .employee-modal{
-  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  .modal-input{
-    width: 194px;
-    margin-bottom: 10px;
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-  .modal-info{
-    width: 194px;
-    margin-bottom: 10px;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-  .modal-info-long{
-    width: 100%;
-    margin-top: 2px;
-  }
-  .start-con{
-    &>*{
-      width: 128px;
-      margin-bottom: 10px;
-      margin-left: 2px;
-      margin-right: 2px;
+  &>div{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button{
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+    &>div{
+      width: 100%;
+    }
+    &.two-in-one{
+      &>div{
+        width: 48%;
+      }
+    }
+    .auth-con{
+      .MuiInputBase-root{
+        width: 100%;
+        .MuiSelect-root{
+          width: 100%;
+        }
+      }
     }
   }
-  .modal-input-long{
-    width: 100%;
-    margin-top: 2px;
-  }
 }
-
