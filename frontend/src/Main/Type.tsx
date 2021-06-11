@@ -127,6 +127,13 @@ export type AdminType = {
 	start_date: string
 }
 
+export type SimpleAdminType = {
+	"admi_id": string,//"0",
+	"admi_name": string,//"관리자",
+	"position": string,//"사장",
+	"start_date": string//"20210101"
+}
+
 export type UserPointType = {
 	user_id: number,
 	point: MypagePointType[],

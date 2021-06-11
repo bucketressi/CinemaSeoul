@@ -56,12 +56,16 @@
 	}
 	.product-content{
 		display: flex;
+		color: black!important;
 		&>div{
 			width: 50%;
 			flex-shrink: 0;
 			display: flex;
 			justify-content: center;
 			margin-bottom: 5%;
+		}
+		div{
+			color: black!important;
 		}
 	}
 }

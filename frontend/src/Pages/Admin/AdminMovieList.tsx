@@ -37,20 +37,13 @@ const AdminMovie = () => {
 	const [imgFile, setImgFile] = useState<File | undefined>(undefined);
 
 	/** 조건 */
-	const [stat, setStat] = useState<number>(0);
-	const [sort, setSort] = useState<number>(0);
 	const [page, setPage] = useState<number>(1);
 
 	useEffect(() => {
 		if (location.pathname === "/movie/search") // search를 통해 왔으면 다시 fetch 안 함
 			return;
-		fetchMovie(page, sort, stat);
+		fetchMovie();
 	}, []);
-
-	useEffect(() => {
-		// stat과 sort는 바뀔 때마다 재구성
-		fetchMovie(page, stat, sort);
-	}, [stat, sort, page]);
 
 	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
 
@@ -99,7 +92,7 @@ const AdminMovie = () => {
 			.then((res) => {
 				alert("영화가 정상적으로 추가되었습니다.");
 				setOpen(false);
-				fetchMovie(page, sort, stat);
+				fetchMovie(page);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -113,18 +106,9 @@ const AdminMovie = () => {
 			<div className="movie-wrap">
 				<div className="movie-con">
 					<div className="stat-sort-con">
-						<p>선택 및 정렬</p>
-						<Select className="select" label="상태" value={stat} onChange={(e: any) => setStat(e.target.value)}>
-							<MenuItem value={0}>전체</MenuItem>
-							<MenuItem value={1}>상영중</MenuItem>
-							<MenuItem value={2}>상영예정</MenuItem>
-						</Select>
-						<Select className="select" label="정렬" value={sort} onChange={(e: any) => setSort(e.target.value)}>
-							<MenuItem value={0}>기본</MenuItem>
-							<MenuItem value={1}>평점순</MenuItem>
-							<MenuItem value={2}>누적관람객순</MenuItem>
-						</Select>
-						<SearchTab />
+						<SearchTab 
+							page={page}
+						/>
 					</div>
 					<div className="movie-content-con">
 						<div className="movie-menu">

@@ -1,5 +1,5 @@
-import React, { Dispatch, useState } from 'react';
-import { Button, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core';
+import React, { Dispatch, useEffect, useState } from 'react';
+import { Button, Radio, RadioGroup, FormControl, FormLabel, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import "../scss/component/_searchtab.scss";
 import axios from 'axios';
 import { SERVER_URL } from '../CommonVariable';
@@ -8,16 +8,25 @@ import { useTokenState } from '../Main/TokenModel';
 import { useGenreCodeState, useMovieAuthCodeState } from '../Main/CodeModel';
 import { useMovieListDispatch } from '../Main/MovieListModel';
 
+type Props = {
+	page : number
+}
 
-const SearchTab = () => {
+const SearchTab = ({ page } : Props) => {
 	const setMovieList = useMovieListDispatch();
 	const token = useTokenState();
 	const genreCode = useGenreCodeState();
 	const movieAuthCode = useMovieAuthCodeState();
 
+	const [sort, setSort] = useState<number>(0);
 	const [state, setState] = useState<number>(0);
 	const [genre, setGenre] = useState<string[]>([]);
 	const [age, setAge] = useState<string[]>([]);
+
+	useEffect(() => {
+		// page가 바뀌거나 정렬이 바뀌면 자동 search
+		handleSearch();
+	}, [page, sort]);
 
 	const handleStateChange = (e: any) => { setState(Number(e.target.value)); };
 	const handleGenreChange = (e: any) => {
@@ -46,11 +55,11 @@ const SearchTab = () => {
 
 	const handleSearch = () => { // 검색
 		axios.post(`${SERVER_URL}/movie/list`, {
-			page: 1,
-			stat: 0,
+			page: page,
+			stat: state,
 			avai_age_code: age.length === 0 ? null : age,  //없으면 null
 			genre_code: genre.length === 0 ? null : genre,  //없으면 null
-			sort: 0,
+			sort: sort,
 			amount: 9
 		})
 			.then((res) => {
@@ -70,6 +79,12 @@ const SearchTab = () => {
 				<Button variant="contained" color="inherit" onClick={handleSearch}>검색</Button>
 			</div>
 			<div className="search-condi-con">
+				<div>정렬</div>
+				<Select className="select" label="정렬" value={sort} onChange={(e: any) => setSort(e.target.value)}>
+					<MenuItem value={0}>기본</MenuItem>
+					<MenuItem value={1}>평점순</MenuItem>
+					<MenuItem value={2}>누적관람객순</MenuItem>
+				</Select>
 				<FormControl>
 					<FormLabel className="search-field-title">상태</FormLabel>
 					<RadioGroup name="state" value={state} onChange={handleStateChange}>

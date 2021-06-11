@@ -4,7 +4,7 @@ import { ProductExactType, CodeMatch, CodeType, CartProductType } from '../../Ma
 import { useProductTypeCodeState } from '../../Main/CodeModel';
 import { useCartChange } from '../../Main/CartSync';
 import "../../scss/pages/storeexact.scss";
-import { Select, MenuItem, TextField} from '@material-ui/core';
+import { Select, MenuItem, TextField, Input, InputBase} from '@material-ui/core';
 
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
@@ -135,7 +135,7 @@ const StoreExact: React.FunctionComponent<RouteComponentProps<MatchParams>> = ({
 							</div>
 						</div>
 						<div className="product-content">
-							<div>{product.prod_contents}</div>
+							<InputBase value={product.prod_contents} disabled={true} multiline={true} inputProps={{ 'aria-label': 'naked' }}/>
 						</div>
 					</div>
 					: <div>상품을 불러오는 중입니다.</div>

@@ -6,7 +6,7 @@ import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
 import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
-import { Button, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField } from '@material-ui/core';
+import { Button, InputBase, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { ModalComponent } from '../../Components';
 
@@ -235,7 +235,7 @@ const MypageAsk = ({ mode }: Props) => {
 						<div><span>제목</span><p>{selectedAsk.ask_title}</p></div>
 						<div><span>내용</span><p> {selectedAsk.ask_contents}</p></div>
 						<div><span>관리자</span> <p>{selectedAsk.admi_name}</p></div>
-						<div><span>답변</span><p> {selectedAsk.answer}</p></div>
+						<div><span>답변</span><InputBase value={selectedAsk.answer} disabled={true} multiline={true} inputProps={{ 'aria-label': 'naked' }}/></div>
 						<div><span>문의 일자</span> <p>{selectedAsk.crea_datetime}</p></div>
 						<div><span>답변 일자</span><p>{selectedAsk.answ_datetime}</p></div>
 					</div>
