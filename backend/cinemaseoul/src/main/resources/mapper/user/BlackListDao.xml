@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.user.BlackListDao">
+
+    <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
+    <insert id="insert" parameterType="BlackListVo" >
+        INSERT INTO BLACKLIST (BLAC_NAME, PHONE_NUM, BIRTH)
+        VALUES (#{blac_name}, #{phone_num}, #{birth})
+    </insert>
+
+    <select id="select" resultType="BlackListVo">
+        SELECT BLAC_NAME, PHONE_NUM, BIRTH FROM BLACKLIST
+        WHERE PHONE_NUM = #{phone_num} AND BLAC_NAME = #{blac_name}
+    </select>
+
+    <delete id="delete" parameterType="BlackListVo">
+        DELETE FROM BLACKLIST
+        WHERE BLAC_NAME = #{blac_name} AND PHONE_NUM = #{phone_num}
+    </delete>
+
+</mapper>
