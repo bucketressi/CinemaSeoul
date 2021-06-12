@@ -7,8 +7,8 @@ import { MypageUserType } from '../../Main/Type';
 import axios from 'axios';
 import { SERVER_URL } from '../../CommonVariable';
 import { errorHandler } from '../../Main/ErrorHandler';
-import { useTokenState } from '../../Main/TokenModel';
-import { useUserState, useLogout } from '../../Main/UserModel';
+import { useTokenState, useTokenDispatch } from '../../Main/TokenModel';
+import { useUserState, useLogout, useUserDispatch, useAdminDispatch } from '../../Main/UserModel';
 
 type Props = {
 	mode: number,
@@ -21,6 +21,9 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 	const userId = useUserState();
 	const AUTH_TOKEN = useTokenState();
 	const logout = useLogout();
+	const setUser = useUserDispatch();
+	const setAdmin = useAdminDispatch();
+	const setToken = useTokenDispatch();
 
 	/* 회원 정보 */
 	const [name, setName] = useState<string>("");
@@ -145,8 +148,10 @@ const MypageInfo = ({ mode, userInfo, fetchUserInfo }: Props) => {
 			}
 		})
 			.then((res) => {
+				setUser(undefined);
+				setAdmin(undefined);
+				setToken("");
 				alert("정상적으로 탈퇴되었습니다. 안녕히 가세요 :)");
-				logout();
 				history.push("/main");
 			})
 			.catch((e) => {

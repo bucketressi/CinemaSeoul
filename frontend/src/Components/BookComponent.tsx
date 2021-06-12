@@ -11,6 +11,7 @@ import { errorHandler } from '../Main/ErrorHandler';
 import { useTokenState } from '../Main/TokenModel';
 import { UserBookType, UserBookExactType } from '../Main/Type';
 import { ModalComponent } from '../Components';
+import { Pagination } from '@material-ui/lab';
 
 type Props = {
 	mode?: number
@@ -20,6 +21,11 @@ const BookComponent = ({ mode }: Props) => {
 	const userId = useUserState();
 	const AUTH_TOKEN = useTokenState();
 	const history = useHistory();
+
+	const [page, setPage] = useState<number>(1);
+	const [totalPage, setTotalPage] = useState<number>(1);
+
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
 
 	/* 예매 */
 	const [bookInfo, setBookInfo] = useState<UserBookType[] | undefined>(undefined); // 예매 정보
@@ -31,7 +37,7 @@ const BookComponent = ({ mode }: Props) => {
 
 	useEffect(() => {
 		fetchUserBookList();
-	}, []);
+	}, [page]);
 
 	useEffect(() => {
 		if (mode !== 0)
@@ -49,7 +55,8 @@ const BookComponent = ({ mode }: Props) => {
 			user_id: userId,     //회원은 강제로 본인으로 바뀝니다.
 			start_date: startDate ==="" ? null : startDate, // 없으면 전체, 있으면 할당
 			end_date: endDate==="" ? null : endDate, // 없으면 전체, 있으면 할당
-			page: 1
+			page: page,
+			amount: 10
 		}, {
 			headers: {
 				TOKEN: AUTH_TOKEN
@@ -59,6 +66,7 @@ const BookComponent = ({ mode }: Props) => {
 				if (!res.data || !res.data.bookrecord_list)
 					return;
 				setBookInfo(res.data.bookrecord_list);
+				setTotalPage(res.data.totalpage);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -143,6 +151,7 @@ const BookComponent = ({ mode }: Props) => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			{
 				bookExactInfo &&
 				<ModalComponent
@@ -150,21 +159,23 @@ const BookComponent = ({ mode }: Props) => {
 					setOpen={setOpenBookModal}
 					title="예매 상세 조회"
 				>
-					<div>
-						<div>예매자 : {bookExactInfo.user_name}</div>
-						<div>성인 좌석 수 : {bookExactInfo.adult}</div>
-						<div>청소년 좌석 수 : {bookExactInfo.teen}</div>
-						<div>시니어 좌석 수 : {bookExactInfo.senior}</div>
-						<div>장애인 좌석 수 : {bookExactInfo.impaired}</div>
-						<div>예매일자 : {bookExactInfo.book_datetime}</div>
-						<div>상영일자 : {bookExactInfo.show_date} {bookExactInfo.show_time}</div>
-						<div>영화 : {bookExactInfo.movi_name}</div>
-						<div>런타임 : {bookExactInfo.run_time}</div>
-						<div>상영관 : {bookExactInfo.hall_name}</div>
-						<div>좌석 : {bookExactInfo.seat_num.map(seat => <span key={seat}>{seat}</span>)}</div>
-						<div>사용코드 : {bookExactInfo.use_code}</div>
-						<div>관람일자 : {bookExactInfo.use_datetime}</div>
-						{/* 관람일자는 없으면 표시 x */}
+					<div className="book-exact-modal">
+						<div><span>예매자</span><p>{bookExactInfo.user_name}</p></div>
+						<div><span>성인 좌석 수</span><p>{bookExactInfo.adult}석</p></div>
+						<div><span>청소년 좌석 수</span><p>{bookExactInfo.teen}석</p></div>
+						<div><span>시니어 좌석 수</span><p>{bookExactInfo.senior}석</p></div>
+						<div><span>장애인 좌석 수</span><p>{bookExactInfo.impaired}석</p></div>
+						<div><span>예매일자</span><p>{bookExactInfo.book_datetime}</p></div>
+						<div><span>상영일자</span><p>{getDateString(bookExactInfo.show_date)} {bookExactInfo.show_time.substr(0,2)+":"+bookExactInfo.show_time.substr(2,2)}</p></div>
+						<div><span>영화</span><p>{bookExactInfo.movi_name}</p></div>
+						<div><span>런타임</span><p>{bookExactInfo.run_time}</p></div>
+						<div><span>상영관</span><p>{bookExactInfo.hall_name}</p></div>
+						<div><span>좌석</span><p>{bookExactInfo.seat_num.join(",")}</p></div>
+						<div><span>사용코드</span><p>{bookExactInfo.use_code}</p></div>
+						{
+							bookExactInfo.use_datetime &&
+								<div><span>관람일자</span><p>{bookExactInfo.use_datetime}</p></div>
+						}
 					</div>
 				</ModalComponent>
 			}

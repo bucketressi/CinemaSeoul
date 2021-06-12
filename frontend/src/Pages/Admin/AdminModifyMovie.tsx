@@ -70,6 +70,7 @@ const AdminModifyMovie: React.FunctionComponent<RouteComponentProps<MatchParams>
 				setGenre(res.data.genre);
 				setPrevImg(res.data.imageBase64);
 				setContent(res.data.movi_contents);
+				setRuntime(res.data.run_time);
 				const date: string = res.data.open_date;
 				const dateString = date.substr(0, 4) + "-" + date.substr(4, 2) + "-" + date.substr(6, 2);
 				setOpenDate(dateString);

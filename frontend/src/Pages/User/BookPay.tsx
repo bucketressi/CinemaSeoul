@@ -69,8 +69,8 @@ const BookPay = ({ mode, scheduleInfo, payPrice, seatTypeNum, seatNum }: Props) 
 		axios.post(`${SERVER_URL}/pay/book`, {
 			show_id: scheduleInfo.show_id,
 			user_id: userId,
-			teen: seatNum[0],
-			adult: seatNum[1],
+			adult: seatNum[0],
+			teen: seatNum[1],
 			senior: seatNum[2],
 			impaired: seatNum[3],
 			hall_id: scheduleInfo.hall_id,

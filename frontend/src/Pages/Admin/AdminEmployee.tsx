@@ -375,6 +375,22 @@ const AdminEmployee = () => {
 			});
 	}
 
+	/** 삭제 */
+	const removeEmployee = (id : string) => {
+		axios.delete(`${SERVER_URL}/admin/delete/${id}`, {
+			headers: {
+				"TOKEN": AUTH_TOKEN
+			}
+		})
+			.then((res) => {
+				alert("직원을 정상적으로 삭제하였습니다.");
+				fetchEmployeeList();
+			})
+			.catch((e) => {
+				errorHandler(e, true);
+			});
+	}
+
 	return (
 		<>
 			<PageTitle title="직원 관리" isButtonVisible={false} />
@@ -402,16 +418,13 @@ const AdminEmployee = () => {
 											<TableCell className="table-content" onClick={() => handleOpenInfoModal(employee.admi_id)}>{employee.position}</TableCell>
 											<TableCell className="table-content" onClick={() => handleOpenInfoModal(employee.admi_id)}>{employee.start_date}</TableCell>
 											<TableCell className="modify-btn-con">
-												<Button variant="contained" color="secondary" >삭제</Button>
+												<Button variant="contained" color="secondary" onClick={() => removeEmployee(employee.admi_id)} >삭제</Button>
 											</TableCell>
 										</TableRow>
 									))
 								}
 							</TableBody>
 						</Table>
-						{
-							/*</div><Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} /> */
-						}
 					</div>
 				</div>
 				<ModalComponent

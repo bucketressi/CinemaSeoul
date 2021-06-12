@@ -162,7 +162,7 @@ const BookSeat = ({ mode, setMode, scheduleInfo, payPrice, setPayPrice, seatNum,
 				booked.push(seat_num);
 			}
 
-			DOM.push(<td className={clsx("seat", seatTypeCodeObj[Number(type_code)], bool ? "selected" : "", blackMode || isBooked ? "불가" : "")} key={seat_num} onClick={(isBooked) => { if(isBooked){alert("이미 예매된 좌석입니다."); return;} handleSelectSeat(seatList[idx + i]);}}><div className={`${seat_num}`}>{seat_num}</div></td>);
+			DOM.push(<td className={clsx("seat", seatTypeCodeObj[Number(type_code)], bool ? "selected" : "", blackMode || isBooked ? "불가" : "")} key={seat_num} onClick={() => { if(isBooked){alert("이미 예매된 좌석입니다."); return;} handleSelectSeat(seatList[idx + i]);}}><div className={`${seat_num}`}>{seat_num}</div></td>);
 		}
 
 		return (

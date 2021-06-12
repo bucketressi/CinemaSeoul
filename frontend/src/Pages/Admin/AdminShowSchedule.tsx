@@ -28,8 +28,6 @@ const AdminShowSchedule = () => {
 	const hallList = useHallListState();
 	const movieList = useMovieListObjState();
 
-	const [mode, setMode] = useState<boolean>(false); // 표 / 리스트
-
 	useEffect(() => {
 		fetchShowSchedule(page);
 		fetchHall();
@@ -44,7 +42,7 @@ const AdminShowSchedule = () => {
 		// stat과 sort는 바뀔 때마다 재구성
 		fetchShowSchedule(page);
 	}, [page]);
-	
+
 	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
 
 
@@ -71,9 +69,6 @@ const AdminShowSchedule = () => {
 	}
 
 	/* 상영일정 관리 */
-	const handleModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setMode(event.target.checked);
-	}
 
 	const saveShowSchedule = () => {
 		if (modalType) {
@@ -88,6 +83,7 @@ const AdminShowSchedule = () => {
 				}
 			})
 				.then((res) => {
+					alert("상영일정이 정상적으로 추가되었습니다.")
 					fetchShowSchedule(page);
 					setModalOpen(false);
 				})
@@ -225,7 +221,7 @@ const AdminShowSchedule = () => {
 	}
 
 	/** 상영 시작 */
-	const startShow = (show_id : number) => {
+	const startShow = (show_id: number) => {
 		axios.get(`${SERVER_URL}/showschedule/start/${show_id}`, {
 			headers: {
 				TOKEN: AUTH_TOKEN
@@ -236,7 +232,7 @@ const AdminShowSchedule = () => {
 				fetchShowSchedule(page);
 			})
 			.catch((e) => {
-				errorHandler(e, true, ["","","","","상영일정 시작 시간 이후에만 누르실 수 있습니다."]);
+				errorHandler(e, true, ["", "", "", "", "상영일정 시작 시간 이후에만 누르실 수 있습니다."]);
 			});
 	}
 
@@ -248,16 +244,6 @@ const AdminShowSchedule = () => {
 			</div>
 			<div className="schedule-con">
 				<div className="schedule-header">
-					<div className="switch-con">
-						<div>리스트</div>
-						<Switch
-							checked={mode}
-							onChange={handleModeChange}
-							color="primary"
-							name={mode ? "표" : "리스트"}
-						/>
-						<div>표</div>
-					</div>
 					<div className="search-con">
 						<div>
 							<FormControl>
@@ -312,56 +298,51 @@ const AdminShowSchedule = () => {
 						</div>
 					</div>
 				</div>
-				{
-					mode ?
-						<div>표</div>
-						:
-						<div className="schedule-con">
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell className="table-title">번호</TableCell>
-										<TableCell className="table-title">상영관</TableCell>
-										<TableCell className="table-title">영화</TableCell>
-										<TableCell className="table-title">개봉일자</TableCell>
-										<TableCell className="table-title">상영시작시각</TableCell>
-										<TableCell className="table-title">상영종료시각</TableCell>
-										<TableCell className="table-title">상영시작</TableCell>
-										<TableCell className="table-title">수정</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{
-										showScheduleList &&
-										showScheduleList.map((schedule: ShowScheduleType, index: number) => {
-											const endTime = schedule.end_time.split("/");
-											return (
-												<TableRow key={schedule.show_id}>
-													<TableCell className="table-content">{index + 1}</TableCell>
-													<TableCell className="table-content">{schedule.hall_name}</TableCell>
-													<TableCell className="table-content">{schedule.movi_name}</TableCell>
-													<TableCell className="table-content">{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
-													<TableCell className="table-content">{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
-													<TableCell className="table-content">{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
-													<TableCell className="table-content">
-														{
-															schedule.started && schedule.started === "0" ?
-																<Button onClick={() => startShow(schedule.show_id)} variant="outlined" color="secondary">상영시작</Button> :
-																<Button variant="outlined" color="default" disabled={true}>상영완료</Button>
-														}
-													</TableCell>
-													<TableCell className="modify-btn-con">
-														<Button variant="contained" color="primary" onClick={() => handleModifyButtonClick(schedule.show_id)}>상영일정 수정</Button>
-														<Button variant="contained" color="secondary" onClick={() => removeShowSchedule(schedule.show_id)}>상영일정 삭제</Button>
-													</TableCell>
-												</TableRow>
-											);
-										})
-									}
-								</TableBody>
-							</Table>
-						</div>
-				}
+				<div className="schedule-con">
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell className="table-title">번호</TableCell>
+								<TableCell className="table-title">상영관</TableCell>
+								<TableCell className="table-title">영화</TableCell>
+								<TableCell className="table-title">상영일자</TableCell>
+								<TableCell className="table-title">상영시작시각</TableCell>
+								<TableCell className="table-title">상영종료시각</TableCell>
+								<TableCell className="table-title">상영시작</TableCell>
+								<TableCell className="table-title">수정</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{
+								showScheduleList &&
+								showScheduleList.map((schedule: ShowScheduleType, index: number) => {
+									const endTime = schedule.end_time.split("/");
+									return (
+										<TableRow key={schedule.show_id}>
+											<TableCell className="table-content">{index + 1}</TableCell>
+											<TableCell className="table-content">{schedule.hall_name}</TableCell>
+											<TableCell className="table-content">{schedule.movi_name}</TableCell>
+											<TableCell className="table-content">{`${schedule.show_date.substr(0, 4)}/${schedule.show_date.substr(4, 2)}/${schedule.show_date.substr(6, 2)}`}</TableCell>
+											<TableCell className="table-content">{`${schedule.show_time.substr(0, 2)}시 ${schedule.show_time.substr(2, 2)}분`}</TableCell>
+											<TableCell className="table-content">{`${endTime[endTime.length - 2]}시 ${endTime[endTime.length - 1]}분`}</TableCell>
+											<TableCell className="table-content">
+												{
+													schedule.started && schedule.started === "0" ?
+														<Button onClick={() => startShow(schedule.show_id)} variant="outlined" color="secondary">상영시작</Button> :
+														<Button variant="outlined" color="default" disabled={true}>상영완료</Button>
+												}
+											</TableCell>
+											<TableCell className="modify-btn-con">
+												<Button variant="contained" color="primary" onClick={() => handleModifyButtonClick(schedule.show_id)}>상영일정 수정</Button>
+												<Button variant="contained" color="secondary" onClick={() => removeShowSchedule(schedule.show_id)}>상영일정 삭제</Button>
+											</TableCell>
+										</TableRow>
+									);
+								})
+							}
+						</TableBody>
+					</Table>
+				</div>
 				<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 			</div>
 			<ModalComponent
@@ -404,7 +385,7 @@ const AdminShowSchedule = () => {
 						<TextField
 							className="schedule-input"
 							type="date"
-							label="개봉일자"
+							label="상영일자"
 							InputLabelProps={{
 								shrink: true,
 							}}

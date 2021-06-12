@@ -7,11 +7,11 @@ import { useTokenDispatch } from './TokenModel';
 import { useHistory } from 'react-router-dom';
 
 const userState = createContext<number | undefined>(undefined);
-const userDispatch = createContext<Dispatch<number>>(() => { });
+const userDispatch = createContext<Dispatch<number | undefined>>(() => { });
 const userLoginFunction = createContext<(id: string, password: string) => void>(() => { });
 const nonUserLoginFunction = createContext<(user: UserType) => void>(() => { });
 const adminState = createContext<number | undefined>(undefined);
-const adminDispatch = createContext<Dispatch<number>>(() => { });
+const adminDispatch = createContext<Dispatch<number | undefined>>(() => { });
 const adminLoginFunction = createContext<(id: string, password: string) => void>(() => { });
 const logoutFunction = createContext<() => void>(() => { });
 

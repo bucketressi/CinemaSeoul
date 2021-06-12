@@ -137,8 +137,7 @@ const ProductPay = () => {
 						<Table>
 							<TableHead>
 								<TableRow>
-									<TableCell>이미지</TableCell>
-									<TableCell>이름</TableCell>
+									<TableCell>상품명</TableCell>
 									<TableCell>개당 가격</TableCell>
 									<TableCell>타입</TableCell>
 									<TableCell>개수</TableCell>
@@ -151,9 +150,6 @@ const ProductPay = () => {
 										const product = cartProduct[Number(prod_id)];
 										return (
 											<TableRow key={prod_id}>
-												<TableCell className="img-con">
-													<img src="https://i.pinimg.com/236x/09/3f/84/093f8410929081023ec09091c8e71578.jpg" alt="상품 이미지" />
-												</TableCell>
 												<TableCell className="prod-name-con">{product.product.prod_name}</TableCell>
 												<TableCell className="prod-price-con">{product.product.price}원</TableCell>
 												<TableCell className="prod-type-con">{productTypeObj[Number(product.product.prod_type_code)]}</TableCell>
@@ -164,7 +160,6 @@ const ProductPay = () => {
 									})
 								}
 								<TableRow>
-									<TableCell></TableCell>
 									<TableCell></TableCell>
 									<TableCell></TableCell>
 									<TableCell></TableCell>

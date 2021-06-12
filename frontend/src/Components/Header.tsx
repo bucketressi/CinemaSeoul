@@ -67,11 +67,13 @@ const Header = () => {
 							<ul>
 								<li><Link to="/myPage"><Button color="primary" variant="outlined">마이페이지</Button></Link></li>
 								<li className="logout" onClick={logout}><Button color="primary" variant="outlined">로그아웃</Button></li>
+								<li><Link to="/admin"><Button color="primary" variant="outlined">관리자</Button></Link></li>
 							</ul>
 							:
 							<ul>
 								<li><Link to="/login"><Button color="primary" variant="outlined">로그인</Button></Link></li>
 								<li><Link to="/signup"><Button color="primary" variant="outlined">회원가입</Button></Link></li>
+								<li><Link to="/admin"><Button color="primary" variant="outlined">관리자</Button></Link></li>
 							</ul>
 					}
 				</div>
