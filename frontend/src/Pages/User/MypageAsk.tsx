@@ -221,7 +221,7 @@ const MypageAsk = ({ mode }: Props) => {
 			>
 				<div className="modal-column-con">
 					<TextField value={title} onChange={(e: any) => setTitle(e.target.value)} label="문의 제목" />
-					<TextField variant="outlined" value={contents} onChange={(e: any) => setContents(e.target.value)} label="문의 내용" multiline={true} />
+					<TextField className="contents" variant="outlined" value={contents} onChange={(e: any) => setContents(e.target.value)} label="문의 내용" multiline={true} />
 				</div>
 			</ModalComponent>
 			{

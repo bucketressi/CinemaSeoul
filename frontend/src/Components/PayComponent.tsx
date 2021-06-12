@@ -10,6 +10,7 @@ import { errorHandler } from '../Main/ErrorHandler';
 import { useTokenState } from '../Main/TokenModel';
 import { Button, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField } from '@material-ui/core';
 import { useUserState } from '../Main/UserModel';
+import { Pagination } from '@material-ui/lab';
 
 type Props = {
 	mode?: number
@@ -23,6 +24,12 @@ const PayComponent = ({ mode }: Props) => {
 
 	const [payMode, setPayMode] = useState<number>(0); // 0 : 예매 결제, 1: 상품 결제
 
+	/* 페이지네이션 */
+	const [page, setPage] = useState<number>(1);
+	const [totalPage, setTotalPage] = useState<number>(1);
+
+	const handlePageChange = (e: any, pageNumber: number) => { setPage(pageNumber); };
+
 	/* 날짜 */
 	const [startDate, setStartDate] = useState<string>("");
 	const [endDate, setEndDate] = useState<string>("");
@@ -33,7 +40,7 @@ const PayComponent = ({ mode }: Props) => {
 	
 	useEffect(() => {
 		fetchFromMode();
-	}, []);
+	}, [page]);
 
 	useEffect(() => {
 		const obj: CodeMatch = {};
@@ -44,10 +51,9 @@ const PayComponent = ({ mode }: Props) => {
 	}, [payStateCode]);
 
 	useEffect(() => {
-		if (mode !== 1)
-			return;
+		setPage(1); // page 1번 띄우기
 		fetchFromMode();
-	}, [mode, payMode]);
+	}, [payMode]);
 
 	const handleModeChange = (e: any, newValue: number) => {
 		setPayMode(newValue);
@@ -64,8 +70,8 @@ const PayComponent = ({ mode }: Props) => {
 
 	const fetchUserBookPayList = () => {
 		axios.post(`${SERVER_URL}/pay/book/list`, {
-			"page": 1,
-			"amount": 30,
+			"page": page,
+			"amount": 5,
 			"user_id": userId,//145,
 			"start_date": startDate === "" ? null : startDate,
 			"end_date": endDate === "" ? null : endDate,
@@ -78,6 +84,7 @@ const PayComponent = ({ mode }: Props) => {
 				if (!res.data || !res.data.bookpayinfo)
 					return;
 				setBookPayInfo(res.data.bookpayinfo);
+				setTotalPage(res.data.totalpage);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -86,8 +93,8 @@ const PayComponent = ({ mode }: Props) => {
 
 	const fetchUserProductPayList = () => {
 		axios.post(`${SERVER_URL}/pay/product/list`, {
-			"page": 1,
-			"amount": 30,
+			"page": page,
+			"amount": 5,
 			"user_id": userId,//145,
 			"start_date": startDate === "" ? null : startDate,
 			"end_date": endDate === "" ? null : endDate,
@@ -100,6 +107,7 @@ const PayComponent = ({ mode }: Props) => {
 				if (!res.data || !res.data.prodpayinfo)
 					return;
 				setProductPayInfo(res.data.prodpayinfo);
+				setTotalPage(res.data.totalpage);
 			})
 			.catch((e) => {
 				errorHandler(e, true);
@@ -242,7 +250,7 @@ const PayComponent = ({ mode }: Props) => {
 										bookPayInfo.map((book: UserBookPayType, index: number) => {
 											return (
 												<TableRow key={book.book_pay_id}>
-													<TableCell>{index}</TableCell>
+													<TableCell>{index+1}</TableCell>
 													<TableCell>
 														{
 															!book.book_id ?
@@ -290,6 +298,7 @@ const PayComponent = ({ mode }: Props) => {
 									}
 								</TableBody>
 							</Table>
+							<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 						</TableContainer>
 					}
 				</div>
@@ -308,7 +317,7 @@ const PayComponent = ({ mode }: Props) => {
 										productPayInfo.map((product: UserProductPayType, index: number) => {
 											return (
 												<TableRow key={product.prod_pay_id}>
-													<TableCell>{index}</TableCell>
+													<TableCell>{index+1}</TableCell>
 													<TableCell>
 														{
 															product.productPayDetails.map((product) => (
@@ -356,6 +365,7 @@ const PayComponent = ({ mode }: Props) => {
 									}
 								</TableBody>
 							</Table>
+							<Pagination className="pagination" count={totalPage} page={page} onChange={handlePageChange} />
 						</TableContainer>
 					}
 				</div>

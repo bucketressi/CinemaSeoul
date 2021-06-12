@@ -1,0 +1,11 @@
+.admin-list-header{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	.code-btn-con{
+		display: flex;
+		&>div{
+			margin-right: 10px;
+		}
+	}
+}

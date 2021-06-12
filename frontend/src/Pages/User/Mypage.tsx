@@ -10,7 +10,7 @@ import { useTokenState } from '../../Main/TokenModel';
 import { useUserState } from '../../Main/UserModel';
 import { useHistory } from 'react-router-dom';
 import { MypageUserType, MypagePointType, MypageAuthType } from '../../Main/Type';
-import { MypageBook, MypagePay, MypageMovie, MypageInfo, MypageAsk } from '.';
+import { MypageMovie, MypageInfo, MypageAsk } from '.';
 import { getDateString, getDateStringFromDate } from '../../Function';
 import PayComponent from '../../Components/PayComponent';
 

@@ -7,11 +7,11 @@ import { useTokenDispatch } from './TokenModel';
 import { useHistory } from 'react-router-dom';
 
 const userState = createContext<number | undefined>(undefined);
-const userDispatch = createContext<Dispatch<number>>(() => { });
+const userDispatch = createContext<Dispatch<number | undefined>>(() => { });
 const userLoginFunction = createContext<(id: string, password: string) => void>(() => { });
 const nonUserLoginFunction = createContext<(user: UserType) => void>(() => { });
 const adminState = createContext<number | undefined>(undefined);
-const adminDispatch = createContext<Dispatch<number>>(() => { });
+const adminDispatch = createContext<Dispatch<number | undefined>>(() => { });
 const adminLoginFunction = createContext<(id: string, password: string) => void>(() => { });
 const logoutFunction = createContext<() => void>(() => { });
 
@@ -23,6 +23,14 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 	const [admin, setAdmin] = useState<number | undefined>(undefined);
 
 	function userLogin(email: string, password: string) {
+		if(!email.includes("@")){
+			alert("이메일 형식을 확인해주세요.");
+			return;
+		}
+		if(password === ""){
+			alert("비밀번호를 입력해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/user/login`, {
 			"email": email,
 			"password": password
@@ -39,6 +47,10 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 	}
 
 	function nonUserLogin(user: UserType) {
+		if(user.password === "" || user.password === "" || user.user_name === ""){
+			alert("정보를 모두 입력해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/user/login/non-member`, {
 			"user_name": user.user_name,
 			"phone_num": user.phone_num,
@@ -59,6 +71,14 @@ export const UserContextProvider = ({ children }: childrenObj) => {
 	}
 
 	function adminLogin(email: string, password: string) {
+		if(!email.includes("@")){
+			alert("이메일 형식을 확인해주세요.");
+			return;
+		}
+		if(password === ""){
+			alert("비밀번호를 입력해주세요.");
+			return;
+		}
 		axios.post(`${SERVER_URL}/admin/login`, {
 			"email": email,
 			"password": password
