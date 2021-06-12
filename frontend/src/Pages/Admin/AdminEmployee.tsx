@@ -377,6 +377,8 @@ const AdminEmployee = () => {
 
 	/** 삭제 */
 	const removeEmployee = (id : string) => {
+		if(!confirm("해당 직원을 정말로 삭제하시겠습니까?"))
+			return;
 		axios.delete(`${SERVER_URL}/admin/delete/${id}`, {
 			headers: {
 				"TOKEN": AUTH_TOKEN
