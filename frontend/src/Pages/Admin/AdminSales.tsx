@@ -80,7 +80,7 @@ const AdminSales = () => {
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell className="table-title">영화 매출</TableCell>
+										<TableCell className="table-title">예매 매출</TableCell>
 										<TableCell className="table-title">상품 매출</TableCell>
 										<TableCell className="table-title">총 매출</TableCell>
 									</TableRow>
@@ -103,7 +103,7 @@ const AdminSales = () => {
 									<TableHead>
 										<TableRow>
 											<TableCell className="table-title">일자</TableCell>
-											<TableCell className="table-title">영화 매출</TableCell>
+											<TableCell className="table-title">예매 매출</TableCell>
 											<TableCell className="table-title">상품 매출</TableCell>
 											<TableCell className="table-title">총 매출</TableCell>
 										</TableRow>
