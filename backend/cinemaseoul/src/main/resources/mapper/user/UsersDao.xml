@@ -20,6 +20,17 @@
         WHERE PHONE_NUM = #{phone_num}
     </select>
 
+    <select id="findByEmailAndPhone" resultType="String">
+        SELECT USER_ID FROM USERS
+        WHERE EMAIL = #{email} or PHONE_NUM = #{phone_num}
+    </select>
+
+    <!--회원 아이디찾기-->
+    <select id="findByPhoneAndName" parameterType="UsersVo" resultType="String">
+        SELECT EMAIL FROM USERS
+        WHERE  PHONE_NUM = #{phone_num} AND USER_NAME = #{user_name}
+    </select>
+
     <insert id="signUp" parameterType="UsersVo">
         <selectKey keyProperty="user_id" resultType="Integer" order="BEFORE">
             SELECT SEQ_USERS.nextval FROM DUAL
@@ -37,6 +48,18 @@
         INSERT INTO USERS (USER_ID, USER_NAME, PHONE_NUM, PASSWORD, AGREEMENT)
         VALUES (#{user_id}, #{user_name}, #{phone_num}, #{password}, #{agreement})
     </insert>
+
+    <update id="nonMemberUpgrade" parameterType="UsersVo">
+        UPDATE USERS SET USER_NAME = #{user_name},
+                         BIRTH = #{birth},
+                         PHONE_NUM = #{phone_num},
+                         EMAIL = #{email},
+                         PASSWORD = #{password},
+                         AGREEMENT = #{agreement},
+                         USER_AUTH_CODE = #{user_auth_code},
+                         USER_TYPE_CODE = DEFAULT
+        WHERE USER_ID = #{user_id}
+    </update>
 
     <select id="selectById" parameterType="Integer" resultType="UserInfoDto">
         SELECT USER_ID, USER_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, AGREEMENT, CURR_POINT, ACCU_POINT,
@@ -59,15 +82,36 @@
                 WHERE USER_ID = #{user_id}
     </update>
 
+    <!--[회원탈퇴]-->
     <delete id="deleteUser">
         DELETE FROM USERS WHERE USER_ID = #{user_id}
     </delete>
+    <update id="setBookPayDefault" parameterType="Integer">
+        UPDATE BOOKPAY SET USER_ID = 0
+        WHERE USER_ID = #{user_id}
+    </update>
+    <update id="setProductPayDefault" parameterType="Integer">
+        UPDATE PRODUCTPAY SET USER_ID = 0
+        WHERE USER_ID = #{user_id}
+    </update>
 
     <select id="adultCheck" resultType="String">
         SELECT BIRTH FROM USERS WHERE PHONE_NUM = #{phone_num}
     </select>
+    <select id="updateAdult">
+        UPDATE USERS SET ADULT_STATE = 1
+        WHERE PHONE_NUM = #{phone_num}
+    </select>
 
+    <select id="adultState" resultType="Integer">
+        SELECT ADULT_STATE FROM USERS WHERE USER_ID = #{user_id}
+    </select>
 
+    <!-- 비밀번호 재설정 -->
+    <update id="resetPassword" parameterType="UsersVo">
+        UPDATE USERS SET PASSWORD = #{password}
+        WHERE PHONE_NUM = #{phone_num} AND EMAIL = #{email}
+    </update>
 
 
 

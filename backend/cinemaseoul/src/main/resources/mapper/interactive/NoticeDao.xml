@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.interactive.NoticeDao">
+
+    <insert id="insertNotice" parameterType="NoticeVo">
+        INSERT INTO NOTICE (NOTI_ID, ADMI_ID, ADMI_NAME,
+            NOTI_CONTENTS, NOTI_TITLE, CREA_DATETIME)
+        VALUES (SEQ_NOTICE.nextval,  #{admi_id},
+          (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = #{admi_id}),
+          #{noti_contents}, #{noti_title}, DEFAULT)
+    </insert>
+
+    <update id="updateNotice" parameterType="NoticeVo">
+        UPDATE NOTICE SET ADMI_ID = #{admi_id},
+                          ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = #{admi_id}),
+                          NOTI_TITLE = #{noti_title},
+                          NOTI_CONTENTS = #{noti_contents},
+                          CREA_DATETIME = SYSDATE
+        WHERE NOTI_ID = #{noti_id}
+    </update>
+
+    <delete id="deleteNotice">
+        DELETE NOTICE WHERE NOTI_ID = #{noti_id}
+    </delete>
+
+    <select id="countList" resultType="Integer">
+        SELECT COUNT(NOTI_ID) FROM NOTICE
+    </select>
+
+    <select id="selectNoticeList" parameterType="Criteria" resultType="NoticeVo">
+        SELECT B.NOTI_ID, B.ADMI_NAME, B.NOTI_TITLE, B.CREA_DATETIME
+        FROM (
+            SELECT /*+index_desc(IDX_NOTICE_PK)*/ ROWNUM AS RNUM,
+                   A.NOTI_ID, A.ADMI_NAME, A.NOTI_TITLE, A.CREA_DATETIME
+            FROM(
+                SELECT N.NOTI_ID, N.ADMI_NAME, N.NOTI_TITLE, N.CREA_DATETIME FROM NOTICE N
+
+                ORDER BY N.NOTI_ID DESC) A
+        <![CDATA[ WHERE ROWNUM <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount}
+    ]]>
+    </select>
+
+    <select id="selectNotice" resultType="NoticeVo">
+        SELECT NOTI_ID, ADMI_ID, ADMI_NAME, NOTI_TITLE, NOTI_CONTENTS, CREA_DATETIME FROM NOTICE
+        WHERE NOTI_ID = #{noti_id}
+    </select>
+
+
+</mapper>

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionController {
 
     //400
-    @ExceptionHandler({ WrongArgException.class,RuntimeException.class})
+    @ExceptionHandler({WrongArgException.class, RuntimeException.class})
     public ResponseEntity<?> BadRequestException(final RuntimeException ex){
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
@@ -20,6 +20,13 @@ public class ExceptionController {
     @ExceptionHandler({DuplicateException.class})
     public ResponseEntity<?> UnAuthorizedException(final DuplicateException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+
+    //402
+    @ExceptionHandler({StopException.class})
+    public ResponseEntity<?> StopException(final StopException ex){
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(ex.getMessage());
     }
 
     //403
@@ -32,6 +39,12 @@ public class ExceptionController {
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<?> NotFoundException(final NotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    //405
+    @ExceptionHandler({NotAllowedException.class})
+    public ResponseEntity<?> NotAllowedException(final NotAllowedException ex){
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ex.getMessage());
     }
 
     //500

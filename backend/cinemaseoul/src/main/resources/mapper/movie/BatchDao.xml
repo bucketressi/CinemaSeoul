@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.movie.BatchDao">
+
+    <!--[관람객 합산 스케쥴러 프로세스]-->
+    <!--해당일 상영 영화 확인-->
+    <select id="getMovies" resultType="Integer">
+        SELECT MOVI_ID FROM SHOWSCHEDULE WHERE SHOW_DATE = #{today}
+    </select>
+    <!--영화별 관객 계산 -->
+    <insert id="insertAudience" parameterType="Map">
+        INSERT ALL
+        <foreach collection="moviId" item="id" index="index" separator=" ">
+            INTO AUDIENCERECORD (RECO_DATE, MOVI_ID, AUDI_AMOUNT)
+            VALUES (#{yesterday} , ${id},(
+                        SELECT COALESCE(SUM(BS.SEAT_NUM),0)  FROM SHOWSCHEDULE S
+                        INNER JOIN BOOKSEAT BS on S.SHOW_ID = BS.SHOW_ID
+                        WHERE S.MOVI_ID = ${id}
+                        AND S.SHOW_DATE = #{yesterday}
+                        )
+                    )
+        </foreach>
+        SELECT * FROM DUAL
+    </insert>
+    <!--영화별 누적관람객 업데이트 -->
+    <update id="updateAudienceMovies">
+        UPDATE MOVIE SET ACCU_AUDIENCE = (
+            SELECT SUM(AR.AUDI_AMOUNT)
+            FROM AUDIENCERECORD AR
+            WHERE AR.MOVI_ID = #{movi_id}
+            )
+    </update>
+
+    <!--[매출 계산 스케쥴러 프로세스]-->
+    <!--존재여부 확인-->
+    <select id="selectSales" resultType="SalesVo">
+        SELECT SALE_DATE, MOVI_SALES, PROD_SALES, TOTA_SALES FROM SALES
+        WHERE SALE_DATE = #{yesterday}
+    </select>
+    <!--삽입-->
+    <insert id="insertSales">
+        INSERT INTO SALES (SALE_DATE, MOVI_SALES, PROD_SALES, TOTA_SALES)
+        VALUES (#{yesterday},
+                COALESCE(
+                    (
+                        SELECT SUM(BP.PRICE) FROM BOOKPAY BP
+                        WHERE TO_CHAR(BP.PAY_DATETIME,'YYYYMMDD') = #{yesterday}
+                        ), 0),
+                COALESCE(
+                    (
+                        SELECT SUM(PP.PRICE) FROM PRODUCTPAY PP
+                        WHERE TO_CHAR(PP.PAY_DATETIME,'YYYYMMDD') = #{yesterday}
+                        ), 0),
+        0)
+    </insert>
+    <!--총합 업데이트-->
+    <update id="updateTotal">
+        UPDATE SALES SET TOTA_SALES = MOVI_SALES + SALES.PROD_SALES
+                    WHERE SALE_DATE = #{yesterday}
+    </update>
+    <!--현재값 업데이트-->
+    <update id="updateSales">
+        UPDATE SALES SET MOVI_SALES = COALESCE(
+                                (
+                                    SELECT SUM(BP.PRICE) FROM BOOKPAY BP
+                                    WHERE TO_CHAR(BP.PAY_DATETIME,'YYYYMMDD') = #{yesterday}
+                                ), 0),
+                         PROD_SALES = COALESCE(
+                                 (
+                                     SELECT SUM(PP.PRICE) FROM PRODUCTPAY PP
+                                     WHERE TO_CHAR(PP.PAY_DATETIME,'YYYYMMDD') = #{yesterday}
+                                 ), 0)
+        WHERE SALE_DATE = #{yesterday}
+    </update>
+
+    <!--[등급 변경 스케쥴러 프로세스]-->
+    <update id="updateUserType"><![CDATA[
+        UPDATE USERS SET USER_TYPE_CODE = #{user_type_code}
+        WHERE ACCU_POINT >= #{accu_point}
+        ]]></update>
+
+    <select id="countList" resultType="Integer">
+        SELECT COUNT(USER_ID) FROM USERS
+    </select>
+    
+    <select id="getUpdateTypeRecord" resultType="UserTypeRecordVo">
+        SELECT B.USER_ID, B.ACCU_POINT, B.USER_TYPE_CODE
+        FROM (
+                 SELECT /*+index_desc(IDX_USERTYPERECORD_PK)*/ ROWNUM AS RNUM, A.USER_ID, A.ACCU_POINT, A.USER_TYPE_CODE
+                 FROM (
+                          SELECT USER_ID, ACCU_POINT, USER_TYPE_CODE FROM USERS
+                          WHERE ACCU_POINT IS NOT NULL
+                          order by USER_ID
+                      ) A
+            <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+    <!--등급변경 이력 삽입-->
+    <insert id="batchInsertTypeRecord" parameterType="UserTypeRecordVo">
+        INSERT ALL
+        <foreach item="user" index="index" collection="users" separator=" ">
+            INTO USERTYPERECORD VALUES(
+            #{user.user_id}, SYSDATE, ${user.user_type_code}, ${user.accu_point}
+            )
+        </foreach>
+        SELECT * FROM DUAL
+    </insert>
+
+    <!--유저 누적 포인트 초기화-->
+    <update id="resetUserPoint">
+        UPDATE USERS SET ACCU_POINT = 0
+    </update>
+
+
+    <!--[기간별 관람객 수 조회]-->
+    <select id="selectAudienceTotal" resultType="AudienceRecordVo">
+        SELECT RECO_DATE, SUM(AUDI_AMOUNT) AS AUDI_AMOUNT FROM AUDIENCERECORD
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="start_date != null"><![CDATA[
+            AND RECO_DATE >= #{start_date}
+        ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+            AND RECO_DATE <= #{end_date}
+        ]]></if>
+        </trim>
+        GROUP BY ROLLUP(RECO_DATE)
+    </select>
+
+    <!--[기간별 매출 조회]-->
+    <select id="selectSalesTotal" resultType="SalesVo">
+        SELECT SALE_DATE, SUM(MOVI_SALES) AS MOVI_SALES,
+               SUM(PROD_SALES) AS PROD_SALES,
+               SUM(TOTA_SALES) AS TOTA_SALES FROM SALES
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="start_date != null"><![CDATA[
+            AND SALE_DATE >= #{start_date}
+        ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+            AND SALE_DATE <= #{end_date}
+        ]]></if>
+        </trim>
+        GROUP BY ROLLUP(SALE_DATE)
+    </select>
+
+    <select id="getUserTypeRecord" resultType="UserTypeRecordDto">
+        SELECT UR.USER_ID, UR.UPDA_DATETIME, UR.ACCU_POINT, C.CODE_NAME AS USER_TYPE
+        FROM USERTYPERECORD UR
+        INNER JOIN CODE C ON UR.USER_TYPE_CODE = C.CODE_ID
+        WHERE USER_ID = #{user_id}
+    </select>
+</mapper>

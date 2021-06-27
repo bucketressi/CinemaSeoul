@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.book.HallDao">
+
+    <!--[상영관 삽입]-->
+    <insert id="insert" parameterType="HallVo">
+        <selectKey keyProperty="hall_id" resultType="int" order="BEFORE">
+            SELECT SEQ_HALL.NEXTVAL FROM DUAL
+        </selectKey>
+
+        insert into HALL
+        VALUES (#{hall_id},
+                <choose>
+                    <when test="hall_name != null"> #{hall_name},</when>
+                     <otherwise> SEQ_HALL.CURRVAL||'관', </otherwise>
+                </choose>
+                #{hall_row}, #{hall_col}, #{avai_seat_amount})
+    </insert>
+    <insert id="insertSeat">
+        INSERT ALL
+            <foreach collection="seats" item="seats" index="index" separator=" ">
+                INTO SEAT (HALL_ID, SEAT_NUM) VALUES (${hall_id}, ${index})
+            </foreach>
+        SELECT * FROM DUAL
+    </insert>
+
+    <!--[상영관 수정]-->
+    <update id="update" parameterType="HallVo">
+        UPDATE HALL SET HALL_NAME = #{hall_name},
+                        HALL_ROW = #{hall_row},
+                        HALL_COL = #{hall_col},
+                        AVAI_SEAT_AMOUNT = #{avai_seat_amount}
+        WHERE HALL_ID = #{hall_id}
+    </update>
+
+<!--
+    <delete id="sweapSeat"><![CDATA[
+        DELETE SEAT WHERE HALL_ID = #{hall_id} AND SEAT_NUM >= #{seat_num}
+        ]]></delete>
+
+    <insert id= "additionalSeat">
+        INSERT ALL
+        <foreach collection="seats" item="seats" index="index" separator=" ">
+            INTO SEAT (HALL_ID, SEAT_NUM) VALUES (${hall_id}, ${seats})
+        </foreach>
+        SELECT * FROM DUAL
+    </insert>
+-->
+
+    <!--[상영관 삭제]-->
+    <delete id="delete">
+        DELETE HALL WHERE HALL_ID = #{hall_id}
+    </delete>
+
+    <!--[상영관 리스트 조회]-->
+    <select id="selectList" resultType="HallDto">
+        SELECT HALL_ID, HALL_NAME, HALL_ROW, HALL_COL, AVAI_SEAT_AMOUNT FROM HALL
+    </select>
+
+    <!--[상영관 좌석 조회]-->
+    <select id="selectHall" resultType="HallVo">
+        SELECT HALL_ID, HALL_NAME, HALL_ROW, HALL_COL FROM HALL
+        WHERE HALL_ID = #{hall_id}
+    </select>
+    <select id="getSeats" resultType="SeatVo">
+        SELECT HALL_ID, SEAT_NUM, SEAT_TYPE_CODE FROM SEAT
+        WHERE HALL_ID = #{hall_id}
+    </select>
+
+    <!--[좌석 수정]-->
+    <update id="updateSeats" parameterType="SeatVo">
+            UPDATE SEAT SET SEAT_TYPE_CODE = #{seat_type_code}
+            WHERE HALL_ID = #{hall_id} AND SEAT_NUM = #{seat_num}
+    </update>
+
+    <update id="updateAvaiSeatAmount">
+        UPDATE HALL SET AVAI_SEAT_AMOUNT = (
+            SELECT COUNT(SEAT_NUM) FROM SEAT
+            WHERE SEAT_TYPE_CODE IN (#{seat_type_ok}, #{seat_type_disabled})
+            AND HALL_ID =#{hall_id})
+        WHERE HALL_ID = #{hall_id}
+    </update>
+
+</mapper>

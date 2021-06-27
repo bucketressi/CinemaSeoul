@@ -43,7 +43,6 @@ public class AuthUser implements UserDetails {
                 auth.add("ROLE_"+i);
             }
         }
-        System.out.println(auth);
         this.password = password;
     }
 

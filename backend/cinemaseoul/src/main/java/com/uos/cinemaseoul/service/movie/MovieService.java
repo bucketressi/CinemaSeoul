@@ -1,21 +1,26 @@
 package com.uos.cinemaseoul.service.movie;
 
 import com.uos.cinemaseoul.common.mapper.MovieMapper;
+import com.uos.cinemaseoul.common.paging.MovieCriteria;
+import com.uos.cinemaseoul.common.paging.MovieSearchCriteria;
 import com.uos.cinemaseoul.dao.movie.MovieDao;
-import com.uos.cinemaseoul.dto.movie.InsertMovieDto;
-import com.uos.cinemaseoul.dto.movie.SelectMovieDto;
-import com.uos.cinemaseoul.dto.movie.UpdateMovieDto;
+import com.uos.cinemaseoul.dto.movie.*;
 import com.uos.cinemaseoul.exception.NotFoundException;
 import com.uos.cinemaseoul.exception.WrongArgException;
 import com.uos.cinemaseoul.vo.movie.MovieVo;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MovieService {
 
     private final MovieDao movieDao;
@@ -23,19 +28,31 @@ public class MovieService {
 
     //영화 삽입
     @Transactional
-    public void insertMovie(InsertMovieDto iMDto){
+    public int insertMovie(InsertMovieDto iMDto){
         MovieVo movieVo = movieMapper.insertMovieDtoToMovieVo(iMDto);
+
         movieDao.insertMovie(movieVo);
-        int movi_id = movieVo.getMovi_id();
+        return movieVo.getMovi_id();
+    }
+    @Transactional
+    public void updateMovieGenre(InsertGenreDto iMDto) {
+        movieDao.deleteGenre(iMDto.getMovi_id());
 
         //삽입값 세팅
         HashMap<String,Object> map = new HashMap<>();
         map.put("genre",iMDto.getGenre_code());
-        map.put("movi_id", movi_id);
-        map.put("casting", iMDto.getCasting());
+        map.put("movi_id", iMDto.getMovi_id());
 
         movieDao.insertGenre(map);
-        System.out.println("장르는 됨");
+    }
+    @Transactional
+    public void updateMovieCast(InsertCastDto iMDto) {
+        movieDao.deleteCasting(iMDto.getMovi_id());
+
+        //삽입값 세팅
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("movi_id", iMDto.getMovi_id());
+        map.put("casting", iMDto.getCasting());
 
         movieDao.insertCasting(map);
     }
@@ -56,19 +73,14 @@ public class MovieService {
         if(movieDao.updateMovie(movieVo) != 1){
             throw new WrongArgException("too much");
         }
+    }
 
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("genre",uMDto.getGenre_code());
-        map.put("movi_id", uMDto.getMovi_id());
-        map.put("casting", uMDto.getCasting());
-
-        //장르재설정
-        movieDao.deleteGenre(movieVo.getMovi_id());
-        movieDao.insertGenre(map);
-
-        //인물재설정
-        movieDao.deleteCasting(movieVo.getMovi_id());
-        movieDao.insertCasting(map);
+    //이미지 업데이트
+    @Transactional
+    public void updateMovieImage(MovieVo movieVo) {
+        if(movieDao.updateMovieImage(movieVo) != 1){
+            throw new WrongArgException("too much");
+        }
     }
 
     //영화 조회
@@ -80,11 +92,62 @@ public class MovieService {
             throw new NotFoundException("no Movie Detected");
         }
 
-        System.out.println(sMDto.getMovi_name() + "아니 이거 왜안돼" + sMDto.getCasting());
+        if(sMDto.getImage() != null){
+            sMDto.setImageBase64(Base64.encodeBase64String(sMDto.getImage()));
+        }
+
+        sMDto.setCasting(movieDao.selectCast(movi_id));
         String[] genre = movieDao.selectGenre(movi_id);
         if(genre != null){
             sMDto.setGenre(genre);
         }
         return sMDto;
     }
+
+    //영화 조건 조회
+    @Transactional
+    public MovieListDto selectMovieList(MovieCriteria movieCriteria){
+        MovieListDto movieListDto = new MovieListDto();
+        //페이지 계산
+        int totalCount = movieDao.countList(movieCriteria);
+        int totalPage =  totalCount / movieCriteria.getAmount();
+        if(totalCount % movieCriteria.getAmount() > 0){
+            totalPage++;
+        }
+
+
+        movieListDto.setMovi_list(movieDao.selectMovieList(movieCriteria));
+        //byte[] to base64
+        for(MovieListInfoDto ml : movieListDto.getMovi_list()){
+            if(ml.getImage() != null){
+                ml.setImageBase64(Base64.encodeBase64String(ml.getImage()));
+            }
+        }
+        movieListDto.setPageInfo(totalPage, movieCriteria.getPage(), movieCriteria.getAmount());
+        return movieListDto;
+    }
+
+    //영화 검색
+    @Transactional
+    public MovieListDto searchMovie(MovieSearchCriteria movieSearchCriteria) {
+        movieSearchCriteria.setName("%" + movieSearchCriteria.getName() + "%");
+        MovieListDto movieListDto = new MovieListDto();
+        //페이지 계산
+        int totalCount = movieDao.countSearchList(movieSearchCriteria);
+        int totalPage =  totalCount / movieSearchCriteria.getAmount();
+        if(totalCount % movieSearchCriteria.getAmount() > 0){
+            totalPage++;
+        }
+        movieListDto.setMovi_list(movieDao.searchMovie(movieSearchCriteria));
+        //byte[] to base64
+        for(MovieListInfoDto ml : movieListDto.getMovi_list()){
+            if(ml.getImage() != null){
+                ml.setImageBase64(Base64.encodeBase64String(ml.getImage()));
+            }
+        }
+        movieListDto.setPageInfo(totalPage, movieSearchCriteria.getPage(), movieSearchCriteria.getAmount());
+        return movieListDto;
+    }
+
+
 }

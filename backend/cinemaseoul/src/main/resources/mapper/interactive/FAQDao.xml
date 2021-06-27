@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.interactive.FAQDao">
+
+    <!--[FAQ 삽입]-->
+    <insert id="insertFAQ" parameterType="FAQVo">
+        INSERT INTO FAQ (FAQ_ID, ADMI_ID, ADMI_NAME, FAQ_TITLE, FAQ_CONTENTS)
+        VALUES (SEQ_FAQ.nextval, #{admi_id}, (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = #{admi_id}),
+          #{faq_title}, #{faq_contents, jdbcType=VARCHAR})
+    </insert>
+
+    <!--[FAQ 수정]-->
+    <update id="updateFAQ" parameterType="FAQVo">
+        UPDATE FAQ SET ADMI_ID = #{admi_id},
+                       ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = #{admi_id}),
+                       FAQ_TITLE = #{faq_title},
+                       FAQ_CONTENTS = #{faq_contents}
+        WHERE FAQ_ID = #{faq_id}
+    </update>
+
+    <!--[FAQ 삭제]-->
+    <delete id="deleteFAQ">
+        DELETE FAQ WHERE FAQ_ID = #{faq_id}
+    </delete>
+
+    <!--[FAQ 리스트 조회]-->
+    <select id="countList" resultType="Integer">
+        SELECT COUNT(FAQ_ID) AS totalpage FROM FAQ
+    </select>
+
+    <!--관리자 리스트 조회(페이지)-->
+    <select id="selectFAQList" resultType="FAQVo">
+        <![CDATA[
+        SELECT B.FAQ_ID, B.ADMI_NAME, B.FAQ_TITLE
+        FROM (
+                 SELECT /*+index_desc(IDX_FAQ_PK)*/ ROWNUM AS RNUM, A.FAQ_ID, A.ADMI_NAME, A.FAQ_TITLE
+                 FROM(
+                         SELECT FAQ_ID, ADMI_NAME, FAQ_TITLE FROM FAQ
+                         ORDER BY FAQ_ID DESC) A
+                 WHERE ROWNUM <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount}
+        ]]>
+    </select>
+
+
+    <!--[FAQ 세부 조회]-->
+    <select id="selectFAQ" resultType="FAQVo">
+        SELECT FAQ_ID, ADMI_ID, ADMI_NAME, FAQ_TITLE, FAQ_CONTENTS FROM FAQ
+        WHERE FAQ_ID = #{faq_id}
+    </select>
+
+</mapper>

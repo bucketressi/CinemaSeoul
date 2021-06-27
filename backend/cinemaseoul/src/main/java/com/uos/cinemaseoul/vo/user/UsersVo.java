@@ -1,12 +1,14 @@
 package com.uos.cinemaseoul.vo.user;
 
-import com.uos.cinemaseoul.dto.user.UserSignUpDto;
+import com.uos.cinemaseoul.common.constatnt.ConstantTable;
+import com.uos.cinemaseoul.dto.user.user.UserSignUpDto;
 import lombok.*;
 
 @Getter @Setter
-@Builder
-@AllArgsConstructor
+@ToString
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
+@Builder
 public class UsersVo {
     private int user_id;
     private String user_name;
@@ -37,8 +39,9 @@ public class UsersVo {
         this.email = userSignupDto.getEmail();
         this.password = userSignupDto.getPassword();
         this.agreement = userSignupDto.getAgreement();
+        this.accu_point = 0;
         //회원
-        this.user_auth_code = "100001";
+        this.user_auth_code = ConstantTable.USER_AUTH_MEMBER;
         return this;
     }
 }

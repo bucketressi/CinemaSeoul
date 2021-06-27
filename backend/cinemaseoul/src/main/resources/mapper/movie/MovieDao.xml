@@ -10,33 +10,32 @@
         <result property="movi_id" column="MOVI_ID"/>
         <result property="movi_name" column="MOVI_NAME"/>
         <result property="avai_age" javaType="string" column="AVAI_AGE"/>
-        <result property="show_time" column="SHOW_TIME"/>
+        <result property="run_time" column="RUN_TIME"/>
         <result property="company" column="COMPANY"/>
         <result property="movi_contents" column="MOVI_CONTENTS"/>
         <result property="open_date" column="OPEN_DATE"/>
         <result property="image" column="IMAGE"/>
         <result property="open_date" column="OPEN_DATE"/>
         <result property="rating" column="RATING"/>
-        <collection property="casting" javaType="java.util.ArrayList" ofType="CastingInfoDto">
-            <id property="peop_id" column="PEOP_ID"/>
-            <result property="peop_id" column="PEOP_ID"/>
-            <result property="peop_name" column="PEOP_NAME"/>
-            <result property="cast_type_code" column="CAST_TYPE_CODE"/>
-        </collection>
+        <result property="accu_audience" column="ACCU_AUDIENCE"/>
     </resultMap>
 
-    <!--장르 빼고 일단 조회 (장르까지 하면 N+1 문제 발생)-->
+    <!-- [영화 세부조회] -->
+    <!--영화 조회-->
     <select id="selectMovie"  resultMap="movieInfo">
         SELECT M.MOVI_ID, M.MOVI_NAME,
                (SELECT CODE_NAME FROM CODE WHERE CODE.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
-               M.SHOW_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.IMAGE, M.OPEN_DATE,
-               C.PEOP_ID, C.PEOP_NAME,  C.CAST_TYPE_CODE
+               M.RUN_TIME, M.COMPANY, M.MOVI_CONTENTS, M.RATING, M.ACCU_AUDIENCE, M.IMAGE, M.OPEN_DATE
         FROM MOVIE M
-        INNER JOIN CAST C on M.MOVI_ID = C.MOVI_ID
         WHERE M.MOVI_ID = #{movi_id}
     </select>
-
-
+    <!--출연진 조회-->
+    <select id="selectCast" resultType="CastingInfoDto">
+        SELECT C.PEOP_ID, C.PEOP_NAME, C.CAST_TYPE_CODE
+        FROM CAST C
+        WHERE C.MOVI_ID = #{movi_id}
+    </select>
+    <!-- 장르 조회-->
     <select id="selectGenre" resultType="String">
         SELECT G.GENRE_CODE
         FROM MOVIEGENRE G
@@ -44,16 +43,177 @@
     </select>
 
 
+    <!-- [영화 리스트 조회] -->
+    <!-- 전체 영화 수 조회 -->
+    <select id="countList" parameterType="MovieCriteria" resultType="Integer">
+        SELECT COUNT(MOVI_ID) FROM MOVIE M
+            <trim prefix="WHERE" prefixOverrides="AND">
+
+                <choose>
+                    <!--개봉 중-->
+                    <when test="stat == 1"><![CDATA[
+                                    M.MOVI_ID IN
+                                    (SELECT DISTINCT S.MOVI_ID FROM SHOWSCHEDULE S
+                                        WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE+7, 'YYYYMMDD') )
+                                    AND
+                                    M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                    ]]></when>
+
+                    <!--개봉 예정-->
+                    <when test="stat == 2"><![CDATA[
+                                    M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        ]]></when>
+                    <otherwise></otherwise>
+                </choose>
+
+                <if test="avai_age_code != null">
+                    AND M.AVAI_AGE_CODE IN
+                    <foreach collection="avai_age_code" item="avai_age" separator=", " open="(" close=")">
+                       #{avai_age}
+                    </foreach>
+                </if>
+
+                <if test="genre_code != null">
+                    AND M.MOVI_ID IN
+                    (SELECT MG.MOVI_ID FROM MOVIEGENRE MG
+                    WHERE MG.GENRE_CODE IN
+                    <foreach collection="genre_code" item="genre" separator=", "  open="(" close=")">
+                        #{genre}
+                    </foreach>
+                    )
+                </if>
+            </trim>
+    </select>
+
+    <!--영화 리스트 조회(페이지)-->
+    <select id="selectMovieList" parameterType="MovieCriteria" resultType="MovieListInfoDto">
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDIENCE, B.IMAGE
+        FROM (
+                 SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDIENCE, A.IMAGE
+                 FROM(
+                         SELECT MOVI_ID, MOVI_NAME, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
+                         OPEN_DATE, RATING, ACCU_AUDIENCE, IMAGE FROM MOVIE M
+
+                            <trim prefix="WHERE" prefixOverrides="AND">
+                                <choose>
+                                    <!--개봉 중-->
+                                    <when test="stat == 1"><![CDATA[
+                                    M.MOVI_ID IN
+                                    (SELECT DISTINCT S.MOVI_ID FROM SHOWSCHEDULE S
+                                        WHERE S.SHOW_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        AND S.SHOW_DATE < TO_CHAR(SYSDATE+7, 'YYYYMMDD') )
+                                    AND
+                                    M.OPEN_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                    ]]></when>
+
+                                    <!--개봉 예정-->
+                                    <when test="stat == 2"><![CDATA[
+                                             M.OPEN_DATE > TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                        ]]></when>
+                                    <otherwise></otherwise>
+                                </choose>
+
+                                <if test="avai_age_code != null">
+                                    AND M.AVAI_AGE_CODE IN
+                                    <foreach collection="avai_age_code" item="avai_age" separator=", " open="(" close=")">
+                                        #{avai_age}
+                                    </foreach>
+                                </if>
+
+                                <if test="genre_code != null">
+                                    AND M.MOVI_ID IN
+                                    (SELECT MG.MOVI_ID FROM MOVIEGENRE MG WHERE MG.GENRE_CODE IN
+                                    <foreach collection="genre_code" item="genre" separator=", "  open="(" close=")">
+                                        #{genre}
+                                    </foreach>
+                                    )
+                                </if>
+                            </trim>
+
+                         ORDER BY
+                         <choose>
+                             <when test="sort eq 1"> RATING </when>
+                             <when test="sort eq 2"> ACCU_AUDIENCE </when>
+                             <otherwise>MOVI_ID</otherwise>
+                         </choose>
+                         ) A
+        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+    
+    <!--[영화 검색]-->
+    <select id="countSearchList" parameterType ="MovieSearchCriteria" resultType="Integer">
+        SELECT COUNT(MOVI_ID) FROM MOVIE M
+        WHERE
+            <choose>
+                <when test="cast_type_code != null"> MOVI_ID IN
+                 (SELECT C.MOVI_ID FROM CAST C
+                 WHERE C.CAST_TYPE_CODE = #{cast_type_code} AND C.PEOP_NAME LIKE #{name})</when>
+                <otherwise> M.MOVI_NAME LIKE #{name}</otherwise>
+            </choose>
+    </select>
+
+
+    <select id = "searchMovie" parameterType="MovieSearchCriteria" resultType="MovieListInfoDto">
+        SELECT B.RNUM, B.MOVI_ID, B.MOVI_NAME, B.AVAI_AGE, B.OPEN_DATE, B.RATING, B.ACCU_AUDIENCE, B.IMAGE
+        FROM (
+            SELECT /*+index_desc(IDX_MOVIE_PK)*/ ROWNUM AS RNUM, A.MOVI_ID, A.MOVI_NAME, A.AVAI_AGE, A.OPEN_DATE, A.RATING, A.ACCU_AUDIENCE, A.IMAGE
+            FROM(
+                SELECT MOVI_ID, MOVI_NAME, (SELECT CODE_NAME FROM CODE C WHERE C.CODE_ID = M.AVAI_AGE_CODE) AS AVAI_AGE,
+                       OPEN_DATE, RATING, ACCU_AUDIENCE, IMAGE FROM MOVIE M
+                WHERE
+                <choose>
+                    <when test="cast_type_code!= null">
+                      M.MOVI_ID IN
+                        (SELECT C.MOVI_ID FROM CAST C
+                        WHERE C.CAST_TYPE_CODE = #{cast_type_code} AND C.PEOP_NAME LIKE #{name})</when>
+                    <otherwise> M.MOVI_NAME LIKE #{name}</otherwise>
+                </choose>
+        ) A
+        <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+    <!-- [영화 삽입] -->
     <!-- 영화삽입  -->
     <insert id="insertMovie" parameterType="MovieVo">
         <selectKey keyProperty="movi_id" resultType="int" order="BEFORE">
             SELECT SEQ_MOVIE.nextval FROM DUAL
         </selectKey>
 
-        INSERT INTO MOVIE VALUES (#{movi_id}, #{movi_name}, #{avai_age_code}, #{show_time},
+        INSERT INTO MOVIE VALUES (#{movi_id}, #{movi_name}, #{avai_age_code}, #{run_time},
                             #{company, jdbcType=VARCHAR}, #{movi_contents, jdbcType=VARCHAR},
-                            #{open_date}, DEFAULT, #{image, jdbcType=BLOB})
+                            #{open_date}, DEFAULT, DEFAULT,
+                                <if test="image == null"> DEFAULT</if>
+                                <if test="image != null"> #{image, jdbcType=BLOB}</if>
+                            )
     </insert>
+
+    <!-- [캐스팅 수정] -->
+    <!-- 캐스팅 삭제 -> 이후 INSERT  -->
+    <delete id="deleteCasting" parameterType="Integer">
+        DELETE FROM CAST WHERE MOVI_ID = #{movi_id}
+    </delete>
+
+    <!-- 캐스팅 삽입  -->
+    <update id="insertCasting">
+        INSERT ALL
+        <foreach item="cast" index="index" collection="casting" separator=" ">
+            INTO CAST VALUES(
+            #{movi_id}, ${cast.peop_id},
+            (SELECT P.PEOP_NAME FROM PEOPLE P WHERE P.PEOP_ID = ${cast.peop_id}),
+            ${cast.cast_type_code}
+        )
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <!-- [장르 수정] -->
+    <!-- 장르 삭제 -> 이후 INSERT -->
+    <delete id="deleteGenre" parameterType="Integer">
+        DELETE FROM MOVIEGENRE WHERE MOVI_ID = #{movi_id}
+    </delete>
 
     <!-- 장르삽입  -->
     <update id="insertGenre" parameterType="hashmap">
@@ -64,22 +224,13 @@
         SELECT * FROM DUAL
     </update>
 
-    <!-- 캐스팅 삽입  -->
-    <update id="insertCasting">
-        INSERT ALL
-        <foreach item="casting" index="index" collection="casting" separator=" ">
-        INTO CAST (MOVI_ID, PEOP_ID, PEOP_NAME, CAST_TYPE_CODE) VALUES
-            ( #{movi_id}, #{casting.peop_id},
-             (SELECT PEOP_NAME FROM PEOPLE P WHERE P.PEOP_ID = #{casting.peop_id}), #{casting.cast_type_code})
-        </foreach>
-        SELECT * FROM DUAL
-    </update>
 
-    <!-- update query -->
+
+    <!-- [영화 수정] -->
     <update id="updateMovie" parameterType="MovieVo">
         UPDATE MOVIE M SET M.MOVI_NAME = #{movi_name},
                          M.AVAI_AGE_CODE = #{avai_age_code},
-                         M.SHOW_TIME = #{show_time},
+                         M.RUN_TIME= #{run_time},
 
                          <if test="company != null">
                          M.COMPANY = #{company},
@@ -91,25 +242,21 @@
 
                          M.OPEN_DATE = #{open_date}
 
-                         <if test="image != null">
-                         , M.IMAGE = #{image}
-                         </if>
-
         WHERE M.MOVI_ID = #{movi_id}
     </update>
 
 
-    <!-- 캐스팅 DELETE  -->
-    <delete id="deleteCasting" parameterType="Integer">
-        DELETE FROM CAST WHERE MOVI_ID = #{movi_id}
-    </delete>
 
-    <!-- 장르 삭제-->
-    <delete id="deleteGenre" parameterType="Integer">
-        DELETE FROM MOVIEGENRE WHERE MOVI_ID = #{movi_id}
-    </delete>
+    <!-- [영화 이미지 수정] -->
+    <update id="updateMovieImage" parameterType="MovieVo">
+        UPDATE MOVIE M SET M.IMAGE =
+        <choose>
+            <when test= "image != NULL"> #{image, jdbcType=BLOB} </when>
+            <otherwise> empty_blob() </otherwise>
+        </choose>
+    </update>
 
-    <!--영화 delete-->
+    <!--[영화 삭제]-->
     <delete id="deleteMovie" parameterType="Integer">
         DELETE FROM MOVIE WHERE MOVI_ID = #{movi_id}
     </delete>

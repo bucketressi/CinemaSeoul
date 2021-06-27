@@ -10,21 +10,31 @@
         SELECT ADMI_ID, EMAIL, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
         WHERE EMAIL = #{email}
     </select>
+
     <!--관리자 번호로 조회-->
     <select id="findByPhone" resultType="AdminVo">
-        SELECT ADMI_ID, EMAIL, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE  FROM ADMIN
+        SELECT ADMI_NAME, EMAIL FROM ADMIN
         WHERE PHONE_NUM = #{phone_num}
     </select>
+
     <!--관리자 아이디로 조회-->
     <select id="findById" resultType="AdminVo">
-        SELECT ADMI_ID, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
+        SELECT ADMI_ID, ADMI_NAME, PASSWORD, PHONE_NUM, ADMI_AUTH_CODE FROM ADMIN
         WHERE ADMI_ID = #{admi_id}
     </select>
+
+    <!--관리자 아이디찾기-->
+    <select id="findByPhoneAndName" parameterType="AdminVo" resultType="String">
+        SELECT EMAIL FROM ADMIN
+        WHERE  PHONE_NUM = #{phone_num} AND ADMI_NAME = #{admi_name}
+    </select>
+
     <!--관리자 이메일 or 번호로 조회-->
     <select id="findByEmailAndPhone" resultType="AdminVo">
         SELECT ADMI_ID FROM ADMIN
-        WHERE EMAIL = #{email} OR PHONE_NUM = #{phone_num}
+        WHERE EMAIL = #{email} or PHONE_NUM = #{phone_num}
     </select>
+
     <!--관리자 회원가입-->
     <insert id="signUp" parameterType="AdminVo">
         INSERT INTO ADMIN (ADMI_ID, ADMI_NAME, BIRTH, PHONE_NUM, EMAIL, PASSWORD, ADMI_AUTH_CODE, POSITION, ADDRESS, START_DATE)
@@ -51,7 +61,9 @@
                        ADMI_AUTH_CODE = #{admi_auth_code},
                        POSITION = #{position},
                        ADDRESS = #{address, jdbcType=VARCHAR},
-                       START_DATE = #{start_date}
+                       <if test="start_date != null">
+                           START_DATE = #{start_date}
+                       </if>
         WHERE ADMI_ID = #{admi_id}
     </update>
     <!--관리자 삭제-->
@@ -75,6 +87,56 @@
 
     <!-- 전체 페이지 수 얻기 -->
     <select id="countList" resultType="Integer">
-        SELECT COUNT(*) AS totalpage FROM ADMIN
+        SELECT COUNT(ADMI_ID) AS totalpage FROM ADMIN
     </select>
+
+    <!-- 비밀번호 재설정 -->
+    <update id="resetPassword" parameterType="AdminVo">
+        UPDATE ADMIN SET PASSWORD = #{password}
+        WHERE PHONE_NUM = #{phone_num} AND EMAIL = #{email}
+    </update>
+
+
+    <!--[무결성 제약용 이름 변경]-->
+    <update id="setDefaultFAQ">
+        UPDATE FAQ SET ADMI_ID = 0,
+                       ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = 0)
+        WHERE FAQ.ADMI_ID = #{admi_id}
+    </update>
+    <update id="setDefaultEvent">
+        UPDATE EVENT SET ADMI_ID = 0,
+                       ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = 0)
+        WHERE EVENT.ADMI_ID = #{admi_id}
+    </update>
+    <update id="setDefaultNotice">
+        UPDATE NOTICE SET ADMI_ID = 0,
+                       ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = 0)
+        WHERE NOTICE.ADMI_ID = #{admi_id}
+    </update>
+    <update id="setDefaultAsk">
+        UPDATE ASK SET ADMI_ID = 0,
+                       ADMI_NAME = (SELECT ADMI_NAME FROM ADMIN WHERE ADMI_ID = 0)
+        WHERE ASK.ADMI_ID = #{admi_id}
+    </update>
+
+    <!--[무결성 제약용 디폴트 관리자 설정]-->
+    <update id="updateAdminFAQ">
+        UPDATE FAQ SET ADMI_NAME = #{admi_name}
+        WHERE FAQ.ADMI_ID = #{admi_id}
+    </update>
+    <update id="updateAdminEvent">
+        UPDATE EVENT SET ADMI_NAME = #{admi_name}
+        WHERE EVENT.ADMI_ID = #{admi_id}
+    </update>
+    <update id="updateAdminNotice">
+        UPDATE NOTICE SET ADMI_NAME = #{admi_name}
+        WHERE NOTICE.ADMI_ID = #{admi_id}
+    </update>
+    <update id="updateAdminAsk">
+    UPDATE ASK SET ADMI_NAME = #{admi_name}
+    WHERE ASK.ADMI_ID = #{admi_id}
+    </update>
+
+
+
 </mapper>

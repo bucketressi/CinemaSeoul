@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.movie.ReviewDao">
+
+    <!--[insert REv]-->
+    <insert id="insertReview" parameterType="ReviewVo">
+        INSERT INTO REVIEW (MOVI_ID, USER_ID, RATING, COMMENTS) VALUES
+        (#{movi_id},#{user_id},#{rating},#{comments})
+    </insert>
+
+    <update id="updateReview" parameterType="ReviewVo">
+        UPDATE REVIEW SET RATING = #{rating}, COMMENTS = #{comments}
+        WHERE MOVI_ID = #{movi_id} AND USER_ID = #{user_id}
+    </update>
+
+    <delete id="deleteReview" parameterType="ReviewVo">
+        DELETE REVIEW WHERE MOVI_ID = #{movi_id} AND USER_ID = #{user_id}
+    </delete>
+
+    <update id="updateMovieRating">
+        UPDATE MOVIE SET RATING = COALESCE(
+            (SELECT SUM(R.RATING) / COUNT(R.RATING) FROM REVIEW R WHERE MOVI_ID = #{movi_id}), 0 )
+        WHERE MOVI_ID = #{movi_id}
+    </update>
+
+    <select id="getMyMovie" resultType="MovieReviewDto">
+        SELECT R.COMMENTS, R.RATING, M.MOVI_ID, M.MOVI_NAME, M.IMAGE
+        FROM MOVIE M
+                 LEFT OUTER JOIN REVIEW R ON R.MOVI_ID = M.MOVI_ID
+        WHERE M.MOVI_ID IN ( SELECT MOVI_ID FROM SHOWSCHEDULE
+            INNER JOIN BOOK B on SHOWSCHEDULE.SHOW_ID = B.SHOW_ID
+            INNER JOIN BOOKPAY BP on B.BOOK_PAY_ID = BP.BOOK_PAY_ID
+            WHERE BP.USER_ID = #{user_id} AND BP.PAY_STATE_CODE = #{pay_stat_fin} )
+    </select>
+
+
+</mapper>

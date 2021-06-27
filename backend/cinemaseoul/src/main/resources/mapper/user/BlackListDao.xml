@@ -5,7 +5,7 @@
 
 <mapper namespace="com.uos.cinemaseoul.dao.user.BlackListDao">
 
-    <!--AUTO INCREMENT 쓰면 useGeneratedKeys="true" keyProperty="BLAC_ID"-->
+    <!--블랙리스트 추가-->
     <insert id="insert" parameterType="BlackListVo" >
         INSERT INTO BLACKLIST (BLAC_NAME, PHONE_NUM, BIRTH)
         VALUES (#{blac_name}, #{phone_num}, #{birth})
@@ -13,12 +13,23 @@
 
     <select id="select" resultType="BlackListVo">
         SELECT BLAC_NAME, PHONE_NUM, BIRTH FROM BLACKLIST
-        WHERE PHONE_NUM = #{phone_num} AND BLAC_NAME = #{blac_name}
+        WHERE PHONE_NUM = #{phone_num}
     </select>
 
     <delete id="delete" parameterType="BlackListVo">
         DELETE FROM BLACKLIST
-        WHERE BLAC_NAME = #{blac_name} AND PHONE_NUM = #{phone_num}
+        WHERE PHONE_NUM = #{phone_num}
     </delete>
+
+    <select id="selectList" resultType="BlackListVo">
+        SELECT BLAC_NAME, PHONE_NUM, BIRTH FROM BLACKLIST
+    </select>
+
+    <insert id="update" parameterType="BlackListVo" >
+        UPDATE BLACKLIST SET
+            BLAC_NAME = #{blac_name},
+            PHONE_NUM = #{phone_num},
+            BIRTH = #{birth}
+    </insert>
 
 </mapper>

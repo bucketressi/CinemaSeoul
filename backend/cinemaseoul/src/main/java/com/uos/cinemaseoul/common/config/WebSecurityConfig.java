@@ -2,7 +2,7 @@ package com.uos.cinemaseoul.common.config;
 
 import com.uos.cinemaseoul.common.auth.JwtAuthenticationFilter;
 import com.uos.cinemaseoul.common.auth.JwtTokenProvider;
-import com.uos.cinemaseoul.common.auth.MappingConstant;
+import com.uos.cinemaseoul.common.constatnt.MappingConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -57,15 +58,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(MappingConstant.NonUser).hasAnyRole("2","1")
 
                 //1 (회원 가능)
-                .antMatchers(MappingConstant.User).hasRole("1")
+                .antMatchers(MappingConstant.User).hasAnyRole("1")
+
+                //3 (매니저(높은 관리자만) 가능)
+                .antMatchers(MappingConstant.Manager).hasAnyRole("3")
 
                 //4 (직원 가능 = 매너지도 가능)
                 .antMatchers(MappingConstant.Admin).hasAnyRole("3","4")
 
-                //3 (매니저(높은 관리자) 가능)
-                .antMatchers(MappingConstant.Manager).hasAnyRole("4")
-
-
+                //5 모든 롤 가능
+                .antMatchers(MappingConstant.AllUser).hasAnyRole("1","2","3","4")
 
                 .and()
                 .cors()
@@ -74,10 +76,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         UsernamePasswordAuthenticationFilter.class);
 	}
 
+	//Arrays.asList("http://localhost:8081","http://localhost:3000",
+    //                "http://3.35.176.97:8081", "http://3.35.176.97:3000")
+
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8081","http://localhost:3000" ));
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("TOKEN", "content-type", "filter"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

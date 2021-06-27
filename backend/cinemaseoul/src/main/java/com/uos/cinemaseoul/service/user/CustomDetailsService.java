@@ -4,7 +4,7 @@ import com.uos.cinemaseoul.common.auth.AuthUser;
 import com.uos.cinemaseoul.common.auth.UserType;
 import com.uos.cinemaseoul.dao.user.AdminDao;
 import com.uos.cinemaseoul.dao.user.UsersDao;
-import com.uos.cinemaseoul.vo.user.AdminVo;
+import com.uos.cinemaseoul.vo.admin.AdminVo;
 import com.uos.cinemaseoul.vo.user.UsersVo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,8 +25,6 @@ public class CustomDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsername(String type, String id) throws UsernameNotFoundException {
-
-        System.out.println("type = " + type + " id = " + id);
 
         //사용자일때
         if(type.equals(UserType.USERS.toString())){

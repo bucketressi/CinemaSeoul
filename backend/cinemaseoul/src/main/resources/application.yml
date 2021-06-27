@@ -3,10 +3,10 @@ server:
 
 spring :
   datasource:
-    #driver-class-name: oracle.jdbc.OracleDriver
-    #url: jdbc:oracle:thin:@3.35.176.97:1521/xe
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:oracle:thin:@3.35.176.97:1521/xe
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@3.35.229.230:1521/xe
+    #driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    #url: jdbc:log4jdbc:oracle:thin:@3.35.229.230:1521/xe
 
     username: root
     password: 1234
@@ -27,3 +27,44 @@ mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.uos.cinemaseoul/**/**/
 
+
+
+# 오라클 실행
+# su -
+# systemctl start oracle-xe
+# systemctl status oracle-xe
+
+# jar 실행
+# java -Duser.timezone=Asia/Seoul -jar cinemaseoul-0.1.jar
+# 서비스 설정
+# cd /etc/systemd/system
+# sudo vi server_start.service
+
+#[Unit]
+#Description=server start
+#After=oracle.service (다음에 실행할 서비스)
+#[Service]
+#ExecStart=/bin/bash -c "exec java -Duser.timezone=Asia/Seoul -jar [jar 파일 경로]/[jar파일].jar"
+#[Install]
+#WantedBy=multi-user.target
+
+#로그확인, 로그 청소
+#journalctl -u server_start.service
+#journalctl --vacuum-time=1s
+
+#sudo systemctl daemon-reload
+#sudo systemctl stop server_start.service
+#sudo systemctl enable server_start.service
+#sudo systemctl start server_start.service
+#sudo systemctl status server_start.service
+
+#우분투 시간대 설정 필요 (Asia로)
+#sudo dpkg-reconfigure tzdata
+
+#오라클 시간대 설정 필요
+#su - oracle
+#export TZ=Asia/Seoul
+#sqlplus / as sysdba (재접속)
+#SQL> shutdown immediate
+#SQL> startup
+#SQL> quit

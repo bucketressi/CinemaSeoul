@@ -17,15 +17,11 @@ public class UpdateMovieDto {
     @NonNull
     private String avai_age_code;
     @NonNull
-    private String show_time;
+    private int run_time;
     //nullable
     private String company;
     //nullable
     private String movi_contents;
     @NonNull
     private String open_date;
-    private String[] genre_code;
-    private List<CastingInfoDto> casting;
-    //nullable
-    private byte[] image;
 }

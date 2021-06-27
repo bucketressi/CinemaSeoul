@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uos.cinemaseoul.dao.book.BookPayDao">
+
+    <!--[예매하기]-->
+    <!-- 예매 결제 INSERT-->
+    <insert id="insertBookPay" parameterType="BookPayVo">
+        <selectKey keyProperty="book_pay_id" resultType="int" order="BEFORE">
+            SELECT SEQ_PAY.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO BOOKPAY (BOOK_PAY_ID, USER_ID, USE_POINT, PRICE, PAY_TYPE_CODE, ACCU_POINT, USE_CODE)
+            VALUES ( #{book_pay_id}, #{user_id}, #{use_point}, #{price}, #{pay_type_code}, #{accu_point}, #{use_code})
+    </insert>
+
+    <!-- 예매 INSERT -->
+    <insert id="insertBook" parameterType="BookVo">
+        <selectKey keyProperty="book_id" resultType="int" order="BEFORE">
+            SELECT SEQ_BOOK.nextval FROM DUAL
+        </selectKey>
+
+        INSERT INTO BOOK (
+        BOOK_ID, USER_ID, SHOW_ID, BOOK_PAY_ID,
+        TEEN, ADULT, SENIOR, IMPAIRED)
+        VALUES (
+        #{book_id}, #{user_id}, #{show_id}, #{book_pay_id},
+          #{teen}, #{adult}, #{senior}, #{impaired})
+    </insert>
+
+    <!--좌석 INSERT -->
+    <update id="insertBookSeats" parameterType="hashmap">
+        INSERT ALL
+        <foreach collection="seatDtos" item="seat" index="index" separator=" ">
+            INTO BOOKSEAT (BOOK_ID, HALL_ID, SEAT_NUM, SHOW_ID)
+            VALUES (${seat.book_id}, ${seat.hall_id}, ${seat.seat_num}, ${seat.show_id})
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <!--[사용 취소]-->
+    <select id="getCancelInfo" resultType="BookPayVo">
+        SELECT BP.BOOK_PAY_ID, BP.USER_ID, BP.ACCU_POINT, BP.PAY_STATE_CODE, BP.USE_POINT FROM BOOKPAY BP
+        WHERE BP.BOOK_PAY_ID = #{book_id}
+    </select>
+
+
+    <update id="setCancel">
+        UPDATE BOOKPAY SET PAY_STATE_CODE = #{pay_state_cancel}
+        WHERE BOOK_PAY_ID = #{book_pay_id}
+    </update>
+
+    <!--[코드 사용]-->
+    <select id="selectBookPay" resultType="BookPayVo">
+        SELECT BOOK_PAY_ID, USE_CODE, USE_DATETIME, PAY_STATE_CODE FROM BOOKPAY
+        WHERE USE_CODE = #{use_code}
+    </select>
+
+    <update id="useCode" parameterType="String">
+        UPDATE BOOKPAY SET PAY_STATE_CODE = #{pay_state_fin},
+                              USE_DATETIME = SYSDATE
+        WHERE USE_CODE = #{use_code}
+    </update>
+
+    <!--[예매 결제 조회]-->
+    <select id="countList" parameterType="PayListCriteria" resultType="Integer">
+        SELECT COUNT(BOOK_PAY_ID) FROM BOOKPAY B
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="user_id != null">
+                AND B.USER_ID = #{user_id}
+            </if>
+
+            <if test="start_date != null"><![CDATA[
+                AND TO_CHAR(B.PAY_DATETIME, 'YYYYMMDD') >= #{start_date}
+            ]]></if>
+
+            <if test="end_date != null"><![CDATA[
+                AND TO_CHAR(B.PAY_DATETIME, 'YYYYMMDD') <= #{end_date}
+            ]]></if>
+        </trim>
+    </select>
+
+    <select id="selectBookPayList" parameterType="PayListCriteria" resultType="BookPayInfoDto">
+        SELECT
+            B.BOOK_PAY_ID, B.USER_ID, B.USE_POINT, B.PRICE, B.ACCU_POINT,
+            B.PAY_STATE_CODE, B.PAY_TYPE, B.PAY_DATETIME,
+            B.USE_DATETIME, B.USE_CODE,
+            B.BOOK_ID,
+            B.SHOW_DATE, B.SHOW_TIME, B.MOVI_NAME
+        FROM (
+            SELECT /*+index_desc(IDX_BOOK_PAY_PK)*/ ROWNUM AS RNUM,
+                A.BOOK_PAY_ID, A.USER_ID, A.USE_POINT, A.PRICE, A.ACCU_POINT,
+                A.PAY_STATE_CODE, A.PAY_TYPE, A.PAY_DATETIME,
+                A.USE_DATETIME, A.USE_CODE,
+                A.BOOK_ID,
+                A.SHOW_DATE, A.SHOW_TIME, A.MOVI_NAME
+                FROM(
+                    SELECT
+                           P.BOOK_PAY_ID, P.USER_ID, P.USE_POINT, P.PRICE, P.ACCU_POINT,
+                           C.CODE_NAME AS PAY_TYPE, P.PAY_STATE_CODE, P.PAY_DATETIME,
+                           P.USE_DATETIME, P.USE_CODE,
+                           BB.BOOK_ID,
+                           S.SHOW_DATE, S.SHOW_TIME, M.MOVI_NAME
+                    FROM BOOKPAY P
+                    LEFT OUTER JOIN BOOK BB on P.BOOK_PAY_ID = BB.BOOK_PAY_ID
+                    LEFT OUTER JOIN SHOWSCHEDULE S on S.SHOW_ID = BB.SHOW_ID
+                    LEFT OUTER JOIN MOVIE M ON S.MOVI_ID = M.MOVI_ID
+                    INNER JOIN CODE C ON CODE_ID = P.PAY_TYPE_CODE
+
+                <trim prefix="WHERE" prefixOverrides="AND">
+                    <if test="user_id != null">
+                        AND P.USER_ID = #{user_id}
+                    </if>
+
+                    <if test="start_date != null"><![CDATA[
+                        AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') >= #{start_date}
+                    ]]></if>
+
+                    <if test="end_date != null"><![CDATA[
+                        AND TO_CHAR(P.PAY_DATETIME, 'YYYYMMDD') <= #{end_date}
+                    ]]></if>
+                </trim>
+                        ORDER BY P.BOOK_PAY_ID
+                        ) A
+            <![CDATA[ WHERE ROWNUM  <= #{page}*#{amount}) B
+        WHERE B.RNUM > (#{page}-1)*#{amount} ]]>
+    </select>
+
+</mapper>
